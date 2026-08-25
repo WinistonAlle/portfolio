@@ -1,36 +1,39 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Portfólio — Winiston Alle
 
-## Getting Started
-
-First, run the development server:
+Next.js 16 (App Router) + Tailwind 4. Hero com crachá 3D pendurado num cordão,
+com física real (arrastável).
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm run dev      # http://localhost:3000
+npm run badge    # regera as faces do crachá a partir de assets/foto.png
+npm run build
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## O crachá
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+As duas faces e a fita são **geradas**, não desenhadas à mão:
+`scripts/gen-badge.mjs` compõe SVG + foto via sharp e escreve
+`public/badge-front.png`, `public/badge-back.png` e `public/lanyard-band.png`.
+Para trocar texto, foto ou cores, edite o script e rode `npm run badge` — as
+cores vivem no objeto `C` e espelham os tokens de `src/app/globals.css`.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+A face precisa manter a proporção **1024×1440** (o mesh do card é 1.6×2.25
+unidades); qualquer outra proporção é cortada pelo atlas de textura.
 
-## Learn More
+## O componente Lanyard
 
-To learn more about Next.js, take a look at the following resources:
+`src/components/lanyard/Lanyard.jsx` é o componente do React Bits, adaptado:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- `card.glb` e `lanyard.png` são servidos de `public/` como URLs comuns, então
+  não é preciso a regra `assetsInclude` do Vite que o README original pede.
+- `LanyardBadge.tsx` faz o `dynamic(..., { ssr: false })` — three + o wasm do
+  rapier são client-only e pesados demais para prerender.
+- `useFrame` recebe o delta limitado a `1/30`: uma aba parada ou um primeiro
+  paint lento entrega um delta enorme, o lerp de recuperação da fita passa do
+  ponto e o cordão chicoteia pela tela.
+- A textura da fita é clonada antes de receber `RepeatWrapping`, para não mutar
+  o objeto que o `useTexture` mantém em cache.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Enquadramento: o cordão cai reto a partir da âncora, então o card **repousa em
+x = 0** — o `x = 2` do RigidBody é só posição de spawn. A câmera em
+`[0, -0.8, 22]` centraliza o card em repouso e deixa a fita sair pelo topo.
