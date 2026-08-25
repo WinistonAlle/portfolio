@@ -17,6 +17,11 @@ As duas faces e a fita são **geradas**, não desenhadas à mão:
 Para trocar texto, foto ou cores, edite o script e rode `npm run badge` — as
 cores vivem no objeto `C` e espelham os tokens de `src/app/globals.css`.
 
+O `card.glb` tem 2,4 MB e o `useGLTF` suspende até terminar de parsear, então o
+hero mostra um estado de carregamento por alguns segundos. Ele é deliberadamente
+borrado, esmaecido e pulsante: um PNG nítido do crachá ali parece o resultado
+final, e dá a impressão de que o 3D nunca chegou.
+
 A face precisa manter a proporção **1024×1440** (o mesh do card é 1.6×2.25
 unidades); qualquer outra proporção é cortada pelo atlas de textura.
 
@@ -53,6 +58,11 @@ em `layout.tsx` como camada fixa de página inteira. Mudanças sobre o original:
   `devicePixelRatio` no corpo do componente quebra o build: um Client Component
   ainda é pré-renderizado no servidor, onde `window` não existe.
 - **`prefers-reduced-motion`** renderiza um frame e para.
+
+O giro do scroll é **somado como deslocamento absoluto**, nunca acumulado:
+`rotation.z = spin + scrollSuavizado * scrollRoll`. Acumular (`+=`) faz o campo
+girar para sempre enquanto a página estiver rolada — medido em 11 rad em 4s
+parado, contra 0,12 rad da versão correta.
 
 Camadas são explícitas: campo em `z-0`, `<main>` em `z-10`. Com z-index negativo
 os pontos passavam por cima do texto em algumas seções.

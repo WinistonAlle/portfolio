@@ -7,19 +7,25 @@ import dynamic from 'next/dynamic';
 // Component, which is why this wrapper exists.
 const Lanyard = dynamic(() => import('./Lanyard'), {
   ssr: false,
-  loading: () => <BadgeFallback />,
+  loading: () => <BadgeLoading />,
 });
 
-/** Shown while the 3D scene loads, and to anyone it never loads for. */
-function BadgeFallback() {
+/**
+ * Shown while the chunk and the 2.4MB card.glb load — useGLTF suspends until
+ * the model is parsed. It has to read as "loading", not as a finished badge:
+ * a crisp static image here just looks like the 3D never arrived.
+ */
+function BadgeLoading() {
   return (
-    <div className="flex h-full w-full items-center justify-center">
+    <div className="flex h-full w-full flex-col items-center justify-center gap-6">
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img
         src="/badge-front.png"
-        alt="Crachá de Winiston Alle, desenvolvedor full-stack"
-        className="w-52 rotate-3 rounded-xl opacity-40 shadow-2xl transition-opacity md:w-64"
+        alt=""
+        aria-hidden
+        className="w-44 animate-pulse rounded-xl opacity-15 blur-[1px] md:w-52"
       />
+      <p className="label animate-pulse">carregando crachá</p>
     </div>
   );
 }
@@ -27,7 +33,7 @@ function BadgeFallback() {
 export default function LanyardBadge() {
   return (
     <Lanyard
-      position={[0, -0.8, 22]}
+      position={[0, -0.8, 18]}
       gravity={[0, -40, 0]}
       fov={20}
       frontImage="/badge-front.png"

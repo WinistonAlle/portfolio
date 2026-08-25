@@ -224,6 +224,7 @@ const Particles = ({
     let elapsed = 0;
     // Eased so a flick of the wheel glides instead of snapping.
     let smoothedScroll = scrollRef.current;
+    let spin = 0;
 
     const update = (t) => {
       animationFrameId = requestAnimationFrame(update);
@@ -249,9 +250,11 @@ const Particles = ({
       if (!disableRotation) {
         particles.rotation.x = Math.sin(elapsed * 0.0002) * 0.1;
         particles.rotation.y = Math.cos(elapsed * 0.0005) * 0.15;
-        particles.rotation.z += 0.01 * speed;
+        spin += 0.01 * speed;
       }
-      particles.rotation.z += smoothedScroll * scrollRoll;
+      // The constant drift accumulates; the scroll contribution must not, or
+      // holding any scroll position keeps adding roll every frame forever.
+      particles.rotation.z = spin + smoothedScroll * scrollRoll;
 
       renderer.render({ scene: particles, camera });
     };
