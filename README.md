@@ -39,9 +39,22 @@ unidades); qualquer outra proporção é cortada pelo atlas de textura.
 - A textura da fita é clonada antes de receber `RepeatWrapping`, para não mutar
   o objeto que o `useTexture` mantém em cache.
 
+**`reactStrictMode` está desligado, e é por causa desta cena.** Em dev o Strict
+Mode monta, desmonta e remonta; a cena rapier/R3F não sobrevive a isso — sobram
+duas instâncias do `Band` com refs alternando entre válidas e nulas, e o loop de
+render do R3F para depois de ~4 frames. Como o rapier sincroniza as transforms
+dentro desse loop, o crachá congela onde estiver. Medido: em dev com Strict Mode
+o callback do `useFrame` roda 3 vezes e para; sem ele, e no build de produção,
+roda continuamente. **O build de produção nunca teve o problema** — se um dia
+quiser o Strict Mode de volta, o custo é o crachá travado em dev.
+
 Enquadramento: o cordão cai reto a partir da âncora, então o card **repousa em
 x = 0** — o `x = 2` do RigidBody é só posição de spawn. A câmera em
 `[0, -0.8, 22]` centraliza o card em repouso e deixa a fita sair pelo topo.
+
+Para conferir mudanças visuais sem abrir o navegador:
+`npm run shot -- <url> <saida.png> 1440x900 <scrollY> <msDeEspera>`. A cena 3D
+leva alguns segundos para assentar — use 8000 ms ou mais.
 
 ## O fundo de partículas
 
