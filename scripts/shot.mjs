@@ -5,7 +5,8 @@ const out = process.argv[3] ?? '/tmp/shot.png';
 const [w, h] = (process.argv[4] ?? '1440x900').split('x').map(Number);
 
 const browser = await puppeteer.launch({
-  executablePath: '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome',
+  executablePath:
+    '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome',
   headless: 'shell',
   args: [
     '--use-gl=angle',

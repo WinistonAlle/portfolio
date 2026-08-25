@@ -1,30 +1,34 @@
-import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
-import "./globals.css";
+import type { Metadata } from 'next';
+import { Geist, Geist_Mono } from 'next/font/google';
+import './globals.css';
+import ParticlesBackground from '@/components/background/ParticlesBackground';
 
 const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
+  variable: '--font-geist-sans',
+  subsets: ['latin'],
 });
 
 const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
+  variable: '--font-geist-mono',
+  subsets: ['latin'],
 });
 
 export const metadata: Metadata = {
-  title: "Winiston Alle — Desenvolvedor Full-Stack",
+  title: 'Winiston Alle — Desenvolvedor Full-Stack',
   description:
-    "Sistemas em produção: catálogo interno para 255 funcionários, PDV integrado a ERP legado, SaaS multi-tenant. React, Next.js, Supabase.",
+    'Sistemas em produção: catálogo interno para 255 funcionários, PDV integrado a ERP legado, SaaS multi-tenant. React, Next.js, Supabase.',
 };
 
-export default function RootLayout({ children }: LayoutProps<"/">) {
+export default function RootLayout({ children }: LayoutProps<'/'>) {
   return (
     <html
       lang="pt-BR"
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col">{children}</body>
+      <body className="min-h-full flex flex-col">
+        <ParticlesBackground />
+        {children}
+      </body>
     </html>
   );
 }

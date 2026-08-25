@@ -2,7 +2,12 @@
 
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { Canvas, extend, useFrame } from '@react-three/fiber';
-import { useGLTF, useTexture, Environment, Lightformer } from '@react-three/drei';
+import {
+  useGLTF,
+  useTexture,
+  Environment,
+  Lightformer,
+} from '@react-three/drei';
 import {
   BallCollider,
   CuboidCollider,
@@ -45,7 +50,7 @@ export default function Lanyard({
   className = '',
 }) {
   const [isMobile, setIsMobile] = useState(
-    () => typeof window !== 'undefined' && window.innerWidth < 768
+    () => typeof window !== 'undefined' && window.innerWidth < 768,
   );
 
   useEffect(() => {
@@ -55,12 +60,16 @@ export default function Lanyard({
   }, []);
 
   return (
-    <div className={`relative z-0 flex h-full w-full items-center justify-center ${className}`}>
+    <div
+      className={`relative z-0 flex h-full w-full items-center justify-center ${className}`}
+    >
       <Canvas
         camera={{ position, fov }}
         dpr={[1, isMobile ? 1.5 : 2]}
         gl={{ alpha: transparent }}
-        onCreated={({ gl }) => gl.setClearColor(new THREE.Color(0x000000), transparent ? 0 : 1)}
+        onCreated={({ gl }) =>
+          gl.setClearColor(new THREE.Color(0x000000), transparent ? 0 : 1)
+        }
       >
         <ambientLight intensity={Math.PI} />
         <Physics gravity={gravity} timeStep={isMobile ? 1 / 30 : 1 / 60}>
@@ -241,14 +250,16 @@ function Band({
     if (fixed.current) {
       [j1, j2].forEach((ref) => {
         if (!ref.current.lerped)
-          ref.current.lerped = new THREE.Vector3().copy(ref.current.translation());
+          ref.current.lerped = new THREE.Vector3().copy(
+            ref.current.translation(),
+          );
         const clampedDistance = Math.max(
           0.1,
-          Math.min(1, ref.current.lerped.distanceTo(ref.current.translation()))
+          Math.min(1, ref.current.lerped.distanceTo(ref.current.translation())),
         );
         ref.current.lerped.lerp(
           ref.current.translation(),
-          delta * (minSpeed + clampedDistance * (maxSpeed - minSpeed))
+          delta * (minSpeed + clampedDistance * (maxSpeed - minSpeed)),
         );
       });
       curve.points[0].copy(j3.current.translation());
@@ -287,10 +298,17 @@ function Band({
             position={[0, -1.2, -0.05]}
             onPointerOver={() => hover(true)}
             onPointerOut={() => hover(false)}
-            onPointerUp={(e) => (e.target.releasePointerCapture(e.pointerId), drag(false))}
+            onPointerUp={(e) => (
+              e.target.releasePointerCapture(e.pointerId),
+              drag(false)
+            )}
             onPointerDown={(e) => (
               e.target.setPointerCapture(e.pointerId),
-              drag(new THREE.Vector3().copy(e.point).sub(vec.copy(card.current.translation())))
+              drag(
+                new THREE.Vector3()
+                  .copy(e.point)
+                  .sub(vec.copy(card.current.translation())),
+              )
             )}
           >
             <mesh geometry={nodes.card.geometry}>
@@ -303,7 +321,11 @@ function Band({
                 metalness={0.8}
               />
             </mesh>
-            <mesh geometry={nodes.clip.geometry} material={materials.metal} material-roughness={0.3} />
+            <mesh
+              geometry={nodes.clip.geometry}
+              material={materials.metal}
+              material-roughness={0.3}
+            />
             <mesh geometry={nodes.clamp.geometry} material={materials.metal} />
           </group>
         </RigidBody>

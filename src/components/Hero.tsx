@@ -1,6 +1,13 @@
 import LanyardBadge from './lanyard/LanyardBadge';
 
-const STACK = ['TypeScript', 'React', 'Next.js', 'Supabase', 'Postgres', 'Expo'];
+const STACK = [
+  'TypeScript',
+  'React',
+  'Next.js',
+  'Supabase',
+  'Postgres',
+  'Expo',
+];
 
 export default function Hero() {
   return (
@@ -22,10 +29,11 @@ export default function Hero() {
           </h1>
 
           <p className="mt-6 max-w-xl text-lg leading-relaxed text-muted">
-            Sou <span className="text-foreground">Winiston Alle</span>, desenvolvedor
-            full-stack. Construo sistemas de ponta a ponta — catálogo interno para 255
-            funcionários, PDV integrado a um ERP legado, SaaS multi-tenant. Nenhum
-            deles é demonstração: estão no ar, com gente usando todo dia.
+            Sou <span className="text-foreground">Winiston Alle</span>,
+            desenvolvedor full-stack. Construo sistemas de ponta a ponta —
+            catálogo interno para 255 funcionários, PDV integrado a um ERP
+            legado, SaaS multi-tenant. Nenhum deles é demonstração: estão no ar,
+            com gente usando todo dia.
           </p>
 
           <div className="mt-9 flex flex-wrap items-center gap-3">

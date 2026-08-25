@@ -37,3 +37,22 @@ unidades); qualquer outra proporção é cortada pelo atlas de textura.
 Enquadramento: o cordão cai reto a partir da âncora, então o card **repousa em
 x = 0** — o `x = 2` do RigidBody é só posição de spawn. A câmera em
 `[0, -0.8, 22]` centraliza o card em repouso e deixa a fita sair pelo topo.
+
+## O fundo de partículas
+
+`src/components/background/Particles.jsx` é o componente do React Bits, montado
+em `layout.tsx` como camada fixa de página inteira. Mudanças sobre o original:
+
+- **Reage ao scroll.** `scrollParallax` desloca o campo conforme a página rola e
+  `scrollRoll` acrescenta giro. A posição é lida num ref dentro do loop de
+  render — rolar a página nunca dispara re-render do React — e é suavizada por
+  lerp, então uma rolada seca desliza em vez de saltar.
+- **Mouse escutado na `window`**, não no container: a camada é
+  `pointer-events: none`, então o ponteiro nunca chega nela.
+- **`pixelRatio` 0 = usar o do display**, lido dentro do efeito. Ler
+  `devicePixelRatio` no corpo do componente quebra o build: um Client Component
+  ainda é pré-renderizado no servidor, onde `window` não existe.
+- **`prefers-reduced-motion`** renderiza um frame e para.
+
+Camadas são explícitas: campo em `z-0`, `<main>` em `z-10`. Com z-index negativo
+os pontos passavam por cima do texto em algumas seções.

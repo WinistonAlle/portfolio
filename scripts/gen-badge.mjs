@@ -164,7 +164,7 @@ async function band() {
       .map(
         (i) =>
           `<text x="${i * (BW / 2) + 40}" y="${BH / 2 + 22}" font-family="${MONO}" font-size="58"
-             font-weight="700" letter-spacing="6" fill="#ffffff" opacity="0.95">${text}</text>`
+             font-weight="700" letter-spacing="6" fill="#ffffff" opacity="0.95">${text}</text>`,
       )
       .join('')}
   </svg>`;
@@ -176,7 +176,7 @@ async function band() {
 const rounded = Buffer.from(
   `<svg xmlns="http://www.w3.org/2000/svg" width="${PHOTO.w}" height="${PHOTO.h}">
      <rect width="${PHOTO.w}" height="${PHOTO.h}" rx="${PHOTO.r}" fill="#fff"/>
-   </svg>`
+   </svg>`,
 );
 
 const photo = await sharp('assets/foto.png')
