@@ -48,9 +48,11 @@ o callback do `useFrame` roda 3 vezes e para; sem ele, e no build de produção,
 roda continuamente. **O build de produção nunca teve o problema** — se um dia
 quiser o Strict Mode de volta, o custo é o crachá travado em dev.
 
-Enquadramento: o cordão cai reto a partir da âncora, então o card **repousa em
-x = 0** — o `x = 2` do RigidBody é só posição de spawn. A câmera em
-`[0, -0.8, 22]` centraliza o card em repouso e deixa a fita sair pelo topo.
+Enquadramento: o cordão cai reto a partir da âncora, então o card **repousa
+perto de x = 0** — o `x = 2` do RigidBody é só posição de spawn. A câmera em
+`[0, -1.3, 13.5]` deixa o card ocupando cerca de metade da altura da coluna,
+centrado no repouso, com a fita saindo pelo topo. Aproximar mais que isso começa
+a cortar o card nas laterais durante a queda inicial.
 
 Para conferir mudanças visuais sem abrir o navegador:
 `npm run shot -- <url> <saida.png> 1440x900 <scrollY> <msDeEspera>`. A cena 3D

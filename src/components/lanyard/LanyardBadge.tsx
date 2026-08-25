@@ -33,7 +33,7 @@ function BadgeLoading() {
 export default function LanyardBadge() {
   return (
     <Lanyard
-      position={[0, -0.8, 18]}
+      position={[0, -1.3, 13.5]}
       gravity={[0, -40, 0]}
       fov={20}
       frontImage="/badge-front.png"
