@@ -152,21 +152,67 @@ function backSVG() {
 /* ------------------------------------------------------------- lanyard */
 
 async function band() {
-  const BW = 1025;
-  const BH = 250;
-  const text = 'WINISTON ALLE';
+  /* Potências de 2, e a largura precisa ser múltipla do tile da trama (8px):
+     a textura repete 4x ao longo da fita (repeat=[-4,1] no meshline), então
+     qualquer sobra faria a emenda aparecer a cada volta. */
+  const BW = 1024;
+  const BH = 256;
+  const seam = 26; // distância da costura até a borda
+
+  /* Um feixe de diagonais paralelas do tile da sarja, deslocado em y.
+     Espaçamento 16 divide a altura do tile (64), que é o que faz o padrão
+     fechar quando ele repete. */
+  const twill = (offset) => {
+    const lines = [];
+    for (let y = -64 + offset; y <= 64 + offset; y += 16) {
+      lines.push(`M0,${y} L128,${y + 64}`);
+    }
+    return lines.join(' ');
+  };
+
+  /* Fita de poliéster escura, sem texto. O que vende o realismo aqui não é
+     a cor, é o resto: trama diagonal de sarja, as bordas escurecendo porque
+     a tira dobra, e a linha de costura correndo paralela. */
   const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${BW}" height="${BH}">
-    <!-- the band sits against a near-black page, so it needs its own value -->
-    <rect width="${BW}" height="${BH}" fill="#1b3f80"/>
-    <rect y="0" width="${BW}" height="10" fill="${C.accent}"/>
-    <rect y="${BH - 10}" width="${BW}" height="10" fill="${C.accent}"/>
-    ${[0, 1]
-      .map(
-        (i) =>
-          `<text x="${i * (BW / 2) + 40}" y="${BH / 2 + 22}" font-family="${MONO}" font-size="58"
-             font-weight="700" letter-spacing="6" fill="#ffffff" opacity="0.95">${text}</text>`,
-      )
-      .join('')}
+    <defs>
+      <linearGradient id="body" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" stop-color="#03060b"/>
+        <stop offset="0.08" stop-color="#0a1524"/>
+        <stop offset="0.34" stop-color="#101e34"/>
+        <stop offset="0.5" stop-color="#12223c"/>
+        <stop offset="0.68" stop-color="#0d192c"/>
+        <stop offset="0.92" stop-color="#080f1b"/>
+        <stop offset="1" stop-color="#03060b"/>
+      </linearGradient>
+
+      <!-- Sarja. Duas correções de escala aqui, as duas aprendidas errando:
+           1) o tile é 128x64, bem maior do que parece necessário, porque a
+              fita renderiza com ~55px de largura contra 256px de textura:
+              tudo encolhe ~5x e detalhe fino vira meio pixel, que o mipmap
+              apaga. Linha de 7px na textura chega como ~1.5px na tela.
+           2) o tile não é quadrado (dx = 2·dy) porque a textura cobre uma
+              fita muito mais longa que larga, então chega achatada em x;
+              essa inclinação sai perto de 45 graus depois do esmagamento.
+           Fecha nas quatro bordas (128 em x equivale a 64 em y, múltiplo do
+           espaçamento de 32), então repete sem emenda. -->
+      <pattern id="twill" width="128" height="64" patternUnits="userSpaceOnUse">
+        <path d="${twill(0)}" stroke="#ffffff" stroke-width="5" opacity="0.06" fill="none"/>
+        <path d="${twill(8)}" stroke="#000000" stroke-width="4.5" opacity="0.2" fill="none"/>
+      </pattern>
+    </defs>
+
+    <rect width="${BW}" height="${BH}" fill="url(#body)"/>
+    <rect width="${BW}" height="${BH}" fill="url(#twill)"/>
+
+    <!-- costura: dois fios paralelos, levemente puxados para o azul -->
+    <line x1="0" y1="${seam}" x2="${BW}" y2="${seam}" stroke="${C.accent}"
+          stroke-width="1.4" stroke-dasharray="7 6" opacity="0.22"/>
+    <line x1="0" y1="${BH - seam}" x2="${BW}" y2="${BH - seam}" stroke="${C.accent}"
+          stroke-width="1.4" stroke-dasharray="7 6" opacity="0.22"/>
+
+    <!-- vinco das bordas: a fita é dobrada e prensada nas duas pontas -->
+    <rect y="0" width="${BW}" height="3" fill="#ffffff" opacity="0.05"/>
+    <rect y="${BH - 3}" width="${BW}" height="3" fill="#ffffff" opacity="0.04"/>
   </svg>`;
   await sharp(Buffer.from(svg)).png().toFile('public/lanyard-band.png');
 }

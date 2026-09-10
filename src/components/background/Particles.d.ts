@@ -15,6 +15,8 @@ export interface ParticlesProps {
   pixelRatio?: number;
   /** World units the field drifts per viewport scrolled. 0 disables parallax. */
   scrollParallax?: number;
+  /** Ceiling for the total parallax drift, in world units. 0 is unbounded. */
+  scrollParallaxCap?: number;
   /** Extra roll, in radians, applied across one viewport of scroll. */
   scrollRoll?: number;
   className?: string;

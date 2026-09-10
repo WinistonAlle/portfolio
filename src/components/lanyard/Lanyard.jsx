@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { Canvas, extend, useFrame } from '@react-three/fiber';
+import { Canvas, extend, useFrame, useThree } from '@react-three/fiber';
 import {
   useGLTF,
   useTexture,
@@ -36,6 +36,42 @@ const BLANK_PIXEL =
 const FRONT_UV_RECT = { x: 0, y: 0, w: 0.5, h: 0.755 };
 const BACK_UV_RECT = { x: 0.5, y: 0, w: 0.5, h: 0.757 };
 
+/**
+ * R3F sizes the canvas from a ResizeObserver on its parent, but when the
+ * scene remounts fast (e.g. navigating back to the home page, where the
+ * chunk is already cached) that observer can miss its first callback and
+ * the canvas is left stuck at the browser's 300x150 default — the badge
+ * renders into a box a fraction of its real size and reads as "not there".
+ * This mirrors the same measurement by hand so sizing never depends on
+ * that race.
+ */
+function ForceCanvasSize() {
+  const { gl, camera } = useThree();
+
+  useEffect(() => {
+    const canvas = gl.domElement;
+    const container = canvas.parentElement;
+    if (!container) return;
+
+    const resize = () => {
+      const { clientWidth: width, clientHeight: height } = container;
+      if (!width || !height) return;
+      gl.setSize(width, height, false);
+      if (camera.isPerspectiveCamera) {
+        camera.aspect = width / height;
+        camera.updateProjectionMatrix();
+      }
+    };
+
+    resize();
+    const observer = new ResizeObserver(resize);
+    observer.observe(container);
+    return () => observer.disconnect();
+  }, [gl, camera]);
+
+  return null;
+}
+
 export default function Lanyard({
   position = [0, 0, 30],
   gravity = [0, -40, 0],
@@ -47,6 +83,7 @@ export default function Lanyard({
   lanyardImage = null,
   lanyardWidth = 1,
   anchor = [0, 4, 0],
+  paused = false,
   className = '',
 }) {
   const [isMobile, setIsMobile] = useState(
@@ -71,8 +108,13 @@ export default function Lanyard({
           gl.setClearColor(new THREE.Color(0x000000), transparent ? 0 : 1)
         }
       >
+        <ForceCanvasSize />
         <ambientLight intensity={Math.PI} />
-        <Physics gravity={gravity} timeStep={isMobile ? 1 / 30 : 1 / 60}>
+        <Physics
+          gravity={gravity}
+          timeStep={isMobile ? 1 / 30 : 1 / 60}
+          paused={paused}
+        >
           <Band
             isMobile={isMobile}
             frontImage={frontImage}
@@ -118,6 +160,15 @@ export default function Lanyard({
   );
 }
 
+// Purely cosmetic: the physics rope starts at `anchor`, which sits well
+// inside the visible frame, leaving a gap of empty sky above the strap. This
+// extends the same strip straight up past the anchor so it reads as
+// disappearing off the top of the page instead of dangling from nothing.
+const ANCHOR_EXTENSION = 14;
+
+// Comprimento de cada um dos três trechos de corda entre a âncora e o crachá.
+const ROPE_SEGMENT = 0.72;
+
 function Band({
   maxSpeed = 50,
   minSpeed = 0,
@@ -129,6 +180,15 @@ function Band({
   lanyardWidth = 1,
   anchor = [0, 4, 0],
 }) {
+  const extension = useRef();
+  const [extensionCurve] = useState(() => {
+    const c = new THREE.CatmullRomCurve3([
+      new THREE.Vector3(),
+      new THREE.Vector3(),
+    ]);
+    c.curveType = 'chordal';
+    return c;
+  });
   const band = useRef(),
     fixed = useRef(),
     j1 = useRef(),
@@ -219,9 +279,22 @@ function Band({
   const [dragged, drag] = useState(false);
   const [hovered, hover] = useState(false);
 
-  useRopeJoint(fixed, j1, [[0, 0, 0], [0, 0, 0], 1]);
-  useRopeJoint(j1, j2, [[0, 0, 0], [0, 0, 0], 1]);
-  useRopeJoint(j2, j3, [[0, 0, 0], [0, 0, 0], 1]);
+  useEffect(() => {
+    extensionCurve.points[0].set(anchor[0], anchor[1], anchor[2]);
+    extensionCurve.points[1].set(
+      anchor[0],
+      anchor[1] + ANCHOR_EXTENSION,
+      anchor[2],
+    );
+    extension.current?.geometry.setPoints(extensionCurve.getPoints(2));
+  }, [anchor, extensionCurve]);
+
+  /* Comprimento de cada trecho da corda. Como são três, cada 0.1 daqui tira
+     0.3 unidade de mundo da fita, o que é bastante: a altura visível toda do
+     canvas tem só ~4.8 unidades. */
+  useRopeJoint(fixed, j1, [[0, 0, 0], [0, 0, 0], ROPE_SEGMENT]);
+  useRopeJoint(j1, j2, [[0, 0, 0], [0, 0, 0], ROPE_SEGMENT]);
+  useRopeJoint(j2, j3, [[0, 0, 0], [0, 0, 0], ROPE_SEGMENT]);
   useSphericalJoint(j3, card, [
     [0, 0, 0],
     [0, 1.5, 0],
@@ -339,6 +412,18 @@ function Band({
           useMap
           map={bandTexture}
           repeat={[-4, 1]}
+          lineWidth={lanyardWidth}
+        />
+      </mesh>
+      <mesh ref={extension}>
+        <meshLineGeometry />
+        <meshLineMaterial
+          color="white"
+          depthTest={false}
+          resolution={isMobile ? [1000, 2000] : [1000, 1000]}
+          useMap
+          map={bandTexture}
+          repeat={[-1, 1]}
           lineWidth={lanyardWidth}
         />
       </mesh>

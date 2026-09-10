@@ -12,6 +12,8 @@ export interface LanyardProps {
   lanyardWidth?: number;
   /** World position of the fixed rope anchor. The card rests ~1.9 units to its right. */
   anchor?: [number, number, number];
+  /** Freezes the physics sim on its authored pose — the segments never fall until this flips to false. */
+  paused?: boolean;
   className?: string;
 }
 

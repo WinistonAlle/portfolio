@@ -101,6 +101,14 @@ const Particles = ({
   pixelRatio = 0,
   /** World units the field drifts per viewport scrolled. 0 disables parallax. */
   scrollParallax = 0,
+  /**
+   * Ceiling, in world units, for the total parallax drift. 0 leaves the drift
+   * unbounded, which only works on a page a couple of viewports tall: past
+   * that the field slides clean out of the camera and the background goes
+   * empty. A cap keeps the drift honest near the top of the page and simply
+   * stops it from ever leaving.
+   */
+  scrollParallaxCap = 0,
   /** Extra roll, in radians, applied across one viewport of scroll. */
   scrollRoll = 0,
   className = '',
@@ -244,8 +252,15 @@ const Particles = ({
         particles.position.y = 0;
       }
 
-      // Field drifts up as the page moves down, which reads as depth.
-      particles.position.y += smoothedScroll * scrollParallax;
+      // Field drifts up as the page moves down, which reads as depth. tanh
+      // keeps the slope of a plain multiply while the drift is small, so the
+      // top of the page moves exactly as before, and bends it into the cap
+      // after that instead of letting it run off screen.
+      const drift = smoothedScroll * scrollParallax;
+      particles.position.y +=
+        scrollParallaxCap > 0
+          ? scrollParallaxCap * Math.tanh(drift / scrollParallaxCap)
+          : drift;
 
       if (!disableRotation) {
         particles.rotation.x = Math.sin(elapsed * 0.0002) * 0.1;
@@ -283,6 +298,7 @@ const Particles = ({
     disableRotation,
     pixelRatio,
     scrollParallax,
+    scrollParallaxCap,
     scrollRoll,
   ]);
 

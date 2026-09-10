@@ -1,76 +1,62 @@
-const PROJECTS = [
-  {
-    n: '01',
-    name: 'Ecossistema Gostinho Mineiro',
-    line: 'Quatro sistemas em produção numa rede de supermercados, todos conversando com um ERP legado: catálogo de funcionários, PDV, totem de loja e dashboard comercial.',
-    tags: ['Next.js', 'Supabase', 'CIGAM', 'Postgres'],
-    stat: '255 funcionários · 124 pedidos/mês no pico',
-  },
-  {
-    n: '02',
-    name: 'WMove',
-    line: 'SaaS de gestão para locadoras de veículos: 18 telas, RLS multi-tenant, DRE e fluxo de caixa, billing com quatro planos.',
-    tags: ['React', 'Supabase', 'RLS', 'Recharts'],
-    stat: 'Produto completo, ponta a ponta',
-  },
-  {
-    n: '03',
-    name: 'habit.exe',
-    line: 'Habit tracker com estética pixel art 8-bit — o avatar evolui junto com os hábitos, num diorama isométrico montado sprite a sprite.',
-    tags: ['Expo', 'React Native', 'TypeScript', 'Jest'],
-    stat: '104 testes verdes · web e mobile',
-  },
-  {
-    n: '04',
-    name: "King's Table",
-    line: 'App de home game de poker para iOS: relógio de blinds, ranking com pódio, criação de torneio em quatro passos.',
-    tags: ['Expo Router', 'Zustand', 'Supabase'],
-    stat: 'iOS primeiro, web depois',
-  },
-];
+import ProjectCard from '@/components/projects/ProjectCard';
+import { PROJECTS } from '@/data/projects';
+import GlowButton, { GlowArrow } from '@/components/ui/GlowButton';
 
+/* Grade de /projetos. Cada card abre a página do projeto.
+
+   Cards soltos, cada um com a sua borda e o seu canto arredondado, separados
+   por um vão de verdade. A versão anterior era uma grade contínua (vão de 1px
+   sobre a cor da linha), e os projetos apareciam como células de uma tabela em
+   vez de oito coisas separadas. */
 export default function Projects() {
   return (
     <section
       id="projetos"
-      className="relative mx-auto w-full max-w-7xl px-6 py-28 lg:px-10"
+      className="relative mx-auto w-full max-w-7xl px-6 pt-16 pb-28 lg:px-10 lg:pt-20"
     >
-      <p className="label">Projetos</p>
-      <h2 className="mt-4 max-w-3xl text-[clamp(1.9rem,3.6vw,2.9rem)] leading-tight font-bold tracking-[-0.02em] text-balance">
-        Quatro que valem ser lidos por inteiro.
-      </h2>
+      {/* Nada de contagem no título: a grade cresce um projeto por vez, e um
+          número escrito na mão vira mentira na primeira adição. */}
+      <h1 className="max-w-3xl text-[clamp(1.9rem,3.6vw,2.9rem)] leading-tight font-bold tracking-[-0.02em] text-balance">
+        Conheça um pouco do meu trabalho.
+      </h1>
+      <p className="mt-5 max-w-xl text-lg leading-relaxed text-muted">
+        Tem projeto de cliente, produto meu, trabalho de faculdade e coisa ainda
+        em construção. Clica em qualquer card pra ver o que tem por dentro.
+      </p>
 
-      <ul className="mt-14 grid grid-cols-1 gap-px overflow-hidden rounded-2xl border border-line bg-line md:grid-cols-2">
-        {PROJECTS.map((p) => (
-          <li
-            key={p.n}
-            className="group bg-background p-8 transition-colors hover:bg-surface"
-          >
-            <div className="flex items-baseline gap-4">
-              <span className="font-mono text-xs text-accent">{p.n}</span>
-              <h3 className="text-xl font-semibold tracking-[-0.01em]">
-                {p.name}
-              </h3>
-            </div>
-            <p className="mt-4 text-sm leading-relaxed text-muted">{p.line}</p>
-            <p className="mt-5 font-mono text-xs text-foreground/70">
-              {p.stat}
-            </p>
-            <ul className="mt-5 flex flex-wrap gap-2">
-              {p.tags.map((t) => (
-                <li
-                  key={t}
-                  className="rounded-full border border-line px-3 py-1 font-mono text-[0.65rem] text-muted"
-                >
-                  {t}
-                </li>
-              ))}
-            </ul>
-          </li>
+      <ul className="mt-14 grid grid-cols-1 gap-6 md:grid-cols-2 lg:gap-8">
+        {PROJECTS.map((project) => (
+          <ProjectCard key={project.slug} project={project} />
         ))}
       </ul>
 
-      <p className="label mt-10">Estudos de caso completos em construção</p>
+      {/* Fecho: quem chegou até aqui já passou pela grade inteira, então a
+          próxima ação é conversar, não continuar navegando. */}
+      <div className="mt-20">
+        <div className="cta">
+          <div className="cta__inner">
+            <h2 className="mx-auto max-w-2xl text-[clamp(1.8rem,3.2vw,2.6rem)] leading-tight font-bold tracking-[-0.02em] text-balance">
+              Quer um assim pro seu negócio?
+            </h2>
+
+            <p className="mx-auto mt-5 max-w-xl text-lg leading-relaxed text-muted">
+              Me conta o que você precisa e eu volto com escopo, prazo e preço.
+              O orçamento é gratuito e a gente ajusta junto até chegar no que
+              funciona pra você.
+            </p>
+
+            <div className="mt-9 flex flex-wrap items-center justify-center gap-3">
+              <GlowButton href="/contato">
+                Solicitar orçamento
+                <GlowArrow />
+              </GlowButton>
+              <GlowButton href="/sobre-mim" variant="secondary">
+                Sobre mim
+              </GlowButton>
+            </div>
+          </div>
+        </div>
+      </div>
     </section>
   );
 }

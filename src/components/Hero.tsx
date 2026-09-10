@@ -1,72 +1,49 @@
-import LanyardBadge from './lanyard/LanyardBadge';
+import EchoText from '@/components/text/EchoText';
+import TechStickers from '@/components/TechStickers';
+import GlowButton, { GlowArrow } from '@/components/ui/GlowButton';
 
-const STACK = [
-  'TypeScript',
-  'React',
-  'Next.js',
-  'Supabase',
-  'Postgres',
-  'Expo',
-];
-
+/* Abertura: "PORTFÓLIO" gigante ao fundo, e a foto recortada por cima, reta e
+   apoiada na base da seção. O crachá 3D e a bio migraram pra /sobre-mim. Este
+   bloco vive dentro do portal do MacBook (montado na page), por isso ocupa
+   uma tela inteira: é o que o notebook mostra na abertura. */
 export default function Hero() {
   return (
-    <section className="ambient relative isolate overflow-hidden">
-      <div className="relative z-10 mx-auto grid w-full max-w-7xl grid-cols-1 items-center gap-8 px-6 pt-24 pb-16 lg:grid-cols-[1.05fr_0.95fr] lg:gap-4 lg:px-10 lg:pt-16 lg:pb-24">
-        {/* ---------------------------------------------------------- copy */}
-        <div className="max-w-2xl">
-          <p className="label flex items-center gap-2.5">
-            <span className="relative flex h-2 w-2">
-              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-accent opacity-60" />
-              <span className="relative inline-flex h-2 w-2 rounded-full bg-accent" />
-            </span>
-            Disponível para novos projetos
-          </p>
+    <section className="ambient relative isolate flex min-h-[100svh] flex-col justify-end overflow-hidden">
+      {/* Título ao fundo, cruzando atrás da cabeça; a foto está em z-10 e
+          continua por cima. */}
+      <div className="absolute inset-x-0 top-[14%] z-0 -translate-y-1/2 px-6 text-center lg:px-10">
+        <EchoText
+          text="PORTFÓLIO"
+          className="echo-text--outlined"
+          fontSize="clamp(4rem, 13vw, 13rem)"
+          fontWeight={700}
+          style={{ fontFamily: 'var(--font-space-grotesk)' }}
+        />
+      </div>
 
-          <h1 className="mt-6 text-[clamp(2.5rem,6vw,4.25rem)] leading-[1.03] font-bold tracking-[-0.03em] text-balance">
-            Software que entra em produção
-            <span className="text-muted"> — e continua rodando.</span>
-          </h1>
+      {/* CTAs acima da foto na ordem do DOM, mas posicionados: assim a foto
+          pode encostar na base sem empurrar os botões para fora. */}
+      <div className="absolute inset-x-0 bottom-24 z-20 flex flex-wrap items-center justify-center gap-3 px-6 lg:px-10">
+        <GlowButton href="/projetos">
+          Ver os projetos
+          <GlowArrow />
+        </GlowButton>
+        <GlowButton href="/sobre-mim" variant="secondary">
+          Sobre mim
+        </GlowButton>
+      </div>
 
-          <p className="mt-6 max-w-xl text-lg leading-relaxed text-muted">
-            Sou <span className="text-foreground">Winiston Alle</span>,
-            desenvolvedor full-stack. Construo sistemas de ponta a ponta —
-            catálogo interno para 255 funcionários, PDV integrado a um ERP
-            legado, SaaS multi-tenant. Nenhum deles é demonstração: estão no ar,
-            com gente usando todo dia.
-          </p>
+      <TechStickers />
 
-          <div className="mt-9 flex flex-wrap items-center gap-3">
-            <a
-              href="#projetos"
-              className="rounded-full bg-foreground px-6 py-3 text-sm font-semibold text-background transition-transform hover:-translate-y-0.5"
-            >
-              Ver os projetos
-            </a>
-            <a
-              href="mailto:dev.winiston@gmail.com"
-              className="rounded-full border border-line px-6 py-3 text-sm font-semibold transition-colors hover:border-accent hover:text-accent"
-            >
-              Falar comigo
-            </a>
-          </div>
-
-          <ul className="mt-12 flex flex-wrap gap-x-5 gap-y-2 border-t border-line pt-6">
-            {STACK.map((tech) => (
-              <li key={tech} className="font-mono text-xs text-muted">
-                {tech}
-              </li>
-            ))}
-          </ul>
-        </div>
-
-        {/* -------------------------------------------------------- badge */}
-        <div className="relative h-[62vh] min-h-[420px] lg:h-[86vh]">
-          <LanyardBadge />
-          <p className="label pointer-events-none absolute inset-x-0 bottom-2 text-center">
-            arraste o crachá
-          </p>
-        </div>
+      {/* A base do busto encosta na base da seção. */}
+      <div className="relative z-10 flex justify-center">
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src="/sticker-winiston-v4.png"
+          alt="Winiston Alle"
+          className="block h-auto w-[clamp(28rem,62vw,53rem)] select-none"
+          draggable={false}
+        />
       </div>
     </section>
   );
