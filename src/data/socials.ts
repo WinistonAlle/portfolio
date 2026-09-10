@@ -32,11 +32,10 @@ const HREFS = {
   linkedin:
     'https://www.linkedin.com/in/winiston-alle-al%C3%ADpio-neves-20713a370/',
   email: 'mailto:dev.winiston@gmail.com',
-  /* O texto já vai preenchido para a pessoa não ter que abrir a conversa
-     pensando no que escrever. */
-  whatsapp:
-    `https://wa.me/${WHATSAPP_NUMBER}?text=` +
-    encodeURIComponent('Oi, Winiston! Vim pelo seu portfólio.'),
+  /* Só a base. O texto que já vai preenchido depende do idioma, então quem
+     monta o link completo é o componente, com a saudação vinda do dicionário:
+     este arquivo não conhece idioma nenhum. */
+  whatsapp: `https://wa.me/${WHATSAPP_NUMBER}`,
   instagram: 'https://www.instagram.com/winistonalle/',
 };
 

@@ -16,18 +16,24 @@ import { useState } from 'react';
 import { WHATSAPP_NUMBER } from '@/data/socials';
 import GlowButton, { GlowArrow } from '@/components/ui/GlowButton';
 
-const ASSUNTOS = [
-  'Um site simples ou landing page',
-  'Um sistema sob medida',
-  'Automação ou alguma coisa com IA',
-  'Uma vaga',
-  'Outro assunto',
-];
+type Texto = {
+  name: string;
+  namePlaceholder: string;
+  subject: string;
+  message: string;
+  messagePlaceholder: string;
+  submit: string;
+  opened: string;
+  openedLink: string;
+  subjects: string[];
+  greeting: string;
+  subjectLine: string;
+};
 
 const CAMPO =
   'mt-3 w-full rounded-xl border border-line bg-surface/60 px-4 py-3 text-sm outline-none transition-colors placeholder:text-muted/60 focus:border-accent';
 
-export default function QuickMessage() {
+export default function QuickMessage({ t }: { t: Texto }) {
   const [abriu, setAbriu] = useState(false);
   const [link, setLink] = useState('');
 
@@ -38,7 +44,7 @@ export default function QuickMessage() {
     const assunto = String(form.get('assunto') ?? '');
     const mensagem = String(form.get('mensagem') ?? '').trim();
 
-    const texto = `Oi, Winiston! Aqui é ${nome}, vim pelo seu portfólio.\n\nAssunto: ${assunto}\n\n${mensagem}`;
+    const texto = `${t.greeting.replace('{nome}', nome)}\n\n${t.subjectLine}: ${assunto}\n\n${mensagem}`;
     const url = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(texto)}`;
 
     /* Aba nova para a pessoa não perder o portfólio de vista. Como a chamada
@@ -55,31 +61,31 @@ export default function QuickMessage() {
         className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-[1fr_1.1fr_1.5fr_auto] lg:items-end"
       >
         <label className="block">
-          <span className="label">Nome</span>
+          <span className="label">{t.name}</span>
           <input
             name="nome"
             required
             autoComplete="name"
-            placeholder="Como te chamo"
+            placeholder={t.namePlaceholder}
             className={CAMPO}
           />
         </label>
 
         <label className="block">
-          <span className="label">Assunto</span>
+          <span className="label">{t.subject}</span>
           {/* color-scheme dark: sem isso a lista que o sistema desenha abre
               branca por cima de uma página preta. */}
           <select
             name="assunto"
             required
-            defaultValue={ASSUNTOS[0]}
+            defaultValue={t.subjects[0]}
             className={`${CAMPO} [color-scheme:dark] cursor-pointer appearance-none bg-[length:11px] bg-[right_1rem_center] bg-no-repeat pr-10`}
             style={{
               backgroundImage:
                 "url(\"data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 8' fill='none' stroke='%2378879f' stroke-width='1.6'><path d='M1 1.5 6 6.5 11 1.5'/></svg>\")",
             }}
           >
-            {ASSUNTOS.map((a) => (
+            {t.subjects.map((a) => (
               <option key={a} value={a}>
                 {a}
               </option>
@@ -88,17 +94,17 @@ export default function QuickMessage() {
         </label>
 
         <label className="block">
-          <span className="label">Mensagem</span>
+          <span className="label">{t.message}</span>
           <input
             name="mensagem"
             required
-            placeholder="uma linha já basta pra começar"
+            placeholder={t.messagePlaceholder}
             className={CAMPO}
           />
         </label>
 
         <GlowButton type="submit" className="justify-center">
-          Chamar no WhatsApp
+          {t.submit}
           <GlowArrow />
         </GlowButton>
       </form>
@@ -107,14 +113,14 @@ export default function QuickMessage() {
           fica sem saber. O link fica aqui como saída. */}
       {abriu && (
         <p className="mt-5 text-sm text-muted">
-          Abri a conversa numa aba nova, com a mensagem pronta. Se não abriu,{' '}
+          {t.opened}{' '}
           <a
             href={link}
             target="_blank"
             rel="noreferrer"
             className="text-foreground underline decoration-line underline-offset-4 transition-colors hover:text-accent"
           >
-            clica aqui
+            {t.openedLink}
           </a>
           .
         </p>

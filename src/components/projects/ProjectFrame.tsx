@@ -1,6 +1,7 @@
 import { MacbookPro } from '@/components/macbook/MacbookPro';
 import { Iphone16Pro } from '@/components/iphone/Iphone16Pro';
 import VideoLoop from '@/components/media/VideoLoop';
+import { pick, type Locale } from '@/i18n/config';
 import type { ProjectMedia } from '@/data/projects';
 
 /* Print (ou vídeo) dentro da moldura do aparelho certo. As duas molduras do
@@ -15,9 +16,11 @@ import type { ProjectMedia } from '@/data/projects';
  */
 export default function ProjectFrame({
   media,
+  locale,
   className,
 }: {
   media: ProjectMedia;
+  locale: Locale;
   className?: string;
 }) {
   if (media.frame === 'none') return null;
@@ -37,7 +40,7 @@ export default function ProjectFrame({
         src={media.src || undefined}
         screen={screen}
         role="img"
-        aria-label={media.alt}
+        aria-label={pick(media.alt, locale)}
       />
     );
   }
@@ -48,7 +51,7 @@ export default function ProjectFrame({
       src={media.src || undefined}
       screen={screen}
       role="img"
-      aria-label={media.alt}
+      aria-label={pick(media.alt, locale)}
     />
   );
 }

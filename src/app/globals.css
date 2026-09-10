@@ -217,6 +217,83 @@ body.boot-intro-active {
   color: var(--accent);
 }
 
+/* Switch de idioma: duas bandeiras num trilho, com o marcador deslizando pra
+   que está ativa. É um LINK, não um input: o que acontece no clique é navegar
+   pra outra URL, e um checkbox mentiria sobre isso pro leitor de tela e pro
+   robô de busca. O nome acessível ("Read in English") vem do aria-label.
+
+   Cada bandeira tem compartimento de largura fixa. É o que segura o layout
+   quando o sistema não tem glifo de bandeira e o navegador desenha as letras
+   "BR" e "US" no lugar: continua lendo como switch de dois estados em vez de
+   virar um "BRUS" grudado. */
+.lang-switch {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  padding: 3px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  line-height: 1;
+  transition: border-color 0.2s ease;
+}
+
+.lang-switch:hover {
+  border-color: rgb(255 255 255 / 25%);
+}
+
+.lang-switch:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+
+/* O marcador é irmão das bandeiras e fica atrás delas. Anima translate, e não
+   left, pra correr na GPU e não recalcular layout a cada quadro. */
+.lang-switch__knob {
+  position: absolute;
+  inset-block: 3px;
+  inset-inline-start: 3px;
+  width: 1.9rem;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--accent) 18%, transparent);
+  border: 1px solid color-mix(in srgb, var(--accent) 45%, transparent);
+  transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.lang-switch[data-locale='en'] .lang-switch__knob {
+  transform: translateX(1.9rem);
+}
+
+.lang-switch__flag {
+  position: relative;
+  z-index: 1;
+  width: 1.9rem;
+  display: grid;
+  place-items: center;
+  font-size: 0.95rem;
+  /* Fallback em letra ("BR"/"US") precisa caber, e num corpo menor. */
+  font-family: var(--font-mono), ui-monospace, monospace;
+  letter-spacing: 0;
+  /* A inativa fica apagada em vez de sumir: o switch precisa mostrar os DOIS
+     estados pra pessoa entender que dá pra trocar. */
+  filter: grayscale(1);
+  opacity: 0.4;
+  transition:
+    filter 0.2s ease,
+    opacity 0.2s ease;
+}
+
+.lang-switch[data-locale='pt'] .lang-switch__flag--pt,
+.lang-switch[data-locale='en'] .lang-switch__flag--en {
+  filter: none;
+  opacity: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lang-switch__knob {
+    transition: none;
+  }
+}
+
 /* Filete aceso na borda de baixo do header. Já foi barra de progresso de
    leitura; agora fica sempre inteiro, como um led. */
 .site-header__glow {

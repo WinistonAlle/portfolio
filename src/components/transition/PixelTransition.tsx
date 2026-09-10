@@ -28,6 +28,7 @@ import {
   useState,
 } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
+import { isLocale } from '@/i18n/config';
 
 const PIXEL_SIZE = 56;
 const MAX_PIXELS = 900;
@@ -74,6 +75,13 @@ type Ctx = {
   chromeHidden: boolean;
   setChromeHidden: (hidden: boolean) => void;
 };
+
+/* Home = um único segmento, e esse segmento é um idioma. '/pt' é home,
+   '/pt/projetos' não é. */
+function ehHome(pathname: string | null) {
+  const partes = (pathname ?? '').split('/').filter(Boolean);
+  return partes.length === 1 && isLocale(partes[0]);
+}
 
 const PixelTransitionContext = createContext<Ctx | null>(null);
 
@@ -151,14 +159,18 @@ export function PixelTransitionProvider({
 
   const [phase, setPhase] = useState<Phase>('idle');
   const [grid, setGrid] = useState<Grid | null>(null);
-  /* A home sempre toca o boot ao chegar em '/' — assume rodando por padrão
+  /* A home sempre toca o boot ao chegar nela — assume rodando por padrão
      pra essa rota (evita o header piscar antes do BootIntro montar) e
      reflete qualquer troca de rota daí em diante. BootIntro desliga isso no
-     handoff, no mesmo commit que libera a cortina. */
-  const [bootActive, setBootActive] = useState(() => pathname === '/');
+     handoff, no mesmo commit que libera a cortina.
+
+     Desde que o site virou bilíngue a home não é mais '/': é '/pt' ou '/en'.
+     Comparar com '/' deixava o boot sem tocar em lugar nenhum, porque a raiz
+     agora só existe pra redirecionar. */
+  const [bootActive, setBootActive] = useState(() => ehHome(pathname));
   const [chromeHidden, setChromeHidden] = useState(false);
   useEffect(() => {
-    setBootActive(pathname === '/');
+    setBootActive(ehHome(pathname));
   }, [pathname]);
   const targetRef = useRef<string | null>(null);
   const pixelRefs = useRef<(HTMLDivElement | null)[]>([]);

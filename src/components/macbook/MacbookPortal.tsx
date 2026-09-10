@@ -25,6 +25,9 @@
 import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { MacbookPro } from './MacbookPro';
 import Header from '@/components/Header';
+import type { Locale } from '@/i18n/config';
+
+type Nav = { about: string; projects: string; contact: string };
 import { usePixelTransition } from '@/components/transition/PixelTransition';
 import { jumpScrollTo } from '@/components/scroll/SmoothScroll';
 
@@ -37,11 +40,16 @@ const SCREEN_Y_OFFSET = ((21.32 + 345.17) / 2 - 400 / 2) / 400;
 
 export default function MacbookPortal({
   children,
+  header,
   startScale = 0.56,
   /** Quanta rolagem o zoom consome, em porcentagem da altura da tela. */
   travelVh = 130,
 }: {
   children: React.ReactNode;
+  /* Props do Header pra cópia que aparece DENTRO da tela do notebook. Chegam
+     por aqui porque o Header precisa de idioma e de texto traduzido, e este
+     componente é de cliente: quem tem essas coisas é a página, no servidor. */
+  header: { locale: Locale; nav: Nav; switchLabel: string };
   startScale?: number;
   travelVh?: number;
 }) {
@@ -151,7 +159,7 @@ export default function MacbookPortal({
             {/* Antes de entrar, o header mora aqui dentro, como se fosse o
                 topo do site rodando na tela do notebook. Some ao entrar: o
                 header real do layout assume a partir daí. */}
-            {!entered && <Header inPortal />}
+            {!entered && <Header inPortal {...header} />}
             {children}
           </div>
         </div>

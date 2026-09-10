@@ -105,8 +105,20 @@ function Cube({
   );
 }
 
-export default function SocialCubes() {
-  const cubes = SOCIALS.map((social, i) => ({ social, ...POSITIONS[i] }));
+export default function SocialCubes({ greeting }: { greeting: string }) {
+  /* Só o WhatsApp muda com o idioma: a saudação já vai escrita na conversa, e
+     ela tem que chegar no idioma de quem clicou. Os outros quatro canais são
+     URL pura, sem texto nosso dentro. */
+  const cubes = SOCIALS.map((social, i) => ({
+    social:
+      social.id === 'whatsapp'
+        ? {
+            ...social,
+            href: `${social.href}?text=${encodeURIComponent(greeting)}`,
+          }
+        : social,
+    ...POSITIONS[i],
+  }));
   /* Fila de cima primeiro (ly menor), para a de baixo pintar por cima. */
   const ordenados = [...cubes].sort((a, b) => a.ly - b.ly);
 

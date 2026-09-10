@@ -4,30 +4,44 @@ import SlideIn from '@/components/scroll/SlideIn';
 import ProjectFrame from '@/components/projects/ProjectFrame';
 import Gallery from '@/components/projects/Gallery';
 import { PROJECTS, projectBySlug } from '@/data/projects';
+import { getDictionary } from '@/i18n';
+import { LOCALES, isLocale, pick } from '@/i18n/config';
 import GlowButton, { GlowArrow } from '@/components/ui/GlowButton';
 
+/* Produto cartesiano idioma x projeto: seis projetos em dois idiomas dá doze
+   páginas estáticas. Sem os dois eixos, metade nasceria sob demanda. */
 export function generateStaticParams() {
-  return PROJECTS.map((p) => ({ slug: p.slug }));
+  return LOCALES.flatMap((lang) => PROJECTS.map((p) => ({ lang, slug: p.slug })));
 }
 
 export async function generateMetadata(
-  props: PageProps<'/projetos/[slug]'>,
+  props: PageProps<'/[lang]/projetos/[slug]'>,
 ): Promise<Metadata> {
-  const { slug } = await props.params;
+  const { lang, slug } = await props.params;
   const project = projectBySlug(slug);
-  if (!project) return {};
+  if (!project || !isLocale(lang)) return {};
+
   return {
     title: `${project.name} — Winiston Alle`,
-    description: project.line,
+    description: pick(project.line, lang),
+    alternates: {
+      languages: {
+        'pt-BR': `/pt/projetos/${slug}`,
+        en: `/en/projetos/${slug}`,
+        'x-default': `/pt/projetos/${slug}`,
+      },
+    },
   };
 }
 
 export default async function ProjectPage(
-  props: PageProps<'/projetos/[slug]'>,
+  props: PageProps<'/[lang]/projetos/[slug]'>,
 ) {
-  const { slug } = await props.params;
+  const { lang, slug } = await props.params;
   const project = projectBySlug(slug);
-  if (!project) notFound();
+  if (!project || !isLocale(lang)) notFound();
+
+  const dict = await getDictionary(lang);
 
   const hasFrame = project.media.frame !== 'none';
 
@@ -39,9 +53,9 @@ export default async function ProjectPage(
         {/* Os três botões do topo usam o mesmo componente, e a hierarquia
             entre eles é feita por tamanho e brilho: o voltar é o mais
             apagado, os links do projeto são os que puxam o clique. */}
-        <GlowButton href="/projetos" variant="quiet">
+        <GlowButton href={`/${lang}/projetos`} variant="quiet">
           <GlowArrow dir="left" />
-          Projetos
+          {dict.project.back}
         </GlowButton>
 
         {/* Abertura: identificação e print de capa lado a lado. */}
@@ -60,11 +74,11 @@ export default async function ProjectPage(
             </h1>
 
             <p className="mt-6 text-xl leading-relaxed text-balance">
-              {project.line}
+              {pick(project.line, lang)}
             </p>
 
             <ul className="mt-8 flex flex-col gap-2">
-              {project.stat.map((s) => (
+              {pick(project.stat, lang).map((s) => (
                 <li
                   key={s}
                   className="flex items-baseline gap-3 font-mono text-xs text-foreground/70"
@@ -84,7 +98,9 @@ export default async function ProjectPage(
                 {project.links.map((link) => (
                   <li key={link.href}>
                     <GlowButton href={link.href} external>
-                      {link.label}
+                      {link.kind === 'site'
+                        ? dict.project.linkSite
+                        : dict.project.linkGithub}
                       <GlowArrow dir="diagonal" />
                     </GlowButton>
                   </li>
@@ -102,18 +118,10 @@ export default async function ProjectPage(
               from="right"
               className="lg:w-[calc(100%+2.5rem)] xl:w-[calc(100%+6rem)]"
             >
-              <ProjectFrame media={project.media} />
+              <ProjectFrame media={project.media} locale={lang} />
             </SlideIn>
           )}
         </div>
-
-        {/* Corpo, quando existe. Sem ele a página vai do topo direto pro
-            case, e a primeira seção do case já carrega o próprio respiro. */}
-        {project.body ? (
-          <div className="mt-24 max-w-2xl">
-            <p className="text-lg leading-relaxed text-muted">{project.body}</p>
-          </div>
-        ) : null}
 
         {/* Antes e depois lado a lado. Empilhados, os dois blocos ocupavam
             duas telas de rolagem para dizer uma coisa só; em colunas, a
@@ -122,14 +130,14 @@ export default async function ProjectPage(
             Ele só aparece quando os DOIS lados existem: num projeto que tem só
             um deles, a coluna sozinha ocupa a largura toda e um filete solto
             marcaria uma divisão que não há. */}
-        {project.problem?.length || project.solution?.length ? (
+        {project.problem || project.solution ? (
           <section className="mt-20 grid grid-cols-1 gap-x-14 gap-y-12 border-t border-line pt-14 lg:grid-cols-2">
-            {project.problem?.length ? (
+            {project.problem ? (
               <div className="max-w-2xl">
                 <h2 className="text-[clamp(1.5rem,2.4vw,2rem)] leading-tight font-bold tracking-[-0.02em] text-balance">
-                  Como era antes.
+                  {dict.project.problemTitle}
                 </h2>
-                {project.problem.map((p) => (
+                {pick(project.problem, lang).map((p) => (
                   <p key={p} className="mt-5 leading-relaxed text-muted">
                     {p}
                   </p>
@@ -137,18 +145,16 @@ export default async function ProjectPage(
               </div>
             ) : null}
 
-            {project.solution?.length ? (
+            {project.solution ? (
               <div
                 className={`max-w-2xl ${
-                  project.problem?.length
-                    ? 'lg:border-l lg:border-line lg:pl-14'
-                    : ''
+                  project.problem ? 'lg:border-l lg:border-line lg:pl-14' : ''
                 }`}
               >
                 <h2 className="text-[clamp(1.5rem,2.4vw,2rem)] leading-tight font-bold tracking-[-0.02em] text-balance">
-                  O que mudou.
+                  {dict.project.solutionTitle}
                 </h2>
-                {project.solution.map((p) => (
+                {pick(project.solution, lang).map((p) => (
                   <p key={p} className="mt-5 leading-relaxed text-muted">
                     {p}
                   </p>
@@ -161,25 +167,25 @@ export default async function ProjectPage(
         {project.gallery?.length ? (
           <section className="mt-20 border-t border-line pt-14">
             <h2 className="max-w-2xl text-[clamp(1.5rem,2.4vw,2rem)] leading-tight font-bold tracking-[-0.02em] text-balance">
-              Por dentro.
+              {dict.project.galleryTitle}
             </h2>
             <div className="mt-10">
-              <Gallery shots={project.gallery} />
+              <Gallery shots={project.gallery} locale={lang} />
             </div>
           </section>
         ) : null}
 
         <section className="mt-20 border-t border-line pt-14">
           <h2 className="max-w-xl text-[clamp(1.4rem,2.2vw,1.8rem)] leading-tight font-bold tracking-[-0.02em] text-balance">
-            Quer saber como essa parte foi feita?
+            {dict.project.ctaTitle}
           </h2>
           <div className="mt-8 flex flex-wrap items-center gap-3">
-            <GlowButton href="/contato">
-              Solicitar orçamento
+            <GlowButton href={`/${lang}/contato`}>
+              {dict.project.ctaButton}
               <GlowArrow />
             </GlowButton>
-            <GlowButton href="/projetos" variant="secondary">
-              Ver os outros projetos
+            <GlowButton href={`/${lang}/projetos`} variant="secondary">
+              {dict.project.ctaOthers}
             </GlowButton>
           </div>
         </section>

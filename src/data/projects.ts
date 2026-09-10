@@ -1,14 +1,21 @@
+import type { Localized } from '@/i18n/config';
+
 /* Conteúdo de /projetos. Cada projeto aparece como card na grade e ganha uma
-   página própria em /projetos/[slug].
+   página própria em /[lang]/projetos/[slug].
 
-   O que existe aqui pra todo projeto (`line`, `stat`, `tags`) é o que a grade
-   mostra e o que a página abre. Os campos do case (`body`, `problem`,
-   `solution`, `gallery`) são opcionais de propósito: os projetos vão ser
-   detalhados um a um, e quem ainda não foi abre a página com o texto curto em
-   vez de abrir uma página vazia.
+   Tudo que a pessoa lê na tela é `Localized`: os dois idiomas moram lado a
+   lado, no mesmo objeto. Foi escolha contra a alternativa óbvia, que era um
+   `projects.en.ts` separado. Dois arquivos derivam: alguém acrescenta um
+   projeto num e esquece o outro, e o site fica com seis cards em português e
+   cinco em inglês. Aqui o TypeScript recusa o projeto pela metade.
 
-   `media.src` fica vazio até o print existir; a moldura aparece com a tela
-   apagada, então falta de imagem não quebra layout nem esconde o projeto. */
+   O que NÃO é traduzido, de propósito: nome de projeto, nome de tecnologia,
+   caminho de imagem e URL. "Supabase" e "Gostinho Mineiro" são os mesmos nos
+   dois idiomas, e traduzir isso só criaria oportunidade de divergir.
+
+   Os campos do case (`problem`, `solution`, `gallery`) são opcionais porque os
+   projetos vão sendo detalhados um a um: quem ainda não foi abre a página com
+   o texto curto em vez de abrir uma página vazia. */
 
 export type ProjectMedia = {
   /** Qual moldura emoldura o print. `none` deixa o texto ocupar a faixa. */
@@ -23,53 +30,73 @@ export type ProjectMedia = {
   video?: string;
   /** Frame exibido enquanto o vídeo carrega. Sem ele a tela pisca preta. */
   poster?: string;
-  alt: string;
+  alt: Localized<string>;
 };
 
-/** Link externo da página do projeto. */
+/* Link externo da página do projeto. O rótulo vem do dicionário, não daqui:
+   "Abrir o site" é igual nos seis projetos, e repetir a string em cada um é
+   repetir a chance de traduzir diferente. */
 export type ProjectLink = {
-  label: string;
+  kind: 'site' | 'github';
   href: string;
 };
 
 /** Print da galeria da página do projeto. */
 export type Shot = {
   src: string;
-  alt: string;
+  alt: Localized<string>;
   /** Legenda curta. É ela que explica o que a tela faz. */
-  caption?: string;
+  caption?: Localized<string>;
 };
+
+/* Etiqueta do filtro, como CHAVE e não como rótulo: o texto do botão está no
+   dicionário, então o filtro funciona igual nos dois idiomas.
+
+   Um projeto pode ter mais de uma, e é de propósito. Os rótulos não são do
+   mesmo eixo: "Gostinho Mineiro" diz PARA QUEM, "Landing pages e sites" diz O
+   QUE É. O site institucional da GM é as duas coisas ao mesmo tempo, e forçar
+   uma escolha escondia ele de quem filtrasse por sites.
+
+   O preço é que a soma dos filtros passa do total (hoje 3 + 4 + 1 = 8 para
+   seis projetos). É esperado: as contagens dizem quantos projetos há em cada
+   etiqueta, não como o total se reparte. */
+export type ProjectGroup = 'gostinho-mineiro' | 'sites' | 'outros';
+
+/** A ordem aqui é a ordem dos filtros na tela. */
+export const PROJECT_GROUPS: ProjectGroup[] = [
+  'gostinho-mineiro',
+  'sites',
+  'outros',
+];
+
+/** Estado do projeto. O card só mostra selo quando não está no ar. */
+export type ProjectStatus = 'live' | 'wip';
 
 export type Project = {
   n: string;
   /** Vira o `id` do bloco, para link direto (ex.: /projetos#pdv). */
   slug: string;
   name: string;
-  /** Etiqueta de estado, na linha do número. */
-  status: string;
-  /** Onde o projeto vive: empresa, produto próprio, etc. */
+  status: ProjectStatus;
+  /* Metadado interno, não aparece em tela nenhuma hoje. Por isso não é
+     `Localized`: traduzir texto que ninguém lê é custo sem retorno. */
   context: string;
+  /** Uma ou mais etiquetas. O card aparece em todos os filtros que listar. */
+  groups: ProjectGroup[];
   /** Uma frase. É o que a pessoa lê se ler só uma linha do bloco. */
-  line: string;
-  /* Opcional: quando o `line` e os `stat` já dizem tudo, um parágrafo de
-     resumo logo abaixo deles só repete o que a pessoa acabou de ler. */
-  /** O problema e o que o sistema faz. Três ou quatro frases. */
-  body?: string;
+  line: Localized<string>;
   /** Números e fatos verificáveis, em fonte mono. */
-  stat: string[];
+  stat: Localized<string[]>;
   tags: string[];
   media: ProjectMedia;
-  /* Lista, e não um `href` só: a Aluplex tem site no ar e repositório
-     público, e os dois interessam a quem está olhando. */
-  /** Links externos, quando existe algo público pra ver. */
   links?: ProjectLink[];
 
   /* Daqui pra baixo: só os projetos já detalhados. Um parágrafo por item. */
 
   /** Como era antes do sistema existir, e o que doía. */
-  problem?: string[];
+  problem?: Localized<string[]>;
   /** O que foi construído e o que mudou na prática. */
-  solution?: string[];
+  solution?: Localized<string[]>;
   gallery?: Shot[];
 };
 
@@ -78,60 +105,91 @@ export const projectBySlug = (slug: string) =>
 
 /** A página do projeto só tem case escrito quando estes campos existem. */
 export const hasCase = (p: Project) =>
-  Boolean(p.problem?.length || p.solution?.length || p.gallery?.length);
+  Boolean(p.problem || p.solution || p.gallery?.length);
 
 export const PROJECTS: Project[] = [
   {
     n: '01',
     slug: 'aluplex',
     name: 'Aluplex',
-    status: 'No ar',
+    status: 'live',
     context: 'Cliente',
-    line: 'Landing de uma empresa de fachadas de vidro, feita pra transformar visita em orçamento no WhatsApp.',
-    stat: [
-      'Uma página, sem framework e sem build',
-      'Formulário qualifica o lead e abre o WhatsApp',
-      'Hospedada na Vercel',
-    ],
+    groups: ['sites'],
+    line: {
+      pt: 'Landing de uma empresa de fachadas de vidro, feita pra transformar visita em orçamento no WhatsApp.',
+      en: 'Landing page for a glass façade company, built to turn a visit into a quote on WhatsApp.',
+    },
+    stat: {
+      pt: [
+        'Uma página, sem framework e sem build',
+        'Formulário qualifica o lead e abre o WhatsApp',
+        'Hospedada na Vercel',
+      ],
+      en: [
+        'One page, no framework and no build step',
+        'The form qualifies the lead and opens WhatsApp',
+        'Hosted on Vercel',
+      ],
+    },
     tags: ['HTML', 'CSS', 'JavaScript', 'Vercel'],
     media: {
       frame: 'desktop',
       src: '/cases/aluplex/capa.jpg',
       video: '/cases/aluplex/scroll.mp4',
       poster: '/cases/aluplex/poster.jpg',
-      alt: 'Topo da landing da Aluplex, com uma fachada de vidro ao fundo',
+      alt: {
+        pt: 'Topo da landing da Aluplex, com uma fachada de vidro ao fundo',
+        en: 'Top of the Aluplex landing page, with a glass façade behind it',
+      },
     },
     links: [
-      { label: 'Abrir o site', href: 'https://site-aluplex.vercel.app' },
-      {
-        label: 'Ver no GitHub',
-        href: 'https://github.com/WinistonAlle/site-aluplex',
-      },
+      { kind: 'site', href: 'https://site-aluplex.vercel.app' },
+      { kind: 'github', href: 'https://github.com/WinistonAlle/site-aluplex' },
     ],
     gallery: [
       {
         src: '/cases/aluplex/solucoes.jpg',
-        alt: 'Grade com as cinco soluções da Aluplex',
-        caption:
-          'As cinco soluções da empresa, cada uma com a foto da coisa pronta. Quem chega procurando "guarda-corpo de vidro" acha o nome que procurava sem ler o resto da página.',
+        alt: {
+          pt: 'Grade com as cinco soluções da Aluplex',
+          en: "Grid with Aluplex's five solutions",
+        },
+        caption: {
+          pt: 'As cinco soluções da empresa, cada uma com a foto da coisa pronta. Quem chega procurando "guarda-corpo de vidro" acha o nome que procurava sem ler o resto da página.',
+          en: 'The five solutions, each with a photo of the finished job. Someone arriving in search of "glass railing" finds the words they came for without reading the rest of the page.',
+        },
       },
       {
         src: '/cases/aluplex/obras.jpg',
-        alt: 'Carrossel de obras entregues, com a peça central colorida',
-        caption:
-          'O carrossel de obras entregues. Só a peça em foco fica colorida, as vizinhas ficam em preto e branco, então o olho sabe onde parar.',
+        alt: {
+          pt: 'Carrossel de obras entregues, com a peça central colorida',
+          en: 'Carousel of completed jobs, with the centre item in colour',
+        },
+        caption: {
+          pt: 'O carrossel de obras entregues. Só a peça em foco fica colorida, as vizinhas ficam em preto e branco, então o olho sabe onde parar.',
+          en: 'The carousel of completed jobs. Only the item in focus keeps its colour, its neighbours go black and white, so the eye knows where to stop.',
+        },
       },
       {
         src: '/cases/aluplex/numeros.jpg',
-        alt: 'Seção de engenharia com os números da empresa',
-        caption:
-          'Os números que sustentam o discurso: 250 obras entregues, 120 mil m² instalados, 15 anos de mercado. Numa compra cara, é isso que responde "posso confiar?".',
+        alt: {
+          pt: 'Seção de engenharia com os números da empresa',
+          en: "Engineering section with the company's numbers",
+        },
+        caption: {
+          pt: 'Os números que sustentam o discurso: 250 obras entregues, 120 mil m² instalados, 15 anos de mercado. Numa compra cara, é isso que responde "posso confiar?".',
+          en: 'The numbers that back the pitch: 250 jobs delivered, 120,000 m² installed, 15 years in business. On an expensive purchase, this is what answers "can I trust them?".',
+        },
       },
       {
         src: '/cases/aluplex/orcamento.jpg',
-        alt: 'Formulário de orçamento com escopo e faixa de investimento',
-        caption:
-          'O formulário de orçamento. Escopo e faixa de investimento viram uma mensagem pronta no WhatsApp da empresa, e o vendedor já abre a conversa sabendo do que se trata.',
+        alt: {
+          pt: 'Formulário de orçamento com escopo e faixa de investimento',
+          en: 'Quote form with scope and budget range',
+        },
+        caption: {
+          pt: 'O formulário de orçamento. Escopo e faixa de investimento viram uma mensagem pronta no WhatsApp da empresa, e o vendedor já abre a conversa sabendo do que se trata.',
+          en: "The quote form. Scope and budget range become a ready-made message in the company's WhatsApp, so the salesperson opens the conversation already knowing what it is about.",
+        },
       },
     ],
   },
@@ -139,53 +197,84 @@ export const PROJECTS: Project[] = [
     n: '02',
     slug: 'alucraft',
     name: 'Alucraft',
-    status: 'No ar',
+    status: 'live',
     context: 'Cliente',
-    line: 'Landing de uma fábrica de esquadrias de alumínio, do hero que se expande até o orçamento no WhatsApp.',
-    stat: [
-      'React 18 direto do CDN, sem etapa de build',
-      'Hero que abre conforme a página rola',
-      'Formulário abre o WhatsApp com a mensagem pronta',
-    ],
+    groups: ['sites'],
+    line: {
+      pt: 'Landing de uma fábrica de esquadrias de alumínio, do hero que se expande até o orçamento no WhatsApp.',
+      en: 'Landing page for an aluminium frame manufacturer, from the expanding hero to the quote on WhatsApp.',
+    },
+    stat: {
+      pt: [
+        'React 18 direto do CDN, sem etapa de build',
+        'Hero que abre conforme a página rola',
+        'Formulário abre o WhatsApp com a mensagem pronta',
+      ],
+      en: [
+        'React 18 straight from the CDN, no build step',
+        'A hero that opens up as the page scrolls',
+        'The form opens WhatsApp with the message written',
+      ],
+    },
     tags: ['React', 'JavaScript', 'CSS', 'Vercel'],
     media: {
       frame: 'desktop',
       src: '/cases/alucraft/capa.jpg',
       video: '/cases/alucraft/scroll.mp4',
       poster: '/cases/alucraft/poster.jpg',
-      alt: 'Hero da Alucraft, com a fachada de um prédio ocupando a tela inteira',
+      alt: {
+        pt: 'Hero da Alucraft, com a fachada de um prédio ocupando a tela inteira',
+        en: 'Alucraft hero, with a building façade filling the whole screen',
+      },
     },
     links: [
-      { label: 'Abrir o site', href: 'https://site-alucraft.vercel.app' },
-      {
-        label: 'Ver no GitHub',
-        href: 'https://github.com/WinistonAlle/site-alucraft',
-      },
+      { kind: 'site', href: 'https://site-alucraft.vercel.app' },
+      { kind: 'github', href: 'https://github.com/WinistonAlle/site-alucraft' },
     ],
     gallery: [
       {
         src: '/cases/alucraft/catalogo.jpg',
-        alt: 'Carrossel de produtos da Alucraft, com a peça central em destaque',
-        caption:
-          'Os produtos num carrossel em coverflow: a peça central vem à frente e as vizinhas recuam. Numa fábrica que faz seis coisas diferentes, isso deixa mostrar uma de cada vez sem esconder o resto.',
+        alt: {
+          pt: 'Carrossel de produtos da Alucraft, com a peça central em destaque',
+          en: 'Alucraft product carousel, with the centre item brought forward',
+        },
+        caption: {
+          pt: 'Os produtos num carrossel em coverflow: a peça central vem à frente e as vizinhas recuam. Numa fábrica que faz seis coisas diferentes, isso deixa mostrar uma de cada vez sem esconder o resto.',
+          en: 'Products in a coverflow carousel: the centre item comes forward and its neighbours fall back. In a factory that makes six different things, this shows one at a time without hiding the rest.',
+        },
       },
       {
         src: '/cases/alucraft/garantias.jpg',
-        alt: 'Seção com as três garantias da Alucraft',
-        caption:
-          'As três objeções que aparecem em toda obra, respondidas antes de virarem pergunta: o alumínio é certificado, o prazo está em contrato e o atendimento é direto com quem executa.',
+        alt: {
+          pt: 'Seção com as três garantias da Alucraft',
+          en: "Section with Alucraft's three guarantees",
+        },
+        caption: {
+          pt: 'As três objeções que aparecem em toda obra, respondidas antes de virarem pergunta: o alumínio é certificado, o prazo está em contrato e o atendimento é direto com quem executa.',
+          en: 'The three objections that come up on every job, answered before they turn into questions: the aluminium is certified, the deadline is in the contract, and you deal directly with the people doing the work.',
+        },
       },
       {
         src: '/cases/alucraft/etapas.jpg',
-        alt: 'As quatro etapas do processo e os depoimentos de clientes',
-        caption:
-          'Medição, projeto, fabricação e instalação, com data marcada em cada etapa, e logo abaixo os depoimentos. Quem está decidindo uma obra cara quer ver o processo antes do preço.',
+        alt: {
+          pt: 'As quatro etapas do processo e os depoimentos de clientes',
+          en: 'The four stages of the process and the customer testimonials',
+        },
+        caption: {
+          pt: 'Medição, projeto, fabricação e instalação, com data marcada em cada etapa, e logo abaixo os depoimentos. Quem está decidindo uma obra cara quer ver o processo antes do preço.',
+          en: 'Measurement, design, manufacturing and installation, each with a date attached, and the testimonials right below. Someone deciding on an expensive job wants to see the process before the price.',
+        },
       },
       {
         src: '/cases/alucraft/orcamento.jpg',
-        alt: 'Formulário de orçamento da Alucraft',
-        caption:
-          'O formulário de orçamento. Nome, WhatsApp e tipo de esquadria viram uma mensagem pronta, e o envio abre a conversa direto no WhatsApp da fábrica.',
+        alt: {
+          pt: 'Formulário de orçamento da Alucraft',
+          en: 'Alucraft quote form',
+        },
+        caption: {
+          pt: 'O formulário de orçamento. Nome, WhatsApp e tipo de esquadria viram uma mensagem pronta, e o envio abre a conversa direto no WhatsApp da fábrica.',
+          en: "Name, WhatsApp and frame type become a ready-made message, and submitting opens the conversation straight in the factory's WhatsApp.",
+        },
       },
     ],
   },
@@ -193,53 +282,84 @@ export const PROJECTS: Project[] = [
     n: '03',
     slug: 'gostinho-mineiro',
     name: 'Gostinho Mineiro',
-    status: 'No ar',
+    status: 'live',
     context: 'Cliente',
-    line: 'Site institucional da indústria de alimentos onde eu trabalho, feito pra vender no atacado, não no varejo.',
-    stat: [
-      'SPA em Vite e React, com duas rotas',
-      'Fala com padaria, mercado e food service',
-      'Publicado na Vercel',
-    ],
+    groups: ['gostinho-mineiro', 'sites'],
+    line: {
+      pt: 'Site institucional da indústria de alimentos onde eu trabalho, feito pra vender no atacado, não no varejo.',
+      en: 'Corporate site for the food manufacturer I work at, built to sell wholesale, not retail.',
+    },
+    stat: {
+      pt: [
+        'SPA em Vite e React, com duas rotas',
+        'Fala com padaria, mercado e food service',
+        'Publicado na Vercel',
+      ],
+      en: [
+        'A Vite and React SPA, with two routes',
+        'Speaks to bakeries, grocers and food service',
+        'Published on Vercel',
+      ],
+    },
     tags: ['React', 'Vite', 'TypeScript', 'Vercel'],
     media: {
       frame: 'desktop',
       src: '/cases/gostinho-mineiro/capa.jpg',
       video: '/cases/gostinho-mineiro/scroll.mp4',
       poster: '/cases/gostinho-mineiro/poster.jpg',
-      alt: 'Topo do site da Gostinho Mineiro, com pães de queijo ao fundo',
+      alt: {
+        pt: 'Topo do site da Gostinho Mineiro, com pães de queijo ao fundo',
+        en: 'Top of the Gostinho Mineiro site, with cheese breads behind it',
+      },
     },
     links: [
-      { label: 'Abrir o site', href: 'https://gostinho-mineiro.vercel.app' },
-      {
-        label: 'Ver no GitHub',
-        href: 'https://github.com/WinistonAlle/site-gm',
-      },
+      { kind: 'site', href: 'https://gostinho-mineiro.vercel.app' },
+      { kind: 'github', href: 'https://github.com/WinistonAlle/site-gm' },
     ],
     gallery: [
       {
         src: '/cases/gostinho-mineiro/linha.jpg',
-        alt: 'Página da linha de pães de queijo',
-        caption:
-          'A segunda rota do site, dedicada a uma linha de produto. É ela que responde a pergunta que o comprador de padaria faz primeiro: quais gramaturas e embalagens existem.',
+        alt: {
+          pt: 'Página da linha de pães de queijo',
+          en: 'Page for the cheese bread product line',
+        },
+        caption: {
+          pt: 'A segunda rota do site, dedicada a uma linha de produto. É ela que responde a pergunta que o comprador de padaria faz primeiro: quais gramaturas e embalagens existem.',
+          en: "The site's second route, given over to a single product line. It answers the question a bakery buyer asks first: which weights and pack sizes exist.",
+        },
       },
       {
         src: '/cases/gostinho-mineiro/galeria.jpg',
-        alt: 'Galeria de fotos de produto sob a marca #GostinhoMineiro',
-        caption:
-          'A vitrine de produto. Num negócio de alimento, a foto é metade do argumento, então ela ocupa a largura toda em vez de virar miniatura numa grade.',
+        alt: {
+          pt: 'Galeria de fotos de produto sob a marca #GostinhoMineiro',
+          en: 'Product photo gallery under the #GostinhoMineiro brand',
+        },
+        caption: {
+          pt: 'A vitrine de produto. Num negócio de alimento, a foto é metade do argumento, então ela ocupa a largura toda em vez de virar miniatura numa grade.',
+          en: 'The product showcase. In a food business the photo is half the argument, so it takes the full width instead of shrinking into a thumbnail grid.',
+        },
       },
       {
         src: '/cases/gostinho-mineiro/contato.jpg',
-        alt: 'Formulário de atendimento comercial',
-        caption:
-          'O atendimento comercial. Nome, empresa e interesse chegam junto, então o time já abre a conversa sabendo se é padaria, mercado ou food service.',
+        alt: {
+          pt: 'Formulário de atendimento comercial',
+          en: 'Sales enquiry form',
+        },
+        caption: {
+          pt: 'O atendimento comercial. Nome, empresa e interesse chegam junto, então o time já abre a conversa sabendo se é padaria, mercado ou food service.',
+          en: 'The sales enquiry. Name, company and interest arrive together, so the team opens the conversation already knowing whether it is a bakery, a grocer or food service.',
+        },
       },
       {
         src: '/cases/gostinho-mineiro/onde.jpg',
-        alt: 'Seção de localização com mapa e horário de atendimento',
-        caption:
-          'Endereço, mapa e horário de atendimento. Parece detalhe, mas venda no atacado passa por visita e retirada, e sem isso a pessoa liga só pra perguntar onde fica.',
+        alt: {
+          pt: 'Seção de localização com mapa e horário de atendimento',
+          en: 'Location section with a map and opening hours',
+        },
+        caption: {
+          pt: 'Endereço, mapa e horário de atendimento. Parece detalhe, mas venda no atacado passa por visita e retirada, e sem isso a pessoa liga só pra perguntar onde fica.',
+          en: 'Address, map and opening hours. It looks like a detail, but wholesale runs on visits and pickups, and without this people phone just to ask where the place is.',
+        },
       },
     ],
   },
@@ -247,52 +367,83 @@ export const PROJECTS: Project[] = [
     n: '04',
     slug: 'habit-exe',
     name: 'habit.exe',
-    status: 'Em desenvolvimento',
+    status: 'wip',
     context: 'Produto próprio',
-    line: 'Habit tracker feito pra dev: hábito cumprido vira XP e moeda pra montar o setup do personagem.',
-    stat: [
-      'Landing pronta, aplicativo em construção',
-      'Expo: web e mobile saem do mesmo código',
-      'Lista de espera para os 500 primeiros',
-    ],
+    groups: ['outros', 'sites'],
+    line: {
+      pt: 'Habit tracker feito pra dev: hábito cumprido vira XP e moeda pra montar o setup do personagem.',
+      en: 'A habit tracker built for developers: a habit kept turns into XP and coins to kit out your character.',
+    },
+    stat: {
+      pt: [
+        'Landing pronta, aplicativo em construção',
+        'Expo: web e mobile saem do mesmo código',
+        'Lista de espera para os 500 primeiros',
+      ],
+      en: [
+        'Landing page done, app under construction',
+        'Expo: web and mobile from the same codebase',
+        'Waiting list for the first 500',
+      ],
+    },
     tags: ['Expo', 'React Native', 'TypeScript', 'Supabase'],
     media: {
       frame: 'desktop',
       src: '/cases/habit-exe/capa.jpg',
       video: '/cases/habit-exe/scroll.mp4',
       poster: '/cases/habit-exe/poster.jpg',
-      alt: 'Topo da landing do habit.exe, em verde sobre preto, com um terminal ao lado',
+      alt: {
+        pt: 'Topo da landing do habit.exe, em verde sobre preto, com um terminal ao lado',
+        en: 'Top of the habit.exe landing page, green on black, with a terminal beside it',
+      },
     },
     links: [
-      {
-        label: 'Ver no GitHub',
-        href: 'https://github.com/WinistonAlle/dev-quest',
-      },
+      { kind: 'github', href: 'https://github.com/WinistonAlle/dev-quest' },
     ],
     gallery: [
       {
         src: '/cases/habit-exe/features.jpg',
-        alt: 'Seção de mecânicas do habit.exe, com um checklist de hábitos ao lado',
-        caption:
-          'As mecânicas, explicadas ao lado da tela onde elas acontecem. A promessa é gamificação de verdade, com moeda e loja, e não checkbox com confete.',
+        alt: {
+          pt: 'Seção de mecânicas do habit.exe, com um checklist de hábitos ao lado',
+          en: 'habit.exe mechanics section, with a habit checklist beside it',
+        },
+        caption: {
+          pt: 'As mecânicas, explicadas ao lado da tela onde elas acontecem. A promessa é gamificação de verdade, com moeda e loja, e não checkbox com confete.',
+          en: 'The mechanics, explained next to the screen where they happen. The promise is real gamification, with currency and a shop, not a checkbox with confetti.',
+        },
       },
       {
         src: '/cases/habit-exe/comandos.jpg',
-        alt: 'Os três comandos do habit.exe escritos como linha de comando',
-        caption:
-          'O uso do app escrito como comando de terminal: add, done e shop buy. É uma tradução do produto para a linguagem de quem ele quer atingir, e é o que faz o dev entender em três linhas.',
+        alt: {
+          pt: 'Os três comandos do habit.exe escritos como linha de comando',
+          en: "habit.exe's three commands written as a command line",
+        },
+        caption: {
+          pt: 'O uso do app escrito como comando de terminal: add, done e shop buy. É uma tradução do produto para a linguagem de quem ele quer atingir, e é o que faz o dev entender em três linhas.',
+          en: 'Using the app written as terminal commands: add, done and shop buy. It translates the product into the language of the people it wants to reach, and it lets a developer get it in three lines.',
+        },
       },
       {
         src: '/cases/habit-exe/depoimentos.jpg',
-        alt: 'Depoimentos formatados como log do git',
-        caption:
-          'Os depoimentos vêm formatados como git log, com autor e "há 2 dias" no lugar da foto e do cargo. Mesmo conteúdo de sempre, na convenção que o público lê todo dia.',
+        alt: {
+          pt: 'Depoimentos formatados como log do git',
+          en: 'Testimonials formatted as a git log',
+        },
+        caption: {
+          pt: 'Os depoimentos vêm formatados como git log, com autor e "há 2 dias" no lugar da foto e do cargo. Mesmo conteúdo de sempre, na convenção que o público lê todo dia.',
+          en: 'The testimonials come formatted as a git log, with an author and "2 days ago" in place of a photo and a job title. The same content as ever, in the convention this audience reads every day.',
+        },
       },
       {
         src: '/cases/habit-exe/waitlist.jpg',
-        alt: 'Formulário de lista de espera do habit.exe',
-        caption:
-          'A lista de espera. Como o app ainda está em construção, a landing não tenta vender: ela reserva vaga e promete a conquista early_adopter pros 500 primeiros.',
+        alt: {
+          pt: 'Formulário de lista de espera do habit.exe',
+          en: 'habit.exe waiting list form',
+        },
+        caption: {
+          pt: 'A lista de espera. Como o app ainda está em construção, a landing não tenta vender: ela reserva vaga e promete a conquista early_adopter pros 500 primeiros.',
+          en: 'The waiting list. Since the app is still being built, the landing page does not try to sell: it holds a spot and promises the early_adopter achievement to the first 500.',
+        },
       },
     ],
   },
@@ -300,75 +451,130 @@ export const PROJECTS: Project[] = [
     n: '05',
     slug: 'delivery-gm',
     name: 'Delivery Gostinho Mineiro',
-    status: 'No ar',
+    status: 'live',
     context: 'Cliente',
-    line: 'A loja online da mesma fábrica: o cliente monta o carrinho e o pedido chega pronto no WhatsApp de quem separa.',
-    stat: [
-      '353 pedidos e 337 clientes desde abril de 2026',
-      '187 produtos, vendidos por quilo ou por pacote',
-      'Supabase próprio, rodando no servidor da empresa',
-    ],
+    groups: ['gostinho-mineiro'],
+    line: {
+      pt: 'A loja online da mesma fábrica: o cliente monta o carrinho e o pedido chega pronto no WhatsApp de quem separa.',
+      en: "The same factory's online shop: the customer builds the cart and the order lands ready in the packing team's WhatsApp.",
+    },
+    stat: {
+      pt: [
+        '353 pedidos e 337 clientes desde abril de 2026',
+        '187 produtos, vendidos por quilo ou por pacote',
+        'Supabase próprio, rodando no servidor da empresa',
+      ],
+      en: [
+        '353 orders and 337 customers since April 2026',
+        '187 products, sold by the kilo or by the pack',
+        "Self-hosted Supabase, on the company's own server",
+      ],
+    },
     tags: ['React', 'TypeScript', 'Supabase', 'Tailwind'],
     media: {
       frame: 'desktop',
       src: '/cases/delivery-gm/capa.jpg',
       video: '/cases/delivery-gm/scroll.mp4',
       poster: '/cases/delivery-gm/poster.jpg',
-      alt: 'Topo do catálogo do delivery da Gostinho Mineiro, com os produtos em destaque',
+      alt: {
+        pt: 'Topo do catálogo do delivery da Gostinho Mineiro, com os produtos em destaque',
+        en: 'Top of the Gostinho Mineiro delivery catalog, with the featured products',
+      },
     },
     links: [
-      { label: 'Abrir o site', href: 'https://varejo.gostinhomineiro.com' },
-      {
-        label: 'Ver no GitHub',
-        href: 'https://github.com/WinistonAlle/delivery-gm',
-      },
+      { kind: 'site', href: 'https://varejo.gostinhomineiro.com' },
+      { kind: 'github', href: 'https://github.com/WinistonAlle/delivery-gm' },
     ],
-    problem: [
-      'O pedido chegava por telefone ou numa conversa de WhatsApp. Alguém da loja atendia, consultava o preço e montava a conta no meio do diálogo.',
-      'Quase tudo é vendido por quilo, e o pacote custa o preço do quilo vezes o peso: 5kg de pão de queijo a R$ 20,25 dá R$ 101,25. Essa conta era refeita a cada ligação, para 187 produtos.',
-      'E o registro do pedido era a própria conversa.',
-    ],
-    solution: [
-      'O WhatsApp continua sendo o canal, e isso foi escolha: é onde o cliente já sabe pedir. O que mudou é quem digita. O cliente monta o carrinho e o sistema entrega a mensagem pronta, com item, quantidade, valor unitário, frete e total.',
-      'O catálogo ainda responde sozinho o que antes ocupava a ligação: rende pra quantas pessoas, quanto sai o frete, quanto pesa o carrinho e como assar o congelado.',
-      'E o pedido virou registro: 353 pedidos e 337 clientes desde abril. O painel mostra onde o cliente desistiu e quais desistências têm telefone.',
-    ],
+    problem: {
+      pt: [
+        'O pedido chegava por telefone ou numa conversa de WhatsApp. Alguém da loja atendia, consultava o preço e montava a conta no meio do diálogo.',
+        'Quase tudo é vendido por quilo, e o pacote custa o preço do quilo vezes o peso: 5kg de pão de queijo a R$ 20,25 dá R$ 101,25. Essa conta era refeita a cada ligação, para 187 produtos.',
+        'E o registro do pedido era a própria conversa.',
+      ],
+      en: [
+        'Orders came in by phone or in a WhatsApp thread. Someone at the shop picked up, looked up prices and added up the bill in the middle of the conversation.',
+        'Almost everything is sold by the kilo, and a pack costs the price per kilo times its weight: 5kg of cheese bread at R$ 20.25 comes to R$ 101.25. That sum was redone on every call, across 187 products.',
+        'And the record of the order was the conversation itself.',
+      ],
+    },
+    solution: {
+      pt: [
+        'O WhatsApp continua sendo o canal, e isso foi escolha: é onde o cliente já sabe pedir. O que mudou é quem digita. O cliente monta o carrinho e o sistema entrega a mensagem pronta, com item, quantidade, valor unitário, frete e total.',
+        'O catálogo ainda responde sozinho o que antes ocupava a ligação: rende pra quantas pessoas, quanto sai o frete, quanto pesa o carrinho e como assar o congelado.',
+        'E o pedido virou registro: 353 pedidos e 337 clientes desde abril. O painel mostra onde o cliente desistiu e quais desistências têm telefone.',
+      ],
+      en: [
+        'WhatsApp is still the channel, and that was a choice: it is where the customer already knows how to order. What changed is who types. The customer builds the cart and the system hands over a finished message, with item, quantity, unit price, delivery fee and total.',
+        'The catalog also answers on its own what used to take up the call: how many people a pack serves, what delivery costs, how much the cart weighs, and how to bake what arrives frozen.',
+        'And the order became a record: 353 orders and 337 customers since April. The dashboard shows where customers dropped off, and which of those drop-offs left a phone number.',
+      ],
+    },
     gallery: [
       {
         src: '/cases/delivery-gm/combos.jpg',
-        alt: 'Combos prontos, busca e filtros por categoria no catálogo',
-        caption:
-          'Combos montados por ocasião, com o total já somado. Quem vai receber trinta pessoas não sabe quantos pacotes pedir, e a pergunta "dá pra quantos?" é a que trava a compra.',
+        alt: {
+          pt: 'Combos prontos, busca e filtros por categoria no catálogo',
+          en: 'Ready-made bundles, search and category filters in the catalog',
+        },
+        caption: {
+          pt: 'Combos montados por ocasião, com o total já somado. Quem vai receber trinta pessoas não sabe quantos pacotes pedir, e a pergunta "dá pra quantos?" é a que trava a compra.',
+          en: 'Bundles built around an occasion, with the total already added up. Someone hosting thirty people has no idea how many packs to order, and "how many does it serve?" is the question that stalls the sale.',
+        },
       },
       {
         src: '/cases/delivery-gm/carrinho.jpg',
-        alt: 'Carrinho aberto, com aviso de frete grátis atingido e o peso total',
-        caption:
-          'O carrinho avisa que o frete ficou grátis e mostra o peso total. Num produto vendido por quilo, saber que são 11kg é o que evita o pedido chegar em quantidade errada.',
+        alt: {
+          pt: 'Carrinho aberto, com aviso de frete grátis atingido e o peso total',
+          en: 'Open cart, showing free delivery unlocked and the total weight',
+        },
+        caption: {
+          pt: 'O carrinho avisa que o frete ficou grátis e mostra o peso total. Num produto vendido por quilo, saber que são 11kg é o que evita o pedido chegar em quantidade errada.',
+          en: 'The cart says delivery just became free and shows the total weight. On a product sold by the kilo, knowing it adds up to 11kg is what stops the order arriving in the wrong quantity.',
+        },
       },
       {
         src: '/cases/delivery-gm/preparo.jpg',
-        alt: 'Página de modos de preparo, com vídeos por produto',
-        caption:
-          'Modos de preparo em vídeo, por produto. Congelado que assa errado vira reclamação e cliente perdido, então ensinar o forno certo é parte de vender.',
+        alt: {
+          pt: 'Página de modos de preparo, com vídeos por produto',
+          en: 'Preparation guides page, with a video per product',
+        },
+        caption: {
+          pt: 'Modos de preparo em vídeo, por produto. Congelado que assa errado vira reclamação e cliente perdido, então ensinar o forno certo é parte de vender.',
+          en: 'Preparation guides on video, product by product. Frozen food baked wrong turns into a complaint and a lost customer, so teaching the right oven setting is part of selling.',
+        },
       },
       {
         src: '/cases/delivery-gm/admin.jpg',
-        alt: 'Painel de produtos do admin, com 187 itens cadastrados',
-        caption:
-          'O painel onde os 187 produtos são mantidos: preço, categoria, peso, foto e se aparece ou não no catálogo. Quem mexe é o time da loja, sem passar por mim.',
+        alt: {
+          pt: 'Painel de produtos do admin, com 187 itens cadastrados',
+          en: 'Admin product panel, with 187 items registered',
+        },
+        caption: {
+          pt: 'O painel onde os 187 produtos são mantidos: preço, categoria, peso, foto e se aparece ou não no catálogo. Quem mexe é o time da loja, sem passar por mim.',
+          en: 'The panel where the 187 products are maintained: price, category, weight, photo, and whether it shows in the catalog at all. The shop team handles it without going through me.',
+        },
       },
       {
         src: '/cases/delivery-gm/temas.jpg',
-        alt: 'Tela de temas do site, com opções sazonais',
-        caption:
-          'Sete temas sazonais que trocam o visual do catálogo inteiro em um clique. Black Friday, Natal, Festa Junina e Copa do Mundo já vêm prontos, e publicar não exige deploy.',
+        alt: {
+          pt: 'Tela de temas do site, com opções sazonais',
+          en: 'Site themes screen, with seasonal options',
+        },
+        caption: {
+          pt: 'Sete temas sazonais que trocam o visual do catálogo inteiro em um clique. Black Friday, Natal, Festa Junina e Copa do Mundo já vêm prontos, e publicar não exige deploy.',
+          en: 'Seven seasonal themes that swap the look of the whole catalog in one click. Black Friday, Christmas, Festa Junina and the World Cup ship ready, and publishing one needs no deploy.',
+        },
       },
       {
         src: '/cases/delivery-gm/funil.jpg',
-        alt: 'Painel de recuperação de clientes, com o funil de saída por etapa',
-        caption:
-          'O funil mostra em que etapa o cliente desistiu e quais desistências têm telefone conhecido. Deixa de ser "vendemos menos essa semana" e vira uma lista de quem ligar.',
+        alt: {
+          pt: 'Painel de recuperação de clientes, com o funil de saída por etapa',
+          en: 'Customer recovery panel, with the drop-off funnel by stage',
+        },
+        caption: {
+          pt: 'O funil mostra em que etapa o cliente desistiu e quais desistências têm telefone conhecido. Deixa de ser "vendemos menos essa semana" e vira uma lista de quem ligar.',
+          en: 'The funnel shows which stage the customer gave up at, and which of those drop-offs left a phone number. It stops being "we sold less this week" and becomes a list of who to call.',
+        },
       },
     ],
   },
@@ -376,73 +582,130 @@ export const PROJECTS: Project[] = [
     n: '06',
     slug: 'catalogo-funcionarios',
     name: 'Catálogo de Funcionários',
-    status: 'No ar',
+    status: 'live',
     context: 'Cliente',
-    line: 'Loja interna da fábrica: o funcionário compra com crédito da folha e o pedido entra sozinho no ERP como recibo.',
-    stat: [
-      '379 funcionários, 363 pedidos desde abril de 2026',
-      '83 dos 85 pedidos entraram sozinhos no ERP desde agosto',
-      'Crédito, corte de horário e lista da portaria no automático',
-    ],
+    groups: ['gostinho-mineiro'],
+    line: {
+      pt: 'Loja interna da fábrica: o funcionário compra com crédito da folha e o pedido entra sozinho no ERP como recibo.',
+      en: "The factory's internal shop: employees buy against payroll credit and the order posts itself into the ERP as a receipt.",
+    },
+    stat: {
+      pt: [
+        '379 funcionários, 363 pedidos desde abril de 2026',
+        '83 dos 85 pedidos entraram sozinhos no ERP desde agosto',
+        'Crédito, corte de horário e lista da portaria no automático',
+      ],
+      en: [
+        '379 employees, 363 orders since April 2026',
+        '83 of 85 orders posted themselves to the ERP since August',
+        'Credit, order cut-off and the gate list all run themselves',
+      ],
+    },
     tags: ['React', 'TypeScript', 'Supabase', 'CIGAM'],
     media: {
       frame: 'desktop',
       src: '/cases/catalogo-funcionarios/capa.jpg',
       video: '/cases/catalogo-funcionarios/scroll.mp4',
       poster: '/cases/catalogo-funcionarios/poster.jpg',
-      alt: 'Painel de operação do catálogo de funcionários, com as ações de sincronizar, restaurar saldo e liberar pedido',
+      alt: {
+        pt: 'Painel de operação do catálogo de funcionários, com as ações de sincronizar, restaurar saldo e liberar pedido',
+        en: 'Operations panel of the employee catalog, with actions to sync, restore balance and release an order',
+      },
     },
     links: [
       {
-        label: 'Ver no GitHub',
+        kind: 'github',
         href: 'https://github.com/WinistonAlle/catalogo-funcionarios',
       },
     ],
-    problem: [
-      'O funcionário mandava mensagem para o faturamento. Alguém lá parava o próprio trabalho e digitava o pedido no sistema, item por item.',
-      'Ia item errado, ia valor errado, e demorava. O preço não era só o erro: era o tempo do faturamento, todo dia, gasto num trabalho que não era o deles.',
-    ],
-    solution: [
-      'O funcionário monta o próprio pedido, com o saldo à vista e o preço já calculado. Ninguém digita mais nada em nome de ninguém.',
-      'Dali o pedido entra sozinho no ERP, vira recibo e sai liberado para faturamento. Desde que a integração subiu, em agosto, 83 dos 85 pedidos fizeram esse caminho sem ninguém tocar.',
-      'Ao faturamento sobrou imprimir a lista e entregar para a separação.',
-    ],
+    problem: {
+      pt: [
+        'O funcionário mandava mensagem para o faturamento. Alguém lá parava o próprio trabalho e digitava o pedido no sistema, item por item.',
+        'Ia item errado, ia valor errado, e demorava. O preço não era só o erro: era o tempo do faturamento, todo dia, gasto num trabalho que não era o deles.',
+      ],
+      en: [
+        'The employee sent a message to the billing team. Someone there dropped their own work and typed the order into the system, item by item.',
+        "The wrong item went out, the wrong price went out, and it was slow. The cost was not only the mistake: it was the billing team's time, every day, spent on work that was never theirs.",
+      ],
+    },
+    solution: {
+      pt: [
+        'O funcionário monta o próprio pedido, com o saldo à vista e o preço já calculado. Ninguém digita mais nada em nome de ninguém.',
+        'Dali o pedido entra sozinho no ERP, vira recibo e sai liberado para faturamento. Desde que a integração subiu, em agosto, 83 dos 85 pedidos fizeram esse caminho sem ninguém tocar.',
+        'Ao faturamento sobrou imprimir a lista e entregar para a separação.',
+      ],
+      en: [
+        'The employee builds their own order, with their balance in sight and the price already worked out. Nobody types anything on anyone else’s behalf any more.',
+        'From there the order posts itself into the ERP, becomes a receipt and comes out cleared for billing. Since the integration went live in August, 83 of 85 orders made that trip untouched.',
+        'What was left for the billing team is printing the list and handing it to the packing floor.',
+      ],
+    },
     gallery: [
       {
         src: '/cases/catalogo-funcionarios/acessos.jpg',
-        alt: 'Tela de entrada, com as opções Sou Funcionário e Sou Cliente',
-        caption:
-          'A porta de entrada separa dois públicos que veem preços diferentes do mesmo produto. Funcionário entra com CPF, sem senha: o público é o chão de fábrica e uma senha a mais viraria papel colado no armário.',
+        alt: {
+          pt: 'Tela de entrada, com as opções Sou Funcionário e Sou Cliente',
+          en: 'Entry screen, with the options I am an Employee and I am a Customer',
+        },
+        caption: {
+          pt: 'A porta de entrada separa dois públicos que veem preços diferentes do mesmo produto. Funcionário entra com CPF, sem senha: o público é o chão de fábrica e uma senha a mais viraria papel colado no armário.',
+          en: 'The front door splits two audiences who see different prices for the same product. Employees sign in with their tax ID, no password: the audience is the factory floor, and one more password would end up on a note taped inside a locker.',
+        },
       },
       {
         src: '/cases/catalogo-funcionarios/catalogo.jpg',
-        alt: 'Catálogo interno, com o saldo do funcionário no topo',
-        caption:
-          'O saldo fica no topo, do lado do nome, e acompanha a pessoa por todas as telas. Comprar aqui é gastar um crédito que tem limite, então esconder quanto sobrou seria esconder justo o que decide a compra.',
+        alt: {
+          pt: 'Catálogo interno, com o saldo do funcionário no topo',
+          en: "Internal catalog, with the employee's balance at the top",
+        },
+        caption: {
+          pt: 'O saldo fica no topo, do lado do nome, e acompanha a pessoa por todas as telas. Comprar aqui é gastar um crédito que tem limite, então esconder quanto sobrou seria esconder justo o que decide a compra.',
+          en: 'The balance sits at the top, beside the name, and follows the person across every screen. Buying here means spending a credit that runs out, so hiding what is left would hide the very thing that decides the purchase.',
+        },
       },
       {
         src: '/cases/catalogo-funcionarios/pedidos.jpg',
-        alt: 'Administração de pedidos, com a faixa de pedido liberado para hoje',
-        caption:
-          'A tela do faturamento. A faixa verde no topo é um pedido feito depois das 13:40 que o RH liberou para sair no mesmo dia: antes isso vivia fora do sistema, como recado por voz, e o pedido nascia no papel do dia seguinte.',
+        alt: {
+          pt: 'Administração de pedidos, com a faixa de pedido liberado para hoje',
+          en: 'Order administration, with the banner for an order released for today',
+        },
+        caption: {
+          pt: 'A tela do faturamento. A faixa verde no topo é um pedido feito depois das 13:40 que o RH liberou para sair no mesmo dia: antes isso vivia fora do sistema, como recado por voz, e o pedido nascia no papel do dia seguinte.',
+          en: "The billing team's screen. The green banner is an order placed after 13:40 that HR released to go out the same day: this used to live outside the system, as a spoken message, and the order was born on the next day's paperwork.",
+        },
       },
       {
         src: '/cases/catalogo-funcionarios/relatorios.jpg',
-        alt: 'Relatório de pedidos, com faturamento, ticket médio e comparação entre meses',
-        caption:
-          'O relatório que o RH usa para fechar o mês. Compara ciclo com ciclo, não mês do calendário com mês do calendário, porque o ciclo real vai do dia 27 ao 26 e essa diferença fazia o total não bater com a folha.',
+        alt: {
+          pt: 'Relatório de pedidos, com faturamento, ticket médio e comparação entre meses',
+          en: 'Order report, with revenue, average ticket and a month-to-month comparison',
+        },
+        caption: {
+          pt: 'O relatório que o RH usa para fechar o mês. Compara ciclo com ciclo, não mês do calendário com mês do calendário, porque o ciclo real vai do dia 27 ao 26 e essa diferença fazia o total não bater com a folha.',
+          en: 'The report HR uses to close the month. It compares cycle against cycle, not calendar month against calendar month, because the real cycle runs from the 27th to the 26th, and that gap is what kept the total from matching payroll.',
+        },
       },
       {
         src: '/cases/catalogo-funcionarios/auditoria.jpg',
-        alt: 'Histórico operacional, com o registro das sincronizações',
-        caption:
-          'Toda sincronização deixa rastro, inclusive as que rodam sozinhas de vinte em vinte minutos. A recarga de crédito já ficou quatro meses morta sem ninguém perceber, e foi essa tela que passou a ser o lugar onde isso apareceria.',
+        alt: {
+          pt: 'Histórico operacional, com o registro das sincronizações',
+          en: 'Operational history, with a record of every sync',
+        },
+        caption: {
+          pt: 'Toda sincronização deixa rastro, inclusive as que rodam sozinhas de vinte em vinte minutos. A recarga de crédito já ficou quatro meses morta sem ninguém perceber, e foi essa tela que passou a ser o lugar onde isso apareceria.',
+          en: 'Every sync leaves a trace, including the ones that run themselves every twenty minutes. The monthly credit top-up once sat dead for four months without anyone noticing, and this screen became the place where that would show.',
+        },
       },
       {
         src: '/cases/catalogo-funcionarios/destaques.jpg',
-        alt: 'Tela de destaques do catálogo, com ordenação por arrastar',
-        caption:
-          'Os destaques da home são escolhidos e ordenados arrastando, com a prévia do carrossel logo acima. Quem monta a vitrine é a equipe, e a prévia existe para não ter que publicar pra descobrir como ficou.',
+        alt: {
+          pt: 'Tela de destaques do catálogo, com ordenação por arrastar',
+          en: 'Catalog highlights screen, ordered by dragging',
+        },
+        caption: {
+          pt: 'Os destaques da home são escolhidos e ordenados arrastando, com a prévia do carrossel logo acima. Quem monta a vitrine é a equipe, e a prévia existe para não ter que publicar pra descobrir como ficou.',
+          en: 'The homepage highlights are picked and ordered by dragging, with a live preview of the carousel right above. The team builds the shop window, and the preview is there so nobody has to publish just to find out how it looks.',
+        },
       },
     ],
   },

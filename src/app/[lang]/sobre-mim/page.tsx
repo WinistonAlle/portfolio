@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { notFound } from 'next/navigation';
 import LanyardBadge from '@/components/lanyard/LanyardBadge';
 import StackGraph from '@/components/stack/StackGraph';
 import EchoText from '@/components/text/EchoText';
@@ -7,14 +8,37 @@ import SlideIn from '@/components/scroll/SlideIn';
 import VideoLoop from '@/components/media/VideoLoop';
 import Timeline from '@/components/timeline/Timeline';
 import GlowButton, { GlowArrow } from '@/components/ui/GlowButton';
+import { getDictionary } from '@/i18n';
+import { isLocale } from '@/i18n/config';
 
-export const metadata: Metadata = {
-  title: 'Sobre mim — Winiston Alle',
-  description:
-    'Winiston Alle, desenvolvedor full-stack. Sistemas de ponta a ponta em produção, com gente usando todo dia.',
-};
+export async function generateMetadata(
+  props: PageProps<'/[lang]/sobre-mim'>,
+): Promise<Metadata> {
+  const { lang } = await props.params;
+  if (!isLocale(lang)) return {};
+  const dict = await getDictionary(lang);
 
-export default function SobreMimPage() {
+  return {
+    title: dict.about.metaTitle,
+    description: dict.about.metaDescription,
+    alternates: {
+      languages: {
+        'pt-BR': '/pt/sobre-mim',
+        en: '/en/sobre-mim',
+        'x-default': '/pt/sobre-mim',
+      },
+    },
+  };
+}
+
+export default async function SobreMimPage(
+  props: PageProps<'/[lang]/sobre-mim'>,
+) {
+  const { lang } = await props.params;
+  if (!isLocale(lang)) notFound();
+
+  const dict = await getDictionary(lang);
+
   return (
     <main className="relative z-10 flex-1">
       {/* id="topo": o header usa isso pra saber que essa página tem um bloco
@@ -43,7 +67,7 @@ export default function SobreMimPage() {
                 Space Grotesk. */}
             <h1>
               <EchoText
-                text="Desenvolvedor full-stack."
+                text={dict.about.heroTitle}
                 className="echo-text--outlined"
                 fontSize="clamp(1.9rem, 3.4vw, 3.6rem)"
                 fontWeight={700}
@@ -52,23 +76,18 @@ export default function SobreMimPage() {
             </h1>
 
             <p className="mt-8 max-w-2xl text-2xl leading-relaxed text-muted">
-              Sou <span className="text-foreground">Winiston Alle</span>, tenho
-              24 anos e curso engenharia de software. Modelo o banco, escrevo o
-              backend, construo a interface e cuido do servidor onde o sistema
-              roda. O que eu desenvolvo está em produção, usado todos os dias
-              por centenas de pessoas. Fora do trabalho mantenho projetos
-              próprios, como um app de controle de hábitos e um app de poker
-              para iOS. Trabalho até ficar bom de verdade, não até ficar
-              aceitável.
+              {dict.about.bioLead}{' '}
+              <span className="text-foreground">{dict.about.bioName}</span>
+              {dict.about.bioRest}
             </p>
 
             <div className="mt-9 flex flex-wrap items-center gap-3">
-              <GlowButton href="/projetos">
-                Ver os projetos
+              <GlowButton href={`/${lang}/projetos`}>
+                {dict.about.ctaProjects}
                 <GlowArrow />
               </GlowButton>
-              <GlowButton href="/contato" variant="secondary">
-                Falar comigo
+              <GlowButton href={`/${lang}/contato`} variant="secondary">
+                {dict.about.ctaContact}
               </GlowButton>
             </div>
           </div>
@@ -96,7 +115,7 @@ export default function SobreMimPage() {
       <section className="relative w-full pb-28">
         <div className="mx-auto w-full max-w-7xl px-6 lg:px-10">
           <h2 className="max-w-2xl text-[clamp(1.8rem,3vw,2.6rem)] leading-tight font-bold tracking-[-0.02em] text-balance">
-            Tudo que eu uso, e como as peças se conversam.
+            {dict.about.stackTitle}
           </h2>
         </div>
 
@@ -120,14 +139,7 @@ export default function SobreMimPage() {
           </SlideIn>
 
           <p className="max-w-2xl text-2xl leading-relaxed text-muted">
-            Sou desenvolvedor de sistemas na Gostinho Mineiro, uma indústria de
-            alimentos em Brasília. Entrei como estagiário e hoje respondo pelos
-            sistemas internos da empresa. O portal de pedidos que eu construí é
-            usado por cerca de 250 funcionários todo dia, antes dele, o pedido
-            chegava por WhatsApp e alguém do faturamento digitava um por um no
-            sistema. Meu foco é frontend e IA: interface que a pessoa usa sem
-            precisar de treinamento, e automação que tira trabalho manual do
-            caminho.
+            {dict.about.workText}
           </p>
         </div>
       </section>
@@ -137,11 +149,11 @@ export default function SobreMimPage() {
       <section className="relative w-full pt-4 pb-40">
         <div className="mx-auto w-full max-w-6xl px-6 lg:px-10">
           <h2 className="max-w-2xl text-[clamp(1.8rem,3vw,2.6rem)] leading-tight font-bold tracking-[-0.02em] text-balance">
-            De gestão financeira a desenvolvedor, em três anos.
+            {dict.about.timelineTitle}
           </h2>
 
           <div className="mt-16 lg:mt-20">
-            <Timeline />
+            <Timeline entries={dict.timeline} nowLabel={dict.about.timelineNow} />
           </div>
         </div>
       </section>
@@ -155,22 +167,20 @@ export default function SobreMimPage() {
           <div className="cta">
             <div className="cta__inner">
               <h2 className="mx-auto max-w-2xl text-[clamp(1.8rem,3.2vw,2.6rem)] leading-tight font-bold tracking-[-0.02em] text-balance">
-                Agora me conta o que você precisa.
+                {dict.about.ctaTitle}
               </h2>
 
               <p className="mx-auto mt-5 max-w-xl text-lg leading-relaxed text-muted">
-                Vaga, projeto freelance ou só uma ideia pra validar: me chama
-                que a gente combina o resto por e-mail. E se quiser ver o código
-                antes de falar comigo, os projetos estão logo ali.
+                {dict.about.ctaText}
               </p>
 
               <div className="mt-9 flex flex-wrap items-center justify-center gap-3">
-                <GlowButton href="/contato">
-                  Falar comigo
+                <GlowButton href={`/${lang}/contato`}>
+                  {dict.about.ctaContact}
                   <GlowArrow />
                 </GlowButton>
-                <GlowButton href="/projetos" variant="secondary">
-                  Ver os projetos
+                <GlowButton href={`/${lang}/projetos`} variant="secondary">
+                  {dict.about.ctaProjects}
                 </GlowButton>
               </div>
             </div>

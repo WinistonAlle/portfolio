@@ -23,6 +23,15 @@
 import { useEffect, useRef } from 'react';
 import { TIMELINE } from '@/data/timeline';
 
+/* Texto por prop: este componente é de cliente, e importar o dicionário aqui
+   levaria as duas traduções inteiras pro bundle. A chave do objeto é o mesmo
+   `id` do TIMELINE, então um ponto sem tradução aparece como buraco na tela em
+   vez de derrubar a página. */
+export type TimelineText = Record<
+  string,
+  { month: string; role: string; place: string; line: string }
+>;
+
 const clamp01 = (n: number) => Math.min(1, Math.max(0, n));
 /* smoothstep: o scrub é por frame, então a suavização entra aqui, não em
    transition (transition brigaria com a escrita a cada quadro). */
@@ -37,7 +46,13 @@ const CARD_SPAN = 0.34;
 /** Faixa, em px, em que o ponto sai de apagado para aceso. */
 const NODE_BAND = 44;
 
-export default function Timeline() {
+export default function Timeline({
+  entries,
+  nowLabel,
+}: {
+  entries: TimelineText;
+  nowLabel: string;
+}) {
   const rootRef = useRef<HTMLDivElement>(null);
   const itemsRef = useRef<(HTMLLIElement | null)[]>([]);
   const rafRef = useRef(0);
@@ -88,7 +103,10 @@ export default function Timeline() {
 
       root.style.setProperty('--led-top', `${start}px`);
       root.style.setProperty('--led-span', `${span}px`);
-      root.style.setProperty('--fill', clamp01((readY - start) / span).toFixed(4));
+      root.style.setProperty(
+        '--fill',
+        clamp01((readY - start) / span).toFixed(4),
+      );
 
       items.forEach((item, i) => {
         const center = centers[i];
@@ -123,37 +141,40 @@ export default function Timeline() {
       </div>
 
       <ol className="timeline__list">
-        {TIMELINE.map((entry, i) => (
-          <li
-            key={entry.id}
-            ref={(el) => {
-              itemsRef.current[i] = el;
-            }}
-            className={`timeline__item timeline__item--${
-              i % 2 === 0 ? 'left' : 'right'
-            }${entry.current ? ' timeline__item--current' : ''}`}
-          >
-            <span className="timeline__node" aria-hidden="true" />
-            <span className="timeline__branch" aria-hidden="true" />
+        {TIMELINE.map((entry, i) => {
+          const texto = entries[entry.id];
+          return (
+            <li
+              key={entry.id}
+              ref={(el) => {
+                itemsRef.current[i] = el;
+              }}
+              className={`timeline__item timeline__item--${
+                i % 2 === 0 ? 'left' : 'right'
+              }${entry.current ? ' timeline__item--current' : ''}`}
+            >
+              <span className="timeline__node" aria-hidden="true" />
+              <span className="timeline__branch" aria-hidden="true" />
 
-            <time className="timeline__when" dateTime={entry.iso}>
-              <span className="timeline__month">{entry.month}</span>
-              <span className="timeline__year">{entry.year}</span>
-            </time>
+              <time className="timeline__when" dateTime={entry.iso}>
+                <span className="timeline__month">{texto?.month}</span>
+                <span className="timeline__year">{entry.year}</span>
+              </time>
 
-            <article className="timeline__card">
-              <h3 className="timeline__role">{entry.role}</h3>
-              <p className="timeline__place">{entry.place}</p>
-              <p className="timeline__line">{entry.line}</p>
-              {entry.current && (
-                <p className="timeline__now">
-                  <span className="timeline__now-dot" aria-hidden="true" />
-                  Onde estou hoje
-                </p>
-              )}
-            </article>
-          </li>
-        ))}
+              <article className="timeline__card">
+                <h3 className="timeline__role">{texto?.role}</h3>
+                <p className="timeline__place">{texto?.place}</p>
+                <p className="timeline__line">{texto?.line}</p>
+                {entry.current && (
+                  <p className="timeline__now">
+                    <span className="timeline__now-dot" aria-hidden="true" />
+                    {nowLabel}
+                  </p>
+                )}
+              </article>
+            </li>
+          );
+        })}
       </ol>
     </div>
   );

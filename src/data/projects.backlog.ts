@@ -9,9 +9,35 @@
  * `PROJECTS` de `projects.ts`.
  */
 
-import type { Project } from './projects';
+import type { ProjectMedia } from './projects';
 
-export const BACKLOG: Project[] = [
+/* Tipo PRÓPRIO, e não mais derivado de `Project`.
+
+   Enquanto o site era só em português, este arquivo podia se dizer um
+   `Project` sem o `group` e passava. Com o site bilíngue, o `Project` virou
+   outra coisa: texto em `{ pt, en }`, status como chave, link sem rótulo. Um
+   rascunho em português não é um projeto pela metade, é outro formato.
+
+   Forçar o encaixe (envolver cada frase num `{ pt: ..., en: ... }` com o
+   inglês vazio) fingiria uma tradução que não existe, e a promoção pro
+   projects.ts passaria a exigir desmontar essa embalagem. Um tipo honesto de
+   quatro linhas custa menos e diz a verdade: isto aqui é texto guardado, em
+   português, esperando print, case e tradução. */
+type Rascunho = {
+  n: string;
+  slug: string;
+  name: string;
+  status: string;
+  context: string;
+  line: string;
+  body: string;
+  stat: string[];
+  tags: string[];
+  media: Omit<ProjectMedia, 'alt'> & { alt: string };
+  links?: { label: string; href: string }[];
+};
+
+export const BACKLOG: Rascunho[] = [
   {
     n: '01',
     slug: 'portal-de-pedidos',
