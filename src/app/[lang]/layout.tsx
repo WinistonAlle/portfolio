@@ -1,5 +1,10 @@
 import type { Metadata } from 'next';
-import { Geist, Geist_Mono, Space_Grotesk } from 'next/font/google';
+import {
+  Bricolage_Grotesque,
+  Geist,
+  Instrument_Serif,
+  JetBrains_Mono,
+} from 'next/font/google';
 import { notFound } from 'next/navigation';
 import { lang } from 'next/root-params';
 import '../globals.css';
@@ -10,24 +15,44 @@ import SmoothScroll from '@/components/scroll/SmoothScroll';
 import { getDictionary } from '@/i18n';
 import { HTML_LANG, LOCALES, isLocale } from '@/i18n/config';
 
+/* Quatro famílias, cada uma com um trabalho que as outras não fazem. Antes
+   eram três sem divisão clara: a Geist fazia corpo E todos os títulos, a mono
+   aparecia em vinte lugares (inclusive na navegação, onde não há dado nenhum),
+   e a Space Grotesk baixava inteira pra ser usada em dois títulos.
+
+   1. DISPLAY (Bricolage Grotesque) — marca, navegação, títulos, rótulos de
+      interface. Tem eixo óptico (`opsz`), então a mesma família serve a um
+      título de 13rem e a um link de 13px sem parecer a mesma letra esticada.
+   2. TEXTO (Geist) — parágrafo. Fica porque ler texto longo é o que ela faz
+      melhor, e os textos dos cases são longos.
+   3. ACENTO (Instrument Serif itálica) — uma expressão dentro de um título,
+      nunca um título inteiro. É o contraste que tira o site do genérico.
+   4. DADO (JetBrains Mono) — número, tag de stack, id de ERP. Só onde
+      monoespaçado significa alguma coisa. */
+const display = Bricolage_Grotesque({
+  variable: '--font-display-face',
+  subsets: ['latin'],
+  axes: ['opsz'],
+});
+
 const geistSans = Geist({
   variable: '--font-geist-sans',
   subsets: ['latin'],
 });
 
-const geistMono = Geist_Mono({
-  variable: '--font-geist-mono',
+/* Só o itálico: o romano desta serifa não é usado em lugar nenhum, e pedir os
+   dois dobraria o download por nada. */
+const serifAccent = Instrument_Serif({
+  variable: '--font-serif-accent',
   subsets: ['latin'],
+  weight: '400',
+  style: 'italic',
 });
 
-/* Geométrica e reta, só para o título do Hero: peso pesado sem nada de
-   cursivo/manuscrito, séria mesmo em contorno vazado (echo-text--outlined).
-   Contraste de propósito com o resto do site, todo em Geist/mono — o título
-   não precisa combinar, precisa chamar atenção. */
-const spaceGrotesk = Space_Grotesk({
-  variable: '--font-space-grotesk',
+const mono = JetBrains_Mono({
+  variable: '--font-mono-data',
   subsets: ['latin'],
-  weight: ['700'],
+  weight: ['400', '500'],
 });
 
 /* Os dois idiomas são gerados no build. Sem isto, /en existiria só quando
@@ -69,7 +94,7 @@ export default async function RootLayout({ children }: LayoutProps<'/[lang]'>) {
   return (
     <html
       lang={HTML_LANG[atual]}
-      className={`${geistSans.variable} ${geistMono.variable} ${spaceGrotesk.variable} h-full antialiased`}
+      className={`${display.variable} ${geistSans.variable} ${serifAccent.variable} ${mono.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">
         <ParticlesBackground />

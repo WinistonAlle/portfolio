@@ -81,7 +81,11 @@ export default function GlowButton({
       speed={0.4}
       {...VARIANTS[variant]}
       {...rest}
-      className={`label !text-[0.7rem] ${className}`}
+      /* Era a mesma classe dos rótulos de seção (`label`): caixa alta, corpo
+         0.7rem e entreletra larga. Botão não é rótulo — é a frase que a pessoa
+         clica, e em caixa alta espremida ela vira etiqueta. Agora é a voz de
+         interface, em caixa mista e num corpo que dá pra ler. */
+      className={`botao-texto ${className}`}
     />
   );
 }

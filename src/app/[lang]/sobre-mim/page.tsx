@@ -11,6 +11,7 @@ import Timeline from '@/components/timeline/Timeline';
 import GlowButton, { GlowArrow } from '@/components/ui/GlowButton';
 import { getDictionary } from '@/i18n';
 import { isLocale } from '@/i18n/config';
+import TituloAcento from '@/components/text/TituloAcento';
 
 /* O modelo do crachá só era pedido depois que o chunk do three baixava,
    parseava e montava — mais de um segundo depois do HTML, atrás de tudo que o
@@ -85,7 +86,7 @@ export default async function SobreMimPage(
                    não muda em nada. */
                 fontSize="clamp(1.2rem, 6.2vw, 3.6rem)"
                 fontWeight={700}
-                style={{ fontFamily: 'var(--font-space-grotesk)' }}
+                style={{ fontFamily: 'var(--font-display)' }}
               />
             </h1>
 
@@ -129,7 +130,7 @@ export default async function SobreMimPage(
       <section className="relative w-full pb-28">
         <div className="mx-auto w-full max-w-7xl px-6 lg:px-10">
           <h2 className="max-w-2xl text-[clamp(1.8rem,3vw,2.6rem)] leading-tight font-bold tracking-[-0.02em] text-balance">
-            {dict.about.stackTitle}
+            <TituloAcento texto={dict.about.stackTitle} />
           </h2>
         </div>
 

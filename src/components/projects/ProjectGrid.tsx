@@ -71,7 +71,7 @@ export default function ProjectGrid({
               type="button"
               aria-pressed={ativo}
               onClick={() => setFiltro(chave)}
-              className={`inline-flex items-center gap-2 rounded-full border px-4 py-2 font-mono text-[0.65rem] tracking-[0.18em] uppercase transition-colors ${
+              className={`inline-flex items-center gap-2 rounded-full border px-4 py-2 text-[0.8rem] font-medium transition-colors ${
                 ativo
                   ? 'border-accent/55 bg-accent/10 text-foreground'
                   : 'border-line text-muted hover:border-white/25 hover:text-foreground'

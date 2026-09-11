@@ -44,7 +44,7 @@ const en: typeof pt = {
       ", I'm 24 and I study software engineering. I model the database, write the backend, build the interface and look after the server the whole thing runs on. What I build is in production, used every day by hundreds of people. Outside of work I keep my own projects going, like a habit tracker and an iOS poker app. I work at something until it's actually good, not until it's acceptable.",
     ctaProjects: 'See the projects',
     ctaContact: 'Get in touch',
-    stackTitle: 'Everything I work with, and how the pieces talk to each other.',
+    stackTitle: 'Everything I work with, and how the pieces *talk to each other*.',
     workText:
       "I'm a systems developer at Gostinho Mineiro, a food manufacturer in Brasília. I joined as an intern and today I own the company's internal systems. The ordering portal I built is used by around 250 employees every day; before it existed, orders arrived over WhatsApp and someone in billing typed them into the system one by one. My focus is frontend and AI: interfaces people use without being trained, and automation that takes manual work out of the way.",
     timelineNow: 'Where I am today',
@@ -58,7 +58,7 @@ const en: typeof pt = {
     metaTitle: 'Projects — Winiston Alle',
     metaDescription:
       'A look at my work: client projects, my own products, university coursework and things still under construction.',
-    title: 'A look at what I build.',
+    title: 'A look at *what I build*.',
     filterLabel: 'Filter projects',
     filterAll: 'All',
     groups: {

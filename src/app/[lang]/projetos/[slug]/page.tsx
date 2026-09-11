@@ -82,7 +82,12 @@ export default async function ProjectPage(
               {pick(project.stat, lang).map((s) => (
                 <li
                   key={s}
-                  className="flex items-baseline gap-3 font-mono text-xs text-foreground/70"
+                  /* Eram frases inteiras em monoespaçada. Mono é boa pra
+                     número e código, e ruim pra ler frase: as larguras iguais
+                     que ajudam a alinhar coluna atrapalham a palavra a formar
+                     desenho. Os números continuam alinhados por
+                     `tabular-nums`, que é a parte que interessava. */
+                  className="flex items-baseline gap-3 text-[0.9rem] leading-relaxed text-foreground/70 tabular-nums"
                 >
                   <span aria-hidden="true" className="text-accent">
                     ·

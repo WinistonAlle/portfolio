@@ -29,7 +29,7 @@ export default function Hero({
           className="echo-text--outlined"
           fontSize="clamp(4rem, 13vw, 13rem)"
           fontWeight={700}
-          style={{ fontFamily: 'var(--font-space-grotesk)' }}
+          style={{ fontFamily: 'var(--font-display)' }}
         />
       </div>
 

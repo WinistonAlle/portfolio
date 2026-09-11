@@ -23,8 +23,23 @@
   --color-muted: var(--muted);
   --color-accent: var(--accent);
   --color-line: var(--line);
+  /* Os papéis, não as fontes: quem escreve CSS pede --font-display porque quer
+     voz de interface, não porque quer Bricolage. Trocar a família um dia é
+     trocar uma linha aqui. */
   --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --font-display: var(--font-display-face);
+  --font-serif: var(--font-serif-accent);
+  --font-mono: var(--font-mono-data);
+}
+
+/* O `overflow-x` do body sozinho não segurava: quando o html está `visible`,
+   o valor do body PROPAGA pra viewport e o body passa a se comportar como
+   `visible`, ou seja, para de cortar. O resultado era a página do "sobre mim"
+   rolando 8px na horizontal no celular, empurrada pelo cartão da linha do
+   tempo, que entra deslocado 32px pra direita. Declarando nos dois, o html
+   cuida da viewport e o body volta a cortar de verdade. */
+html {
+  overflow-x: clip;
 }
 
 body {
@@ -44,6 +59,19 @@ body {
   font-family: var(--font-sans), system-ui, sans-serif;
 }
 
+/* Título é voz de display; parágrafo é voz de texto. As duas são grotescas,
+   e é justamente por isso que a divisão precisa ser por PAPEL e não por gosto:
+   o que separa uma da outra aqui é o tamanho em que cada uma trabalha, não um
+   contraste gritante. O tamanho e o peso continuam vindo das classes de cada
+   página — isto só troca a família e aperta o entreletra, que é o ajuste que
+   toda grotesca pede quando cresce. */
+h1,
+h2,
+h3 {
+  font-family: var(--font-display), system-ui, sans-serif;
+  letter-spacing: -0.025em;
+}
+
 /* Ambient backdrop for the hero: a single accent bloom, nothing else — the
    motion comes from the particle field behind the whole page. */
 .ambient::after {
@@ -58,12 +86,37 @@ body {
   pointer-events: none;
 }
 
+/* Rótulo de seção. Era monoespaçado com 0.22em de entreletra, que é o visual
+   padrão de portfólio de dev: a mono ali não marcava dado nenhum, só texto
+   pequeno. Agora é a família de interface, com entreletra o suficiente pra
+   caixa alta respirar e nem um tiquinho a mais. */
 .label {
-  font-family: var(--font-mono), ui-monospace, monospace;
+  font-family: var(--font-display), system-ui, sans-serif;
   font-size: 0.6875rem;
-  letter-spacing: 0.22em;
+  font-weight: 500;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
   color: var(--muted);
+}
+
+/* A expressão em serifa itálica dentro de um título. Nunca o título inteiro:
+   o contraste só funciona enquanto é exceção. O ajuste óptico existe porque
+   esta serifa tem altura-x menor que a display, e sem ele a palavra destacada
+   parece ter encolhido em vez de ter mudado de voz. */
+.botao-texto {
+  font-family: var(--font-display), system-ui, sans-serif;
+  font-size: 0.875rem;
+  font-weight: 500;
+  letter-spacing: -0.005em;
+}
+
+.acento {
+  font-family: var(--font-serif), Georgia, serif;
+  font-style: italic;
+  font-weight: 400;
+  font-size: 1.08em;
+  letter-spacing: 0;
+  color: var(--accent);
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -128,10 +181,10 @@ body.scroll-locked .site-header {
 }
 
 .boot-intro__name {
-  font-family: var(--font-mono), ui-monospace, monospace;
-  font-size: 1.375rem;
-  letter-spacing: 0.22em;
-  text-transform: uppercase;
+  font-family: var(--font-display), system-ui, sans-serif;
+  font-size: 1.75rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
   color: var(--foreground);
   animation: boot-intro-breathe 2.4s ease-in-out infinite;
 }
@@ -155,6 +208,8 @@ body.scroll-locked .site-header {
   transform: scaleX(0);
 }
 
+/* Continua monoespaçada: é um número que muda depressa, e largura fixa é o
+   que impede o texto de pular a cada dígito. Aqui mono resolve um problema. */
 .boot-intro__percent {
   font-family: var(--font-mono), ui-monospace, monospace;
   font-size: 0.75rem;
@@ -223,12 +278,14 @@ body.scroll-locked .site-header {
   visibility: hidden;
 }
 
+/* A marca é um nome próprio, então é escrita como nome próprio: caixa mista,
+   entreletra normal, peso pra ter presença. Em caixa alta monoespaçada
+   espalhada ela não lia como assinatura, lia como cabeçalho de tabela. */
 .site-header__brand {
-  font-family: var(--font-mono), ui-monospace, monospace;
-  font-size: 0.8rem;
-  font-weight: 600;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
+  font-family: var(--font-display), system-ui, sans-serif;
+  font-size: 1.0625rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
   color: var(--foreground);
   transition: color 0.2s ease;
 }
@@ -238,24 +295,27 @@ body.scroll-locked .site-header {
 }
 
 .site-header__link {
-  font-family: var(--font-mono), ui-monospace, monospace;
-  font-size: 0.6875rem;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
+  font-family: var(--font-display), system-ui, sans-serif;
+  font-size: 0.875rem;
+  font-weight: 500;
+  letter-spacing: 0;
   color: var(--muted);
   transition: color 0.2s ease;
 }
 
 /* No celular a barra não cabia: marca + três links + switch somavam mais que
    a largura da tela, e era daí que vinha a rolagem horizontal em TODAS as
-   páginas. O entreletra é o primeiro a ceder porque é ele que infla texto
-   curto em caixa alta sem adicionar informação nenhuma.
+   páginas. Em caixa mista sem entreletra inflada os links já ocupam bem menos,
+   mas o piso de 390px continua apertado, então o corpo ainda cede um pouco.
 
    Tudo aqui é `max-width`: acima de 640px nada muda, e o desktop fica intacto. */
 @media (max-width: 640px) {
+  .site-header__brand {
+    font-size: 0.9375rem;
+  }
+
   .site-header__link {
-    font-size: 0.625rem;
-    letter-spacing: 0.08em;
+    font-size: 0.75rem;
   }
 }
 
@@ -1034,16 +1094,17 @@ body.scroll-locked .site-header {
 
 .timeline__month {
   font-family: var(--font-mono), ui-monospace, monospace;
-  font-size: 0.625rem;
-  letter-spacing: 0.22em;
+  font-size: 0.6875rem;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
   color: var(--accent);
   opacity: calc(0.45 + var(--lit) * 0.55);
 }
 
 .timeline__year {
+  font-family: var(--font-display), system-ui, sans-serif;
   font-size: clamp(2rem, 9vw, 3.4rem);
-  font-weight: 700;
+  font-weight: 800;
   line-height: 1;
   letter-spacing: -0.03em;
   color: var(--foreground);
@@ -1085,10 +1146,12 @@ body.scroll-locked .site-header {
   letter-spacing: -0.01em;
 }
 
+/* Nome de empresa é nome, não dado: saiu da mono. */
 .timeline__place {
   margin-block-start: 0.35rem;
-  font-family: var(--font-mono), ui-monospace, monospace;
-  font-size: 0.7rem;
+  font-family: var(--font-display), system-ui, sans-serif;
+  font-weight: 500;
+  font-size: 0.8125rem;
   color: var(--muted);
 }
 
@@ -1104,9 +1167,10 @@ body.scroll-locked .site-header {
   align-items: center;
   gap: 0.5rem;
   margin-block-start: 1.1rem;
-  font-family: var(--font-mono), ui-monospace, monospace;
-  font-size: 0.625rem;
-  letter-spacing: 0.22em;
+  font-family: var(--font-display), system-ui, sans-serif;
+  font-weight: 500;
+  font-size: 0.6875rem;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
   color: var(--foreground);
 }

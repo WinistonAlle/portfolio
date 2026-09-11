@@ -42,7 +42,7 @@ export default async function ContatoPage(
         <div>
           <h1 className="text-[clamp(2.2rem,4.6vw,3.4rem)] leading-[1.05] font-bold tracking-[-0.03em] text-balance">
             {dict.contact.titleStart}
-            <span className="text-muted">{dict.contact.titleEnd}</span>
+            <em className="acento">{dict.contact.titleEnd}</em>
           </h1>
 
           <p className="mt-7 max-w-md text-lg leading-relaxed text-muted">

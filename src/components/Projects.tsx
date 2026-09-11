@@ -7,6 +7,7 @@ import { PROJECTS, PROJECT_GROUPS } from '@/data/projects';
 import GlowButton, { GlowArrow } from '@/components/ui/GlowButton';
 import { getDictionary } from '@/i18n';
 import type { Locale } from '@/i18n/config';
+import TituloAcento from '@/components/text/TituloAcento';
 
 /* As gavetas e os cards são montados AQUI, no servidor, e vão pro filtro já
    prontos. É o que mantém o texto dos cases fora do bundle do navegador; a
@@ -65,7 +66,7 @@ export default async function Projects({ locale }: { locale: Locale }) {
       {/* Nada de contagem no título: a grade cresce um projeto por vez, e um
           número escrito na mão vira mentira na primeira adição. */}
       <h1 className="max-w-3xl text-[clamp(1.9rem,3.6vw,2.9rem)] leading-tight font-bold tracking-[-0.02em] text-balance">
-        {dict.projects.title}
+        <TituloAcento texto={dict.projects.title} />
       </h1>
       {/* Só o filtro roda no cliente. Os cards chegam nele já renderizados. */}
       <ProjectGrid

@@ -28,7 +28,7 @@ function Cover({ project, locale }: { project: Project; locale: Locale }) {
       aria-hidden="true"
       className="flex h-full w-full items-center justify-center bg-surface"
     >
-      <span className="font-mono text-[clamp(3rem,7vw,5rem)] leading-none font-bold text-foreground/[0.07]">
+      <span className="font-display text-[clamp(3rem,7vw,5rem)] leading-none font-extrabold text-foreground/[0.07]">
         {project.n}
       </span>
     </div>
@@ -83,7 +83,7 @@ export default function ProjectCard({
                 como a pessoa lê o que está vendo, e precisa aparecer antes
                 do clique. */}
             {project.status !== 'live' && (
-              <span className="absolute top-3 left-3 rounded-full border border-white/20 bg-background/75 px-3 py-1 font-mono text-[0.6rem] tracking-[0.18em] text-foreground/85 uppercase backdrop-blur-sm">
+              <span className="absolute top-3 left-3 rounded-full border border-white/20 bg-background/75 px-3 py-1 font-display text-[0.65rem] font-medium tracking-[0.1em] text-foreground/85 uppercase backdrop-blur-sm">
                 {statusWip}
               </span>
             )}
@@ -105,7 +105,7 @@ export default function ProjectCard({
               {project.tags.slice(0, 4).map((t) => (
                 <li
                   key={t}
-                  className="rounded-full border border-line px-3 py-1 font-mono text-[0.65rem] text-muted"
+                  className="rounded-full border border-line px-3 py-1 font-mono text-[0.65rem] tracking-tight text-muted"
                 >
                   {t}
                 </li>
@@ -114,7 +114,7 @@ export default function ProjectCard({
 
             {/* mt-auto: o "ver projeto" desce pro pé do card, então cards de
               alturas diferentes na mesma linha terminam alinhados. */}
-            <span className="mt-auto inline-flex items-center gap-2 pt-7 font-mono text-[0.65rem] tracking-[0.22em] text-muted uppercase transition-colors group-hover:text-accent">
+            <span className="mt-auto inline-flex items-center gap-2 pt-7 font-display text-[0.8rem] font-medium text-muted transition-colors group-hover:text-accent">
               {cardCta}
               <span
                 aria-hidden="true"

@@ -45,7 +45,7 @@ const pt = {
       ', tenho 24 anos e curso engenharia de software. Modelo o banco, escrevo o backend, construo a interface e cuido do servidor onde o sistema roda. O que eu desenvolvo está em produção, usado todos os dias por centenas de pessoas. Fora do trabalho mantenho projetos próprios, como um app de controle de hábitos e um app de poker para iOS. Trabalho até ficar bom de verdade, não até ficar aceitável.',
     ctaProjects: 'Ver os projetos',
     ctaContact: 'Falar comigo',
-    stackTitle: 'Tudo que eu uso, e como as peças se conversam.',
+    stackTitle: 'Tudo que eu uso, e como as peças *se conversam*.',
     workText:
       'Sou desenvolvedor de sistemas na Gostinho Mineiro, uma indústria de alimentos em Brasília. Entrei como estagiário e hoje respondo pelos sistemas internos da empresa. O portal de pedidos que eu construí é usado por cerca de 250 funcionários todo dia, antes dele, o pedido chegava por WhatsApp e alguém do faturamento digitava um por um no sistema. Meu foco é frontend e IA: interface que a pessoa usa sem precisar de treinamento, e automação que tira trabalho manual do caminho.',
     timelineNow: 'Onde estou hoje',
@@ -59,7 +59,7 @@ const pt = {
     metaTitle: 'Projetos — Winiston Alle',
     metaDescription:
       'Um pouco do meu trabalho: projetos de cliente, produtos próprios, trabalhos de faculdade e o que ainda está em construção.',
-    title: 'Conheça um pouco do meu trabalho.',
+    title: 'Conheça um pouco do *meu trabalho*.',
     filterLabel: 'Filtrar projetos',
     filterAll: 'Todos',
     groups: {
