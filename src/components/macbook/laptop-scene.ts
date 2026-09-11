@@ -658,28 +658,3 @@ export function projectScreen(
   return pts;
 }
 
-/* --------------------------------------------------------- capacidade
- * Detecção por CAPACIDADE, não por largura: um iPad Pro roda isto melhor que
- * um notebook de escritório com GPU integrada antiga.
- */
-export function canRun3D(): boolean {
-  if (typeof window === 'undefined') return false;
-  const nav = navigator as Navigator & { connection?: { saveData?: boolean }; deviceMemory?: number };
-  if (nav.connection?.saveData) return false;
-  const cores = nav.hardwareConcurrency ?? 4;
-  const mem = nav.deviceMemory ?? 4;
-  if (cores < 4 || mem < 4) return false;
-  try {
-    const cv = document.createElement('canvas');
-    const gl = cv.getContext('webgl2', { failIfMajorPerformanceCaveat: true });
-    if (!gl) return false;
-    const dbg = gl.getExtension('WEBGL_debug_renderer_info');
-    const name = dbg ? String(gl.getParameter(dbg.UNMASKED_RENDERER_WEBGL)) : '';
-    gl.getExtension('WEBGL_lose_context')?.loseContext();
-    /* Renderizadores de software: rodam, mas a 5fps. Melhor o SVG. */
-    if (/swiftshader|llvmpipe|software|basic render/i.test(name)) return false;
-    return true;
-  } catch {
-    return false;
-  }
-}

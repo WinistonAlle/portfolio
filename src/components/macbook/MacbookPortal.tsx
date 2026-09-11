@@ -25,7 +25,7 @@
 import dynamic from 'next/dynamic';
 import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { MacbookPro } from './MacbookPro';
-import { canRun3D } from './laptop-scene';
+import { canRun3D } from './can-run-3d';
 import Header from '@/components/Header';
 import type { Locale } from '@/i18n/config';
 
