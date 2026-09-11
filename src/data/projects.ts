@@ -90,6 +90,10 @@ export type Project = {
   tags: string[];
   media: ProjectMedia;
   links?: ProjectLink[];
+  /** Aviso destacado no topo do case. Existe para o dashboard financeiro, cujos
+   *  números são todos inventados: dizer isso numa linha perdida do meio do
+   *  texto seria a mesma coisa que não dizer. */
+  nota?: Localized<string>;
 
   /* Daqui pra baixo: só os projetos já detalhados. Um parágrafo por item. */
 
@@ -1145,6 +1149,93 @@ export const PROJECTS: Project[] = [
         caption: {
           pt: 'Três campos, e o botão abre o WhatsApp com a mensagem já montada. Formulário que manda e-mail e some é onde contato morre: aqui a conversa começa no lugar onde eu de fato respondo.',
           en: 'Three fields, and the button opens WhatsApp with the message already written. A form that sends an email into the void is where contact dies: here the conversation starts where I actually reply.',
+        },
+      },
+    ],
+  },
+  {
+    n: '12',
+    slug: 'dashboard-financeiro',
+    name: 'Dashboard Financeiro',
+    status: 'live',
+    context: 'Cliente',
+    groups: ['outros'],
+    line: {
+      pt: 'Painel de vendas para a diretoria: 138 meses de faturamento em três empresas, com 18 análises comparativas prontas.',
+      en: 'Sales dashboard for the board: 138 months of revenue across three companies, with 18 comparative analyses ready to use.',
+    },
+    nota: {
+      pt: 'Todos os números, nomes de cliente e rotas deste case são FICTÍCIOS, gerados por um script feito para isso. O sistema é real e está em uso, mas os dados dele são faturamento e carteira de clientes de uma empresa, e isso não vai para um portfólio. A base falsa preserva as relações internas da verdadeira (o ticket é o faturamento dividido pelos pedidos, o diário soma o mês), então o que você vê aqui é o comportamento do painel, não a operação de ninguém.',
+      en: 'Every number, client name and route in this case is FICTITIOUS, produced by a script written for that purpose. The system is real and in use, but its data is a company’s revenue and client base, and that does not belong in a portfolio. The fake dataset preserves the real one’s internal relations (ticket is revenue divided by orders, daily figures add up to the month), so what you see here is how the dashboard behaves, not anyone’s actual operation.',
+    },
+    stat: {
+      pt: [
+        'Dados fictícios: o sistema é real, os números não',
+        '138 meses consolidados de três empresas, de 11/2021 a 04/2026',
+        '18 análises comparativas, de Pareto 80/20 a coorte de retenção',
+        'Roda local, sem nada saindo da máquina de quem usa',
+      ],
+      en: [
+        'Fictitious data: the system is real, the numbers are not',
+        '138 months consolidated across three companies, from 11/2021 to 04/2026',
+        '18 comparative analyses, from Pareto 80/20 to retention cohorts',
+        'Runs locally, with nothing leaving the machine of whoever uses it',
+      ],
+    },
+    tags: ['React', 'Recharts', 'Python', 'Vite'],
+    media: {
+      frame: 'desktop',
+      src: '/cases/dashboard/resumo.jpg',
+      video: '/cases/dashboard/scroll.mp4',
+      poster: '/cases/dashboard/poster.jpg',
+      alt: {
+        pt: 'Resumo executivo do painel, com indicadores do período e a evolução do faturamento (dados fictícios)',
+        en: 'Executive summary of the dashboard, with period indicators and revenue over time (fictitious data)',
+      },
+    },
+    gallery: [
+      {
+        src: '/cases/dashboard/detalhe.jpg',
+        alt: {
+          pt: 'Painel lateral com o detalhamento de um mês: indicadores, participação por empresa e produtos (dados fictícios)',
+          en: 'Side panel detailing one month: indicators, share per company and products (fictitious data)',
+        },
+        caption: {
+          pt: 'Clicar em qualquer ponto do gráfico abre o mês por dentro: quanto cada empresa fez, o mix por linha de produto e os SKUs vendidos, sem sair da tela. Antes essa pergunta virava uma planilha nova.',
+          en: 'Clicking any point on the chart opens the month from the inside: what each company made, the mix by product line and the SKUs sold, without leaving the screen. That question used to turn into a brand new spreadsheet.',
+        },
+      },
+      {
+        src: '/cases/dashboard/heatmap.jpg',
+        alt: {
+          pt: 'Mapa de calor de clientes por mês, com as 18 análises comparativas acima (dados fictícios)',
+          en: 'Heatmap of clients by month, with the 18 comparative analyses above (fictitious data)',
+        },
+        caption: {
+          pt: 'O mapa de calor mostra quando cada cliente comprou nos últimos quatro anos. É onde um sumiço aparece: a linha que era cheia e ficou vazia é um cliente que parou, e ninguém tinha percebido.',
+          en: 'The heatmap shows when each client bought over the last four years. It is where a disappearance becomes visible: a row that used to be full and went empty is a client who stopped, and nobody had noticed.',
+        },
+      },
+      {
+        src: '/cases/dashboard/ano.jpg',
+        alt: {
+          pt: 'Comparação ano contra ano, com faturamento, pedidos, clientes e ticket lado a lado (dados fictícios)',
+          en: 'Year against year comparison, with revenue, orders, clients and ticket side by side (fictitious data)',
+        },
+        caption: {
+          pt: 'As comparações vêm prontas com a leitura já escrita em cima. A diretoria não precisa montar a conta nem lembrar contra o que está comparando: escolhe os dois anos e lê a frase.',
+          en: 'The comparisons come ready with the reading already written on top. The board does not have to build the calculation or remember what it is comparing against: pick the two years and read the sentence.',
+        },
+      },
+      {
+        src: '/cases/dashboard/tabela.jpg',
+        alt: {
+          pt: 'Tabela de dados brutos, mês a mês, ordenada por faturamento (dados fictícios)',
+          en: 'Raw data table, month by month, sorted by revenue (fictitious data)',
+        },
+        caption: {
+          pt: 'Embaixo de todo gráfico existe a tabela crua, ordenável e exportável em CSV. Painel que só mostra gráfico obriga a confiar nele; este deixa conferir linha por linha, que é o que faz alguém parar de manter a planilha paralela.',
+          en: 'Underneath every chart there is the raw table, sortable and exportable to CSV. A dashboard that only shows charts forces you to trust it; this one lets you check row by row, which is what makes someone stop keeping the parallel spreadsheet.',
         },
       },
     ],

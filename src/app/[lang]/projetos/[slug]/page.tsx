@@ -78,6 +78,15 @@ export default async function ProjectPage(
               {pick(project.line, lang)}
             </p>
 
+            {project.nota ? (
+              /* Cor de acento e borda à esquerda, não um parágrafo a mais:
+                 quem bate o olho no case precisa ver o aviso antes de olhar
+                 qualquer número, senão o aviso chega tarde demais. */
+              <p className="mt-6 border-l-2 border-accent/60 bg-accent/[0.06] py-3 pr-4 pl-4 text-[0.92rem] leading-relaxed text-foreground/85">
+                {pick(project.nota, lang)}
+              </p>
+            ) : null}
+
             <ul className="mt-8 flex flex-col gap-2">
               {pick(project.stat, lang).map((s) => (
                 <li
