@@ -1008,6 +1008,26 @@ export const PROJECTS: Project[] = [
         en: 'Kiosk welcome screen, with the brand and the start button',
       },
     },
+    problem: {
+      pt: [
+        'Fila na loja. E boa parte dela não era gente pagando: era gente decidindo, parada na frente do balcão.',
+        'Escolher leva tempo, e ali esse tempo acontecia no lugar mais caro possível, com o caixa ocupado e a fila crescendo atrás.',
+      ],
+      en: [
+        'Queues in the shop. And much of the queue was not people paying: it was people deciding, standing at the counter.',
+        'Choosing takes time, and there that time happened in the most expensive place possible, with the till occupied and the line growing behind.',
+      ],
+    },
+    solution: {
+      pt: [
+        'Agora escolher acontece antes do caixa, no totem, e no tempo de cada um. Ninguém mais segura a fila lendo o catálogo.',
+        'O pedido confirmado cai montado na fila do PDV, e de lá vira documento no CIGAM sem ninguém redigitar. Ao caixa sobrou a parte rápida: abrir e cobrar.',
+      ],
+      en: [
+        'Choosing now happens before the till, at the kiosk, at each person’s own pace. Nobody holds up the queue reading the catalog.',
+        'The confirmed order lands fully built in the POS queue, and from there it becomes a document in CIGAM with nobody retyping it. What is left for the till is the fast part: open and charge.',
+      ],
+    },
     gallery: [
       {
         src: '/cases/totem/catalogo.jpg',
