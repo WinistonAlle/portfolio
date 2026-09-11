@@ -19,7 +19,7 @@ import type { Localized } from '@/i18n/config';
 
 export type ProjectMedia = {
   /** Qual moldura emoldura o print. `none` deixa o texto ocupar a faixa. */
-  frame: 'desktop' | 'mobile' | 'none';
+  frame: 'desktop' | 'mobile' | 'totem' | 'none';
   /** Caminho em public/, ex.: '/cases/pdv/caixa.png'. Vazio = moldura vazia. */
   src?: string;
   /* O vídeo só aparece na página do projeto, dentro da moldura; o card da
@@ -970,6 +970,76 @@ export const PROJECTS: Project[] = [
         caption: {
           pt: 'A porta da área interna. Ela existe, e atrás dela existe o código da ficha do paciente, do prontuário e dos exames. O que não existe mais é o banco: o projeto parou antes de entrar em uso e o Supabase dele foi desativado.',
           en: 'The door to the private area. It exists, and behind it lives the code for the patient record, the history and the test results. What no longer exists is the database: the project stopped before going live and its Supabase was shut down.',
+        },
+      },
+    ],
+  },
+  {
+    n: '10',
+    slug: 'totem-loja',
+    name: 'Totem da Loja',
+    status: 'live',
+    context: 'Cliente',
+    groups: ['gostinho-mineiro'],
+    line: {
+      pt: 'Totem de autoatendimento da loja: o cliente monta o pedido na tela e o caixa só cobra.',
+      en: 'Self-service kiosk for the shop: the customer builds the order on screen and the till only takes the money.',
+    },
+    stat: {
+      pt: [
+        '178 produtos no catálogo, 177 já casados com o ERP',
+        'O pedido sai do totem pronto pra ser cobrado no PDV',
+        'PWA em tela cheia, servida pelo servidor da própria loja',
+      ],
+      en: [
+        '178 products in the catalog, 177 already matched to the ERP',
+        'The order leaves the kiosk ready to be charged at the POS',
+        "Full-screen PWA, served from the shop's own server",
+      ],
+    },
+    tags: ['React', 'TypeScript', 'Supabase', 'PWA'],
+    media: {
+      frame: 'totem',
+      src: '/cases/totem/capa.jpg',
+      video: '/cases/totem/scroll.mp4',
+      poster: '/cases/totem/poster.jpg',
+      alt: {
+        pt: 'Tela de abertura do totem, com a marca e o botão de começar',
+        en: 'Kiosk welcome screen, with the brand and the start button',
+      },
+    },
+    gallery: [
+      {
+        src: '/cases/totem/catalogo.jpg',
+        alt: {
+          pt: 'Catálogo do totem, com as categorias na lateral e os produtos em grade',
+          en: 'Kiosk catalog, with categories on the side and products in a grid',
+        },
+        caption: {
+          pt: 'Tudo ao alcance do polegar, sem menu escondido: as categorias ficam abertas na lateral e cada produto tem foto, preço e o botão de adicionar na mesma célula. Quem está de pé na loja não vai caçar submenu.',
+          en: 'Everything within thumb reach, nothing hidden in a menu: categories stay open on the side and each product carries photo, price and the add button in the same cell. Someone standing in a shop will not go hunting through submenus.',
+        },
+      },
+      {
+        src: '/cases/totem/sacola.jpg',
+        alt: {
+          pt: 'Catálogo com a sacola mostrando itens e total na parte de baixo',
+          en: 'Catalog with the bag showing items and total along the bottom',
+        },
+        caption: {
+          pt: 'A sacola acompanha a pessoa pelo catálogo inteiro, com a conta somando ao vivo. Numa loja, saber quanto já deu antes de chegar no caixa é o que evita a desistência na frente da fila.',
+          en: 'The bag follows the person through the whole catalog, with the total adding up live. In a shop, knowing the running total before reaching the till is what prevents someone backing out in front of the queue.',
+        },
+      },
+      {
+        src: '/cases/totem/revisao.jpg',
+        alt: {
+          pt: 'Revisão do pedido, com itens, quantidades e total antes de confirmar',
+          en: 'Order review, with items, quantities and total before confirming',
+        },
+        caption: {
+          pt: 'A última tela do totem, e ela não cobra nada. O pedido confirmado aqui vai para a fila do PDV, e o caixa só abre e recebe. É esse recorte que faz o totem valer: ele tira do balcão a parte demorada, que é decidir.',
+          en: 'The last screen of the kiosk, and it takes no payment. The order confirmed here goes into the POS queue, and the cashier just opens it and collects. That split is what makes the kiosk worth it: it takes the slow part, deciding, off the counter.',
         },
       },
     ],

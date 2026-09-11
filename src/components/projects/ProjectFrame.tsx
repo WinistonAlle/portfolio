@@ -1,5 +1,6 @@
 import { MacbookPro } from '@/components/macbook/MacbookPro';
 import { Iphone16Pro } from '@/components/iphone/Iphone16Pro';
+import { TotemFrame } from '@/components/totem/TotemFrame';
 import VideoLoop from '@/components/media/VideoLoop';
 import { pick, type Locale } from '@/i18n/config';
 import type { ProjectMedia } from '@/data/projects';
@@ -32,6 +33,21 @@ export default function ProjectFrame({
       className="h-full w-full object-cover"
     />
   ) : undefined;
+
+  if (media.frame === 'totem') {
+    /* Bem mais larga que a do celular (min(58vw,240px)): o totem é uma tela
+       de 1080x1920 cheia de informação, e no tamanho de um telefone não dá
+       pra ler nada do que está nela. */
+    return (
+      <TotemFrame
+        className={`mx-auto w-[min(76vw,360px)] text-surface ${className ?? ''}`}
+        src={media.src || undefined}
+        screen={screen}
+        role="img"
+        aria-label={pick(media.alt, locale)}
+      />
+    );
+  }
 
   if (media.frame === 'mobile') {
     return (
