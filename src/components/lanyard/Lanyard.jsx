@@ -84,6 +84,7 @@ export default function Lanyard({
   lanyardWidth = 1,
   anchor = [0, 4, 0],
   paused = false,
+  onReveal,
   className = '',
 }) {
   const [isMobile, setIsMobile] = useState(
@@ -96,9 +97,21 @@ export default function Lanyard({
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
+  /* A cena renderiza desde o primeiro quadro (a física precisa rodar pra
+     assentar), mas só APARECE depois que a corda para. Esconder por opacidade,
+     e não desmontando, é o que permite a queda acontecer fora de vista. */
+  const [visivel, setVisivel] = useState(false);
+  /* Em ref porque quem chama passa função nova a cada render, e isso não pode
+     virar motivo pra reexecutar o efeito de revelação. */
+  const revelarRef = useRef(onReveal);
+  revelarRef.current = onReveal;
+
   return (
     <div
-      className={`relative z-0 flex h-full w-full items-center justify-center ${className}`}
+      data-lanyard
+      className={`relative z-0 flex h-full w-full items-center justify-center transition-opacity duration-500 ${
+        visivel ? 'opacity-100' : 'opacity-0'
+      } ${className}`}
     >
       <Canvas
         camera={{ position, fov }}
@@ -116,6 +129,10 @@ export default function Lanyard({
           paused={paused}
         >
           <Band
+            onSettled={() => {
+              setVisivel(true);
+              revelarRef.current?.();
+            }}
             isMobile={isMobile}
             frontImage={frontImage}
             backImage={backImage}
@@ -179,8 +196,18 @@ function Band({
   lanyardImage = null,
   lanyardWidth = 1,
   anchor = [0, 4, 0],
+  onSettled,
 }) {
   const extension = useRef();
+  /* Os corpos da corda nascem DEITADOS na horizontal ([0.5,0,0] até [2,0,0]),
+     na altura da âncora, e é a gravidade que os derruba até o lugar. Desenhar
+     esses primeiros quadros é a piscada do crachá "num lugar aleatório" antes
+     de ele assentar. Aqui a gente avisa quando parou; quem esconde até lá é o
+     componente de fora. */
+  const assentado = useRef(false);
+  const caiu = useRef(false);
+  const quadros = useRef(0);
+  const quietos = useRef(0);
   const [extensionCurve] = useState(() => {
     const c = new THREE.CatmullRomCurve3([
       new THREE.Vector3(),
@@ -343,6 +370,31 @@ function Band({
       ang.copy(card.current.angvel());
       rot.copy(card.current.rotation());
       card.current.setAngvel({ x: ang.x, y: ang.y - rot.y * 0.25, z: ang.z });
+    }
+
+    if (!assentado.current && card.current) {
+      /* A contagem só começa depois que o card DESCEU. Sem isso, com a física
+         pausada (`paused`, quando a seção ainda não está ativa) o useFrame
+         continua rodando, o teto de quadros estoura e o crachá apareceria
+         exatamente no estado que este código existe pra esconder: deitado na
+         horizontal, na altura da âncora. */
+      if (!caiu.current) {
+        caiu.current = card.current.translation().y < anchor[1] - 0.5;
+      } else {
+        quadros.current += 1;
+        const v = card.current.linvel();
+        const quase = Math.abs(v.x) + Math.abs(v.y) + Math.abs(v.z) < 0.8;
+        /* Velocidade baixa sozinha não basta: ela também acontece no pico do
+           balanço, no instante em que o card inverte o sentido. Por isso são
+           6 quadros seguidos, e não um. */
+        quietos.current = quase ? quietos.current + 1 : 0;
+        /* Teto de quadros pra nunca ficar invisível pra sempre caso a corda
+           não pare (aba em segundo plano acumulando delta, por exemplo). */
+        if (quietos.current >= 6 || quadros.current > 360) {
+          assentado.current = true;
+          onSettled?.();
+        }
+      }
     }
   });
 

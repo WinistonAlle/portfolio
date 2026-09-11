@@ -14,6 +14,9 @@ export interface LanyardProps {
   anchor?: [number, number, number];
   /** Freezes the physics sim on its authored pose — the segments never fall until this flips to false. */
   paused?: boolean;
+  /** Fires once the rope has stopped swinging and the scene has faded in. The
+   *  scene is hidden until then, so this is the cue to drop any placeholder. */
+  onReveal?: () => void;
   className?: string;
 }
 

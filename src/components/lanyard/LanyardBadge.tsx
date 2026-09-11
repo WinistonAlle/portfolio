@@ -26,9 +26,14 @@ type Stage = { left: number; width: number; anchorX: number };
  * the model is parsed. It has to read as "loading", not as a finished badge:
  * a crisp static image here just looks like the 3D never arrived.
  */
-function BadgeLoading() {
+function BadgeLoading({ saindo = false }: { saindo?: boolean }) {
   return (
-    <div className="flex h-full w-full flex-col items-center justify-center gap-6">
+    <div
+      aria-hidden={saindo}
+      className={`flex h-full w-full flex-col items-center justify-center gap-6 transition-opacity duration-500 ${
+        saindo ? 'pointer-events-none opacity-0' : 'opacity-100'
+      }`}
+    >
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img
         src="/badge-front.png"
@@ -59,6 +64,12 @@ export default function LanyardBadge({
 }) {
   const slotRef = useRef<HTMLDivElement>(null);
   const [stage, setStage] = useState<Stage | null>(null);
+  /* A cena nasce invisível de propósito (a corda precisa de alguns quadros pra
+     parar de balançar, e desenhar essa queda era a piscada que o usuário via).
+     Sem este estado sobrava um buraco: o placeholder saía junto com o chunk e
+     a cena ainda estava escondida. Agora o placeholder só sai quando a cena
+     entra, e os dois se cruzam num fade. */
+  const [revelou, setRevelou] = useState(false);
 
   useEffect(() => {
     const slot = slotRef.current;
@@ -119,8 +130,15 @@ export default function LanyardBadge({
             : { left: 0, right: 0 }
         }
       >
+        {/* Camada de espera POR TRÁS da cena, não no lugar dela: enquanto a
+            corda assenta é ela que ocupa o espaço do crachá. */}
+        <div className="absolute inset-0">
+          <BadgeLoading saindo={revelou} />
+        </div>
+
         {stage ? (
           <Lanyard
+            onReveal={() => setRevelou(true)}
             /* Rapier reads each body's world transform once, at creation, so a
                moved anchor only takes effect on a fresh scene. Resizes are rare
                and drei caches the glb, so remounting is the cheap way out. */
@@ -136,9 +154,7 @@ export default function LanyardBadge({
             lanyardWidth={1.1}
             paused={!active}
           />
-        ) : (
-          <BadgeLoading />
-        )}
+        ) : null}
       </div>
     </div>
   );
