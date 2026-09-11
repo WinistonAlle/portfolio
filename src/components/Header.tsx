@@ -53,11 +53,12 @@ export default function Header({
 
   return (
     <header className={`site-header${hidden ? ' site-header--hidden' : ''}`}>
-      <div className="mx-auto flex h-[72px] w-full max-w-7xl items-center justify-between px-6 lg:px-10">
+      <div className="mx-auto flex h-[72px] w-full max-w-7xl items-center justify-between gap-3 px-4 sm:px-6 lg:px-10">
         <TransitionLink href={`/${locale}`} className="site-header__brand">
           Winiston Alle
         </TransitionLink>
-        <nav className="flex items-center gap-6 lg:gap-8">
+        {/* gap menor no celular: com gap-6 a barra estourava a tela. */}
+        <nav className="flex items-center gap-3 sm:gap-6 lg:gap-8">
           {itens.map((item) => (
             <TransitionLink
               key={item.href}

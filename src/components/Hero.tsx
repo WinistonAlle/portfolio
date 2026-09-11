@@ -14,8 +14,13 @@ export default function Hero({
   locale: Locale;
   t: { title: string; ctaProjects: string; ctaAbout: string };
 }) {
+  /* A altura desconta o header, que rola junto com a página em vez de ser
+     fixo. Vale nos dois estados: dentro do portal, a tela do notebook mostra
+     header + hero e o conjunto tem que caber nos 100svh do .portal__content;
+     depois de entrar, é o que faz a home ocupar a tela exata, sem sobrar
+     rolagem. */
   return (
-    <section className="ambient relative isolate flex min-h-[100svh] flex-col justify-end overflow-hidden">
+    <section className="ambient relative isolate flex min-h-[calc(100svh-var(--header-h))] flex-col justify-end overflow-hidden">
       {/* Título ao fundo, cruzando atrás da cabeça; a foto está em z-10 e
           continua por cima. */}
       <div className="absolute inset-x-0 top-[14%] z-0 -translate-y-1/2 px-6 text-center lg:px-10">
@@ -48,7 +53,12 @@ export default function Hero({
         <img
           src="/sticker-winiston-v4.png"
           alt="Winiston Alle"
-          className="block h-auto w-[clamp(28rem,62vw,53rem)] select-none"
+          /* `max-h` e `object-contain`: a largura continua mandando enquanto a
+             foto couber, mas em tela baixa é a altura que passa a limitar, em
+             vez de a foto esticar a home e deixar sobrar rolagem embaixo. O
+             `max-w-full` é pro celular, onde o piso de 28rem do clamp é mais
+             largo que a tela. */
+          className="block h-auto w-[clamp(28rem,62vw,53rem)] max-h-[calc(100svh-var(--header-h))] max-w-full object-contain select-none"
           draggable={false}
         />
       </div>

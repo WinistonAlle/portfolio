@@ -39,6 +39,22 @@ export function jumpScrollTo(top: number) {
   window.scrollTo({ top, behavior: 'instant' as ScrollBehavior });
 }
 
+/* Trava e destrava a rolagem da página.
+ *
+ * Os dois passos são necessários. O `overflow: hidden` no body segura a
+ * rolagem nativa, e o `lenis.stop()` segura o loop do Lenis, que roda por
+ * conta própria e continuaria rolando com o body travado.
+ *
+ * Quem usa: o visualizador ampliado da moldura de projeto. O boot da home tem
+ * o caminho dele, pelo `bootActive`, porque lá a trava começa antes de este
+ * componente montar. */
+export function setScrollLocked(locked: boolean) {
+  document.body.classList.toggle('scroll-locked', locked);
+  if (!lenis) return;
+  if (locked) lenis.stop();
+  else lenis.start();
+}
+
 export default function SmoothScroll() {
   const pathname = usePathname();
   const { bootActive } = usePixelTransition();

@@ -9,6 +9,11 @@
   --muted: #78879f;
   --accent: #5b9cff;
   --line: rgba(255, 255, 255, 0.11);
+  /* 72px da barra + 1px do filete de baixo. Fica aqui porque o Hero precisa
+     descontar isso da altura de tela: o header rola junto com a página (não é
+     fixo), então header + hero de 100svh dava 73px a mais que a tela e sobrava
+     rolagem na home depois de a abertura terminar. */
+  --header-h: 73px;
 }
 
 @theme inline {
@@ -23,6 +28,17 @@
 }
 
 body {
+  /* `clip` e não `hidden`: os dois cortam o que vaza na horizontal, mas
+     `hidden` cria um contêiner de rolagem e quebraria `position: sticky` em
+     qualquer lugar do site. `clip` não cria contêiner nenhum.
+
+     Isto existe para o sangramento DECORATIVO, que é de propósito: o brilho do
+     card de projeto vaza 38px pra fora da borda, o rastro do texto do topo
+     acompanha o cursor pra fora da caixa, e os blocos que entram deslizando
+     começam fora da tela. No desktop isso cabe nas margens; num aparelho de
+     390px, cada um vira rolagem horizontal. O estouro que era bug de verdade
+     (a barra do topo) foi consertado no lugar certo. */
+  overflow-x: clip;
   background: var(--background);
   color: var(--foreground);
   font-family: var(--font-sans), system-ui, sans-serif;
@@ -62,6 +78,23 @@ body {
 /* Trava o scroll enquanto o boot intro roda por cima de tudo. */
 body.boot-intro-active {
   overflow: hidden;
+}
+
+/* Trava da moldura ampliada. Separada da do boot porque as duas nunca
+   acontecem juntas (boot só na home, ampliar só na página de projeto) e
+   misturar as duas faria uma destravar o que a outra ainda precisa. */
+body.scroll-locked {
+  overflow: hidden;
+}
+
+/* O header sai de cena enquanto a moldura está ampliada.
+   Não é enfeite: ele fica em z-index 40, acima do <main> (z-10) onde a
+   moldura vive, então sem isto a barra ficaria por cima do fundo escurecido,
+   como se não fizesse parte do mesmo momento. */
+body.scroll-locked .site-header {
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
 }
 
 /* Intro de boot da home (BootIntro.tsx) — tela cheia preta que entrega pra
@@ -213,8 +246,63 @@ body.boot-intro-active {
   transition: color 0.2s ease;
 }
 
+/* No celular a barra não cabia: marca + três links + switch somavam mais que
+   a largura da tela, e era daí que vinha a rolagem horizontal em TODAS as
+   páginas. O entreletra é o primeiro a ceder porque é ele que infla texto
+   curto em caixa alta sem adicionar informação nenhuma.
+
+   Tudo aqui é `max-width`: acima de 640px nada muda, e o desktop fica intacto. */
+@media (max-width: 640px) {
+  .site-header__link {
+    font-size: 0.625rem;
+    letter-spacing: 0.08em;
+  }
+}
+
 .site-header__link:hover {
   color: var(--accent);
+}
+
+/* Botão de ampliar a moldura do projeto.
+
+   Só posição e forma vivem aqui: o visual (vidro, brilho na borda, o canvas
+   que sangra pra fora) vem do SpecularButton, o mesmo de todos os botões do
+   site. Por isso o seletor carrega as DUAS classes: as regras do botão e estas
+   têm a mesma especificidade, e depender da ordem dos arquivos importados pra
+   uma ganhar da outra é apostar na sorte.
+
+   Fechado: encostado no canto superior direito da moldura, acima dela, do lado
+   de fora da tela do notebook.
+   Aberto: vira `fixed` no canto da janela. Ele é irmão do elemento que escala,
+   e não filho, senão cresceria junto e terminaria a animação gigante. */
+.specular-button.frame-expand {
+  position: absolute;
+  inset-block-start: -3.1rem;
+  inset-inline-end: 0;
+  z-index: 3;
+  /* Quadrado: o preset `sm` traz 10px/22px, que é proporção pensada pra
+     texto e deixaria um ícone perdido no meio de um retângulo deitado. */
+  padding: 10px 12px;
+  transition:
+    inset-block-start 0.35s ease,
+    transform 0.15s ease;
+}
+
+.specular-button.frame-expand svg {
+  display: block;
+  width: 16px;
+  height: 16px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.6;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.specular-button.frame-expand--open {
+  position: fixed;
+  inset-block-start: 1.25rem;
+  inset-inline-end: 1.25rem;
 }
 
 /* Switch de idioma: duas bandeiras num trilho, com o marcador deslizando pra
@@ -288,6 +376,23 @@ body.boot-intro-active {
   opacity: 1;
 }
 
+@media (max-width: 640px) {
+  /* Bandeiras menores e knob no mesmo passo, senão o marcador desliza para
+     fora do compartimento que ele deveria marcar. */
+  .lang-switch__flag {
+    width: 1.5rem;
+    font-size: 0.85rem;
+  }
+
+  .lang-switch__knob {
+    width: 1.5rem;
+  }
+
+  .lang-switch[data-locale='en'] .lang-switch__knob {
+    transform: translateX(1.5rem);
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .lang-switch__knob {
     transition: none;
@@ -345,8 +450,46 @@ body.boot-intro-active {
   transform: translateY(var(--enter-y));
 }
 
+/* A cena 3D da abertura.
+
+   z-index 5, atrás do .portal__viewport (20): a malha da tela do laptop é
+   opaca, então com o canvas na frente ela taparia o site e a home nunca
+   apareceria dentro do notebook.
+
+   O `scale` é o que faz o notebook VIR JUNTO com a tela durante o zoom. A tela
+   3D já coincide com o retângulo do portal no fim da intro, e os dois são
+   centrados na viewport, então aplicar a mesma razão de escala do conteúdo
+   (--s sobre --s0) mantém o encaixe em qualquer ponto do zoom. Sem isto o
+   laptop ficava parado enquanto o site crescia, e parecia que ele tinha ficado
+   para trás.
+
+   Ele só some no fim, quando a moldura já passou da borda da viewport. Sumir
+   antes deixava um retângulo de site flutuando no vazio. */
+.portal__scene {
+  position: fixed;
+  inset: 0;
+  z-index: 5;
+  display: block;
+  width: 100vw;
+  height: 100svh;
+  pointer-events: none;
+  transform: scale(calc(var(--s) * var(--inv-s0)));
+  transform-origin: center center;
+  opacity: calc((0.88 - var(--p)) / 0.12);
+}
+
+/* `--boot` acende a tela do laptop.
+
+   Sem 3D ele vale 1 e nada muda. Com 3D ele começa em 0 e só sobe quando a
+   câmera assenta: durante o giro, a tela do portal é um retângulo opaco no
+   meio da viewport, e se ela ficasse acesa apareceria como uma placa flutuando
+   sobre um notebook que ainda está rodando.
+
+   A opacidade vai no elemento inteiro, e não só no conteúdo, porque o fundo
+   opaco do próprio .portal__screen é parte do que taparia a tela 3D. */
 .portal__screen {
   position: relative;
+  opacity: var(--boot, 1);
   width: calc(100vw * var(--s));
   height: calc(
     (100vw * var(--s0) / var(--screen-aspect)) * (1 - var(--p)) + 100svh *

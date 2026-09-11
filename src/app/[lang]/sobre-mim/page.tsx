@@ -69,7 +69,11 @@ export default async function SobreMimPage(
               <EchoText
                 text={dict.about.heroTitle}
                 className="echo-text--outlined"
-                fontSize="clamp(1.9rem, 3.4vw, 3.6rem)"
+                /* O mínimo era 1.9rem e o título saía com 406px numa tela de
+                   390px, criando rolagem horizontal. Agora o piso é em vw até
+                   dar 1.9rem por volta de 560px de largura, então o desktop
+                   não muda em nada. */
+                fontSize="clamp(1.2rem, 6.2vw, 3.6rem)"
                 fontWeight={700}
                 style={{ fontFamily: 'var(--font-space-grotesk)' }}
               />
