@@ -1064,4 +1064,78 @@ export const PROJECTS: Project[] = [
       },
     ],
   },
+  {
+    n: '11',
+    slug: 'portfolio',
+    name: 'Este portfólio',
+    status: 'live',
+    context: 'Produto próprio',
+    groups: ['outros', 'sites'],
+    line: {
+      pt: 'O site que você está lendo agora: bilíngue, com abertura em 3D e um case por projeto.',
+      en: 'The site you are reading right now: bilingual, with a 3D opening and one case per project.',
+    },
+    stat: {
+      pt: [
+        'Onze cases, cada um com vídeo do sistema rodando de verdade',
+        'Português e inglês na mesma base: tradução faltando quebra o build',
+        'A abertura é um MacBook 3D em three.js, guiado pela rolagem',
+      ],
+      en: [
+        'Eleven cases, each with video of the system actually running',
+        'Portuguese and English from one source: a missing translation breaks the build',
+        'The opening is a 3D MacBook in three.js, driven by scroll',
+      ],
+    },
+    tags: ['Next.js', 'TypeScript', 'three.js', 'Tailwind'],
+    media: {
+      frame: 'desktop',
+      src: '/cases/portfolio/home.jpg',
+      video: '/cases/portfolio/tour.mp4',
+      poster: '/cases/portfolio/poster.jpg',
+      alt: {
+        pt: 'Home do portfólio, com o retrato recortado no meio e adesivos de tecnologia em volta',
+        en: 'Portfolio home, with the cut-out portrait in the middle and technology stickers around it',
+      },
+    },
+    links: [
+      { kind: 'site', href: 'https://winiston.vercel.app' },
+      { kind: 'github', href: 'https://github.com/WinistonAlle/portfolio' },
+    ],
+    gallery: [
+      {
+        src: '/cases/portfolio/cracha.jpg',
+        alt: {
+          pt: 'Página sobre mim, com um crachá pendurado num cordão ao lado do texto',
+          en: 'About me page, with a badge hanging from a lanyard beside the text',
+        },
+        caption: {
+          pt: 'O crachá não é imagem: é um cordão com física, que balança e responde ao arrasto do mouse. Ele fica escondido enquanto a corda ainda está caindo, porque o que convence é ele já estar parado quando aparece.',
+          en: 'The badge is not an image: it is a lanyard with physics, swinging and responding to the drag of the mouse. It stays hidden while the rope is still falling, because what convinces is finding it already at rest.',
+        },
+      },
+      {
+        src: '/cases/portfolio/stack.jpg',
+        alt: {
+          pt: 'Mapa da stack, com as ferramentas ligadas por linhas em torno de um núcleo central',
+          en: 'Stack map, with tools connected by lines around a central core',
+        },
+        caption: {
+          pt: 'Lista de tecnologia não diz nada: todo mundo tem uma. Aqui as peças aparecem ligadas, agrupadas por frente, porque o que interessa não é quais eu sei, é como elas se encaixam num sistema.',
+          en: 'A list of technologies says nothing: everybody has one. Here the pieces appear connected, grouped by area, because what matters is not which ones I know, it is how they fit together into a system.',
+        },
+      },
+      {
+        src: '/cases/portfolio/contato.jpg',
+        alt: {
+          pt: 'Página de contato, com os canais em blocos isométricos e um formulário curto embaixo',
+          en: 'Contact page, with channels as isometric blocks and a short form below',
+        },
+        caption: {
+          pt: 'Três campos, e o botão abre o WhatsApp com a mensagem já montada. Formulário que manda e-mail e some é onde contato morre: aqui a conversa começa no lugar onde eu de fato respondo.',
+          en: 'Three fields, and the button opens WhatsApp with the message already written. A form that sends an email into the void is where contact dies: here the conversation starts where I actually reply.',
+        },
+      },
+    ],
+  },
 ];
