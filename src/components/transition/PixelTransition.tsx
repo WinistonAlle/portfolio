@@ -323,6 +323,18 @@ export function PixelTransitionProvider({
     });
 
     timerRef.current = window.setTimeout(() => {
+      /* Apaga o estilo-base ANTES de cancelar.
+
+         Cancelar uma animação devolve o elemento ao estilo inline, e o cover
+         tinha deixado `opacity: '1'` ali de propósito (pra um cancelamento no
+         meio do caminho cair em "tela fechada", e não em "pixel sumido"). Só
+         que aqui a animação já terminou: cancelar sem apagar isso reacendia
+         todos os pixels de uma vez, e eles ficavam opacos durante o quadro
+         entre o cancelamento e a desmontagem da grade, que só acontece no
+         render seguinte. Era essa a piscada depois de trocar de página. */
+      pixelRefs.current.forEach((element) => {
+        if (element) element.style.opacity = '0';
+      });
       stopAnimations();
       targetRef.current = null;
       pixelRefs.current = [];
