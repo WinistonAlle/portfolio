@@ -13,6 +13,7 @@ import {
   CuboidCollider,
   Physics,
   RigidBody,
+  useRapier,
   useRopeJoint,
   useSphericalJoint,
 } from '@react-three/rapier';
@@ -326,6 +327,23 @@ function Band({
     [0, 0, 0],
     [0, 1.5, 0],
   ]);
+
+  /* Adianta a simulação antes do primeiro quadro visível.
+   *
+   * A corda leva cerca de um segundo de tempo real pra parar de balançar, e
+   * como a cena fica escondida até lá, esse segundo virava "carregando" na
+   * tela. Rodar os mesmos passos de física de uma vez custa menos de um
+   * milissegundo (são cinco corpos) e entrega o crachá já parado no primeiro
+   * quadro que a pessoa vê.
+   *
+   * Vai DEPOIS dos hooks de junta de propósito: efeitos rodam na ordem em que
+   * são declarados, e sem as juntas criadas os passos só derrubariam os corpos
+   * soltos, cada um pro seu lado. */
+  const { world } = useRapier();
+  useEffect(() => {
+    if (!world) return;
+    for (let i = 0; i < 180; i++) world.step();
+  }, [world]);
 
   useEffect(() => {
     if (hovered) {

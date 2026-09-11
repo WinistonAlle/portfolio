@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
+import { preload } from 'react-dom';
 import LanyardBadge from '@/components/lanyard/LanyardBadge';
 import StackGraph from '@/components/stack/StackGraph';
 import EchoText from '@/components/text/EchoText';
@@ -10,6 +11,13 @@ import Timeline from '@/components/timeline/Timeline';
 import GlowButton, { GlowArrow } from '@/components/ui/GlowButton';
 import { getDictionary } from '@/i18n';
 import { isLocale } from '@/i18n/config';
+
+/* O modelo do crachá só era pedido depois que o chunk do three baixava,
+   parseava e montava — mais de um segundo depois do HTML, atrás de tudo que o
+   navegador já tinha na fila. Pedindo aqui, ele começa junto com a página. */
+function preloadCracha() {
+  preload('/card.glb', { as: 'fetch', crossOrigin: 'anonymous' });
+}
 
 export async function generateMetadata(
   props: PageProps<'/[lang]/sobre-mim'>,
@@ -36,6 +44,8 @@ export default async function SobreMimPage(
 ) {
   const { lang } = await props.params;
   if (!isLocale(lang)) notFound();
+
+  preloadCracha();
 
   const dict = await getDictionary(lang);
 

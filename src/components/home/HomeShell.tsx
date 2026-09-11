@@ -1,7 +1,9 @@
 'use client';
 
 import dynamic from 'next/dynamic';
+import { useEffect } from 'react';
 import Hero from '@/components/Hero';
+import { aquecerCracha } from '@/components/lanyard/aquecer-cracha';
 import MacbookPortal from '@/components/macbook/MacbookPortal';
 import type { Locale } from '@/i18n/config';
 
@@ -34,6 +36,13 @@ export default function HomeShell({
   nav: Nav;
   switchLabel: string;
 }) {
+  /* A abertura do MacBook deixa a rede parada por vários segundos. É nela que
+     o crachá da página "sobre mim" é baixado, pra que chegar lá seja instantâneo
+     em vez de esperar o modelo do zero. */
+  useEffect(() => {
+    aquecerCracha();
+  }, []);
+
   return (
     <main className="relative z-10 flex-1">
       <BootIntro />
