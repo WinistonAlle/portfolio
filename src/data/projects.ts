@@ -1104,6 +1104,17 @@ export const PROJECTS: Project[] = [
     ],
     gallery: [
       {
+        src: '/cases/portfolio/abertura3d.jpg',
+        alt: {
+          pt: 'MacBook 3D fechado, de costas, com adesivos de tecnologia na tampa',
+          en: 'Closed 3D MacBook seen from behind, technology stickers on the lid',
+        },
+        caption: {
+          pt: 'O site abre com este MacBook, em three.js puro, sem biblioteca de React por cima: ele gira, abre, e a câmera entra até a tela dele virar exatamente a moldura onde o site aparece. Nada disso é animação com duração própria, é tudo função da rolagem, então quem desce rápido chega ao site rápido. Os adesivos são os mesmos da home, desenhados num atlas único pra tampa inteira custar uma textura só. E sim: este é o único lugar do portfólio onde a moldura do case é o próprio site.',
+          en: 'The site opens with this MacBook, in plain three.js with no React layer on top: it spins, opens, and the camera moves in until its screen becomes exactly the frame the site appears in. None of it is an animation with a duration of its own, it is all a function of scroll, so scrolling fast gets you to the site fast. The stickers are the same ones from the home page, drawn into a single atlas so the whole lid costs one texture. And yes: this is the one place in the portfolio where the case mockup is the site itself.',
+        },
+      },
+      {
         src: '/cases/portfolio/cracha.jpg',
         alt: {
           pt: 'Página sobre mim, com um crachá pendurado num cordão ao lado do texto',
