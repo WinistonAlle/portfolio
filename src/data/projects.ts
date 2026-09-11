@@ -604,12 +604,16 @@ export const PROJECTS: Project[] = [
     tags: ['React', 'TypeScript', 'Supabase', 'CIGAM'],
     media: {
       frame: 'desktop',
-      src: '/cases/catalogo-funcionarios/capa.jpg',
+      /* Nome próprio em vez de `capa.jpg`: a capa deste projeto já foi trocada
+         duas vezes, e reaproveitar o mesmo nome deixa o navegador servindo a
+         imagem antiga, porque a URL não muda. Nome que descreve o conteúdo
+         muda junto com ele. */
+      src: '/cases/catalogo-funcionarios/entrada.jpg',
       video: '/cases/catalogo-funcionarios/scroll.mp4',
       poster: '/cases/catalogo-funcionarios/poster.jpg',
       alt: {
-        pt: 'Painel de operação do catálogo de funcionários, com as ações de sincronizar, restaurar saldo e liberar pedido',
-        en: 'Operations panel of the employee catalog, with actions to sync, restore balance and release an order',
+        pt: 'Tela de entrada do sistema, com as opções Sou Funcionário e Sou Cliente',
+        en: 'System entry screen, with the options I am an Employee and I am a Customer',
       },
     },
     links: [
@@ -642,14 +646,14 @@ export const PROJECTS: Project[] = [
     },
     gallery: [
       {
-        src: '/cases/catalogo-funcionarios/acessos.jpg',
+        src: '/cases/catalogo-funcionarios/vitrine.jpg',
         alt: {
-          pt: 'Tela de entrada, com as opções Sou Funcionário e Sou Cliente',
-          en: 'Entry screen, with the options I am an Employee and I am a Customer',
+          pt: 'Destaques do catálogo, com as fotos e os preços dos produtos em linha',
+          en: 'Catalog highlights, with product photos and prices in a row',
         },
         caption: {
-          pt: 'A porta de entrada separa dois públicos que veem preços diferentes do mesmo produto. Funcionário entra com CPF, sem senha: o público é o chão de fábrica e uma senha a mais viraria papel colado no armário.',
-          en: 'The front door splits two audiences who see different prices for the same product. Employees sign in with their tax ID, no password: the audience is the factory floor, and one more password would end up on a note taped inside a locker.',
+          pt: 'A vitrine que abre o catálogo é escolhida e ordenada arrastando, com a prévia logo acima. Quem monta é a equipe da loja, e a prévia existe para não ter que publicar só pra descobrir como ficou.',
+          en: 'The shop window that opens the catalog is picked and ordered by dragging, with a live preview right above. The shop team builds it, and the preview is there so nobody has to publish just to find out how it looks.',
         },
       },
       {
@@ -697,14 +701,275 @@ export const PROJECTS: Project[] = [
         },
       },
       {
-        src: '/cases/catalogo-funcionarios/destaques.jpg',
+        src: '/cases/catalogo-funcionarios/painel.jpg',
         alt: {
-          pt: 'Tela de destaques do catálogo, com ordenação por arrastar',
-          en: 'Catalog highlights screen, ordered by dragging',
+          pt: 'Painel de operação, com as ações de sincronizar, restaurar saldo e liberar pedido',
+          en: 'Operations panel, with actions to sync, restore balance and release an order',
         },
         caption: {
-          pt: 'Os destaques da home são escolhidos e ordenados arrastando, com a prévia do carrossel logo acima. Quem monta a vitrine é a equipe, e a prévia existe para não ter que publicar pra descobrir como ficou.',
-          en: 'The homepage highlights are picked and ordered by dragging, with a live preview of the carousel right above. The team builds the shop window, and the preview is there so nobody has to publish just to find out how it looks.',
+          pt: 'A sala de máquinas. Cada botão aqui era, antes, uma mensagem pra mim: sincronizar a planilha, restaurar o saldo do ciclo, liberar um pedido fora do horário. O topo mostra o estado de cada engrenagem, para a resposta a "está rodando?" não depender de perguntar.',
+          en: 'The engine room. Every button here used to be a message to me: sync the spreadsheet, restore the cycle balance, release an order past the cut-off. The top shows the state of each moving part, so answering "is it running?" no longer means asking someone.',
+        },
+      },
+    ],
+  },
+  {
+    n: '07',
+    slug: 'marsbeer',
+    name: 'MARS BEER',
+    status: 'live',
+    context: 'Faculdade',
+    groups: ['outros'],
+    line: {
+      pt: 'Trabalho de faculdade que passou do enunciado: loja com carrinho, painel administrativo e três cadastros que se cruzam num relatório.',
+      en: 'University coursework that outgrew the brief: a shop with a cart, an admin panel, and three registries that meet in one report.',
+    },
+    stat: {
+      pt: [
+        'Tema claro e escuro, rota protegida e dois perfis de acesso',
+        'Três cadastros servidos por um só componente de tabela',
+        'Relatório cruza pedidos, clientes e cervejas em JavaScript',
+      ],
+      en: [
+        'Light and dark themes, guarded routes and two access roles',
+        'Three registries served by a single table component',
+        'The report joins orders, customers and beers in JavaScript',
+      ],
+    },
+    tags: ['React', 'Vite', 'React Router', 'JavaScript'],
+    media: {
+      frame: 'desktop',
+      src: '/cases/marsbeer/capa.jpg',
+      video: '/cases/marsbeer/scroll.mp4',
+      poster: '/cases/marsbeer/poster.jpg',
+      alt: {
+        pt: 'Topo do site da MARS BEER, com três garrafas rotuladas ao lado do título',
+        en: 'Top of the MARS BEER site, with three labelled bottles beside the headline',
+      },
+    },
+    links: [
+      {
+        kind: 'github',
+        href: 'https://github.com/WinistonAlle/trabalho-web-ucb',
+      },
+    ],
+    gallery: [
+      {
+        src: '/cases/marsbeer/login.jpg',
+        alt: {
+          pt: 'Tela de login dividida, com escolha entre Administrador e Cliente',
+          en: 'Split login screen, choosing between Administrator and Customer',
+        },
+        caption: {
+          pt: 'A entrada já pergunta quem está chegando, e a resposta muda o site inteiro: cliente cai na loja, administrador cai no painel. O enunciado pedia login; dois perfis foi o que tornou o resto necessário.',
+          en: 'The door asks who is arriving, and the answer changes the whole site: a customer lands in the shop, an administrator in the panel. The brief asked for a login; two roles are what made everything else necessary.',
+        },
+      },
+      {
+        src: '/cases/marsbeer/loja.jpg',
+        alt: {
+          pt: 'Loja com as cervejas em cards e o resumo do pedido ao lado',
+          en: 'Shop with the beers as cards and the order summary beside them',
+        },
+        caption: {
+          pt: 'O lado do cliente. O carrinho fica fixo ao lado da vitrine, com o total somando ao vivo: numa loja, o número que importa é o que você já gastou, e ele não deveria estar a um clique de distância.',
+          en: 'The customer side. The cart stays pinned next to the shelf, with the total adding up live: in a shop, the number that matters is what you have already spent, and it should not be one click away.',
+        },
+      },
+      {
+        src: '/cases/marsbeer/crud.jpg',
+        alt: {
+          pt: 'Cadastro de cervejas, com busca e as ações de editar e excluir',
+          en: 'Beer registry, with search and the edit and delete actions',
+        },
+        caption: {
+          pt: 'Um dos três cadastros. Cervejas, clientes e pedidos são telas diferentes servidas pelo mesmo componente de tabela, que recebe as colunas e as ações por parâmetro. Era a chance de escrever a mesma tela três vezes e não escrevi.',
+          en: 'One of the three registries. Beers, customers and orders are different screens served by the same table component, which takes its columns and actions as parameters. It was a chance to write the same screen three times, and I did not.',
+        },
+      },
+      {
+        src: '/cases/marsbeer/relatorio.jpg',
+        alt: {
+          pt: 'Relatório de pedidos cruzando cliente, cerveja, quantidade e total',
+          en: 'Order report joining customer, beer, quantity and total',
+        },
+        caption: {
+          pt: 'O relatório é onde os três cadastros se encontram: cada linha junta um pedido, o cliente que fez e a cerveja que saiu. Sem banco de dados, o cruzamento é feito em JavaScript, e é ele que transforma três listas soltas em uma informação.',
+          en: 'The report is where the three registries meet: each row joins an order, the customer who placed it and the beer that went out. With no database, the join happens in JavaScript, and it is what turns three loose lists into one piece of information.',
+        },
+      },
+    ],
+  },
+  {
+    n: '08',
+    slug: 'pdv-gm',
+    name: 'PDV Gostinho Mineiro',
+    status: 'live',
+    context: 'Cliente',
+    groups: ['gostinho-mineiro'],
+    line: {
+      pt: 'A frente de caixa da loja, refeita para fechar uma venda em poucos cliques e lançar direto no ERP.',
+      en: 'The shop counter, rebuilt to close a sale in a few clicks and post it straight into the ERP.',
+    },
+    stat: {
+      pt: [
+        '684 vendas em produção desde 14 de agosto de 2026',
+        '890 testes automatizados, em 53 arquivos',
+        'Preço e estoque vêm do CIGAM, e a venda volta pra lá',
+      ],
+      en: [
+        '684 sales in production since 14 August 2026',
+        '890 automated tests, across 53 files',
+        'Prices and stock come from CIGAM, and the sale goes back',
+      ],
+    },
+    tags: ['React', 'TypeScript', 'Node', 'CIGAM'],
+    media: {
+      frame: 'desktop',
+      src: '/cases/pdv/capa.jpg',
+      video: '/cases/pdv/scroll.mp4',
+      poster: '/cases/pdv/poster.jpg',
+      alt: {
+        pt: 'Menu do PDV, com os atalhos de venda, totem, relatório e administração',
+        en: 'POS menu, with shortcuts for sales, kiosk, reports and administration',
+      },
+    },
+    problem: {
+      pt: [
+        'O sistema anterior era moroso: muitos botões para clicar e muitos campos para digitar até uma venda fechar.',
+        'Num caixa, esse tempo não é abstrato. Ele acontece com o cliente parado do outro lado do balcão.',
+      ],
+      en: [
+        'The previous system was slow: too many buttons to click and too many fields to type before a sale closed.',
+        'At a counter, that time is not abstract. It happens with the customer standing on the other side.',
+      ],
+    },
+    solution: {
+      pt: [
+        'A venda fecha em poucos cliques: busca o produto, adiciona, cobra. O pagamento aceita dividir entre formas sem sair da tela.',
+        'E ela nasce integrada. Preço e estoque vêm do CIGAM, e o pedido volta pra lá como documento, sem ninguém redigitar nada.',
+        '684 vendas passaram por ele desde 14 de agosto, e 890 testes automatizados seguram o que não pode quebrar no meio de um atendimento.',
+      ],
+      en: [
+        'A sale closes in a few clicks: search the product, add it, take the money. Payment can be split across methods without leaving the screen.',
+        'And it is born integrated. Prices and stock come from CIGAM, and the order goes back there as a document, with nobody retyping anything.',
+        '684 sales have gone through it since 14 August, and 890 automated tests hold up what cannot break in the middle of serving someone.',
+      ],
+    },
+    gallery: [
+      {
+        src: '/cases/pdv/carrinho.jpg',
+        alt: {
+          pt: 'Carrinho do PDV, com busca de produto, tabelas de preço e os itens do pedido',
+          en: 'POS cart, with product search, price tables and the order items',
+        },
+        caption: {
+          pt: 'Uma busca e um clique por item. Cada resultado já traz o estoque e o preço da tabela escolhida, então quem está no caixa não abre outra tela para conferir se tem e quanto custa.',
+          en: 'One search and one click per item. Each result already carries stock and the price from the chosen table, so whoever is at the till never opens another screen to check availability or price.',
+        },
+      },
+      {
+        src: '/cases/pdv/pagamento.jpg',
+        alt: {
+          pt: 'Tela de pagamento, com a venda dividida entre duas entradas de valor',
+          en: 'Payment screen, with the sale split across two amounts',
+        },
+        caption: {
+          pt: 'O pagamento aceita dividir: parte no débito, o resto em pix ou dinheiro, somando na tela até fechar o total. É o caso que mais aparece no balcão e o que mais travava o sistema antigo.',
+          en: 'Payment can be split: part on card, the rest by transfer or cash, adding up on screen until the total is covered. It is the most common case at the counter, and the one that jammed the old system most.',
+        },
+      },
+      {
+        src: '/cases/pdv/dashboard.jpg',
+        alt: {
+          pt: 'Painel administrativo com o total vendido no dia e os caixas abertos',
+          en: 'Admin panel with the day total and the tills currently open',
+        },
+        caption: {
+          pt: 'O painel de quem administra a loja: quanto saiu hoje, por qual forma de pagamento, e quais caixas estão abertos agora. A coluna de operador está tarjada porque são nomes de gente que trabalha lá.',
+          en: 'The panel for whoever runs the shop: what went out today, by payment method, and which tills are open right now. The operator column is redacted because those are the names of people who work there.',
+        },
+      },
+      {
+        src: '/cases/pdv/impressoras.jpg',
+        alt: {
+          pt: 'Tela de impressoras, com uma entrada de endereço por impressora',
+          en: 'Printers screen, with one address field per printer',
+        },
+        caption: {
+          pt: 'O sistema fala com as impressoras da loja e da portaria, e cada uma pode ser ligada ou desligada sem mexer em código. Os endereços estão tarjados por serem da rede interna da empresa.',
+          en: 'The system talks to the printers on the shop floor and at the gate, and each one can be switched on or off without touching code. The addresses are redacted because they belong to the company network.',
+        },
+      },
+    ],
+  },
+  {
+    n: '09',
+    slug: 'evolua',
+    name: 'Evolua',
+    status: 'wip',
+    context: 'Produto próprio',
+    groups: ['outros', 'sites'],
+    line: {
+      pt: 'Nasceu pra facilitar o plantão de um médico: paciente, prontuário, exames e observações no mesmo lugar, achados rápido.',
+      en: "Built to make a doctor's shift easier: patient, records, tests and notes in one place, found fast.",
+    },
+    stat: {
+      pt: [
+        'Landing no ar; a área interna ficou em código',
+        'Ficha reúne prontuário, exames e observações do paciente',
+        'Multi-organização, com separação por clínica no banco',
+      ],
+      en: [
+        'Landing page done; the private area stayed in code',
+        'One record holds a patient’s history, tests and notes',
+        'Multi-organisation, with clinics separated in the database',
+      ],
+    },
+    tags: ['React', 'TypeScript', 'Supabase', 'styled-components'],
+    media: {
+      frame: 'desktop',
+      src: '/cases/evolua/capa.jpg',
+      video: '/cases/evolua/scroll.mp4',
+      poster: '/cases/evolua/poster.jpg',
+      alt: {
+        pt: 'Topo da landing do Evolua, com o título sobre o fluxo de cuidado',
+        en: 'Top of the Evolua landing page, with the headline about care flow',
+      },
+    },
+    links: [{ kind: 'github', href: 'https://github.com/WinistonAlle/Evolua' }],
+    gallery: [
+      {
+        src: '/cases/evolua/fluxo.jpg',
+        alt: {
+          pt: 'Seção com as três etapas do fluxo de atendimento',
+          en: 'Section with the three stages of the care flow',
+        },
+        caption: {
+          pt: 'O produto resumido em três passos, na ordem em que acontecem: cadastrar, abrir na consulta, acompanhar depois. É a promessa central escrita sem rodeio, que é abrir prontuário e exame por botão em vez de caçar link.',
+          en: 'The product in three steps, in the order they happen: register, open during the appointment, follow up after. It states the central promise plainly: open records and test results with a button instead of hunting for links.',
+        },
+      },
+      {
+        src: '/cases/evolua/sobre.jpg',
+        alt: {
+          pt: 'Seção sobre o sistema, com as listas do que ele serve e onde ajuda',
+          en: 'About section, listing what the system is for and where it helps',
+        },
+        caption: {
+          pt: 'Duas listas em vez de um texto corrido: para que serve e onde ajuda mais. Quem decide comprar software de consultório não lê parágrafo, procura a linha que descreve o próprio dia.',
+          en: 'Two lists instead of a block of prose: what it is for and where it helps most. People choosing clinic software do not read paragraphs, they look for the line that describes their own day.',
+        },
+      },
+      {
+        src: '/cases/evolua/login.jpg',
+        alt: {
+          pt: 'Tela de login do Evolua, dividida entre a marca e o formulário',
+          en: 'Evolua login screen, split between the brand and the form',
+        },
+        caption: {
+          pt: 'A porta da área interna. Ela existe, e atrás dela existe o código da ficha do paciente, do prontuário e dos exames. O que não existe mais é o banco: o projeto parou antes de entrar em uso e o Supabase dele foi desativado.',
+          en: 'The door to the private area. It exists, and behind it lives the code for the patient record, the history and the test results. What no longer exists is the database: the project stopped before going live and its Supabase was shut down.',
         },
       },
     ],
