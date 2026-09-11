@@ -84,6 +84,8 @@ const en: typeof pt = {
     ctaTitle: 'Want to know how this part was built?',
     ctaButton: 'Request a quote',
     ctaOthers: 'See the other projects',
+    expand: 'Expand the video',
+    collapse: 'Close',
     linkSite: 'Open the site',
     linkGithub: 'View on GitHub',
     statusWip: 'In development',

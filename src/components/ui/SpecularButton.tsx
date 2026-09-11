@@ -111,6 +111,11 @@ type SpecularButtonProps = {
   disabled?: boolean;
   onClick?: MouseEventHandler;
   className?: string;
+  /* Repassados explicitamente porque botão só de ícone não tem texto: sem
+     `aria-label` ele é anunciado como "botão" e mais nada. */
+  'aria-label'?: string;
+  'aria-expanded'?: boolean;
+  title?: string;
   type?: 'button' | 'submit' | 'reset';
   /** Com `href` o componente vira link em vez de <button>. */
   href?: string;
@@ -139,6 +144,9 @@ export default function SpecularButton({
   disabled = false,
   onClick,
   className = '',
+  'aria-label': ariaLabel,
+  'aria-expanded': ariaExpanded,
+  title,
   type = 'button',
   href,
   external = false,
@@ -433,6 +441,9 @@ export default function SpecularButton({
       type={type}
       disabled={disabled}
       onClick={onClick as MouseEventHandler<HTMLButtonElement>}
+      aria-label={ariaLabel}
+      aria-expanded={ariaExpanded}
+      title={title}
       className={classes}
       style={style}
     >

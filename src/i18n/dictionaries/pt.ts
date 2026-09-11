@@ -88,6 +88,8 @@ const pt = {
     /* Rótulos de link e de estado ficam aqui, e não no dado do projeto: são os
        mesmos em todo card, e repetir "Abrir o site" seis vezes no projects.ts
        é seis lugares pra desencontrar tradução. */
+    expand: 'Ampliar o vídeo',
+    collapse: 'Fechar',
     linkSite: 'Abrir o site',
     linkGithub: 'Ver no GitHub',
     statusWip: 'Em desenvolvimento',

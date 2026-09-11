@@ -3,6 +3,7 @@ import type { Metadata } from 'next';
 import SlideIn from '@/components/scroll/SlideIn';
 import ProjectFrame from '@/components/projects/ProjectFrame';
 import Gallery from '@/components/projects/Gallery';
+import ExpandableFrame from '@/components/projects/ExpandableFrame';
 import { PROJECTS, projectBySlug } from '@/data/projects';
 import { getDictionary } from '@/i18n';
 import { LOCALES, isLocale, pick } from '@/i18n/config';
@@ -114,12 +115,20 @@ export default async function ProjectPage(
                direita. É o que dá tamanho de verdade pra tela sem espremer o
                texto do lado esquerdo. O `[overflow-x:clip]` do <main> segura
                a barra de rolagem horizontal. */
-            <SlideIn
-              from="right"
-              className="lg:w-[calc(100%+2.5rem)] xl:w-[calc(100%+6rem)]"
+            /* O ExpandableFrame fica POR FORA do SlideIn: ele precisa de um
+               ancestral sem `transform` pra posicionar o fundo escurecido e o
+               botão contra a janela. Ver o comentário do componente. */
+            <ExpandableFrame
+              expandLabel={dict.project.expand}
+              collapseLabel={dict.project.collapse}
             >
-              <ProjectFrame media={project.media} locale={lang} />
-            </SlideIn>
+              <SlideIn
+                from="right"
+                className="lg:w-[calc(100%+2.5rem)] xl:w-[calc(100%+6rem)]"
+              >
+                <ProjectFrame media={project.media} locale={lang} />
+              </SlideIn>
+            </ExpandableFrame>
           )}
         </div>
 
