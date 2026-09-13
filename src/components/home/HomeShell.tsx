@@ -1,7 +1,7 @@
 'use client';
 
 import dynamic from 'next/dynamic';
-import { useEffect } from 'react';
+import { useEffect, type ReactNode } from 'react';
 import Hero from '@/components/Hero';
 import { aquecerCracha } from '@/components/lanyard/aquecer-cracha';
 import MacbookPortal from '@/components/macbook/MacbookPortal';
@@ -30,11 +30,17 @@ export default function HomeShell({
   t,
   nav,
   switchLabel,
+  children,
 }: {
   locale: Locale;
-  t: { title: string; ctaProjects: string; ctaAbout: string };
+  t: { title: string; ctaProjects: string; ctaAbout: string; rolar: string };
   nav: Nav;
   switchLabel: string;
+  /* As seções que vêm abaixo do hero.
+     Chegam por `children` e não por import porque são Server Components e leem
+     o dicionário, que tem `server-only`: importá-las aqui, de dentro de um
+     Client Component, quebraria o build — e é pra isso que a trava existe. */
+  children?: ReactNode;
 }) {
   /* A abertura do MacBook deixa a rede parada por vários segundos. É nela que
      o crachá da página "sobre mim" é baixado, pra que chegar lá seja instantâneo
@@ -51,6 +57,13 @@ export default function HomeShell({
       <MacbookPortal header={{ locale, nav, switchLabel }}>
         <Hero locale={locale} t={t} />
       </MacbookPortal>
+
+      {/* Fora do portal de propósito: dentro, este conteúdo seria emoldurado e
+          reduzido junto com o hero durante a abertura. Aqui ele fica logo
+          abaixo — durante a abertura o `portal__rail` empurra tudo isso pra
+          muito longe da dobra, e quando ela termina o rail some e as seções
+          encostam no hero. */}
+      {children}
     </main>
   );
 }

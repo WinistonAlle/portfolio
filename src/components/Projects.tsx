@@ -1,53 +1,10 @@
-import ProjectCard from '@/components/projects/ProjectCard';
-import ProjectGrid, {
-  type Aba,
-  type Item,
-} from '@/components/projects/ProjectGrid';
-import { PROJECTS, PROJECT_GROUPS } from '@/data/projects';
+import ProjectGrid from '@/components/projects/ProjectGrid';
+import { montarAbas, montarItens } from '@/components/projects/montar';
 import GlowButton, { GlowArrow } from '@/components/ui/GlowButton';
 import { getDictionary } from '@/i18n';
 import type { Locale } from '@/i18n/config';
 import TituloAcento from '@/components/text/TituloAcento';
-
-/* As gavetas e os cards são montados AQUI, no servidor, e vão pro filtro já
-   prontos. É o que mantém o texto dos cases fora do bundle do navegador; a
-   razão longa está no comentário do ProjectGrid.
-
-   Só entram gavetas com projeto dentro: a lista cresce um projeto por vez e um
-   filtro que devolve grade vazia é um botão que só serve pra frustrar. */
-type Dict = Awaited<ReturnType<typeof getDictionary>>;
-
-function montarAbas(dict: Dict): Aba[] {
-  const usadas = PROJECT_GROUPS.filter((g) =>
-    PROJECTS.some((p) => p.groups.includes(g)),
-  );
-  /* A CHAVE do filtro é o rótulo traduzido, e não o identificador da gaveta:
-     o estado do filtro vive no cliente e só precisa casar consigo mesmo. Assim
-     o componente de cliente não conhece nem o tipo ProjectGroup, e continua
-     sem nenhuma linha de import apontando pro módulo dos projetos. */
-  return [
-    { chave: dict.projects.filterAll, total: PROJECTS.length },
-    ...usadas.map((g) => ({
-      chave: dict.projects.groups[g],
-      total: PROJECTS.filter((p) => p.groups.includes(g)).length,
-    })),
-  ];
-}
-
-function montarItens(dict: Dict, locale: Locale): Item[] {
-  return PROJECTS.map((project) => ({
-    slug: project.slug,
-    grupos: project.groups.map((g) => dict.projects.groups[g]),
-    card: (
-      <ProjectCard
-        project={project}
-        locale={locale}
-        cardCta={dict.projects.cardCta}
-        statusWip={dict.project.statusWip}
-      />
-    ),
-  }));
-}
+import CtaBlock from '@/components/ui/CtaBlock';
 
 /* Grade de /projetos. Cada card abre a página do projeto.
 
@@ -80,27 +37,15 @@ export default async function Projects({ locale }: { locale: Locale }) {
       {/* Fecho: quem chegou até aqui já passou pela grade inteira, então a
           próxima ação é conversar, não continuar navegando. */}
       <div className="mt-20">
-        <div className="cta">
-          <div className="cta__inner">
-            <h2 className="mx-auto max-w-2xl text-[clamp(1.8rem,3.2vw,2.6rem)] leading-tight font-bold tracking-[-0.02em] text-balance">
-              {dict.projects.ctaTitle}
-            </h2>
-
-            <p className="mx-auto mt-5 max-w-xl text-lg leading-relaxed text-muted">
-              {dict.projects.ctaText}
-            </p>
-
-            <div className="mt-9 flex flex-wrap items-center justify-center gap-3">
-              <GlowButton href={`/${locale}/contato`}>
-                {dict.projects.ctaButton}
-                <GlowArrow />
-              </GlowButton>
-              <GlowButton href={`/${locale}/sobre-mim`} variant="secondary">
-                {dict.projects.ctaAbout}
-              </GlowButton>
-            </div>
-          </div>
-        </div>
+        <CtaBlock titulo={dict.projects.ctaTitle} texto={dict.projects.ctaText}>
+          <GlowButton href={`/${locale}/contato`}>
+            {dict.projects.ctaButton}
+            <GlowArrow />
+          </GlowButton>
+          <GlowButton href={`/${locale}/sobre-mim`} variant="secondary">
+            {dict.projects.ctaAbout}
+          </GlowButton>
+        </CtaBlock>
       </div>
     </section>
   );

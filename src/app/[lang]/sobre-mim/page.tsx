@@ -12,6 +12,7 @@ import GlowButton, { GlowArrow } from '@/components/ui/GlowButton';
 import { getDictionary } from '@/i18n';
 import { isLocale } from '@/i18n/config';
 import TituloAcento from '@/components/text/TituloAcento';
+import CtaBlock from '@/components/ui/CtaBlock';
 
 /* O modelo do crachá só era pedido depois que o chunk do three baixava,
    parseava e montava — mais de um segundo depois do HTML, atrás de tudo que o
@@ -179,27 +180,15 @@ export default async function SobreMimPage(
           ação natural e fica como botão principal. */}
       <section className="relative w-full pb-32">
         <div className="mx-auto w-full max-w-4xl px-6 lg:px-10">
-          <div className="cta">
-            <div className="cta__inner">
-              <h2 className="mx-auto max-w-2xl text-[clamp(1.8rem,3.2vw,2.6rem)] leading-tight font-bold tracking-[-0.02em] text-balance">
-                {dict.about.ctaTitle}
-              </h2>
-
-              <p className="mx-auto mt-5 max-w-xl text-lg leading-relaxed text-muted">
-                {dict.about.ctaText}
-              </p>
-
-              <div className="mt-9 flex flex-wrap items-center justify-center gap-3">
-                <GlowButton href={`/${lang}/contato`}>
-                  {dict.about.ctaContact}
-                  <GlowArrow />
-                </GlowButton>
-                <GlowButton href={`/${lang}/projetos`} variant="secondary">
-                  {dict.about.ctaProjects}
-                </GlowButton>
-              </div>
-            </div>
-          </div>
+          <CtaBlock titulo={dict.about.ctaTitle} texto={dict.about.ctaText}>
+            <GlowButton href={`/${lang}/contato`}>
+              {dict.about.ctaContact}
+              <GlowArrow />
+            </GlowButton>
+            <GlowButton href={`/${lang}/projetos`} variant="secondary">
+              {dict.about.ctaProjects}
+            </GlowButton>
+          </CtaBlock>
         </div>
       </section>
     </main>

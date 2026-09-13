@@ -39,6 +39,60 @@ export function jumpScrollTo(top: number) {
   window.scrollTo({ top, behavior: 'instant' as ScrollBehavior });
 }
 
+/**
+ * Leva ao topo e ignora a rolagem que ainda está chegando.
+ *
+ * Existe por causa da entrada da home. Ao terminar a abertura do MacBook, o
+ * espaçador de ~420vh é removido e o conteúdo volta ao fluxo no mesmo quadro —
+ * mas quem rolou até ali ainda tem inércia no dedo e no Lenis. Antes isso não
+ * fazia diferença: a home não tinha altura nenhuma abaixo do hero, então a
+ * rolagem sobrando não tinha pra onde ir.
+ *
+ * Com a home em página única ela tem: medido, a pessoa atravessava a abertura e
+ * era despejada no RODAPÉ da página, pulando o hero e as quatro seções.
+ *
+ * A janela de graça resolve segurando o Lenis por um instante depois do salto.
+ * Curta de propósito: é só o tempo de a inércia morrer, e travar mais que isso
+ * viraria uma página que não responde ao dedo.
+ */
+export function ancorarNoTopo() {
+  if (!lenis) {
+    window.scrollTo({ top: 0, behavior: 'instant' as ScrollBehavior });
+    return;
+  }
+
+  lenis.stop();
+  /* `force` porque `stop()` bloquearia também este scrollTo. */
+  lenis.scrollTo(0, { immediate: true, force: true });
+
+  /* A espera é pela rolagem PARAR, não por um tempo fixo.
+     Um temporizador de alguns centésimos não serve: atravessar a abertura leva
+     uns dois segundos de dedo contínuo, e quando ele expirava o resto da
+     rolagem entrava e levava a pessoa ao rodapé do mesmo jeito. Aqui cada novo
+     evento adia a liberação; ela só acontece depois de um instante de silêncio. */
+  const OCIOSO = 180;
+  const TETO = 3000; // nunca deixar a página presa, aconteça o que acontecer
+
+  let ocioso = 0;
+  const eventos = ['wheel', 'touchmove', 'keydown'] as const;
+
+  const liberar = () => {
+    window.clearTimeout(ocioso);
+    window.clearTimeout(teto);
+    for (const e of eventos) window.removeEventListener(e, adiar);
+    lenis?.start();
+  };
+
+  const adiar = () => {
+    window.clearTimeout(ocioso);
+    ocioso = window.setTimeout(liberar, OCIOSO);
+  };
+
+  const teto = window.setTimeout(liberar, TETO);
+  for (const e of eventos) window.addEventListener(e, adiar, { passive: true });
+  adiar();
+}
+
 /* Trava e destrava a rolagem da página.
  *
  * Os dois passos são necessários. O `overflow: hidden` no body segura a

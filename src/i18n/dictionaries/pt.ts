@@ -32,6 +32,18 @@ const pt = {
     title: 'PORTFÓLIO',
     ctaProjects: 'Ver os projetos',
     ctaAbout: 'Sobre mim',
+
+    /* A home virou página única: abaixo do hero vêm recortes das outras três
+       páginas, cada um terminando num caminho pra versão completa. Os títulos
+       moram aqui, e não são reaproveitados dos das páginas, porque o papel é
+       outro: lá o título abre a página, aqui ele apresenta um trecho. */
+    rolar: 'Role para ver',
+    sobreTitulo: 'Quem faz, e *como trabalha*.',
+    sobreVerMais: 'Conhecer melhor',
+    stackVerMais: 'Ver a stack inteira',
+    projetosTitulo: 'O trabalho mais *recente*.',
+    projetosVerTodos: 'Ver os {n} projetos',
+    contatoTitulo: 'Vamos conversar?',
   },
 
   about: {

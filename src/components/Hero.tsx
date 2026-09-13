@@ -12,13 +12,14 @@ export default function Hero({
   t,
 }: {
   locale: Locale;
-  t: { title: string; ctaProjects: string; ctaAbout: string };
+  t: { title: string; ctaProjects: string; ctaAbout: string; rolar: string };
 }) {
   /* A altura desconta o header, que rola junto com a página em vez de ser
      fixo. Vale nos dois estados: dentro do portal, a tela do notebook mostra
      header + hero e o conjunto tem que caber nos 100svh do .portal__content;
-     depois de entrar, é o que faz a home ocupar a tela exata, sem sobrar
-     rolagem. */
+     depois de entrar, é o que faz o hero ocupar a tela exata. Deixou de ser
+     uma trava e virou um piso: a home agora continua abaixo, e é o conteúdo
+     das seções que passa a dar altura ao documento. */
   return (
     <section className="ambient relative isolate flex min-h-[calc(100svh-var(--header-h))] flex-col justify-end overflow-hidden">
       {/* Título ao fundo, cruzando atrás da cabeça; a foto está em z-10 e
@@ -43,6 +44,20 @@ export default function Hero({
         <GlowButton href={`/${locale}/sobre-mim`} variant="secondary">
           {t.ctaAbout}
         </GlowButton>
+      </div>
+
+      {/* Indicador de que a página continua.
+          Passou a ser necessário quando a home virou página única: o hero
+          termina exatamente na dobra, e sem nenhuma pista de que há mais
+          embaixo, uma tela que acaba certinho na borda lê como página inteira.
+          Fica abaixo dos CTAs e some do leitor de tela — é dica visual, não
+          conteúdo. */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-x-0 bottom-7 z-20 flex flex-col items-center gap-2"
+      >
+        <span className="label !text-[0.6rem] opacity-60">{t.rolar}</span>
+        <span className="hero-rolar" />
       </div>
 
       <TechStickers />

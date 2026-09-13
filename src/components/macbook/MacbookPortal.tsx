@@ -31,7 +31,7 @@ import type { Locale } from '@/i18n/config';
 
 type Nav = { about: string; projects: string; contact: string };
 import { usePixelTransition } from '@/components/transition/PixelTransition';
-import { jumpScrollTo } from '@/components/scroll/SmoothScroll';
+import { ancorarNoTopo } from '@/components/scroll/SmoothScroll';
 
 /* ssr:false porque não existe WebGL no servidor, e porque o bundle do three
    não pode entrar no HTML inicial. Enquanto ele não chega, quem está na tela é
@@ -208,9 +208,15 @@ export default function MacbookPortal({
   /* No mesmo quadro em que o conteúdo volta ao fluxo, a rolagem vai a zero.
      Antes disso ele estava preso no topo da tela em escala 1, então o topo do
      conteúdo já era o topo da tela: com a página no começo, continua sendo, e
-     a troca não aparece. Em layout effect para acontecer antes da pintura. */
+     a troca não aparece. Em layout effect para acontecer antes da pintura.
+
+     `ancorarNoTopo` e não um scrollTo simples: o espaçador de ~420vh some
+     aqui, e quem rolou até o fim da abertura ainda tem inércia sobrando. Com
+     a home em página única essa sobra tem pra onde ir — medido, ela levava a
+     pessoa direto ao RODAPÉ, pulando o hero e as quatro seções. A função
+     segura o Lenis pelo tempo de a inércia morrer. */
   useLayoutEffect(() => {
-    if (entered) jumpScrollTo(0);
+    if (entered) ancorarNoTopo();
   }, [entered]);
 
   return (

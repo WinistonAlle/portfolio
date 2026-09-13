@@ -31,6 +31,14 @@ const en: typeof pt = {
     title: 'PORTFOLIO',
     ctaProjects: 'See the projects',
     ctaAbout: 'About me',
+
+    rolar: 'Scroll to see',
+    sobreTitulo: 'Who builds it, and *how he works*.',
+    sobreVerMais: 'Get to know me',
+    stackVerMais: 'See the whole stack',
+    projetosTitulo: 'The most *recent* work.',
+    projetosVerTodos: 'See all {n} projects',
+    contatoTitulo: 'Shall we talk?',
   },
 
   about: {

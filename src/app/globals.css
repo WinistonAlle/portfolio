@@ -103,6 +103,39 @@ h3 {
    o contraste só funciona enquanto é exceção. O ajuste óptico existe porque
    esta serifa tem altura-x menor que a display, e sem ele a palavra destacada
    parece ter encolhido em vez de ter mudado de voz. */
+/* Traço que desce, sob o hero. Um risco fino que escorre de cima pra baixo e
+   reinicia, em vez de uma seta piscando: a seta vira ícone de "clique aqui", e
+   aqui não há o que clicar — a informação é só que a página continua.
+
+   `scaleY` com origem no topo, e não translação: o traço nasce do nada e
+   cresce, que é o desenho de "tem mais por baixo". */
+.hero-rolar {
+  display: block;
+  width: 1px;
+  height: 34px;
+  overflow: hidden;
+  background: linear-gradient(
+    to bottom,
+    transparent,
+    color-mix(in srgb, var(--accent) 70%, transparent)
+  );
+  transform-origin: top;
+  animation: hero-rolar 2.4s ease-in-out infinite;
+}
+
+@keyframes hero-rolar {
+  0%        { transform: scaleY(0);   opacity: 0; }
+  35%       { transform: scaleY(1);   opacity: 1; }
+  75%, 100% { transform: scaleY(1);   opacity: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-rolar {
+    animation: none;
+    opacity: 0.5;
+  }
+}
+
 .botao-texto {
   font-family: var(--font-display), system-ui, sans-serif;
   font-size: 0.875rem;
