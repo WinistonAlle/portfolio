@@ -637,13 +637,38 @@ body.scroll-locked .site-header {
 /* Fase 2: o conteúdo volta para o fluxo, logo depois do espaçador, e a
    página passa a rolar normalmente. Nada de transform ou recorte aqui,
    senão a rolagem interna e os elementos fixos do site quebrariam. */
+/* Ao entrar, o portal se desfaz e o site volta a ser um documento normal.
+ *
+ * As larguras aqui são 100% EXPLÍCITOS, e não `auto`, e isso não é estilo: é
+ * a correção de um bug que só aparecia fora do macOS.
+ *
+ * Enquanto a abertura roda, `.portal__viewport` é `display: grid` com
+ * `place-items: center` — é o que mantém o notebook no meio da tela. Ao
+ * entrar, ele vira `display: block`, e a ideia era que `width: auto` no filho
+ * passasse a significar "preencha o pai", como todo bloco faz.
+ *
+ * No Windows e no Linux isso não acontecia. Medido ao vivo num Chrome Linux,
+ * com a abertura já terminada: o pai reportava `display: block` e 1425px de
+ * largura, o filho reportava `float: none`, `max-width: none` e margens zero,
+ * e mesmo assim nascia com 848px CENTRALIZADO — que é exatamente o
+ * `max-width` da foto do hero, ou seja, encolhido para o conteúdo e
+ * centralizado como um item de grid. O layout continuava tratando o pai como
+ * grid depois de a troca de `display` já ter acontecido. O resultado é o site
+ * inteiro espremido numa coluna no meio da tela, com o título cortado, logo
+ * depois da animação do notebook — foi o que o amigo do usuário viu.
+ *
+ * `width: 100%` resolve para a mesma coisa nos dois casos (bloco preenchendo
+ * o pai, ou item de grid preenchendo a faixa), então a correção é não
+ * depender de qual dos dois o navegador acha que está fazendo. E
+ * `place-items: stretch` tira o centramento que sobrava junto. */
 .portal--entered .portal__viewport {
   position: static;
   display: block;
+  place-items: stretch;
 }
 
 .portal--entered .portal__screen {
-  width: auto;
+  width: 100%;
   height: auto;
   overflow: visible;
   border-radius: 0;
@@ -652,7 +677,7 @@ body.scroll-locked .site-header {
 
 .portal--entered .portal__content {
   position: static;
-  width: auto;
+  width: 100%;
   height: auto;
   margin: 0;
   transform: none;
