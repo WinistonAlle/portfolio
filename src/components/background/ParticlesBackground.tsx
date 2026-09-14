@@ -4,6 +4,7 @@ import dynamic from 'next/dynamic';
 import { useEffect, useState } from 'react';
 import Salvaguarda3D from '@/components/3d/Salvaguarda3D';
 import { temWebGL } from '@/lib/tem-webgl';
+import { aberturaAtiva, assinarAbertura } from './abertura';
 
 const Particles = dynamic(() => import('./Particles'), { ssr: false });
 
@@ -33,7 +34,17 @@ export default function ParticlesBackground() {
     setPodeWebGL(temWebGL());
   }, []);
 
-  if (!podeWebGL) return null;
+  /* Sai de cena enquanto a abertura do MacBook roda: lá o fundo são os anéis
+     (`AneisDaAbertura`). Desmontar, e não esconder — `display: none` num
+     canvas mantém o contexto WebGL vivo, que é justamente o que não se quer
+     no momento mais pesado da home. */
+  const [naAbertura, setNaAbertura] = useState(false);
+  useEffect(() => {
+    setNaAbertura(aberturaAtiva());
+    return assinarAbertura(setNaAbertura);
+  }, []);
+
+  if (!podeWebGL || naAbertura) return null;
 
   return (
     <div

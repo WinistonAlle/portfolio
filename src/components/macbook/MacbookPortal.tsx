@@ -27,6 +27,8 @@ import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { MacbookPro } from './MacbookPro';
 import { canRun3D } from './can-run-3d';
 import Salvaguarda3D from '@/components/3d/Salvaguarda3D';
+import AneisDaAbertura from '@/components/background/AneisDaAbertura';
+import { definirAbertura } from '@/components/background/abertura';
 import Header from '@/components/Header';
 import type { Locale } from '@/i18n/config';
 
@@ -220,6 +222,17 @@ export default function MacbookPortal({
     if (entered) ancorarNoTopo();
   }, [entered]);
 
+  /* Avisa o fundo de partículas para sair de cena enquanto a abertura roda.
+   *
+   * Os dois são fundos animados com contexto WebGL próprio, e a abertura é o
+   * momento mais pesado da home. Além do custo, o pedido era um efeito
+   * diferente NESTA página: sobrepor os dois não seria diferente, seria os
+   * dois ao mesmo tempo. Ver `background/abertura.ts`. */
+  useEffect(() => {
+    definirAbertura(on3D && !entered);
+    return () => definirAbertura(false);
+  }, [on3D, entered]);
+
   /* Mede a largura ÚTIL da página e publica em --vw.
    *
    * `100vw` inclui a barra de rolagem; `clientWidth` não. No macOS a barra é
@@ -304,6 +317,12 @@ export default function MacbookPortal({
 
       {/* A cena vive atrás do portal (z-index 5 contra 20 do viewport) e sai
           por opacidade quando o notebook já saiu de quadro. */}
+      {/* Os anéis são o fundo desta abertura, e só dela. Mesma condição da
+          cena 3D (`on3D`): onde o notebook 3D não roda — celular, movimento
+          reduzido, máquina sem fôlego — um shader em tela cheia seria
+          exatamente o que não se deve acrescentar. */}
+      {on3D && !entered && <AneisDaAbertura />}
+
       {/* `canRun3D` já reprova a maioria das máquinas sem condição, mas ele
           responde ANTES: se o contexto morrer no meio (driver caindo, GPU
           entrando na lista de bloqueio depois de um update), o erro sobe de
