@@ -26,6 +26,7 @@ import dynamic from 'next/dynamic';
 import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { MacbookPro } from './MacbookPro';
 import { canRun3D } from './can-run-3d';
+import Salvaguarda3D from '@/components/3d/Salvaguarda3D';
 import Header from '@/components/Header';
 import type { Locale } from '@/i18n/config';
 
@@ -219,6 +220,40 @@ export default function MacbookPortal({
     if (entered) ancorarNoTopo();
   }, [entered]);
 
+  /* Mede a largura ÚTIL da página e publica em --vw.
+   *
+   * `100vw` inclui a barra de rolagem; `clientWidth` não. No macOS a barra é
+   * sobreposta e os dois valores são iguais, então nada disto aparece durante
+   * o desenvolvimento. No Windows e no Linux a barra clássica ocupa ~15px, e
+   * toda a geometria do portal (que é calculada em cima da largura da tela)
+   * nascia larga demais e descentrada. Ver o comentário do bloco `.portal` no
+   * globals.css.
+   *
+   * No `documentElement` e não no elemento do portal: a variável é lida por
+   * regras que valem para filhos posicionados como `fixed`, e herdar da raiz é
+   * o único lugar que alcança todas elas. */
+  useEffect(() => {
+    const medir = () => {
+      document.documentElement.style.setProperty(
+        '--vw',
+        `${document.documentElement.clientWidth}px`,
+      );
+    };
+    medir();
+    window.addEventListener('resize', medir);
+    /* A barra pode aparecer e sumir enquanto a página cresce (o rail da
+       abertura muda de altura), e aí a largura útil muda sem um `resize`. */
+    const obs =
+      typeof ResizeObserver === 'undefined'
+        ? null
+        : new ResizeObserver(medir);
+    obs?.observe(document.documentElement);
+    return () => {
+      window.removeEventListener('resize', medir);
+      obs?.disconnect();
+    };
+  }, []);
+
   return (
     <div
       ref={rootRef}
@@ -269,13 +304,21 @@ export default function MacbookPortal({
 
       {/* A cena vive atrás do portal (z-index 5 contra 20 do viewport) e sai
           por opacidade quando o notebook já saiu de quadro. */}
+      {/* `canRun3D` já reprova a maioria das máquinas sem condição, mas ele
+          responde ANTES: se o contexto morrer no meio (driver caindo, GPU
+          entrando na lista de bloqueio depois de um update), o erro sobe de
+          dentro de um efeito e leva a home junto. A alternativa é `null`,
+          porque a moldura SVG do notebook já está desenhada por baixo: sem a
+          cena 3D a abertura vira a versão 2D, que é o que roda no celular. */}
       {on3D && !entered && (
-        <MacbookIntro3D
-          startScale={startScale}
-          introVh={INTRO_VH}
-          onHandoff={setBoot}
-          onReady={() => setReady3D(true)}
-        />
+        <Salvaguarda3D alternativa={null} ativo>
+          <MacbookIntro3D
+            startScale={startScale}
+            introVh={INTRO_VH}
+            onHandoff={setBoot}
+            onReady={() => setReady3D(true)}
+          />
+        </Salvaguarda3D>
       )}
 
       <div className="portal__viewport">

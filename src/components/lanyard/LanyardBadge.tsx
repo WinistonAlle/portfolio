@@ -2,6 +2,8 @@
 
 import dynamic from 'next/dynamic';
 import { useEffect, useRef, useState } from 'react';
+import Salvaguarda3D from '@/components/3d/Salvaguarda3D';
+import { temWebGL } from '@/lib/tem-webgl';
 
 // The whole scene (three + rapier wasm) is client-only and heavy, so it is
 // split out and never prerendered. `ssr: false` is only legal inside a Client
@@ -120,6 +122,14 @@ export default function LanyardBadge({
     };
   }, []);
 
+  /* Resolvido no cliente, depois da hidratação: `temWebGL` cria um canvas de
+     verdade e no servidor não existe `document`. Começar em `true` mantém a
+     marcação do servidor igual à do primeiro render do cliente. */
+  const [podeWebGL, setPodeWebGL] = useState(true);
+  useEffect(() => {
+    setPodeWebGL(temWebGL());
+  }, []);
+
   return (
     <div ref={slotRef} className="relative h-full w-full">
       <div
@@ -136,7 +146,12 @@ export default function LanyardBadge({
           <BadgeLoading saindo={revelou} />
         </div>
 
+        {/* A cena só entra se o navegador conseguir abrir WebGL, e mesmo assim
+            com rede embaixo. Quando não dá, fica a imagem do crachá parada, que
+            já é a camada de espera logo acima: a seção continua fazendo sentido
+            e o resto da página não vai junto. Ver Salvaguarda3D. */}
         {stage ? (
+          <Salvaguarda3D ativo={podeWebGL} alternativa={null}>
           <Lanyard
             onReveal={() => setRevelou(true)}
             /* Rapier reads each body's world transform once, at creation, so a
@@ -154,6 +169,7 @@ export default function LanyardBadge({
             lanyardWidth={1.1}
             paused={!active}
           />
+          </Salvaguarda3D>
         ) : null}
       </div>
     </div>

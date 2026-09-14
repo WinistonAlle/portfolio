@@ -56,7 +56,10 @@ export default function SecaoSobre({
             câmera tem distância e campo fixos), então subir a caixa é o único
             jeito de o crachá crescer. Com 520px ele ficava miúdo ao lado de
             uma coluna de texto larga. */}
-        <div className="relative h-[380px] w-full lg:h-[620px]">
+        {/* No celular o crachá ganhou altura: a 380px ele aparecia como uma
+            miniatura no meio de uma coluna larga, e é o único objeto da seção
+            que vale ser olhado. */}
+        <div className="relative h-[540px] w-full lg:h-[620px]">
           <CrachaPreguicoso />
         </div>
       </div>

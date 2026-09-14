@@ -510,13 +510,24 @@ body.scroll-locked .site-header {
 
 /* Portal do MacBook (MacbookPortal.tsx): a home abre dentro da tela dele e a
    rolagem entra no site. Todo o movimento sai de --p (0 a 1), escrito pelo JS
-   a cada frame; o resto é calc. */
+   a cada frame; o resto é calc.
+
+   --vw é a largura ÚTIL da página, escrita pelo JS, e NÃO é preciosismo.
+   `100vw` inclui a barra de rolagem; a área onde o conteúdo é desenhado, não.
+   No macOS a barra é sobreposta e ocupa 0px, então os dois valores coincidem e
+   o problema não existe. No Windows e no Linux a barra clássica come ~15px: o
+   portal nascia 15px mais largo que a tela, o `-50vw` que o centraliza errava
+   por 7,5px, e a página inteira ganhava rolagem horizontal. É por isso que um
+   site "certo" no Mac abre torto no Windows, nos dois navegadores, porque
+   Chrome e Opera são o mesmo Chromium.
+
+   O fallback `100vw` é o que vale entre o HTML chegar e o JS medir. */
 .portal {
   position: relative;
   /* escala do conteúdo: começa em --s0 e termina em 1, tamanho natural */
   --s: calc(var(--s0) + (1 - var(--s0)) * var(--p));
   /* largura do notebook inteiro a partir da largura da tela */
-  --frame-w: calc(100vw * var(--s) / var(--screen-ratio));
+  --frame-w: calc(var(--vw, 100vw) * var(--s) / var(--screen-ratio));
   /* deslocamento da animação de entrada: o notebook sobe de fora da tela */
   --enter-y: 34svh;
 }
@@ -563,7 +574,7 @@ body.scroll-locked .site-header {
   inset: 0;
   z-index: 5;
   display: block;
-  width: 100vw;
+  width: var(--vw, 100vw);
   height: 100svh;
   pointer-events: none;
   transform: scale(calc(var(--s) * var(--inv-s0)));
@@ -583,24 +594,24 @@ body.scroll-locked .site-header {
 .portal__screen {
   position: relative;
   opacity: var(--boot, 1);
-  width: calc(100vw * var(--s));
+  width: calc(var(--vw, 100vw) * var(--s));
   height: calc(
-    (100vw * var(--s0) / var(--screen-aspect)) * (1 - var(--p)) + 100svh *
+    (var(--vw, 100vw) * var(--s0) / var(--screen-aspect)) * (1 - var(--p)) + 100svh *
       var(--p)
   );
   overflow: hidden;
   background: var(--background);
-  border-radius: calc(100vw * var(--s) * 0.012 * (1 - var(--p)));
+  border-radius: calc(var(--vw, 100vw) * var(--s) * 0.012 * (1 - var(--p)));
 }
 
 .portal__content {
   position: absolute;
   inset-block-start: 50%;
   inset-inline-start: 50%;
-  width: 100vw;
+  width: var(--vw, 100vw);
   height: 100svh;
   margin-block-start: -50svh;
-  margin-inline-start: -50vw;
+  margin-inline-start: calc(var(--vw, 100vw) / -2);
   transform: scale(var(--s));
   transform-origin: center center;
 }

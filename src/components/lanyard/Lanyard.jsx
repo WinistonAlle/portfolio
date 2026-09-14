@@ -118,6 +118,15 @@ export default function Lanyard({
         camera={{ position, fov }}
         dpr={[1, isMobile ? 1.5 : 2]}
         gl={{ alpha: transparent }}
+        /* No dedo o crachá é enfeite, não brinquedo.
+         *
+         * Arrastar o cartão chama `setPointerCapture`, e a partir daí o
+         * gesto pertence ao canvas: quem encostava no crachá para rolar
+         * ficava balançando o cordão no lugar de descer a página. O
+         * `touch-action: pan-y` devolve a rolagem vertical ao navegador, e
+         * os handlers do cartão saem no toque (mais abaixo), para o gesto
+         * nunca chegar a ser capturado. */
+        style={{ touchAction: isMobile ? 'pan-y' : 'none' }}
         onCreated={({ gl }) =>
           gl.setClearColor(new THREE.Color(0x000000), transparent ? 0 : 1)
         }
@@ -347,7 +356,7 @@ function Band({
 
   useEffect(() => {
     if (hovered) {
-      document.body.style.cursor = dragged ? 'grabbing' : 'grab';
+      if (!isMobile) document.body.style.cursor = dragged ? 'grabbing' : 'grab';
       return () => void (document.body.style.cursor = 'auto');
     }
   }, [hovered, dragged]);
@@ -439,20 +448,25 @@ function Band({
           <group
             scale={2.25}
             position={[0, -1.2, -0.05]}
-            onPointerOver={() => hover(true)}
-            onPointerOut={() => hover(false)}
-            onPointerUp={(e) => (
-              e.target.releasePointerCapture(e.pointerId),
-              drag(false)
-            )}
-            onPointerDown={(e) => (
-              e.target.setPointerCapture(e.pointerId),
-              drag(
-                new THREE.Vector3()
-                  .copy(e.point)
-                  .sub(vec.copy(card.current.translation())),
-              )
-            )}
+            onPointerOver={isMobile ? undefined : () => hover(true)}
+            onPointerOut={isMobile ? undefined : () => hover(false)}
+            onPointerUp={
+              isMobile
+                ? undefined
+                : (e) => (e.target.releasePointerCapture(e.pointerId), drag(false))
+            }
+            onPointerDown={
+              isMobile
+                ? undefined
+                : (e) => (
+                    e.target.setPointerCapture(e.pointerId),
+                    drag(
+                      new THREE.Vector3()
+                        .copy(e.point)
+                        .sub(vec.copy(card.current.translation())),
+                    )
+                  )
+            }
           >
             <mesh geometry={nodes.card.geometry}>
               <meshPhysicalMaterial

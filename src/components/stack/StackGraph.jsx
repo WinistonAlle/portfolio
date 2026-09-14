@@ -147,11 +147,22 @@ const GRAPH = {
   ],
 };
 
+/** `true` no dedo (celular, tablet), `false` no mouse. */
+const ponteiroGrosso = () =>
+  typeof window !== 'undefined' &&
+  typeof window.matchMedia === 'function' &&
+  window.matchMedia('(pointer: coarse)').matches;
+
 const FOCAL = 880;
 /* Teto do "fit to bounds". Sem isso o grafo cresceria sem limite em telas
    grandes; com um teto baixo demais ele para de crescer e sobra vazio na
    caixa. */
 const MAX_FIT = 2.3;
+/* No celular o grafo pode encher mais a caixa: ele já mostra menos nós (os
+   marcados com `mobile: 'hide'` saem), então sobra espaço, e o que restava
+   ficava pequeno no meio de uma área de 92vh. O teto maior e a margem menor
+   são as duas coisas que limitavam o crescimento. */
+const MAX_FIT_TOQUE = 3.2;
 
 const rgba = (hex, a) => {
   const h = hex.replace('#', '');
@@ -178,6 +189,15 @@ export default function StackGraph({
   const canvasRef = useRef(null);
   const tipRef = useRef(null);
   const [missingLogos, setMissingLogos] = useState(false);
+  /* Começa em `true` (sem gestos) de propósito: é o estado que deixa a página
+     rolar. Se o padrão fosse o contrário, o primeiro quadro no celular já
+     nasceria com `touch-action: none` e comeria o começo do gesto de quem
+     chegou rolando. O mouse libera os gestos logo em seguida, no efeito. */
+  const [semGestos, setSemGestos] = useState(true);
+
+  useEffect(() => {
+    setSemGestos(ponteiroGrosso());
+  }, []);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -429,11 +449,11 @@ export default function StackGraph({
 
       /* margem interna do encaixe: sem moldura o desenho pode chegar mais
          perto da borda, então sobra menos vazio e o grafo cresce */
-      const padX = w < 520 ? 20 : 32;
-      const padY = 24;
+      const padX = w < 520 ? 10 : 32;
+      const padY = w < 520 ? 12 : 24;
       const target = Math.max(
         0.35,
-        Math.min(MAX_FIT, Math.min((w / 2 - padX) / halfW, (h / 2 - padY) / halfH)),
+        Math.min(mobile ? MAX_FIT_TOQUE : MAX_FIT, Math.min((w / 2 - padX) / halfW, (h / 2 - padY) / halfH)),
       );
       fit = fit == null ? target : fit + (target - fit) * 0.08;
       for (const n of nodes) {
@@ -699,11 +719,23 @@ export default function StackGraph({
       setHover(null);
     };
 
-    canvas.addEventListener('pointerdown', onPointerDown);
-    canvas.addEventListener('pointermove', onPointerMove);
-    canvas.addEventListener('pointerup', onPointerUp);
-    canvas.addEventListener('pointercancel', onPointerUp);
-    canvas.addEventListener('pointerleave', onPointerLeave);
+    /* No TOQUE o grafo não é interativo, e isso é de propósito.
+     *
+     * O canvas ocupa 92vh. Com os gestos ligados, encostar nele para rolar
+     * virava arrastar o grafo: o `pointerdown` chamava `setPointerCapture`,
+     * e o `touch-action: none` da classe do canvas dizia ao navegador que a
+     * página não queria rolagem ali. O dedo ficava preso numa tela inteira
+     * de altura, e a única saída era acertar a margem lateral.
+     *
+     * Girar um grafo com o dedo é um brinquedo; rolar a página é a função.
+     * Quando os dois disputam o mesmo gesto, quem perde é a função. */
+    if (!ponteiroGrosso()) {
+      canvas.addEventListener('pointerdown', onPointerDown);
+      canvas.addEventListener('pointermove', onPointerMove);
+      canvas.addEventListener('pointerup', onPointerUp);
+      canvas.addEventListener('pointercancel', onPointerUp);
+      canvas.addEventListener('pointerleave', onPointerLeave);
+    }
 
     const ro = new ResizeObserver(resize);
     ro.observe(box);
@@ -758,7 +790,7 @@ export default function StackGraph({
     >
       <canvas
         ref={canvasRef}
-        className="block h-full w-full cursor-grab touch-none"
+        className={`block h-full w-full ${semGestos ? "touch-pan-y" : "cursor-grab touch-none"}`}
       />
 
       {missingLogos && (
