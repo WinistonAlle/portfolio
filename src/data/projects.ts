@@ -1081,12 +1081,12 @@ export const PROJECTS: Project[] = [
     },
     stat: {
       pt: [
-        'Treze cases, cada um com vídeo do sistema rodando de verdade',
+        'Quatorze cases, cada um com vídeo do sistema rodando de verdade',
         'Português e inglês na mesma base: tradução faltando quebra o build',
         'A abertura é um MacBook 3D em three.js, guiado pela rolagem',
       ],
       en: [
-        'Thirteen cases, each with video of the system actually running',
+        'Fourteen cases, each with video of the system actually running',
         'Portuguese and English from one source: a missing translation breaks the build',
         'The opening is a 3D MacBook in three.js, driven by scroll',
       ],
@@ -1345,6 +1345,129 @@ export const PROJECTS: Project[] = [
         caption: {
           pt: 'A busca abre em qualquer ponto do site e acha lugar, cidade ou dia pelo nome. Ela só existe porque o site vai ser usado durante a viagem: quando a pergunta é "era hoje o Ghibli?", ninguém quer rolar 24 dias pra descobrir.',
           en: 'Search opens from anywhere on the site and finds a place, a city or a day by name. It only exists because the site will be used during the trip: when the question is "was Ghibli today?", nobody wants to scroll 24 days to find out.',
+        },
+      },
+    ],
+  },
+  {
+    n: '14',
+    slug: 'kings-table',
+    name: "King’s Table",
+    status: 'wip',
+    context: 'Produto próprio',
+    groups: ['outros', 'sites'],
+    line: {
+      pt: 'App de poker para home game: o relógio, quem pagou, a premiação e o ranking da temporada num lugar só.',
+      en: 'A poker app for home games: the clock, who has paid, the payouts and the season ranking in one place.',
+    },
+    stat: {
+      pt: [
+        'Landing no ar com lista de espera; o app fica atrás do login',
+        '8 áreas e 106 funcionalidades descritas na landing',
+        '22 suítes de teste no app, do relógio à sincronia offline',
+        '10 tabelas com RLS: cada conta só enxerga as próprias noites',
+      ],
+      en: [
+        'Landing page live with a waiting list; the app sits behind the login',
+        '8 areas and 106 features described on the landing page',
+        '22 test suites in the app, from the clock to offline sync',
+        '10 tables with RLS: each account only ever sees its own nights',
+      ],
+    },
+    tags: ['Next.js', 'Expo', 'TypeScript', 'Supabase'],
+    media: {
+      frame: 'desktop',
+      src: '/cases/kings-table/capa.jpg',
+      video: '/cases/kings-table/scroll.mp4',
+      poster: '/cases/kings-table/poster.jpg',
+      alt: {
+        pt: "Topo da landing do King’s Table, com uma maleta de fichas de poker aberta ao fundo",
+        en: "Top of the King’s Table landing page, with an open poker chip case behind it",
+      },
+    },
+    links: [
+      { kind: 'site', href: 'https://kings-table-poker.vercel.app' },
+      {
+        kind: 'github',
+        href: 'https://github.com/WinistonAlle/kings-table-app',
+      },
+    ],
+    problem: {
+      pt: [
+        'Home game de amigos roda em planilha e memória. Alguém cronometra o blind no celular, alguém anota num papel quem já pagou, e no fim da noite a premiação sai na conta de cabeça com a mesa inteira esperando.',
+        'O que se perde não é a conta de uma noite: é a temporada. Quem ganhou mais vezes no ano, quem está devendo desde abril, qual estrutura de blinds fez a noite acabar na hora certa. Nada disso sobrevive até o próximo encontro.',
+      ],
+      en: [
+        'A home game among friends runs on a spreadsheet and memory. Someone times the blinds on their phone, someone else notes on paper who has already paid, and at the end of the night the payouts are worked out in someone’s head with the whole table waiting.',
+        'What gets lost is not one night’s arithmetic: it is the season. Who won most this year, who has owed since April, which blind structure made the night end on time. None of it survives to the next gathering.',
+      ],
+    },
+    solution: {
+      pt: [
+        'O produto tem duas metades. A landing apresenta e reserva vaga na lista de espera; o app é onde a noite acontece, com relógio de blinds, entradas e rebuys, acerto de contas, premiação calculada na hora e o ranking da liga fechando sozinho a cada noite encerrada.',
+        'O relógio foi a parte teimosa. Ele precisa continuar certo com a tela bloqueada e o app em segundo plano, que é justamente onde esse tipo de app falha no meio da mesa. São 22 suítes de teste segurando o que não pode quebrar, e boa parte delas cobre sincronia offline: fila de operações, conflito entre dois aparelhos e recuperação depois que a internet cai.',
+        'Landing e app moram no mesmo endereço, e isso foi decisão, não acaso. A sessão vive num cookie, e cookie não atravessa dois subdomínios de vercel.app. Servir o app dentro da própria landing, em /app, foi o que fez o login funcionar de ponta a ponta sem depender de comprar domínio.',
+      ],
+      en: [
+        'The product has two halves. The landing page pitches it and holds a spot on the waiting list; the app is where the night happens, with the blind clock, buy-ins and rebuys, settling up, payouts worked out on the spot, and the league ranking closing itself every time a night ends.',
+        'The clock was the stubborn part. It has to stay right with the screen locked and the app in the background, which is exactly where this kind of app fails mid-table. 22 test suites hold up what cannot break, and a good share of them cover offline sync: the queue of operations, a conflict between two devices, and recovery after the connection drops.',
+        'The landing page and the app live at the same address, and that was a decision, not an accident. The session lives in a cookie, and a cookie does not cross two vercel.app subdomains. Serving the app inside the landing page itself, at /app, is what made the login work end to end without having to buy a domain.',
+      ],
+    },
+    gallery: [
+      {
+        src: '/cases/kings-table/manifesto.jpg',
+        alt: {
+          pt: 'Manifesto do produto ao lado da ficha de poker em 3D',
+          en: 'Product manifesto beside the 3D poker chip',
+        },
+        caption: {
+          pt: 'A promessa dita em uma frase só, ao lado da ficha em 3D que gira conforme a página rola. Relógio que não atrasa, controle de quem pagou, premiação calculada na hora e ranking saindo sozinho: são as quatro dores da noite, na ordem em que aparecem.',
+          en: 'The promise said in a single sentence, beside the 3D chip that turns as the page scrolls. A clock that does not fall behind, a record of who paid, payouts worked out on the spot and a ranking that writes itself: the four pains of the night, in the order they turn up.',
+        },
+      },
+      {
+        src: '/cases/kings-table/areas.jpg',
+        alt: {
+          pt: 'Navegador de funcionalidades, com as oito áreas do produto na lateral',
+          en: 'Feature explorer, with the product’s eight areas down the side',
+        },
+        caption: {
+          pt: 'São 106 funcionalidades divididas em oito áreas, e listar tudo de uma vez viraria parede de texto. Aqui a lista fica na lateral e só uma área abre por vez, com um exemplo de mesa montada em cima para a pessoa ver do que se trata antes de ler os doze itens.',
+          en: 'There are 106 features split across eight areas, and listing them all at once would become a wall of text. Here the list stays on the side and only one area opens at a time, with a worked example of a table above it so people see what it is about before reading the twelve items.',
+        },
+      },
+      {
+        src: '/cases/kings-table/chip.jpg',
+        alt: {
+          pt: 'Ficha de poker em 3D ao lado da lista de áreas em perspectiva',
+          en: '3D poker chip beside the list of areas in perspective',
+        },
+        caption: {
+          pt: 'A mesma ficha volta como âncora da navegação: as áreas passam inclinadas ao lado dela e só a que está em foco fica legível. É a mesma ideia do carrossel que uso nos sites de fachada, aplicada a um índice, para o olho saber onde está sem barra de progresso.',
+          en: 'The same chip comes back as the anchor of the navigation: the areas slide past it at an angle and only the one in focus stays readable. It is the same idea as the carousel I use on the façade sites, applied to an index, so the eye knows where it is without a progress bar.',
+        },
+      },
+      {
+        src: '/cases/kings-table/noites.jpg',
+        alt: {
+          pt: 'Mosaico de fotos de noites de poker entre amigos',
+          en: 'Mosaic of photos of poker nights among friends',
+        },
+        caption: {
+          pt: 'O mosaico existe para dizer de quem é o produto. Não é sala de cassino nem torneio profissional: é a turma de sempre, na mesa da sala, e a foto faz esse recorte mais rápido do que qualquer parágrafo faria.',
+          en: 'The mosaic is there to say who the product belongs to. It is not a casino floor or a professional tournament: it is the usual crowd, at the table in the living room, and the photo makes that point faster than any paragraph would.',
+        },
+      },
+      {
+        src: '/cases/kings-table/mesa.jpg',
+        alt: {
+          pt: 'Chamada final sobre uma mesa de poker vista de cima',
+          en: 'Closing call to action over a poker table seen from above',
+        },
+        caption: {
+          pt: 'A última tela é a mesa vista de cima, com o convite no feltro. Como o produto ainda não abriu, ela não tenta vender: reserva vaga na lista de espera, que é a única coisa honesta a pedir antes do lançamento.',
+          en: 'The last screen is the table seen from above, with the invitation on the felt. Since the product has not opened yet, it does not try to sell: it holds a spot on the waiting list, which is the only honest thing to ask for before launch.',
         },
       },
     ],

@@ -169,26 +169,6 @@ export const BACKLOG: Rascunho[] = [
   },
   {
     n: '07',
-    slug: 'kings-table',
-    name: "King's Table",
-    status: 'Em desenvolvimento',
-    context: 'Produto próprio',
-    line: 'App de poker para home game: relógio de blinds, torneio e ranking da temporada.',
-    body: 'O relógio continua certo mesmo com o app em segundo plano ou com o celular bloqueado, que é onde esse tipo de app costuma falhar na mesa. A criação de torneio acontece em quatro passos e o ranking fecha com pódio. iOS primeiro, web depois.',
-    stat: [
-      'Timer que sobrevive ao background',
-      '9 tabelas com RLS',
-      'iOS primeiro',
-    ],
-    tags: ['Expo Router', 'React Native', 'Zustand', 'Supabase'],
-    media: {
-      frame: 'mobile',
-      src: '',
-      alt: "Relógio de blinds do King's Table em tela cheia",
-    },
-  },
-  {
-    n: '08',
     slug: 'portfolio',
     name: 'Este portfólio',
     status: 'No ar',
