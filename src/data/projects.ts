@@ -1081,12 +1081,12 @@ export const PROJECTS: Project[] = [
     },
     stat: {
       pt: [
-        'Onze cases, cada um com vídeo do sistema rodando de verdade',
+        'Treze cases, cada um com vídeo do sistema rodando de verdade',
         'Português e inglês na mesma base: tradução faltando quebra o build',
         'A abertura é um MacBook 3D em three.js, guiado pela rolagem',
       ],
       en: [
-        'Eleven cases, each with video of the system actually running',
+        'Thirteen cases, each with video of the system actually running',
         'Portuguese and English from one source: a missing translation breaks the build',
         'The opening is a 3D MacBook in three.js, driven by scroll',
       ],
@@ -1236,6 +1236,115 @@ export const PROJECTS: Project[] = [
         caption: {
           pt: 'Embaixo de todo gráfico existe a tabela crua, ordenável e exportável em CSV. Painel que só mostra gráfico obriga a confiar nele; este deixa conferir linha por linha, que é o que faz alguém parar de manter a planilha paralela.',
           en: 'Underneath every chart there is the raw table, sortable and exportable to CSV. A dashboard that only shows charts forces you to trust it; this one lets you check row by row, which is what makes someone stop keeping the parallel spreadsheet.',
+        },
+      },
+    ],
+  },
+  {
+    n: '13',
+    slug: 'lua-de-mel',
+    name: 'Lua de Mel',
+    status: 'live',
+    context: 'Produto próprio',
+    groups: ['outros', 'sites'],
+    line: {
+      pt: 'Roteiro interativo de uma lua de mel de 24 dias em Madri e no Japão, feito de presente e pensado pra ser usado na rua.',
+      en: 'Interactive itinerary for a 24 day honeymoon in Madrid and Japan, made as a gift and built to be used out on the street.',
+    },
+    stat: {
+      pt: [
+        '24 dias e 156 paradas, 116 delas abrindo direto no Google Maps',
+        'Madri é catálogo e o Japão é agenda, porque o roteiro real é assim',
+        'Globo 3D, bilhete de embarque que rasga e busca que acha qualquer dia',
+        'Site estático: abre sem depender de rede no meio da rua no Japão',
+      ],
+      en: [
+        '24 days and 156 stops, 116 of them opening straight in Google Maps',
+        'Madrid is a catalog and Japan is a schedule, because the real plan is like that',
+        'A 3D globe, a boarding pass that tears and a search that finds any day',
+        'Static site: it opens without depending on a signal mid street in Japan',
+      ],
+    },
+    tags: ['Next.js', 'TypeScript', 'three.js', 'GSAP'],
+    media: {
+      frame: 'desktop',
+      src: '/cases/lua-de-mel/capa.jpg',
+      video: '/cases/lua-de-mel/scroll.mp4',
+      poster: '/cases/lua-de-mel/poster.jpg',
+      alt: {
+        pt: 'Abertura do capítulo de Madri, com o globo girando até a Espanha ao lado do título',
+        en: 'Opening of the Madrid chapter, with the globe turning to Spain beside the title',
+      },
+    },
+    links: [
+      { kind: 'site', href: 'https://lua-de-mel-olive.vercel.app' },
+      { kind: 'github', href: 'https://github.com/WinistonAlle/lua-de-mel' },
+    ],
+    problem: {
+      pt: [
+        'O roteiro existia, mas existia como documento: vinte e tantas páginas que ninguém abre no meio da rua, com o celular na mão e a bateria caindo.',
+        'E documento não sabe onde você está. Descobrir o que fazer na quinta à tarde em Kyoto era rolar o arquivo inteiro, e o endereço ainda precisava ser copiado na mão pro mapa.',
+      ],
+      en: [
+        'The itinerary existed, but it existed as a document: twenty odd pages nobody opens mid street, phone in hand and the battery dropping.',
+        'And a document does not know where you are. Finding out what to do on Thursday afternoon in Kyoto meant scrolling the whole file, and the address still had to be copied by hand into a map.',
+      ],
+    },
+    solution: {
+      pt: [
+        'O roteiro virou uma linha do tempo por dia, com tudo aberto na tela. Nada escondido atrás de clique, porque na rua ninguém tem paciência de caçar, e cada lugar citado abre no Google Maps num toque.',
+        'Madri e Japão são modelados diferente de propósito. O documento fecha o Japão hora a hora e deixa Madri em aberto, então o site mostra o Japão como agenda e Madri como catálogo de vontades. Forçar os dois no mesmo formato seria inventar um plano que não existe.',
+        'Como também é presente, ele tem que emocionar: carta na abertura, globo girando até a próxima cidade, bilhete de embarque que rasga no dedo. A regra foi que nada disso podia atrapalhar quem só quer saber a que horas sai o trem.',
+      ],
+      en: [
+        'The itinerary became a timeline by day, with everything open on screen. Nothing hidden behind a click, because out on the street nobody has the patience to go hunting, and every place named opens in Google Maps in one tap.',
+        'Madrid and Japan are modelled differently on purpose. The document pins Japan down hour by hour and leaves Madrid open, so the site shows Japan as a schedule and Madrid as a catalog of wishes. Forcing both into the same format would be inventing a plan that does not exist.',
+        'Since it is also a gift, it has to move them: a letter at the opening, a globe turning to the next city, a boarding pass that tears under your finger. The rule was that none of it could get in the way of someone who just wants to know when the train leaves.',
+      ],
+    },
+    gallery: [
+      {
+        src: '/cases/lua-de-mel/abertura.jpg',
+        alt: {
+          pt: 'Abertura do site, com o contador de dias em cima e a carta amassada como uma bola de papel',
+          en: 'Site opening, with the day counter above and the letter crumpled into a ball of paper',
+        },
+        caption: {
+          pt: 'O site abre com uma carta escrita pro casal e o contador de dias em cima dela. A carta não fica no caminho: amassa e joga fora, e a viagem começa. Presente que obriga a ler antes de usar vira obstáculo.',
+          en: 'The site opens with a letter written to the couple and the day counter above it. The letter does not get in the way: crumple it, throw it out, and the trip begins. A gift that forces you to read before using it becomes an obstacle.',
+        },
+      },
+      {
+        src: '/cases/lua-de-mel/transito.jpg',
+        alt: {
+          pt: 'Dia de voo, com o bilhete de embarque de Brasília para Madri e o roteiro da partida ao lado',
+          en: 'Flight day, with the boarding pass from Brasília to Madrid and the departure plan beside it',
+        },
+        caption: {
+          pt: 'Cada voo vira um bilhete de embarque de verdade, com número, horário e escala tirados do roteiro. O canhoto rasga quando se puxa. O dia de avião deixa de ser uma linha de texto e vira a coisa que ele é.',
+          en: 'Each flight becomes a real boarding pass, with the number, the time and the stopover taken from the itinerary. The stub tears when you pull it. A flying day stops being a line of text and becomes the thing it actually is.',
+        },
+      },
+      {
+        src: '/cases/lua-de-mel/toquio.jpg',
+        alt: {
+          pt: 'Cartão de um dia em Tóquio, dividido em fim de tarde e noite, com um selo de falta reservar e um plano B',
+          en: 'Card for a day in Tokyo, split into late afternoon and night, with a still to book tag and a plan B',
+        },
+        caption: {
+          pt: 'Um dia do Japão inteiro na tela, dividido em manhã, tarde e noite, porque às três da tarde o que importa é o que ainda vem. O selo vermelho marca só o que falta reservar, e o plano B já fica escrito embaixo, pronto pro dia em que chover.',
+          en: 'A whole Japanese day on screen, split into morning, afternoon and night, because at three in the afternoon what matters is what is still ahead. The red tag marks only what is still to be booked, and plan B is already written underneath, ready for the day it rains.',
+        },
+      },
+      {
+        src: '/cases/lua-de-mel/busca.jpg',
+        alt: {
+          pt: 'Busca aberta sobre o site, com as cidades da viagem e a contagem de dias que faltam',
+          en: 'Search open over the site, with the cities of the trip and the countdown of days left',
+        },
+        caption: {
+          pt: 'A busca abre em qualquer ponto do site e acha lugar, cidade ou dia pelo nome. Ela só existe porque o site vai ser usado durante a viagem: quando a pergunta é "era hoje o Ghibli?", ninguém quer rolar 24 dias pra descobrir.',
+          en: 'Search opens from anywhere on the site and finds a place, a city or a day by name. It only exists because the site will be used during the trip: when the question is "was Ghibli today?", nobody wants to scroll 24 days to find out.',
         },
       },
     ],
