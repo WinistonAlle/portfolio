@@ -1081,12 +1081,12 @@ export const PROJECTS: Project[] = [
     },
     stat: {
       pt: [
-        'Quatorze cases, cada um com vídeo do sistema rodando de verdade',
+        'Quinze cases, cada um com vídeo do sistema rodando de verdade',
         'Português e inglês na mesma base: tradução faltando quebra o build',
         'A abertura é um MacBook 3D em three.js, guiado pela rolagem',
       ],
       en: [
-        'Fourteen cases, each with video of the system actually running',
+        'Fifteen cases, each with video of the system actually running',
         'Portuguese and English from one source: a missing translation breaks the build',
         'The opening is a 3D MacBook in three.js, driven by scroll',
       ],
@@ -1468,6 +1468,112 @@ export const PROJECTS: Project[] = [
         caption: {
           pt: 'A última tela é a mesa vista de cima, com o convite no feltro. Como o produto ainda não abriu, ela não tenta vender: reserva vaga na lista de espera, que é a única coisa honesta a pedir antes do lançamento.',
           en: 'The last screen is the table seen from above, with the invitation on the felt. Since the product has not opened yet, it does not try to sell: it holds a spot on the waiting list, which is the only honest thing to ask for before launch.',
+        },
+      },
+    ],
+  },
+  {
+    n: '15',
+    slug: 'coro-hub',
+    name: 'Coro Hub',
+    status: 'live',
+    context: 'Empresa própria',
+    groups: ['sites'],
+    line: {
+      pt: 'Site institucional da Coro Hub, a empresa de IA aplicada que abri com três sócios: traz cliente e faz a operação dar conta dele.',
+      en: 'Corporate site for Coro Hub, the applied AI company I started with three partners: it brings in customers and makes the operation keep up with them.',
+    },
+    stat: {
+      pt: [
+        'No ar na Vercel; cada push na main publica sozinho',
+        'Sete componentes do React Bits portados sem React para o navegador',
+        'Fundo em WebGL puro que troca de paleta na borda de cada seção clara',
+        'Nenhum case, logo ou número inventado: a empresa ainda não tem clientes no site',
+      ],
+      en: [
+        'Live on Vercel; every push to main publishes itself',
+        'Seven React Bits components ported with no React sent to the browser',
+        'Plain WebGL background that swaps palette at the edge of each light section',
+        'No made up case, logo or number: the company has no clients on the site yet',
+      ],
+    },
+    tags: ['Astro', 'TypeScript', 'GSAP', 'WebGL'],
+    media: {
+      frame: 'desktop',
+      src: '/cases/coro-hub/capa.jpg',
+      video: '/cases/coro-hub/scroll.mp4',
+      poster: '/cases/coro-hub/poster.jpg',
+      alt: {
+        pt: 'Hero da Coro Hub, com o título Automatize o que importa e uma conversa de WhatsApp com o agente de IA ao lado',
+        en: 'Coro Hub hero, with the headline Automate what matters and a WhatsApp chat with the AI agent beside it',
+      },
+    },
+    links: [{ kind: 'site', href: 'https://coro-hub.vercel.app' }],
+    problem: {
+      pt: [
+        'A Coro Hub nasceu com quatro sócios e nenhum cliente. O site precisava explicar uma oferta que junta duas coisas que o mercado vende separado: trazer cliente com anúncio e site, e fazer a operação dar conta dele com IA e automação.',
+        'E precisava fazer isso sem o atalho de sempre. Sem cases, sem depoimentos e sem logos de clientes, qualquer número inventado viraria mentira na primeira conversa.',
+      ],
+      en: [
+        'Coro Hub was born with four partners and no clients. The site had to explain an offer that puts together two things the market sells separately: bringing in customers with ads and a website, and making the operation keep up with them through AI and automation.',
+        'And it had to do that without the usual shortcut. With no cases, no testimonials and no client logos, any made up number would turn into a lie on the first call.',
+      ],
+    },
+    solution: {
+      pt: [
+        'O hero mostra o produto em vez de descrever: uma conversa de WhatsApp em que o agente de IA atende, qualifica e marca horário, e que termina com o que a automação fez por trás, como salvar o lead no CRM. É o serviço de entrada da empresa acontecendo na frente da pessoa.',
+        'A página segue o modelo de negócio: os quatro braços agrupados em Aquisição e Operação, o caminho do primeiro clique até a automação e o Método CORO (Conectar, Organizar, Resolver, Otimizar). Onde entraria prova social entram exemplos de antes e depois, avisando que são exemplos e não histórias de clientes.',
+        'Os efeitos vieram do React Bits, mas nenhum React vai para o navegador: cada componente foi portado para TypeScript puro dentro do Astro. O fundo em dither é WebGL escrito à mão e troca de paleta exatamente na borda das seções claras. A pilha de cartões usa position: sticky, porque a versão original movia os cartões por script e travava na rolagem.',
+      ],
+      en: [
+        'The hero shows the product instead of describing it: a WhatsApp chat where the AI agent answers, qualifies and books a time, ending with what the automation did behind the scenes, like saving the lead to the CRM. It is the company’s entry service happening in front of the visitor.',
+        'The page follows the business model: the four arms grouped into Acquisition and Operations, the path from the first click to the automation, and the CORO Method (Connect, Organize, Resolve, Optimize). Where social proof would go, there are before and after examples, saying plainly that they are examples and not client stories.',
+        'The effects came from React Bits, but no React reaches the browser: every component was ported to plain TypeScript inside Astro. The dither background is hand written WebGL and swaps palette exactly at the edge of the light sections. The card stack uses position: sticky, because the original version moved the cards by script and stuttered on scroll.',
+      ],
+    },
+    gallery: [
+      {
+        src: '/cases/coro-hub/servicos.jpg',
+        alt: {
+          pt: 'Serviços em dois blocos, Aquisição e Operação, com o caminho do cliente em cinco passos embaixo',
+          en: 'Services in two blocks, Acquisition and Operations, with the customer path in five steps below',
+        },
+        caption: {
+          pt: 'A frase de posicionamento abre os serviços, e os quatro braços ficam em dois blocos: Aquisição traz o cliente, Operação dá conta dele. Embaixo, o caminho em cinco passos amarra os dois, do anúncio até o CRM.',
+          en: 'The positioning line opens the services, and the four arms sit in two blocks: Acquisition brings the customer in, Operations keeps up with them. Below, the five step path ties both together, from the ad to the CRM.',
+        },
+      },
+      {
+        src: '/cases/coro-hub/metodo.jpg',
+        alt: {
+          pt: 'Método CORO, com as letras C, O, R e O grandes sobre as quatro etapas',
+          en: 'CORO Method, with the large letters C, O, R and O above the four steps',
+        },
+        caption: {
+          pt: 'O nome da empresa vira o método. Um coro é várias vozes soando como uma só, e as quatro letras grandes são as etapas: Conectar, Organizar, Resolver e Otimizar.',
+          en: 'The company name becomes the method. A choir is many voices sounding as one, and the four large letters are the steps: Connect, Organize, Resolve and Optimize.',
+        },
+      },
+      {
+        src: '/cases/coro-hub/exemplos.jpg',
+        alt: {
+          pt: 'Cartão de exemplo em tela cheia, com o Antes apagado à esquerda e o Depois em letra grande à direita',
+          en: 'Full screen example card, with the Before faded on the left and the After in large type on the right',
+        },
+        caption: {
+          pt: 'Seis situações de antes e depois, um cartão por vez conforme a rolagem. O Antes fica apagado e o Depois em letra grande, porque é ele que a pessoa precisa lembrar.',
+          en: 'Six before and after situations, one card at a time as you scroll. The Before stays faded and the After in large type, because that is the part people need to remember.',
+        },
+      },
+      {
+        src: '/cases/coro-hub/chamada.jpg',
+        alt: {
+          pt: 'Chamada final com o símbolo da Coro Hub e a pergunta sobre qual processo tirar das costas da equipe',
+          en: 'Closing call to action with the Coro Hub symbol and the question about which process to take off the team',
+        },
+        caption: {
+          pt: 'A chamada final faz a pergunta que a conversa de 30 minutos vai responder. Não tem formulário: o botão abre o WhatsApp com a mensagem já escrita, uma diferente para cada seção do site.',
+          en: 'The closing call asks the question the 30 minute call will answer. There is no form: the button opens WhatsApp with the message already written, a different one for each section of the site.',
         },
       },
     ],
