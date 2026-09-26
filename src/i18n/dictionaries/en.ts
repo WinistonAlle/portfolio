@@ -28,9 +28,7 @@ const en: typeof pt = {
   },
 
   home: {
-    eyebrow: 'Winiston Alle · full-stack developer',
     title: 'Systems and websites *businesses use* every day.',
-    sub: 'From the ordering portal to the store checkout: I build it, ship it and stay with it while real people use it.',
     prova: [
       '{total} projects',
       '{live} live',

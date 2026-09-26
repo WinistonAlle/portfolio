@@ -33,9 +33,7 @@ const pt = {
        rótulo "PORTFÓLIO". Os números da prova ({total}, {live}) são
        preenchidos na página a partir de projects.ts, pra nunca ficarem
        desatualizados quando entra um projeto novo. */
-    eyebrow: 'Winiston Alle · desenvolvedor full-stack',
     title: 'Sistemas e sites que *empresas usam* todo dia.',
-    sub: 'Do portal de pedidos ao caixa da loja: eu construo, coloco no ar e acompanho com gente usando de verdade.',
     prova: [
       '{total} projetos',
       '{live} no ar',

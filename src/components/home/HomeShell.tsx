@@ -35,9 +35,7 @@ export default function HomeShell({
 }: {
   locale: Locale;
   t: {
-    eyebrow: string;
     title: string;
-    sub: string;
     ctaProjects: string;
     ctaAbout: string;
     rolar: string;

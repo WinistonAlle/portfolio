@@ -124,11 +124,6 @@ h3 {
 }
 
 /* ---------- Hero da home (Hero.tsx) ---------- */
-.hero__eyebrow {
-  color: var(--muted);
-  margin-bottom: 1.4rem;
-}
-
 .hero__titulo {
   font-family: var(--font-display), system-ui, sans-serif;
   font-size: clamp(2.6rem, 5.4vw, 5.6rem);
@@ -138,15 +133,6 @@ h3 {
   color: var(--foreground);
   text-wrap: balance;
   max-width: 13ch;
-}
-
-.hero__sub {
-  margin-top: 1.5rem;
-  max-width: 34rem;
-  font-size: clamp(1.02rem, 1.25vw, 1.2rem);
-  line-height: 1.6;
-  color: var(--muted);
-  text-wrap: pretty;
 }
 
 /* Prova: fatos em mono abaixo dos botões. No celular, um por linha; no
@@ -185,35 +171,104 @@ h3 {
 
 /* "Role para ver" alinhado com a coluna de texto (mesma margem da grade). */
 .hero__rolar {
-  left: max(2.5rem, calc((100% - 84rem) / 2 + 2.5rem));
+  left: max(2.5rem, calc((100% - 88rem) / 2 + 2.5rem));
 }
 
 /* Foto: grande, apoiada na base, esfumada embaixo para o recorte reto do busto
    não virar uma linha dura contra o fundo. */
 .hero__img {
-  width: clamp(18rem, 78vw, 26rem);
-  max-height: calc(100svh - var(--header-h) - 2rem);
+  width: clamp(20rem, 92vw, 30rem);
+  max-height: calc(100svh - var(--header-h));
   object-fit: contain;
-  -webkit-mask-image: linear-gradient(to bottom, #000 78%, transparent 100%);
-  mask-image: linear-gradient(to bottom, #000 78%, transparent 100%);
+  -webkit-mask-image: linear-gradient(to bottom, #000 80%, transparent 100%);
+  mask-image: linear-gradient(to bottom, #000 80%, transparent 100%);
+}
+
+/* As camadas do parallax são movidas por transform (Hero.tsx). */
+.hero__img-wrap,
+.hero__halo,
+.hero__anel,
+.hero__texto {
+  will-change: transform;
 }
 
 /* Brilho azul atrás da cabeça: separa o cabelo escuro do fundo escuro. */
 .hero__halo {
   position: absolute;
   left: 50%;
-  top: 8%;
+  top: 4%;
   width: 90%;
   aspect-ratio: 1;
-  transform: translateX(-50%);
+  margin-left: -45%;
   border-radius: 50%;
   background: radial-gradient(
     circle,
-    color-mix(in srgb, var(--accent) 26%, transparent) 0%,
-    color-mix(in srgb, var(--accent) 8%, transparent) 45%,
+    color-mix(in srgb, var(--accent) 28%, transparent) 0%,
+    color-mix(in srgb, var(--accent) 9%, transparent) 45%,
     transparent 70%
   );
   pointer-events: none;
+}
+
+/* Anéis finos em volta da cabeça, cada um com um ponto de luz "orbitando".
+   Eles são o plano de trás do parallax: andam mais que a foto. */
+.hero__anel {
+  position: absolute;
+  left: 50%;
+  top: 30%;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  border: 1px solid color-mix(in srgb, var(--accent) 22%, transparent);
+  pointer-events: none;
+}
+
+.hero__anel i {
+  position: absolute;
+  inset: -3px;
+  border-radius: 50%;
+  animation: hero-orbita 26s linear infinite;
+}
+
+.hero__anel i::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: 6px;
+  height: 6px;
+  margin-left: -3px;
+  border-radius: 50%;
+  background: var(--accent);
+  box-shadow: 0 0 12px 2px color-mix(in srgb, var(--accent) 70%, transparent);
+}
+
+.hero__anel--fora {
+  width: 118%;
+  margin: -59% 0 0 -59%;
+  border-style: dashed;
+  border-color: color-mix(in srgb, var(--accent) 14%, transparent);
+}
+
+.hero__anel--dentro {
+  width: 82%;
+  margin: -41% 0 0 -41%;
+}
+
+.hero__anel--dentro i {
+  animation-duration: 18s;
+  animation-direction: reverse;
+}
+
+@keyframes hero-orbita {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero__anel i {
+    animation: none;
+  }
 }
 
 @media (min-width: 1024px) {
@@ -224,14 +279,7 @@ h3 {
   }
 
   .hero__img {
-    width: min(100%, 44rem);
-  }
-
-  .hero__halo {
-    left: auto;
-    right: 4%;
-    transform: none;
-    width: 80%;
+    width: min(100%, 52rem);
   }
 }
 

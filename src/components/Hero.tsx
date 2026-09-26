@@ -1,3 +1,7 @@
+'use client';
+
+import { useEffect, useRef } from 'react';
+import { aberturaAtiva } from '@/components/background/abertura';
 import TituloAcento from '@/components/text/TituloAcento';
 import GlowButton, { GlowArrow } from '@/components/ui/GlowButton';
 import type { Locale } from '@/i18n/config';
@@ -5,14 +9,15 @@ import type { Locale } from '@/i18n/config';
 /* Abertura da home. Vive dentro do portal do MacBook (montado na page), por
    isso ocupa uma tela inteira: é o que o notebook mostra na abertura.
 
-   Antes o centro era "PORTFÓLIO" gigante com a foto cortando a palavra e
-   adesivos de tecnologia em volta. O maior espaço da página era um rótulo, e
-   os logos competiam com o rosto. Agora cada coisa tem um trabalho:
+   À esquerda, o que eu faço e pra quem, com prova logo abaixo; à direita, a
+   foto grande, apoiada na base, com anéis e brilho atrás.
 
-   - à esquerda, o que eu faço e pra quem, com prova logo abaixo;
-   - à direita, a foto, grande e apoiada na base, sem disputar com nada.
-
-   A stack continua na seção dela, logo abaixo. */
+   Parallax: cada camada com `data-depth` desliza em sentido contrário ao
+   cursor, e quanto maior a profundidade, mais ela anda. O fundo (anéis, halo)
+   anda mais que a foto, e o texto anda um pouco no sentido oposto, o que dá a
+   sensação de planos separados. Na rolagem, a foto e os anéis sobem mais
+   devagar que a página. Tudo em `transform`, num laço que para sozinho quando
+   as camadas assentam. */
 export default function Hero({
   locale,
   t,
@@ -20,32 +25,97 @@ export default function Hero({
 }: {
   locale: Locale;
   t: {
-    eyebrow: string;
     title: string;
-    sub: string;
     ctaProjects: string;
     ctaAbout: string;
     rolar: string;
   };
   prova: string[];
 }) {
+  const ref = useRef<HTMLElement>(null);
+
+  useEffect(() => {
+    const root = ref.current;
+    if (!root) return;
+    if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+    const layers = [...root.querySelectorAll<HTMLElement>('[data-depth]')].map((el) => ({
+      el,
+      depth: parseFloat(el.dataset.depth ?? '0'),
+      scroll: parseFloat(el.dataset.scroll ?? '0'),
+    }));
+    // Mouse só onde há mouse; no toque fica só a rolagem.
+    const mouse = matchMedia('(hover: hover) and (pointer: fine)').matches;
+
+    let alvoX = 0;
+    let alvoY = 0;
+    let x = 0;
+    let y = 0;
+    let rolagem = 0;
+    let raf = 0;
+    let visivel = true;
+
+    const frame = () => {
+      raf = 0;
+      x += (alvoX - x) * 0.08;
+      y += (alvoY - y) * 0.08;
+      for (const l of layers) {
+        const dx = -x * l.depth;
+        const dy = -y * l.depth + rolagem * l.scroll;
+        l.el.style.transform = `translate3d(${dx.toFixed(2)}px, ${dy.toFixed(2)}px, 0)`;
+      }
+      if (Math.abs(alvoX - x) > 0.001 || Math.abs(alvoY - y) > 0.001) acordar();
+    };
+
+    const acordar = () => {
+      if (!raf && visivel) raf = requestAnimationFrame(frame);
+    };
+
+    const onPointer = (e: PointerEvent) => {
+      alvoX = (e.clientX / innerWidth - 0.5) * 2;
+      alvoY = (e.clientY / innerHeight - 0.5) * 2;
+      acordar();
+    };
+
+    /* Durante a abertura quem mexe com a rolagem é o portal do MacBook; o
+       parallax de rolagem só entra depois, com o hero já em tela cheia. */
+    const onScroll = () => {
+      rolagem = aberturaAtiva() ? 0 : Math.max(0, -root.getBoundingClientRect().top);
+      acordar();
+    };
+
+    const io = new IntersectionObserver(([entry]) => {
+      visivel = entry.isIntersecting;
+      acordar();
+    });
+    io.observe(root);
+
+    if (mouse) window.addEventListener('pointermove', onPointer, { passive: true });
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => {
+      cancelAnimationFrame(raf);
+      io.disconnect();
+      if (mouse) window.removeEventListener('pointermove', onPointer);
+      window.removeEventListener('scroll', onScroll);
+    };
+  }, []);
+
   /* A altura desconta o header, que rola junto com a página em vez de ser
      fixo. Vale nos dois estados: dentro do portal, a tela do notebook mostra
      header + hero e o conjunto tem que caber nos 100svh do .portal__content;
      depois de entrar, é o que faz o hero ocupar a tela exata. */
   return (
-    <section className="ambient hero relative isolate flex min-h-[calc(100svh-var(--header-h))] flex-col overflow-hidden">
-      <div className="hero__grade relative z-10 mx-auto grid w-full max-w-[84rem] flex-1 grid-cols-1 px-6 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,1fr)] lg:gap-10 lg:px-10">
-        <div className="hero__texto self-center pt-10 lg:pt-0 lg:pb-16">
-          <p className="label hero__eyebrow">{t.eyebrow}</p>
-
+    <section
+      ref={ref}
+      className="ambient hero relative isolate flex min-h-[calc(100svh-var(--header-h))] flex-col overflow-hidden"
+    >
+      <div className="hero__grade relative z-10 mx-auto grid w-full max-w-[88rem] flex-1 grid-cols-1 px-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.15fr)] lg:gap-6 lg:px-10">
+        <div className="hero__texto self-center pt-12 lg:pt-0 lg:pb-16" data-depth="-6">
           <h1 className="hero__titulo">
             <TituloAcento texto={t.title} />
           </h1>
 
-          <p className="hero__sub">{t.sub}</p>
-
-          <div className="mt-9 flex flex-wrap items-center gap-3">
+          <div className="mt-10 flex flex-wrap items-center gap-3">
             <GlowButton href={`/${locale}/projetos`}>
               {t.ctaProjects}
               <GlowArrow />
@@ -64,17 +134,25 @@ export default function Hero({
           </ul>
         </div>
 
-        {/* A base do busto encosta na base da seção; o brilho atrás e o
-            esfumado embaixo integram o recorte ao fundo. */}
+        {/* A base do busto encosta na base da seção. Atrás dela, do fundo
+            para a frente: anéis (os que mais andam), halo e a foto. */}
         <div className="hero__foto relative flex justify-center self-end lg:justify-end">
-          <span className="hero__halo" aria-hidden="true" />
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src="/winiston-hero.png"
-            alt="Winiston Alle"
-            className="hero__img relative block h-auto select-none"
-            draggable={false}
-          />
+          <span className="hero__anel hero__anel--fora" data-depth="34" data-scroll="0.28" aria-hidden="true">
+            <i />
+          </span>
+          <span className="hero__anel hero__anel--dentro" data-depth="22" data-scroll="0.2" aria-hidden="true">
+            <i />
+          </span>
+          <span className="hero__halo" data-depth="16" data-scroll="0.14" aria-hidden="true" />
+          <div className="hero__img-wrap relative" data-depth="9" data-scroll="0.08">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src="/winiston-hero.png"
+              alt="Winiston Alle"
+              className="hero__img block h-auto select-none"
+              draggable={false}
+            />
+          </div>
         </div>
       </div>
 
