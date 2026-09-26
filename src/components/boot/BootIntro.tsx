@@ -1,8 +1,9 @@
 'use client';
 
-/* Intro estilo "primeira ligada" — boot com nome + barra de progresso, que
-   entrega a tela pra cortina de pixel (revealPage) no final, em vez de um
-   fade simples, pra ficar consistente com a navegação do resto do site.
+/* Abertura da home: o nome "Winiston Alle" desenhado com traços SVG
+   (winiston-loader.ts), que no fim entrega a tela pra cortina de pixel
+   (revealPage) em vez de sair sozinho, pra ficar consistente com a navegação
+   do resto do site.
 
    O "ligar" de verdade acontece no crachá 3D: a física do Lanyard fica
    pausada (veja `active`/`paused` em LanyardBadge.tsx e Lanyard.jsx) até o
@@ -10,15 +11,23 @@
    assentar ao mesmo tempo em que a página é revelada — em vez de já estar
    parado atrás do overlay.
 
+   Clique, Esc, Enter ou espaço pulam direto pro nome pronto.
+
    Roda toda vez que a home monta — inclusive em refresh e em navegação de
    volta pra home — não fica preso a sessionStorage. */
 
 import { useEffect, useRef, useState } from 'react';
 import { usePixelTransition } from '@/components/transition/PixelTransition';
+import { playLoader, type LoaderColors } from './winiston-loader';
 
-const NAME = 'Winiston Alle';
-const BOOT_MS = 2600;
-const BOOT_ENTRANCE_MS = 500;
+/* A paleta do site: branco e azul de destaque dos tokens do globals.css, mais
+   um azul-céu como segunda cor, no lugar do verde do loader original, pra
+   animação ficar na mesma família do resto do portfólio. */
+const COLORS: LoaderColors = {
+  white: '#f3f6ff',
+  blue: '#5b9cff',
+  green: '#7dd3fc',
+};
 
 type Phase = 'boot' | 'done';
 
@@ -29,10 +38,8 @@ export default function BootIntro({
 }) {
   const { revealPage, setBootActive } = usePixelTransition();
   const [phase, setPhase] = useState<Phase>('boot');
-  const [progress, setProgress] = useState(0);
-  const [bootReady, setBootReady] = useState(false);
+  const stageRef = useRef<HTMLDivElement>(null);
   const handedOffRef = useRef(false);
-  const skippedRef = useRef(false);
 
   const handOff = () => {
     if (handedOffRef.current) return;
@@ -59,43 +66,27 @@ export default function BootIntro({
     return () => document.body.classList.remove('boot-intro-active');
   }, [phase]);
 
-  /* fase boot — entra, depois a barra de progresso enche até o handoff */
   useEffect(() => {
-    if (skippedRef.current) return;
-
     const reduced = window.matchMedia(
       '(prefers-reduced-motion: reduce)',
     ).matches;
-    if (reduced) {
+    const stage = stageRef.current;
+    if (reduced || !stage) {
       handOff();
       return;
     }
 
-    const entrance = window.setTimeout(
-      () => setBootReady(true),
-      BOOT_ENTRANCE_MS,
-    );
-
-    let raf = 0;
-    let start = 0;
-    const tick = (now: number) => {
-      if (!start) start = now;
-      const t = Math.min(1, (now - start) / BOOT_MS);
-      setProgress(t);
-      if (t < 1) {
-        raf = requestAnimationFrame(tick);
-      } else {
-        handOff();
-      }
+    const loader = playLoader(stage, { colors: COLORS, onDone: handOff });
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape' || e.key === 'Enter' || e.key === ' ') loader.skip();
     };
-    const startTimer = window.setTimeout(() => {
-      raf = requestAnimationFrame(tick);
-    }, BOOT_ENTRANCE_MS);
+    stage.addEventListener('click', loader.skip);
+    document.addEventListener('keydown', onKey);
 
     return () => {
-      window.clearTimeout(entrance);
-      window.clearTimeout(startTimer);
-      cancelAnimationFrame(raf);
+      stage.removeEventListener('click', loader.skip);
+      document.removeEventListener('keydown', onKey);
+      loader.destroy();
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -104,20 +95,7 @@ export default function BootIntro({
 
   return (
     <div className="boot-intro" role="presentation" aria-hidden="true">
-      <div
-        className={`boot-intro__boot${bootReady ? ' boot-intro__boot--in' : ''}`}
-      >
-        <span className="boot-intro__name">{NAME}</span>
-        <div className="boot-intro__bar">
-          <div
-            className="boot-intro__bar-fill"
-            style={{ transform: `scaleX(${progress})` }}
-          />
-        </div>
-        <span className="boot-intro__percent">
-          {Math.round(progress * 100)}%
-        </span>
-      </div>
+      <div ref={stageRef} className="boot-intro__stage" />
     </div>
   );
 }

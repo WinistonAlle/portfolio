@@ -183,9 +183,9 @@ body.scroll-locked .site-header {
   transition: opacity 0.3s ease;
 }
 
-/* Intro de boot da home (BootIntro.tsx) — tela cheia preta que entrega pra
-   cortina de pixel no final, então usa o mesmo --background pra não ter
-   costura na troca. */
+/* Abertura da home (BootIntro.tsx): o nome desenhado em SVG sobre tela cheia,
+   que entrega pra cortina de pixel no final, então usa o mesmo --background
+   pra não ter costura na troca. */
 .boot-intro {
   position: fixed;
   inset: 0;
@@ -196,69 +196,15 @@ body.scroll-locked .site-header {
   justify-content: center;
 }
 
-.boot-intro__boot {
+.boot-intro__stage {
   display: flex;
-  flex-direction: column;
   align-items: center;
-  gap: 30px;
-  opacity: 0;
-  transform: scale(0.92);
-  transition:
-    opacity 0.5s cubic-bezier(0.22, 1, 0.36, 1),
-    transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
-}
-
-.boot-intro__boot--in {
-  opacity: 1;
-  transform: scale(1);
-}
-
-.boot-intro__name {
-  font-family: var(--font-display), system-ui, sans-serif;
-  font-size: 1.75rem;
-  font-weight: 700;
-  letter-spacing: -0.01em;
-  color: var(--foreground);
-  animation: boot-intro-breathe 2.4s ease-in-out infinite;
-}
-
-.boot-intro__bar {
-  position: relative;
-  width: 260px;
-  height: 5px;
-  border-radius: 999px;
-  background: var(--line);
-  overflow: hidden;
-}
-
-.boot-intro__bar-fill {
-  position: relative;
+  justify-content: center;
   width: 100%;
   height: 100%;
-  transform-origin: left;
-  background: var(--accent);
-  box-shadow: 0 0 16px 1px color-mix(in srgb, var(--accent) 70%, transparent);
-  transform: scaleX(0);
-}
-
-/* Continua monoespaçada: é um número que muda depressa, e largura fixa é o
-   que impede o texto de pular a cada dígito. Aqui mono resolve um problema. */
-.boot-intro__percent {
-  font-family: var(--font-mono), ui-monospace, monospace;
-  font-size: 0.75rem;
-  letter-spacing: 0.1em;
-  color: var(--muted);
-  font-variant-numeric: tabular-nums;
-}
-
-@keyframes boot-intro-breathe {
-  0%,
-  100% {
-    opacity: 0.75;
-  }
-  50% {
-    opacity: 1;
-  }
+  padding: 0 16px;
+  /* Clique pula a animação (BootIntro). */
+  cursor: pointer;
 }
 
 /* Cortina de pixels da transição de página (PixelTransition.tsx).
