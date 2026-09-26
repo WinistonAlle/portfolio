@@ -10,13 +10,13 @@ import type { Locale } from '@/i18n/config';
    isso ocupa uma tela inteira: é o que o notebook mostra na abertura.
 
    À esquerda, o que eu faço e pra quem; à direita, a foto em close, maior que
-   a coluna, com os ombros saindo pela base e anéis e brilho atrás.
+   a coluna, com os ombros saindo pela base e uma luz lateral atrás.
 
    Parallax: cada camada com `data-depth` desliza em sentido contrário ao
-   cursor, e quanto maior a profundidade, mais ela anda. O fundo (anéis, halo)
-   anda mais que a foto, e o texto anda um pouco no sentido oposto, o que dá a
-   sensação de planos separados. Na rolagem, a foto e os anéis sobem mais
-   devagar que a página. Tudo em `transform`, num laço que para sozinho quando
+   cursor, e quanto maior a profundidade, mais ela anda. A luz do fundo anda
+   mais que a foto, e o texto anda um pouco no sentido oposto, o que dá a
+   sensação de planos separados. Na rolagem, a foto e a luz sobem mais devagar
+   que a página. Tudo em `transform`, num laço que para sozinho quando
    as camadas assentam. */
 export default function Hero({
   locale,
@@ -127,16 +127,11 @@ export default function Hero({
 
         {/* Close: a foto é posicionada pelo alto da cabeça e é maior que a
             coluna; os ombros saem pela base do hero, onde o esfumado
-            (.hero__base) apaga o corte. Atrás, do fundo para a frente: anéis
-            (os que mais andam), halo e a foto. */}
+            (.hero__base) apaga o corte. Atrás, uma luz lateral vinda do alto
+            à direita: separa o cabelo do fundo sem virar círculo em volta da
+            cabeça (anéis e halo redondo pareciam auréola). */}
         <div className="hero__foto relative self-stretch">
-          <span className="hero__anel hero__anel--fora" data-depth="34" data-scroll="0.28" aria-hidden="true">
-            <i />
-          </span>
-          <span className="hero__anel hero__anel--dentro" data-depth="22" data-scroll="0.2" aria-hidden="true">
-            <i />
-          </span>
-          <span className="hero__halo" data-depth="16" data-scroll="0.14" aria-hidden="true" />
+          <span className="hero__luz" data-depth="20" data-scroll="0.16" aria-hidden="true" />
           <div className="hero__img-wrap relative" data-depth="9" data-scroll="0.08">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img

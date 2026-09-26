@@ -173,89 +173,29 @@ h3 {
 
 /* As camadas do parallax são movidas por transform (Hero.tsx). */
 .hero__img-wrap,
-.hero__halo,
-.hero__anel,
+.hero__luz,
 .hero__texto {
   will-change: transform;
 }
 
-/* Brilho azul atrás da cabeça: separa o cabelo escuro do fundo escuro. */
-.hero__halo {
+/* Luz lateral: vem do alto à direita, como um recorte de estúdio, e separa o
+   cabelo escuro do fundo escuro. Elipse deslocada e difusa, de propósito longe
+   do centro da cabeça: um círculo concêntrico ali lia como auréola. */
+.hero__luz {
   position: absolute;
-  left: 50%;
-  top: 4%;
-  width: 90%;
-  aspect-ratio: 1;
-  margin-left: -45%;
+  top: -12%;
+  right: -18%;
+  width: 95%;
+  height: 80%;
   border-radius: 50%;
   background: radial-gradient(
-    circle,
-    color-mix(in srgb, var(--accent) 28%, transparent) 0%,
-    color-mix(in srgb, var(--accent) 9%, transparent) 45%,
-    transparent 70%
+    closest-side,
+    color-mix(in srgb, var(--accent) 24%, transparent),
+    color-mix(in srgb, var(--accent) 7%, transparent) 55%,
+    transparent
   );
+  filter: blur(8px);
   pointer-events: none;
-}
-
-/* Anéis finos em volta da cabeça, cada um com um ponto de luz "orbitando".
-   Eles são o plano de trás do parallax: andam mais que a foto. */
-.hero__anel {
-  position: absolute;
-  left: 50%;
-  top: 34%;
-  aspect-ratio: 1;
-  border-radius: 50%;
-  border: 1px solid color-mix(in srgb, var(--accent) 22%, transparent);
-  pointer-events: none;
-}
-
-.hero__anel i {
-  position: absolute;
-  inset: -3px;
-  border-radius: 50%;
-  animation: hero-orbita 26s linear infinite;
-}
-
-.hero__anel i::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 50%;
-  width: 6px;
-  height: 6px;
-  margin-left: -3px;
-  border-radius: 50%;
-  background: var(--accent);
-  box-shadow: 0 0 12px 2px color-mix(in srgb, var(--accent) 70%, transparent);
-}
-
-.hero__anel--fora {
-  width: 118%;
-  margin: -59% 0 0 -59%;
-  border-style: dashed;
-  border-color: color-mix(in srgb, var(--accent) 14%, transparent);
-}
-
-.hero__anel--dentro {
-  width: 82%;
-  margin: -41% 0 0 -41%;
-}
-
-.hero__anel--dentro i {
-  animation-duration: 18s;
-  animation-direction: reverse;
-}
-
-@keyframes hero-orbita {
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .hero__anel i {
-    animation: none;
-  }
 }
 
 @media (min-width: 1024px) {
