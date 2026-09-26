@@ -1,21 +1,17 @@
 import GlowButton, { GlowArrow } from '@/components/ui/GlowButton';
 import TituloAcento from '@/components/text/TituloAcento';
 import Timeline from '@/components/timeline/Timeline';
-import CrachaPreguicoso from './CrachaPreguicoso';
 import { getDictionary } from '@/i18n';
 import type { Locale } from '@/i18n/config';
 
 type Dict = Awaited<ReturnType<typeof getDictionary>>;
 
-/* Quem faz, em versão curta: a bio, o crachá e a linha do tempo.
+/* Quem faz, em versão curta: a bio e a linha do tempo.
  *
- * O crachá 3D é o componente mais pesado do site (three, fiber, drei e o
- * rapier em wasm) e a home já carrega three pela abertura do MacBook. Ele vem
- * assim mesmo porque é a assinatura da página, mas com duas travas no
- * CrachaPreguicoso: só é baixado quando o bloco chega perto da tela, e a
- * física é pausada quando ele sai de quadro. Quem não rola até aqui não paga
- * por ele.
- */
+ * O crachá 3D morava aqui ao lado da bio e saiu a pedido: na home ele
+ * destoava da abertura nova. Continua sendo a abertura da página "sobre mim",
+ * onde é o que a pessoa foi ver (e o HomeShell segue aquecendo o cache dele,
+ * pra que chegar lá seja instantâneo). */
 export default function SecaoSobre({
   locale,
   dict,
@@ -29,38 +25,18 @@ export default function SecaoSobre({
         <TituloAcento texto={dict.home.sobreTitulo} />
       </h2>
 
-      {/* Duas colunas no desktop, empilhadas no celular. O crachá vem DEPOIS
-          do texto na ordem do DOM: num aparelho estreito é a bio que precisa
-          aparecer primeiro, e quem lê por leitor de tela não deve esbarrar
-          num canvas decorativo antes do conteúdo. */}
-      <div className="mt-8 grid grid-cols-1 items-start gap-8 lg:grid-cols-[1.05fr_0.95fr] lg:gap-4">
-        <div className="max-w-2xl">
-          <p className="text-xl leading-relaxed text-muted lg:text-2xl">
-            {dict.about.bioLead}{' '}
-            <span className="text-foreground">{dict.about.bioName}</span>
-            {dict.about.bioRest}
-          </p>
+      <div className="mt-8 max-w-3xl">
+        <p className="text-xl leading-relaxed text-muted lg:text-2xl">
+          {dict.about.bioLead}{' '}
+          <span className="text-foreground">{dict.about.bioName}</span>
+          {dict.about.bioRest}
+        </p>
 
-          <div className="mt-10">
-            <GlowButton href={`/${locale}/sobre-mim`}>
-              {dict.home.sobreVerMais}
-              <GlowArrow />
-            </GlowButton>
-          </div>
-        </div>
-
-        {/* Altura fixa e declarada: o canvas do crachá mede o slot pra
-            calcular a escala do cartão, então uma caixa que colapsa devolve
-            um crachá do tamanho errado — e é por isso que a altura é maior no
-            desktop. O tamanho do cartão é DERIVADO da altura do canvas (a
-            câmera tem distância e campo fixos), então subir a caixa é o único
-            jeito de o crachá crescer. Com 520px ele ficava miúdo ao lado de
-            uma coluna de texto larga. */}
-        {/* No celular o crachá ganhou altura: a 380px ele aparecia como uma
-            miniatura no meio de uma coluna larga, e é o único objeto da seção
-            que vale ser olhado. */}
-        <div className="relative h-[540px] w-full lg:h-[620px]">
-          <CrachaPreguicoso />
+        <div className="mt-10">
+          <GlowButton href={`/${locale}/sobre-mim`}>
+            {dict.home.sobreVerMais}
+            <GlowArrow />
+          </GlowButton>
         </div>
       </div>
 
