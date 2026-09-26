@@ -123,6 +123,119 @@ h3 {
   animation: hero-rolar 2.4s ease-in-out infinite;
 }
 
+/* ---------- Hero da home (Hero.tsx) ---------- */
+.hero__eyebrow {
+  color: var(--muted);
+  margin-bottom: 1.4rem;
+}
+
+.hero__titulo {
+  font-family: var(--font-display), system-ui, sans-serif;
+  font-size: clamp(2.6rem, 5.4vw, 5.6rem);
+  font-weight: 700;
+  line-height: 1.02;
+  letter-spacing: -0.035em;
+  color: var(--foreground);
+  text-wrap: balance;
+  max-width: 13ch;
+}
+
+.hero__sub {
+  margin-top: 1.5rem;
+  max-width: 34rem;
+  font-size: clamp(1.02rem, 1.25vw, 1.2rem);
+  line-height: 1.6;
+  color: var(--muted);
+  text-wrap: pretty;
+}
+
+/* Prova: fatos em mono abaixo dos botões. No celular, um por linha; no
+   desktop, lado a lado separados por um ponto (empilhados no celular porque,
+   quebrando, o ponto ia parar no começo da linha). */
+.hero__prova {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+  margin-top: 2.4rem;
+  padding: 0;
+  list-style: none;
+  font-family: var(--font-mono), ui-monospace, monospace;
+  font-size: 0.78rem;
+  letter-spacing: 0.02em;
+  color: color-mix(in srgb, var(--foreground) 70%, transparent);
+}
+
+/* Bolinha como item flex: quando o texto quebra, a segunda linha alinha com
+   o texto e não volta para baixo da bolinha. */
+.hero__prova li {
+  display: flex;
+  align-items: baseline;
+  gap: 0.6rem;
+}
+
+.hero__prova li::before {
+  content: '';
+  flex: none;
+  width: 0.35rem;
+  height: 0.35rem;
+  border-radius: 50%;
+  background: var(--accent);
+  transform: translateY(-0.1em);
+}
+
+/* "Role para ver" alinhado com a coluna de texto (mesma margem da grade). */
+.hero__rolar {
+  left: max(2.5rem, calc((100% - 84rem) / 2 + 2.5rem));
+}
+
+/* Foto: grande, apoiada na base, esfumada embaixo para o recorte reto do busto
+   não virar uma linha dura contra o fundo. */
+.hero__img {
+  width: clamp(18rem, 78vw, 26rem);
+  max-height: calc(100svh - var(--header-h) - 2rem);
+  object-fit: contain;
+  -webkit-mask-image: linear-gradient(to bottom, #000 78%, transparent 100%);
+  mask-image: linear-gradient(to bottom, #000 78%, transparent 100%);
+}
+
+/* Brilho azul atrás da cabeça: separa o cabelo escuro do fundo escuro. */
+.hero__halo {
+  position: absolute;
+  left: 50%;
+  top: 8%;
+  width: 90%;
+  aspect-ratio: 1;
+  transform: translateX(-50%);
+  border-radius: 50%;
+  background: radial-gradient(
+    circle,
+    color-mix(in srgb, var(--accent) 26%, transparent) 0%,
+    color-mix(in srgb, var(--accent) 8%, transparent) 45%,
+    transparent 70%
+  );
+  pointer-events: none;
+}
+
+@media (min-width: 1024px) {
+  .hero__prova {
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 0.4rem 1.4rem;
+  }
+
+  .hero__img {
+    width: min(100%, 44rem);
+  }
+
+  .hero__halo {
+    left: auto;
+    right: 4%;
+    transform: none;
+    width: 80%;
+  }
+}
+
+
 @keyframes hero-rolar {
   0%        { transform: scaleY(0);   opacity: 0; }
   35%       { transform: scaleY(1);   opacity: 1; }
@@ -631,57 +744,6 @@ body.scroll-locked .site-header {
 
 .portal--entered .portal__frame {
   display: none;
-}
-
-/* Adesivos de tecnologia do hero (TechStickers.tsx). O giro base vem de --r,
-   escrito no elemento; o hover soma o seu por cima. Só transform e filter,
-   sem JS, então não custa nada de desempenho. */
-.tech-sticker {
-  transform: translate(-50%, -50%) rotate(var(--r, 0deg));
-  transition:
-    transform 0.35s cubic-bezier(0.16, 1, 0.3, 1),
-    filter 0.35s ease;
-  filter: drop-shadow(0 10px 22px rgba(0, 0, 0, 0.45));
-}
-
-.tech-sticker:hover {
-  transform: translate(-50%, -50%) rotate(calc(var(--r, 0deg) * 0.35))
-    translateY(-8px) scale(1.09);
-  filter: drop-shadow(0 16px 30px rgba(0, 0, 0, 0.55));
-}
-
-.tech-sticker__img {
-  position: relative;
-}
-
-/* Brilho atrás do adesivo. Gradiente radial já é suave por natureza, então
-   não precisa de filter:blur (caro se animado a cada frame) — só a
-   opacidade troca no hover, o que o GPU faz de graça. */
-.tech-sticker__glow {
-  position: absolute;
-  inset: -40%;
-  z-index: -1;
-  border-radius: 50%;
-  background: radial-gradient(closest-side, var(--glow, #fff) 0%, transparent 72%);
-  opacity: 0;
-  transition: opacity 0.4s ease;
-  pointer-events: none;
-}
-
-.tech-sticker:hover .tech-sticker__glow {
-  opacity: 0.6;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .tech-sticker,
-  .tech-sticker:hover {
-    transition: none;
-    transform: translate(-50%, -50%) rotate(var(--r, 0deg));
-  }
-
-  .tech-sticker__glow {
-    display: none;
-  }
 }
 
 /* Texto em partículas (ParticleText.jsx). O canvas ocupa o container, então

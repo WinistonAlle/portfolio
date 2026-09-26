@@ -29,7 +29,18 @@ const pt = {
   },
 
   home: {
-    title: 'PORTFÓLIO',
+    /* Hero: o maior espaço da página diz o que eu faço e pra quem, em vez do
+       rótulo "PORTFÓLIO". Os números da prova ({total}, {live}) são
+       preenchidos na página a partir de projects.ts, pra nunca ficarem
+       desatualizados quando entra um projeto novo. */
+    eyebrow: 'Winiston Alle · desenvolvedor full-stack',
+    title: 'Sistemas e sites que *empresas usam* todo dia.',
+    sub: 'Do portal de pedidos ao caixa da loja: eu construo, coloco no ar e acompanho com gente usando de verdade.',
+    prova: [
+      '{total} projetos',
+      '{live} no ar',
+      'um portal de pedidos que 250 funcionários usam todo dia',
+    ],
     ctaProjects: 'Ver os projetos',
     ctaAbout: 'Sobre mim',
 

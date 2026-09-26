@@ -28,12 +28,22 @@ type Nav = { about: string; projects: string; contact: string };
 export default function HomeShell({
   locale,
   t,
+  prova,
   nav,
   switchLabel,
   children,
 }: {
   locale: Locale;
-  t: { title: string; ctaProjects: string; ctaAbout: string; rolar: string };
+  t: {
+    eyebrow: string;
+    title: string;
+    sub: string;
+    ctaProjects: string;
+    ctaAbout: string;
+    rolar: string;
+  };
+  /** Linha de prova do hero, já com os números preenchidos no servidor. */
+  prova: string[];
   nav: Nav;
   switchLabel: string;
   /* As seções que vêm abaixo do hero.
@@ -55,7 +65,7 @@ export default function HomeShell({
       {/* A home inteira mora dentro do MacBook: a abertura é só a moldura
           sobre o fundo animado, e a rolagem entra no site. */}
       <MacbookPortal header={{ locale, nav, switchLabel }}>
-        <Hero locale={locale} t={t} />
+        <Hero locale={locale} t={t} prova={prova} />
       </MacbookPortal>
 
       {/* Fora do portal de propósito: dentro, este conteúdo seria emoldurado e
