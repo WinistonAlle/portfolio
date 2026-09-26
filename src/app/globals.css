@@ -135,53 +135,40 @@ h3 {
   max-width: 13ch;
 }
 
-/* Prova: fatos em mono abaixo dos botões. No celular, um por linha; no
-   desktop, lado a lado separados por um ponto (empilhados no celular porque,
-   quebrando, o ponto ia parar no começo da linha). */
-.hero__prova {
-  display: flex;
-  flex-direction: column;
-  gap: 0.45rem;
-  margin-top: 2.4rem;
-  padding: 0;
-  list-style: none;
-  font-family: var(--font-mono), ui-monospace, monospace;
-  font-size: 0.78rem;
-  letter-spacing: 0.02em;
-  color: color-mix(in srgb, var(--foreground) 70%, transparent);
-}
-
-/* Bolinha como item flex: quando o texto quebra, a segunda linha alinha com
-   o texto e não volta para baixo da bolinha. */
-.hero__prova li {
-  display: flex;
-  align-items: baseline;
-  gap: 0.6rem;
-}
-
-.hero__prova li::before {
-  content: '';
-  flex: none;
-  width: 0.35rem;
-  height: 0.35rem;
-  border-radius: 50%;
-  background: var(--accent);
-  transform: translateY(-0.1em);
-}
-
 /* "Role para ver" alinhado com a coluna de texto (mesma margem da grade). */
 .hero__rolar {
   left: max(2.5rem, calc((100% - 88rem) / 2 + 2.5rem));
 }
 
-/* Foto: grande, apoiada na base, esfumada embaixo para o recorte reto do busto
-   não virar uma linha dura contra o fundo. */
+/* Foto em close: posicionada pelo alto da cabeça e maior que a coluna, com os
+   ombros saindo pela base do hero (a seção corta, .hero__base esfuma). A
+   centralização é por margem, não por transform, porque o transform é do
+   parallax. */
+.hero__foto {
+  min-height: 30rem;
+}
+
+.hero__img-wrap {
+  position: absolute;
+  top: 0.5rem;
+  left: 50%;
+  width: min(128vw, 36rem);
+  margin-left: calc(min(128vw, 36rem) / -2);
+}
+
 .hero__img {
-  width: clamp(20rem, 92vw, 30rem);
-  max-height: calc(100svh - var(--header-h));
-  object-fit: contain;
-  -webkit-mask-image: linear-gradient(to bottom, #000 80%, transparent 100%);
-  mask-image: linear-gradient(to bottom, #000 80%, transparent 100%);
+  width: 100%;
+  height: auto;
+}
+
+/* Esfumado na base do hero: apaga o corte dos ombros contra o fundo. */
+.hero__base {
+  position: absolute;
+  inset: auto 0 0;
+  z-index: 15;
+  height: 22%;
+  background: linear-gradient(to bottom, transparent, var(--background));
+  pointer-events: none;
 }
 
 /* As camadas do parallax são movidas por transform (Hero.tsx). */
@@ -215,7 +202,7 @@ h3 {
 .hero__anel {
   position: absolute;
   left: 50%;
-  top: 30%;
+  top: 34%;
   aspect-ratio: 1;
   border-radius: 50%;
   border: 1px solid color-mix(in srgb, var(--accent) 22%, transparent);
@@ -272,14 +259,14 @@ h3 {
 }
 
 @media (min-width: 1024px) {
-  .hero__prova {
-    flex-direction: row;
-    flex-wrap: wrap;
-    gap: 0.4rem 1.4rem;
+  .hero__foto {
+    min-height: 0;
   }
 
-  .hero__img {
-    width: min(100%, 52rem);
+  .hero__img-wrap {
+    top: 2%;
+    width: min(135%, 66rem);
+    margin-left: calc(min(135%, 66rem) / -2);
   }
 }
 

@@ -9,8 +9,8 @@ import type { Locale } from '@/i18n/config';
 /* Abertura da home. Vive dentro do portal do MacBook (montado na page), por
    isso ocupa uma tela inteira: é o que o notebook mostra na abertura.
 
-   À esquerda, o que eu faço e pra quem, com prova logo abaixo; à direita, a
-   foto grande, apoiada na base, com anéis e brilho atrás.
+   À esquerda, o que eu faço e pra quem; à direita, a foto em close, maior que
+   a coluna, com os ombros saindo pela base e anéis e brilho atrás.
 
    Parallax: cada camada com `data-depth` desliza em sentido contrário ao
    cursor, e quanto maior a profundidade, mais ela anda. O fundo (anéis, halo)
@@ -21,7 +21,6 @@ import type { Locale } from '@/i18n/config';
 export default function Hero({
   locale,
   t,
-  prova,
 }: {
   locale: Locale;
   t: {
@@ -30,7 +29,6 @@ export default function Hero({
     ctaAbout: string;
     rolar: string;
   };
-  prova: string[];
 }) {
   const ref = useRef<HTMLElement>(null);
 
@@ -125,18 +123,13 @@ export default function Hero({
             </GlowButton>
           </div>
 
-          {/* Fatos verificáveis, em mono: é número e dado, que é o papel da
-              fonte mono no site. */}
-          <ul className="hero__prova">
-            {prova.map((item) => (
-              <li key={item}>{item}</li>
-            ))}
-          </ul>
         </div>
 
-        {/* A base do busto encosta na base da seção. Atrás dela, do fundo
-            para a frente: anéis (os que mais andam), halo e a foto. */}
-        <div className="hero__foto relative flex justify-center self-end lg:justify-end">
+        {/* Close: a foto é posicionada pelo alto da cabeça e é maior que a
+            coluna; os ombros saem pela base do hero, onde o esfumado
+            (.hero__base) apaga o corte. Atrás, do fundo para a frente: anéis
+            (os que mais andam), halo e a foto. */}
+        <div className="hero__foto relative self-stretch">
           <span className="hero__anel hero__anel--fora" data-depth="34" data-scroll="0.28" aria-hidden="true">
             <i />
           </span>
@@ -155,6 +148,8 @@ export default function Hero({
           </div>
         </div>
       </div>
+
+      <span className="hero__base" aria-hidden="true" />
 
       {/* Indicador de que a página continua: o hero termina exatamente na
           dobra, e sem nenhuma pista uma tela que acaba certinho na borda lê

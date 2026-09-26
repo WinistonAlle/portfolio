@@ -29,11 +29,6 @@ const en: typeof pt = {
 
   home: {
     title: 'Systems and websites *businesses use* every day.',
-    prova: [
-      '{total} projects',
-      '{live} live',
-      'an ordering portal 250 employees use every day',
-    ],
     ctaProjects: 'See the projects',
     ctaAbout: 'About me',
 

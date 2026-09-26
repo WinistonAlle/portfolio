@@ -5,7 +5,6 @@ import SecaoStack from '@/components/home/secoes/SecaoStack';
 import SecaoProjetos from '@/components/home/secoes/SecaoProjetos';
 import SecaoContato from '@/components/home/secoes/SecaoContato';
 import { getDictionary } from '@/i18n';
-import { PROJECTS } from '@/data/projects';
 import { isLocale } from '@/i18n/config';
 
 /* A home é página única: abaixo do hero vêm recortes de "sobre mim", da
@@ -26,11 +25,6 @@ export default async function Home(props: PageProps<'/[lang]'>) {
     <HomeShell
       locale={lang}
       t={dict.home}
-      prova={dict.home.prova.map((item) =>
-        item
-          .replace('{total}', String(PROJECTS.length))
-          .replace('{live}', String(PROJECTS.filter((p) => p.status === 'live').length)),
-      )}
       nav={dict.nav}
       switchLabel={dict.header.switchLabel}
     >

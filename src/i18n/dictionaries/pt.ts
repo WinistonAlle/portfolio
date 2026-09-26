@@ -30,15 +30,8 @@ const pt = {
 
   home: {
     /* Hero: o maior espaço da página diz o que eu faço e pra quem, em vez do
-       rótulo "PORTFÓLIO". Os números da prova ({total}, {live}) são
-       preenchidos na página a partir de projects.ts, pra nunca ficarem
-       desatualizados quando entra um projeto novo. */
+       rótulo "PORTFÓLIO". */
     title: 'Sistemas e sites que *empresas usam* todo dia.',
-    prova: [
-      '{total} projetos',
-      '{live} no ar',
-      'um portal de pedidos que 250 funcionários usam todo dia',
-    ],
     ctaProjects: 'Ver os projetos',
     ctaAbout: 'Sobre mim',
 
