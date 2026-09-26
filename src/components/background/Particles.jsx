@@ -111,9 +111,13 @@ const Particles = ({
   scrollParallaxCap = 0,
   /** Extra roll, in radians, applied across one viewport of scroll. */
   scrollRoll = 0,
+  /** Pausado: o contexto e os shaders continuam vivos, mas nada é desenhado. */
+  paused = false,
   className = '',
 }) => {
   const containerRef = useRef(null);
+  const pausedRef = useRef(paused);
+  const resumeRef = useRef(() => {});
   const mouseRef = useRef({ x: 0, y: 0 });
   const scrollRef = useRef(0);
 
@@ -121,8 +125,10 @@ const Particles = ({
     const container = containerRef.current;
     if (!container) return;
 
-    const dpr =
-      pixelRatio > 0 ? pixelRatio : Math.min(window.devicePixelRatio || 1, 2);
+    /* DPR 1 por padrão: são pontos difusos com alfa, e o campo cobre a tela
+       inteira em todas as páginas. Em Retina, DPR 2 desenhava quatro vezes
+       mais pixels por quadro sem ganho visível. */
+    const dpr = pixelRatio > 0 ? pixelRatio : 1;
 
     const renderer = new Renderer({ dpr, depth: false, alpha: true });
     const gl = renderer.gl;
@@ -235,6 +241,12 @@ const Particles = ({
     let spin = 0;
 
     const update = (t) => {
+      /* Pausado, o laço simplesmente para; `resumeRef` religa sem o salto de
+         tempo que o intervalo parado causaria. */
+      if (pausedRef.current) {
+        animationFrameId = 0;
+        return;
+      }
       animationFrameId = requestAnimationFrame(update);
       const delta = t - lastTime;
       lastTime = t;
@@ -274,9 +286,15 @@ const Particles = ({
       renderer.render({ scene: particles, camera });
     };
 
-    animationFrameId = requestAnimationFrame(update);
+    resumeRef.current = () => {
+      if (animationFrameId) return;
+      lastTime = performance.now();
+      animationFrameId = requestAnimationFrame(update);
+    };
+    if (!pausedRef.current) animationFrameId = requestAnimationFrame(update);
 
     return () => {
+      resumeRef.current = () => {};
       window.removeEventListener('resize', resize);
       if (moveParticlesOnHover)
         window.removeEventListener('mousemove', handleMouseMove);
@@ -301,6 +319,11 @@ const Particles = ({
     scrollParallaxCap,
     scrollRoll,
   ]);
+
+  useEffect(() => {
+    pausedRef.current = paused;
+    if (!paused) resumeRef.current();
+  }, [paused]);
 
   return (
     <div ref={containerRef} className={`relative h-full w-full ${className}`} />

@@ -19,6 +19,8 @@ export interface ParticlesProps {
   scrollParallaxCap?: number;
   /** Extra roll, in radians, applied across one viewport of scroll. */
   scrollRoll?: number;
+  /** Pausado: contexto e shaders vivos, nada desenhado. */
+  paused?: boolean;
   className?: string;
 }
 

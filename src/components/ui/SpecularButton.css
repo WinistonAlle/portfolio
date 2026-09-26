@@ -1,6 +1,7 @@
 /* Botão de vidro com um brilho especular correndo na borda, do React Bits.
-   Só o essencial do CSS original ficou: tamanhos, foco e o canvas que sangra
-   pra fora da borda. O resto do visual vem do shader. */
+   O original desenhava o brilho num canvas WebGL por botão; aqui ele é um
+   conic-gradient recortado no formato da borda. O ângulo (--sb-angle) e a
+   intensidade (--sb-shine) vêm do specular-engine.ts. */
 
 .specular-button {
   --sb-radius: 18px;
@@ -73,18 +74,44 @@
   padding: 18px 40px;
 }
 
-/* Canvas extends past the button so the rim glow can bleed outside the edge */
+/* Aro de base: a linha discreta que dá espessura à borda o tempo todo. */
 .specular-button__fx {
   position: absolute;
-  inset: -20px;
-  pointer-events: none;
+  inset: 0;
   z-index: 1;
+  border-radius: inherit;
+  pointer-events: none;
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--sb-base) 45%, transparent);
 }
 
-.specular-button__fx canvas {
-  display: block;
-  width: 100%;
-  height: 100%;
+/* O reflexo: dois feixes opostos (o lado virado para a luz e o do outro lado,
+   como no shader original), recortados só na borda pela máscara. */
+.specular-button__fx::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  padding: var(--sb-thickness, 1px);
+  border-radius: inherit;
+  background: conic-gradient(
+    from calc(var(--sb-angle, 0deg) - var(--sb-spread, 50deg)),
+    transparent 0deg,
+    var(--sb-line) var(--sb-spread, 50deg),
+    transparent calc(var(--sb-spread, 50deg) * 2),
+    transparent 180deg,
+    var(--sb-line) calc(180deg + var(--sb-spread, 50deg)),
+    transparent calc(180deg + var(--sb-spread, 50deg) * 2)
+  );
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  mask-composite: exclude;
+  opacity: var(--sb-shine, 1);
+  /* Um halo leve por fora, no lugar do espalhamento do gaussiano do shader. */
+  filter: drop-shadow(0 0 3px color-mix(in srgb, var(--sb-line) 55%, transparent));
 }
 
 .specular-button__label {

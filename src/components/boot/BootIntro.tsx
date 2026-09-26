@@ -76,17 +76,34 @@ export default function BootIntro({
       return;
     }
 
-    const loader = playLoader(stage, { colors: COLORS, onDone: handOff });
+    /* A animação é marcada pelo relógio, então qualquer tarefa longa no meio
+       dela vira um salto visível. As cenas 3D da home (anéis, MacBook) são
+       criadas logo no começo e seguram o navegador por uns 300ms. Esperar o
+       primeiro intervalo livre (no máximo 2s) tira esse engasgo de dentro da
+       animação: ele acontece com a tela ainda lisa, onde não aparece. A
+       animação roda 15% mais rápida para compensar a espera. */
+    let loader: ReturnType<typeof playLoader> | null = null;
+    const skip = () => loader?.skip();
     const onKey = (e: KeyboardEvent) => {
-      if (e.key === 'Escape' || e.key === 'Enter' || e.key === ' ') loader.skip();
+      if (e.key === 'Escape' || e.key === 'Enter' || e.key === ' ') skip();
     };
-    stage.addEventListener('click', loader.skip);
+    const pedir =
+      window.requestIdleCallback ??
+      (((fn: () => void) => window.setTimeout(fn, 300)) as unknown as typeof window.requestIdleCallback);
+    const idle = pedir(
+      () => {
+        loader = playLoader(stage, { colors: COLORS, speed: 1.15, onDone: handOff });
+      },
+      { timeout: 2000 },
+    );
+    stage.addEventListener('click', skip);
     document.addEventListener('keydown', onKey);
 
     return () => {
-      stage.removeEventListener('click', loader.skip);
+      if (window.cancelIdleCallback) window.cancelIdleCallback(idle);
+      stage.removeEventListener('click', skip);
       document.removeEventListener('keydown', onKey);
-      loader.destroy();
+      loader?.destroy();
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);

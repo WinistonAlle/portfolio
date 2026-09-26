@@ -116,7 +116,17 @@ export default function Lanyard({
     >
       <Canvas
         camera={{ position, fov }}
-        dpr={[1, isMobile ? 1.5 : 2]}
+        /* Teto 1.5 e não 2: o palco tem a largura da viewport, e em tela
+           Retina o 2 desenhava 78% mais pixels por quadro sem diferença que
+           se note no cartão. */
+        dpr={[1, 1.5]}
+        /* Pausado (fora de quadro), não fica desenhando. `paused` do Physics
+           só congela a simulação; sem isto o canvas seguia renderizando a cena
+           inteira a cada quadro, inclusive com a pessoa lá no contato.
+           'demand' e não 'never': ele ainda desenha UM quadro ao montar, e é
+           nesse quadro que os shaders compilam. Com 'never' a compilação ficava
+           para a primeira aparição, no meio da rolagem, e travava ali. */
+        frameloop={paused ? 'demand' : 'always'}
         gl={{ alpha: transparent }}
         /* No dedo o crachá é enfeite, não brinquedo.
          *

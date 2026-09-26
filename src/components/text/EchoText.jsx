@@ -148,6 +148,20 @@ export default function EchoText({
       };
     }
 
+    /* O desfoque de cada eco depende só da profundidade dele, então é fixo:
+       aplicado uma vez aqui. Reaplicar `filter` a cada quadro obrigava o
+       navegador a refazer o desfoque de todas as cópias o tempo todo. */
+    for (let index = 1; index <= echoCount; index += 1) {
+      const copy = copyRefs.current[index];
+      if (!copy) continue;
+      const depth = echoCount ? index / echoCount : 0;
+      copy.style.filter =
+        safeBlur > 0 ? `blur(${(safeBlur * depth).toFixed(2)}px)` : 'none';
+    }
+
+    /* Fora da tela não anima. */
+    let onScreen = true;
+
     const renderFrame = (now) => {
       const state = stateRef.current;
       if (!state) return;
@@ -191,9 +205,6 @@ export default function EchoText({
             ? Math.hypot(current.x - front.x, current.y - front.y)
             : 0;
           maxSeparation = Math.max(maxSeparation, separation);
-          const depth = echoCount ? index / echoCount : 0;
-          copy.style.filter =
-            safeBlur > 0 ? `blur(${(safeBlur * depth).toFixed(2)}px)` : 'none';
         }
       }
 
@@ -216,23 +227,45 @@ export default function EchoText({
         copy.style.opacity = String(Math.pow(safeFade, index) * state.activity);
       }
 
-      const stillMoving =
-        state.activity > 0.002 ||
-        Math.abs(state.targetX) > 0.01 ||
-        Math.abs(state.targetY) > 0.01 ||
-        entranceProgress < 1 ||
-        canHover;
+      /* Para quando tudo assentou nas posições-alvo. Antes a condição incluía
+         "o aparelho tem mouse", e aí o laço nunca parava no desktop. O
+         movimento do ponteiro acorda o laço de novo (ver `wake`). */
+      const front = state.positions[0];
+      const settled =
+        state.activity <= 0.002 &&
+        entranceProgress >= 1 &&
+        state.positions.every(
+          (pos) =>
+            Math.abs(pos.x - state.targetX) < 0.05 &&
+            Math.abs(pos.y - state.targetY) < 0.05,
+        ) &&
+        front != null;
 
-      if (stillMoving) {
+      if (!settled && onScreen) {
         frameRef.current = requestAnimationFrame(renderFrame);
       } else {
         frameRef.current = null;
       }
     };
 
+    const wake = () => {
+      if (!frameRef.current && onScreen && stateRef.current) {
+        frameRef.current = requestAnimationFrame(renderFrame);
+      }
+    };
+    if (canHover) window.addEventListener('pointermove', wake, { passive: true });
+
+    const io = new IntersectionObserver(([entry]) => {
+      onScreen = entry.isIntersecting;
+      wake();
+    });
+    io.observe(root);
+
     frameRef.current = requestAnimationFrame(renderFrame);
 
     return () => {
+      io.disconnect();
+      if (canHover) window.removeEventListener('pointermove', wake);
       cleanupPointer();
       if (frameRef.current) cancelAnimationFrame(frameRef.current);
       frameRef.current = null;

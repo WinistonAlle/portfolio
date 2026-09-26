@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef } from 'react';
 
 /* Entrada acompanha o scroll direto (scrub), não dispara uma vez só: o
  * quanto o filho já saiu de fora da página é função da posição do elemento
@@ -41,7 +41,6 @@ export default function SlideIn({
 }) {
   const ref = useRef<HTMLDivElement>(null);
   const rafRef = useRef(0);
-  const [progress, setProgress] = useState(0);
 
   useEffect(() => {
     const node = ref.current;
@@ -50,8 +49,16 @@ export default function SlideIn({
     const reduced = window.matchMedia(
       '(prefers-reduced-motion: reduce)',
     ).matches;
+    /* Escreve direto no estilo em vez de guardar o progresso em estado: com
+       estado, cada quadro de rolagem virava um render do React. */
+    const aplicar = (progress: number) => {
+      const offset = (1 - progress) * (from === 'left' ? -distance : distance);
+      node.style.transform = `translateX(${offset}%)`;
+      node.style.opacity = String(progress);
+    };
+
     if (reduced) {
-      setProgress(1);
+      aplicar(1);
       return;
     }
 
@@ -63,7 +70,7 @@ export default function SlideIn({
          mudar de hora conforme a altura do conteúdo. */
       const center = (rect.top + rect.bottom) / 2;
       const p = (ENTERS_AT - center / vh) / (ENTERS_AT - ARRIVES_AT);
-      setProgress(ease(clamp01(p)));
+      aplicar(ease(clamp01(p)));
     };
 
     const onScroll = () => {
@@ -79,17 +86,15 @@ export default function SlideIn({
       window.removeEventListener('resize', onScroll);
       if (rafRef.current) cancelAnimationFrame(rafRef.current);
     };
-  }, []);
-
-  const offset = (1 - progress) * (from === 'left' ? -distance : distance);
+  }, [from, distance]);
 
   return (
     <div
       ref={ref}
       className={className}
       style={{
-        transform: `translateX(${offset}%)`,
-        opacity: progress,
+        transform: `translateX(${from === 'left' ? -distance : distance}%)`,
+        opacity: 0,
       }}
     >
       {children}

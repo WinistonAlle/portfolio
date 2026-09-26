@@ -2,6 +2,7 @@
 
 import dynamic from 'next/dynamic';
 import { useEffect, useRef, useState } from 'react';
+import { usePixelTransition } from '@/components/transition/PixelTransition';
 
 /* O crachá 3D na home, montado tarde e pausado quando ninguém olha.
  *
@@ -14,8 +15,14 @@ import { useEffect, useRef, useState } from 'react';
  *
  * Duas travas, e elas resolvem coisas diferentes:
  *
- * 1. MONTAR TARDE: o chunk só é baixado quando o bloco chega perto da tela.
- *    Quem nunca rola até aqui nunca paga por ele.
+ * 1. MONTAR TARDE, MAS NUM MOMENTO OCIOSO: montar custa mais de um segundo
+ *    de trabalho travado (contexto WebGL, shaders, o rapier em wasm, o
+ *    modelo). Quando isso acontecia só ao chegar perto da tela, caía bem no
+ *    meio da rolagem e era o maior engasgo do site. Agora ele monta no
+ *    primeiro momento ocioso DEPOIS que o loading termina e a cortina abre
+ *    (a pessoa está lendo o hero, parada) ou ao chegar perto, o que vier
+ *    primeiro. Só "ocioso" não basta: o navegador considera o loading
+ *    ocioso, e aí a montagem travava a animação do nome no meio.
  * 2. PAUSAR FORA DE QUADRO: o `active` do LanyardBadge vira `paused` na física
  *    do Rapier. Sem isso, o crachá continuaria simulando corda e colisão o
  *    tempo todo depois de montado, inclusive com a pessoa lendo o contato lá
@@ -31,6 +38,7 @@ export default function CrachaPreguicoso() {
   const alvo = useRef<HTMLDivElement>(null);
   const [montado, setMontado] = useState(false);
   const [emQuadro, setEmQuadro] = useState(false);
+  const { bootActive } = usePixelTransition();
 
   useEffect(() => {
     const el = alvo.current;
@@ -62,11 +70,31 @@ export default function CrachaPreguicoso() {
 
     paraMontar.observe(el);
     paraPausar.observe(el);
+
     return () => {
       paraMontar.disconnect();
       paraPausar.disconnect();
     };
   }, []);
+
+  /* Ocioso, e só depois do loading: espera a cortina de pixels abrir
+     (~1,5s depois do fim do boot) e então pede um intervalo livre. O timeout
+     do requestIdleCallback garante que acontece mesmo numa página que nunca
+     fica 100% parada. */
+  useEffect(() => {
+    if (bootActive || montado) return;
+    let idle = 0;
+    const espera = window.setTimeout(() => {
+      const pedir =
+        window.requestIdleCallback ??
+        (((fn: () => void) => window.setTimeout(fn, 1)) as unknown as typeof window.requestIdleCallback);
+      idle = pedir(() => setMontado(true), { timeout: 4000 });
+    }, 2500);
+    return () => {
+      window.clearTimeout(espera);
+      if (idle && window.cancelIdleCallback) window.cancelIdleCallback(idle);
+    };
+  }, [bootActive, montado]);
 
   return (
     <div ref={alvo} className="h-full w-full">

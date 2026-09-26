@@ -35,22 +35,25 @@ export default function ParticlesBackground() {
   }, []);
 
   /* Sai de cena enquanto a abertura do MacBook roda: lá o fundo são os anéis
-     (`AneisDaAbertura`). Desmontar, e não esconder — `display: none` num
-     canvas mantém o contexto WebGL vivo, que é justamente o que não se quer
-     no momento mais pesado da home. */
+     (`AneisDaAbertura`). Antes ele era DESMONTADO nesse período, e aí o fim da
+     abertura (que acontece no meio de uma rolagem) recriava o contexto WebGL e
+     compilava os shaders ali mesmo: um engasgo de ~200ms na hora errada.
+     Agora ele nasce junto com a página, escondido e PAUSADO: contexto parado
+     não custa nada por quadro, e no fim da abertura é só voltar a desenhar. */
   const [naAbertura, setNaAbertura] = useState(false);
   useEffect(() => {
     setNaAbertura(aberturaAtiva());
     return assinarAbertura(setNaAbertura);
   }, []);
 
-  if (!podeWebGL || naAbertura) return null;
+  if (!podeWebGL) return null;
 
   return (
     <div
       aria-hidden
       className="pointer-events-none fixed inset-0 z-0"
       style={{
+        visibility: naAbertura ? 'hidden' : 'visible',
         // The layer is fixed, so this fade is viewport-relative: the field is
         // always densest near the top of the screen and quiets toward the fold.
         maskImage:
@@ -83,6 +86,7 @@ export default function ParticlesBackground() {
           scrollParallax={2.4}
           scrollParallaxCap={2.6}
           scrollRoll={0.06}
+          paused={naAbertura}
         />
       </Salvaguarda3D>
     </div>
