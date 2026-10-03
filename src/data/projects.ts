@@ -1578,4 +1578,132 @@ export const PROJECTS: Project[] = [
       },
     ],
   },
+  {
+    n: '16',
+    slug: 'estudai',
+    name: 'Estud.AI',
+    status: 'wip',
+    context: 'Produto próprio',
+    groups: ['outros', 'sites'],
+    line: {
+      pt: 'App de estudos que transforma PDF em flashcards com IA e avisa a hora certa de revisar cada um, antes de esquecer.',
+      en: 'A study app that turns a PDF into flashcards with AI and tells you the right moment to review each one, before you forget it.',
+    },
+    stat: {
+      pt: [
+        'No ar com teste grátis de 7 dias; o pagamento ainda não abriu',
+        'Revisões agendadas com FSRS, o mesmo algoritmo que o Anki passou a oferecer',
+        'Plano, XP, sequência e cota de IA validados no banco, com 63 verificações automáticas',
+        'PDF e deck do Anki são lidos no navegador: o arquivo não sai do computador',
+      ],
+      en: [
+        'Live with a 7 day free trial; payments have not opened yet',
+        'Reviews scheduled with FSRS, the same algorithm Anki started offering',
+        'Plan, XP, streak and AI quota enforced in the database, with 63 automated checks',
+        'PDFs and Anki decks are read in the browser: the file never leaves the computer',
+      ],
+    },
+    tags: ['Next.js', 'TypeScript', 'Supabase', 'Groq'],
+    media: {
+      frame: 'desktop',
+      src: '/cases/estudai/capa.jpg',
+      video: '/cases/estudai/scroll.mp4',
+      poster: '/cases/estudai/poster.jpg',
+      alt: {
+        pt: 'Hero do Estud.AI, com o título Pare de reler, comece a lembrar sobre um fundo violeta em lâminas',
+        en: 'Estud.AI hero, with the headline Stop rereading, start remembering over a slatted violet background',
+      },
+    },
+    links: [{ kind: 'site', href: 'https://estudai-alpha.vercel.app' }],
+    problem: {
+      pt: [
+        'Quem estuda pra prova costuma estudar do jeito que menos funciona: reler o resumo e grifar de novo. Dá a sensação de que o conteúdo ficou, mas a curva do esquecimento continua lá, e na semana da prova metade já sumiu.',
+        'Repetição espaçada resolve isso, e o Anki prova há anos. Só que ele pede disciplina pra montar card por card e tem cara de planilha. O Estud.AI nasceu pra tirar essas duas barreiras: a IA monta os cards a partir do material, e o app diz o que revisar em cada dia.',
+      ],
+      en: [
+        'People studying for an exam tend to study the way that works least: rereading the summary and highlighting it again. It feels like the content stuck, but the forgetting curve is still there, and by exam week half of it is gone.',
+        'Spaced repetition fixes that, and Anki has proven it for years. But it asks for the discipline to build card after card and looks like a spreadsheet. Estud.AI was born to remove those two barriers: the AI builds the cards from the material, and the app says what to review each day.',
+      ],
+    },
+    solution: {
+      pt: [
+        'O fluxo é curto: a pessoa sobe um PDF ou cola um texto, revisa os cards que a IA sugeriu e salva. Dali em diante o FSRS calcula quando cada card volta, e os botões de avaliação já mostram o próximo intervalo, de Errei em 1 minuto a Fácil em 4 dias. O PDF é lido no próprio navegador; só o texto segue pra IA.',
+        'O que não pode ser burlado mora no banco. XP, nível, sequência de dias, teto diário de pontos, cota de cards por IA e o modo somente leitura de quem não assinou são triggers e políticas de RLS no Postgres, não condicionais na tela. Antes de irem pro ar, essas regras passaram por 63 verificações num Supabase rodando na minha máquina.',
+        'A landing conta o jeito antigo de estudar antes de mostrar o produto, e abre com o logo se montando peça por peça, feito só com a Web Animations API do navegador. O que ainda não existe, como o tutor que responde com base nos seus arquivos, aparece marcado como em breve.',
+      ],
+      en: [
+        'The flow is short: you upload a PDF or paste some text, review the cards the AI suggested and save them. From then on FSRS works out when each card comes back, and the rating buttons already show the next interval, from Again in 1 minute to Easy in 4 days. The PDF is read in the browser itself; only the text goes on to the AI.',
+        'Whatever cannot be gamed lives in the database. XP, level, the daily streak, the daily points cap, the AI card quota and read only mode for people who have not subscribed are triggers and RLS policies in Postgres, not conditionals on the screen. Before going live, those rules went through 63 checks against a Supabase instance running on my machine.',
+        'The landing page tells the old way of studying before it shows the product, and it opens with the logo assembling itself piece by piece, built only with the browser’s Web Animations API. What does not exist yet, like the tutor that answers from your own files, is marked as coming soon.',
+      ],
+    },
+    gallery: [
+      {
+        src: '/cases/estudai/livro.jpg',
+        alt: {
+          pt: 'Livro aberto com o resumo grifado de amarelo, um plano de estudo riscado e a curva do esquecimento',
+          en: 'Open book with the summary highlighted in yellow, a crossed out study plan and the forgetting curve',
+        },
+        caption: {
+          pt: 'O jeito antigo, desenhado como um caderno aberto: o plano riscado item por item, o resumo grifado e a curva do esquecimento com o rabisco “e no dia da prova…?”. Um livro 3D se abre conforme a página rola, e só depois disso o produto aparece.',
+          en: 'The old way, drawn as an open notebook: the plan crossed off item by item, the highlighted summary and the forgetting curve with the scribble “and on exam day…?”. A 3D book opens as the page scrolls, and only after that does the product show up.',
+        },
+      },
+      {
+        src: '/cases/estudai/recursos.jpg',
+        alt: {
+          pt: 'Grade de recursos com o texto de um PDF virando cards, uma revisão em andamento, um pomodoro e o chat do tutor',
+          en: 'Feature grid with the text of a PDF turning into cards, a review in progress, a pomodoro timer and the tutor chat',
+        },
+        caption: {
+          pt: 'Os recursos aparecem funcionando em vez de listados: o texto do PDF ganha grifos e vira cards, a revisão mostra o intervalo de cada botão e o pomodoro corre acelerado. O tutor está marcado como em breve, porque ainda não existe no app.',
+          en: 'The features are shown working instead of listed: the PDF text gets highlighted and turns into cards, the review shows each button’s interval and the pomodoro runs fast forward. The tutor is marked as coming soon, because it does not exist in the app yet.',
+        },
+      },
+      {
+        src: '/cases/estudai/publico.jpg',
+        alt: {
+          pt: 'Aba Concurseiros, com a cobertura do edital por disciplina e um card de lei seca com lacuna',
+          en: 'Civil service exam tab, with syllabus coverage by subject and a fill in the blank law card',
+        },
+        caption: {
+          pt: 'Cada público tem a sua tela. O concurseiro vê o edital por disciplina e a lei seca em cards de lacuna; vestibulandos, medicina e idiomas ganham exemplos próprios. É a mesma ferramenta contada na língua de quem vai usar.',
+          en: 'Each audience gets its own screen. Civil service candidates see the syllabus by subject and the letter of the law as fill in the blank cards; university entrance, medicine and languages get their own examples. It is the same tool, told in the language of whoever is going to use it.',
+        },
+      },
+      {
+        src: '/cases/estudai/planos.jpg',
+        alt: {
+          pt: 'Planos Plus e Pro, com a linha do tempo do teste grátis e uma régua de quantos PDFs a pessoa quer transformar por mês',
+          en: 'Plus and Pro plans, with the free trial timeline and a slider for how many PDFs you want to turn into cards each month',
+        },
+        caption: {
+          pt: 'O preço responde à pergunta que importa, quantos PDFs você quer transformar por mês, e recomenda o plano a partir dela. O teste de 7 dias aparece como uma linha do tempo do que acontece em cada dia, porque a repetição espaçada se prova dentro do próprio teste.',
+          en: 'The pricing answers the question that matters, how many PDFs you want to turn into cards each month, and recommends the plan from it. The 7 day trial shows up as a timeline of what happens on each day, because spaced repetition proves itself within the trial.',
+        },
+      },
+      {
+        src: '/cases/estudai/chamada.jpg',
+        alt: {
+          pt: 'Chamada final com a frase Pare de reler, comece a lembrar e um card perguntando qual organela produz ATP',
+          en: 'Closing call to action with the line Stop rereading, start remembering and a card asking which organelle produces ATP',
+        },
+        caption: {
+          pt: 'A chamada final repete a promessa com um card de verdade na mão: qual organela produz ATP? Sem formulário no meio do caminho, o botão leva direto ao cadastro do teste grátis.',
+          en: 'The closing call repeats the promise with a real card in hand: which organelle produces ATP? With no form in the way, the button goes straight to the free trial sign up.',
+        },
+      },
+      {
+        src: '/cases/estudai/login.jpg',
+        alt: {
+          pt: 'Tela de entrar desenhada como um caderno aberto, com boas vindas na página da esquerda e o formulário na da direita',
+          en: 'Sign in screen drawn as an open notebook, with a welcome on the left page and the form on the right',
+        },
+        caption: {
+          pt: 'Entrar e criar conta acontecem dentro de um caderno aberto: a página da esquerda fala com quem volta, a da direita tem o formulário. É a mesma metáfora do livro da landing, levada até a porta do app.',
+          en: 'Signing in and creating an account happen inside an open notebook: the left page speaks to whoever is coming back, the right one holds the form. It is the same book metaphor as the landing page, carried all the way to the app’s front door.',
+        },
+      },
+    ],
+  },
 ];
