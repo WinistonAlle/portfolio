@@ -57,6 +57,11 @@ function Row({ cert, newTab }: { cert: Certification; newTab: string }) {
 }
 
 export default function Certifications({ labels }: { labels: Labels }) {
+  /* Em duas colunas a lista desce pela esquerda e continua na direita, como
+     uma ficha. Sem isso o grid preenche por linha e a ordem por data fica
+     alternando de um lado pro outro. A ordem do HTML continua a mesma da tela. */
+  const rows = Math.ceil(certifications.length / 2);
+
   return (
     <section aria-labelledby="certificacoes" className="relative w-full pb-28">
       <div className="mx-auto w-full max-w-6xl px-6 lg:px-10">
@@ -65,10 +70,14 @@ export default function Certifications({ labels }: { labels: Labels }) {
           className="font-mono text-xs tracking-[0.18em] text-muted uppercase"
         >
           {labels.title}
-          <span className="ml-2 text-muted/70 tabular-nums">{certifications.length}</span>
+          <span aria-hidden="true"> · </span>
+          <span className="tabular-nums">{certifications.length}</span>
         </h2>
 
-        <ul className="mt-5 grid grid-cols-1 gap-x-12 md:grid-cols-2">
+        <ul
+          className="mt-5 grid grid-cols-1 gap-x-12 md:grid-flow-col md:grid-cols-2 md:grid-rows-[repeat(var(--rows),auto)]"
+          style={{ '--rows': rows } as React.CSSProperties}
+        >
           {certifications.map((cert) => (
             <li key={`${cert.issuer}-${cert.name}`} className="border-b border-line">
               <Row cert={cert} newTab={labels.newTab} />
