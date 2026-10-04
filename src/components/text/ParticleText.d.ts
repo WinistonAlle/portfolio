@@ -1,7 +1,7 @@
 import type { CSSProperties } from 'react';
 
 // Tipos escritos à mão para o componente JS em ParticleText.jsx (mesma
-// convenção de CardSwap, Lanyard, StackGraph, StrokeText e EchoText).
+// convenção de CardSwap, Lanyard, StackGraph, StrokeText).
 export interface ParticleTextProps {
   text?: string;
   /** Tamanho de cada partícula, em px. */

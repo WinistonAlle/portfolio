@@ -3,7 +3,6 @@ import { notFound } from 'next/navigation';
 import { preload } from 'react-dom';
 import LanyardBadge from '@/components/lanyard/LanyardBadge';
 import StackGraph from '@/components/stack/StackGraph';
-import EchoText from '@/components/text/EchoText';
 import { Iphone16Pro } from '@/components/iphone/Iphone16Pro';
 import SlideIn from '@/components/scroll/SlideIn';
 import VideoLoop from '@/components/media/VideoLoop';
@@ -74,21 +73,10 @@ export default async function SobreMimPage(
           {/* pt extra só nesta coluna: descer o grid inteiro arrastaria o
               canvas do crachá junto e a fita descolaria do topo da página */}
           <div className="relative z-10 max-w-4xl lg:pt-56">
-            {/* Mesmo efeito do título do Hero: contorno vazado com rastro que
-                segue o cursor (EchoText + echo-text--outlined), na mesma
-                Space Grotesk. */}
-            <h1>
-              <EchoText
-                text={dict.about.heroTitle}
-                className="echo-text--outlined"
-                /* O mínimo era 1.9rem e o título saía com 406px numa tela de
-                   390px, criando rolagem horizontal. Agora o piso é em vw até
-                   dar 1.9rem por volta de 560px de largura, então o desktop
-                   não muda em nada. */
-                fontSize="clamp(1.2rem, 6.2vw, 3.6rem)"
-                fontWeight={700}
-                style={{ fontFamily: 'var(--font-display)' }}
-              />
+            {/* Mesmo padrão dos outros títulos do site: Bricolage em negrito
+                com uma expressão em serifa itálica, marcada no dicionário. */}
+            <h1 className="text-[clamp(2.2rem,4.6vw,3.6rem)] leading-[1.05] font-bold tracking-[-0.03em] text-balance">
+              <TituloAcento texto={dict.about.heroTitle} />
             </h1>
 
             <p className="mt-8 max-w-2xl text-2xl leading-relaxed text-muted">

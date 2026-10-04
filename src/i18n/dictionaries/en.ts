@@ -45,7 +45,7 @@ const en: typeof pt = {
     metaTitle: 'About — Winiston Alle',
     metaDescription:
       'Winiston Alle, full-stack developer. End-to-end systems in production, used by real people every day.',
-    heroTitle: 'Full-stack developer.',
+    heroTitle: '*Full-stack* developer.',
     bioLead: "I'm",
     bioName: 'Winiston Alle',
     bioRest:

@@ -52,7 +52,7 @@ const pt = {
     metaTitle: 'Sobre mim — Winiston Alle',
     metaDescription:
       'Winiston Alle, desenvolvedor full-stack. Sistemas de ponta a ponta em produção, com gente usando todo dia.',
-    heroTitle: 'Desenvolvedor full-stack.',
+    heroTitle: 'Desenvolvedor *full-stack*.',
     bioLead: 'Sou',
     bioName: 'Winiston Alle',
     bioRest:
