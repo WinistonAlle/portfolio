@@ -64,6 +64,8 @@ const pt = {
       'Sou desenvolvedor de sistemas na Gostinho Mineiro, uma indústria de alimentos em Brasília. Entrei como estagiário e hoje respondo pelos sistemas internos da empresa. O portal de pedidos que eu construí é usado por cerca de 250 funcionários todo dia, antes dele, o pedido chegava por WhatsApp e alguém do faturamento digitava um por um no sistema. Meu foco é frontend e IA: interface que a pessoa usa sem precisar de treinamento, e automação que tira trabalho manual do caminho.',
     timelineNow: 'Onde estou hoje',
     timelineTitle: 'De gestão financeira a desenvolvedor, em três anos.',
+    certTitle: 'Certificações',
+    certNewTab: 'abre a credencial em nova aba',
     ctaTitle: 'Agora me conta o que você precisa.',
     ctaText:
       'Vaga, projeto freelance ou só uma ideia pra validar: me chama que a gente combina o resto por e-mail. E se quiser ver o código antes de falar comigo, os projetos estão logo ali.',

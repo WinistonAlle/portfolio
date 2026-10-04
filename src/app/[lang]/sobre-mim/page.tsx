@@ -12,6 +12,7 @@ import { getDictionary } from '@/i18n';
 import { isLocale } from '@/i18n/config';
 import TituloAcento from '@/components/text/TituloAcento';
 import CtaBlock from '@/components/ui/CtaBlock';
+import Certifications from '@/components/about/Certifications';
 
 /* O modelo do crachá só era pedido depois que o chunk do three baixava,
    parseava e montava — mais de um segundo depois do HTML, atrás de tudo que o
@@ -148,8 +149,8 @@ export default async function SobreMimPage(
         </div>
       </section>
 
-      {/* Trajetória: última seção da página. O respiro grande embaixo é de
-          propósito, senão o último ponto da fita acende já colado no rodapé. */}
+      {/* Trajetória. O respiro grande embaixo é de propósito, senão o último
+          ponto da fita acende colado na seção seguinte. */}
       <section className="relative w-full pt-4 pb-40">
         <div className="mx-auto w-full max-w-6xl px-6 lg:px-10">
           <h2 className="max-w-2xl text-[clamp(1.8rem,3vw,2.6rem)] leading-tight font-bold tracking-[-0.02em] text-balance">
@@ -161,6 +162,9 @@ export default async function SobreMimPage(
           </div>
         </div>
       </section>
+
+      {/* Certificações: camada extra, discreta, depois do conteúdo principal. */}
+      <Certifications labels={{ title: dict.about.certTitle, newTab: dict.about.certNewTab }} />
 
       {/* Fecho da página. A ordem dos botões é invertida em relação ao topo:
           lá em cima o visitante ainda não sabe quem eu sou e o projeto vem

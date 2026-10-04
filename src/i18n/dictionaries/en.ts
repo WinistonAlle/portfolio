@@ -57,6 +57,8 @@ const en: typeof pt = {
       "I'm a systems developer at Gostinho Mineiro, a food manufacturer in Brasília. I joined as an intern and today I own the company's internal systems. The ordering portal I built is used by around 250 employees every day; before it existed, orders arrived over WhatsApp and someone in billing typed them into the system one by one. My focus is frontend and AI: interfaces people use without being trained, and automation that takes manual work out of the way.",
     timelineNow: 'Where I am today',
     timelineTitle: 'From finance to developer, in three years.',
+    certTitle: 'Certifications',
+    certNewTab: 'opens the credential in a new tab',
     ctaTitle: 'Now tell me what you need.',
     ctaText:
       "A job, freelance work or just an idea you want to sanity-check: reach out and we'll sort the rest over email. And if you'd rather see the code before talking to me, the projects are right there.",
