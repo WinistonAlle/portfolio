@@ -1,89 +1,81 @@
-import { certifications, type Certification } from '@/data/certifications';
+import TituloAcento from '@/components/text/TituloAcento';
+import { certifications, ISSUER_MARK, type Issuer } from '@/data/certifications';
+import CertificationsIndex, { type CertItem } from './CertificationsIndex';
 
-/* Certificações no fim da página Sobre mim. É camada extra de informação, não
-   destaque: lista em duas colunas, letra menor que o resto da página, linha
-   fina entre os itens, cara de ficha técnica. Server component, não manda JS.
+/* Certificações no fim da página Sobre mim. Continua secundária aos projetos
+   (vem depois da trajetória e usa título menor que o das outras seções), mas
+   tem a mesma linguagem do resto da página: índice numerado, filtro igual ao
+   de /projetos e um cartão de credencial que acompanha o cursor, primo do
+   crachá lá do topo.
 
-   A linha inteira é o link da credencial (sem botão de "exibir"). Item sem
-   `url` aparece igual, só que não clicável. */
+   O servidor monta os textos (data por extenso no idioma da página) e o
+   cliente só cuida da interação. */
 
 type Labels = {
+  eyebrow: string;
   title: string;
-  /** Texto só para leitor de tela, avisando que o link abre outra aba. */
+  all: string;
+  filterLabel: string;
+  issuedIn: string;
+  verify: string;
   newTab: string;
+  countOne: string;
+  countMany: string;
 };
 
-function Row({ cert, newTab }: { cert: Certification; newTab: string }) {
-  const year = cert.date.slice(0, 4);
-  const content = (
-    <>
-      <span className="min-w-0">
-        <span className="block text-pretty text-foreground/90 transition-colors group-hover:text-foreground">
-          {cert.name}
-        </span>
-        <span className="block text-xs text-muted">{cert.issuer}</span>
-      </span>
-      <span className="flex shrink-0 items-center gap-2 font-mono text-xs text-muted tabular-nums">
-        {year}
-        {cert.url && (
-          <span
-            aria-hidden="true"
-            className="text-accent opacity-0 transition-opacity group-hover:opacity-100 group-focus-visible:opacity-100"
-          >
-            ↗
-          </span>
-        )}
-      </span>
-    </>
-  );
+export default function Certifications({ lang, labels }: { lang: 'pt' | 'en'; labels: Labels }) {
+  const monthYear = new Intl.DateTimeFormat(lang === 'pt' ? 'pt-BR' : 'en-US', {
+    month: 'long',
+    year: 'numeric',
+    timeZone: 'UTC',
+  });
 
-  const rowClass = 'flex items-center justify-between gap-4 py-3 text-sm';
+  const items: CertItem[] = certifications.map((c, i) => ({
+    id: `${c.issuer}-${c.name}`,
+    n: String(i + 1).padStart(2, '0'),
+    name: c.name,
+    issuer: c.issuer,
+    mark: ISSUER_MARK[c.issuer],
+    year: c.date.slice(0, 4),
+    issued: monthYear.format(new Date(`${c.date}-01T00:00:00Z`)),
+    url: c.url,
+  }));
 
-  if (!cert.url) {
-    return <div className={rowClass}>{content}</div>;
-  }
-
-  return (
-    <a
-      href={cert.url}
-      target="_blank"
-      rel="noopener noreferrer"
-      className={`group ${rowClass} -mx-2 rounded-md px-2 transition-colors hover:bg-surface focus-visible:bg-surface focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent`}
-    >
-      {content}
-      <span className="sr-only"> ({newTab})</span>
-    </a>
-  );
-}
-
-export default function Certifications({ labels }: { labels: Labels }) {
-  /* Em duas colunas a lista desce pela esquerda e continua na direita, como
-     uma ficha. Sem isso o grid preenche por linha e a ordem por data fica
-     alternando de um lado pro outro. A ordem do HTML continua a mesma da tela. */
-  const rows = Math.ceil(certifications.length / 2);
+  const issuers = [...new Set(certifications.map((c) => c.issuer))] as Issuer[];
+  const tabs = [
+    { key: 'all', label: labels.all, total: items.length },
+    ...issuers.map((issuer) => ({
+      key: issuer,
+      label: issuer,
+      total: items.filter((i) => i.issuer === issuer).length,
+    })),
+  ];
 
   return (
     <section aria-labelledby="certificacoes" className="relative w-full pb-28">
       <div className="mx-auto w-full max-w-6xl px-6 lg:px-10">
+        <p className="font-mono text-xs tracking-[0.18em] text-muted uppercase">
+          {labels.eyebrow}
+        </p>
         <h2
           id="certificacoes"
-          className="font-mono text-xs tracking-[0.18em] text-muted uppercase"
+          className="mt-3 max-w-2xl text-[clamp(1.4rem,2.2vw,1.9rem)] leading-tight font-bold tracking-[-0.02em] text-balance"
         >
-          {labels.title}
-          <span aria-hidden="true"> · </span>
-          <span className="tabular-nums">{certifications.length}</span>
+          <TituloAcento texto={labels.title} />
         </h2>
 
-        <ul
-          className="mt-5 grid grid-cols-1 gap-x-12 md:grid-flow-col md:grid-cols-2 md:grid-rows-[repeat(var(--rows),auto)]"
-          style={{ '--rows': rows } as React.CSSProperties}
-        >
-          {certifications.map((cert) => (
-            <li key={`${cert.issuer}-${cert.name}`} className="border-b border-line">
-              <Row cert={cert} newTab={labels.newTab} />
-            </li>
-          ))}
-        </ul>
+        <CertificationsIndex
+          items={items}
+          tabs={tabs}
+          labels={{
+            filterLabel: labels.filterLabel,
+            issuedIn: labels.issuedIn,
+            verify: labels.verify,
+            newTab: labels.newTab,
+            countOne: labels.countOne,
+            countMany: labels.countMany,
+          }}
+        />
       </div>
     </section>
   );

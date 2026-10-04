@@ -164,7 +164,20 @@ export default async function SobreMimPage(
       </section>
 
       {/* Certificações: camada extra, discreta, depois do conteúdo principal. */}
-      <Certifications labels={{ title: dict.about.certTitle, newTab: dict.about.certNewTab }} />
+      <Certifications
+        lang={lang}
+        labels={{
+          eyebrow: dict.about.certEyebrow,
+          title: dict.about.certTitle,
+          all: dict.about.certAll,
+          filterLabel: dict.about.certFilterLabel,
+          issuedIn: dict.about.certIssuedIn,
+          verify: dict.about.certVerify,
+          newTab: dict.about.certNewTab,
+          countOne: dict.about.certCountOne,
+          countMany: dict.about.certCountMany,
+        }}
+      />
 
       {/* Fecho da página. A ordem dos botões é invertida em relação ao topo:
           lá em cima o visitante ainda não sabe quem eu sou e o projeto vem
