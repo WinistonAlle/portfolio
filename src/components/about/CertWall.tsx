@@ -5,11 +5,12 @@ import { useEffect, useRef, useState, type PointerEvent } from 'react';
 /* Parede de quadros em 3D, só com CSS (nada de WebGL: são 12 itens repetidos
    e a regra do site é 60fps).
 
-   Profundidade: a parede inteira gira poucos graus seguindo o cursor, e cada
-   quadro mora numa profundidade diferente (--z), então eles se deslocam entre
-   si como numa parede de verdade vista de lado. Cada quadro também pende um
-   pouquinho torto (--rot), como quadro pendurado na mão, e endireita quando
-   o cursor chega.
+   Profundidade: a parede inteira gira poucos graus seguindo o cursor, e o
+   quadro em foco sai dela na direção de quem olha. Quadros alinhados e sem
+   prego/arame: o usuário pediu a parede limpa.
+
+   Paginação: no máximo 12 por página (2 fileiras de 6). Com 12 ou menos, os
+   controles nem aparecem.
 
    Movimento, arquétipo Corporate do site, curva (0.2, 0, 0, 1):
    primária = quadro em foco sai da parede; secundária = reflexo no vidro e
@@ -25,20 +26,28 @@ export type WallItem = {
   url?: string;
 };
 
-/* Fixos, não aleatórios: o servidor e o navegador precisam desenhar igual. */
-const ROT = [-1.1, 0.7, -0.4, 1, 0.5, -0.9, 0.8, -0.3, 1.1, -0.7, 0.3, -1];
-const Z = [0, 28, 12, 40, 20, 4, 34, 16, 26, 8, 38, 14];
-const DROP = [0, 1.4, 0.5, 1.9, 0.9, 0.2, 1.6, 0.6, 0.3, 1.8, 0.8, 1.2];
+const PER_PAGE = 12;
+
+type Labels = { newTab: string; view: string; prev: string; next: string; page: string };
 
 export default function CertWall({
   items,
   labels,
 }: {
   items: WallItem[];
-  labels: { newTab: string; view: string };
+  labels: Labels;
 }) {
   const wallRef = useRef<HTMLDivElement>(null);
   const [phase, setPhase] = useState<'idle' | 'wait' | 'play'>('idle');
+  const [page, setPage] = useState(0);
+  const pages = Math.max(1, Math.ceil(items.length / PER_PAGE));
+  const shown = items.slice(page * PER_PAGE, (page + 1) * PER_PAGE);
+
+  const go = (to: number) => {
+    if (to < 0 || to >= pages || to === page) return;
+    setPage(to);
+    setPhase('play');
+  };
 
   useEffect(() => {
     const el = wallRef.current;
@@ -81,8 +90,9 @@ export default function CertWall({
   return (
     <div ref={wallRef} className="cert-wall" data-phase={phase} onPointerMove={move} onPointerLeave={leave}>
       <div className="cert-wall__light" aria-hidden="true" />
-      <ul className="cert-wall__plane">
-        {items.map((c, i) => {
+      {/* key na página: trocar de página pendura os quadros de novo. */}
+      <ul key={page} className="cert-wall__plane">
+        {shown.map((c, i) => {
           const frame = (
             <>
               <span className="cert-frame" aria-hidden="true">
@@ -109,12 +119,7 @@ export default function CertWall({
             <li
               key={c.id}
               className="cert-hang"
-              style={{
-                ['--i' as string]: i,
-                ['--rot' as string]: `${ROT[i % ROT.length]}deg`,
-                ['--z' as string]: `${Z[i % Z.length]}px`,
-                ['--drop' as string]: `${DROP[i % DROP.length]}rem`,
-              }}
+              style={{ ['--i' as string]: i }}
             >
               {c.url ? (
                 <a href={c.url} target="_blank" rel="noopener noreferrer" className="cert-piece" onPointerMove={glare}>
@@ -129,6 +134,26 @@ export default function CertWall({
           );
         })}
       </ul>
+
+      {pages > 1 && (
+        <nav aria-label={labels.page} className="cert-pager">
+          <button type="button" onClick={() => go(page - 1)} disabled={page === 0} className="cert-pager__btn">
+            {labels.prev}
+          </button>
+          <span aria-live="polite" className="font-mono text-xs text-muted tabular-nums">
+            <span className="text-foreground">{String(page + 1).padStart(2, '0')}</span> /{' '}
+            {String(pages).padStart(2, '0')}
+          </span>
+          <button
+            type="button"
+            onClick={() => go(page + 1)}
+            disabled={page === pages - 1}
+            className="cert-pager__btn"
+          >
+            {labels.next}
+          </button>
+        </nav>
+      )}
     </div>
   );
 }

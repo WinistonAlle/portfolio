@@ -1,4 +1,3 @@
-import TituloAcento from '@/components/text/TituloAcento';
 import { certifications } from '@/data/certifications';
 import CertWall, { type WallItem } from './CertWall';
 
@@ -10,7 +9,7 @@ import CertWall, { type WallItem } from './CertWall';
    O servidor monta os textos (data por extenso no idioma da página) e o
    cliente só cuida do 3D e da entrada. */
 
-type Labels = { eyebrow: string; title: string; newTab: string; view: string };
+type Labels = { title: string; newTab: string; view: string; prev: string; next: string; page: string };
 
 export default function Certifications({ lang, labels }: { lang: 'pt' | 'en'; labels: Labels }) {
   const fmt = (locale: string, date: string) =>
@@ -32,18 +31,21 @@ export default function Certifications({ lang, labels }: { lang: 'pt' | 'en'; la
   return (
     <section aria-labelledby="certificacoes" className="relative w-full pb-32">
       <div className="mx-auto w-full max-w-6xl px-6 lg:px-10">
-        <p className="font-mono text-xs tracking-[0.18em] text-muted uppercase">
-          {labels.eyebrow} · {items.length}
-        </p>
         <h2
           id="certificacoes"
-          className="mt-3 max-w-2xl text-[clamp(1.4rem,2.2vw,1.9rem)] leading-tight font-bold tracking-[-0.02em] text-balance"
+          className="flex items-baseline gap-3 text-[clamp(1.4rem,2.2vw,1.9rem)] leading-tight font-bold tracking-[-0.02em]"
         >
-          <TituloAcento texto={labels.title} />
+          {labels.title}
+          <span className="font-mono text-xs font-normal tracking-normal text-muted tabular-nums">
+            {String(items.length).padStart(2, '0')}
+          </span>
         </h2>
       </div>
 
-      <CertWall items={items} labels={{ newTab: labels.newTab, view: labels.view }} />
+      <CertWall
+        items={items}
+        labels={{ newTab: labels.newTab, view: labels.view, prev: labels.prev, next: labels.next, page: labels.page }}
+      />
     </section>
   );
 }

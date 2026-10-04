@@ -167,10 +167,12 @@ export default async function SobreMimPage(
       <Certifications
         lang={lang}
         labels={{
-          eyebrow: dict.about.certEyebrow,
           title: dict.about.certTitle,
           newTab: dict.about.certNewTab,
           view: dict.about.certView,
+          prev: dict.about.certPrev,
+          next: dict.about.certNext,
+          page: dict.about.certPages,
         }}
       />
 
