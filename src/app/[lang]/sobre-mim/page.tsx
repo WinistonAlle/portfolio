@@ -149,6 +149,21 @@ export default async function SobreMimPage(
         </div>
       </section>
 
+      {/* Certificações entre o trabalho e a trajetória: a trajetória termina em
+          "onde estou hoje", que puxa direto o convite do fim da página, então
+          ela fica colada no fecho. */}
+      <Certifications
+        lang={lang}
+        labels={{
+          title: dict.about.certTitle,
+          newTab: dict.about.certNewTab,
+          view: dict.about.certView,
+          prev: dict.about.certPrev,
+          next: dict.about.certNext,
+          page: dict.about.certPages,
+        }}
+      />
+
       {/* Trajetória. O respiro grande embaixo é de propósito, senão o último
           ponto da fita acende colado na seção seguinte. */}
       <section className="relative w-full pt-4 pb-40">
@@ -162,19 +177,6 @@ export default async function SobreMimPage(
           </div>
         </div>
       </section>
-
-      {/* Certificações: camada extra, discreta, depois do conteúdo principal. */}
-      <Certifications
-        lang={lang}
-        labels={{
-          title: dict.about.certTitle,
-          newTab: dict.about.certNewTab,
-          view: dict.about.certView,
-          prev: dict.about.certPrev,
-          next: dict.about.certNext,
-          page: dict.about.certPages,
-        }}
-      />
 
       {/* Fecho da página. A ordem dos botões é invertida em relação ao topo:
           lá em cima o visitante ainda não sabe quem eu sou e o projeto vem
