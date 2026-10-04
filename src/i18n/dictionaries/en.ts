@@ -59,6 +59,7 @@ const en: typeof pt = {
     timelineTitle: 'From finance to developer, in three years.',
     certEyebrow: 'Certifications',
     certTitle: "What I've been *studying*.",
+    certView: 'View credential',
     certNewTab: 'opens the credential in a new tab',
     ctaTitle: 'Now tell me what you need.',
     ctaText:

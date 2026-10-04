@@ -1407,73 +1407,369 @@ body.scroll-locked .site-header {
   }
 }
 
-/* ── Certificações (Sobre mim) ─────────────────────────────────────────────
-   Pílulas por instituição. Curva única do site (0.2, 0, 0, 1); hover em
-   120ms; entrada em cascata de 30ms (12 pílulas = 360ms). */
+/* ── Certificações (Sobre mim): parede de galeria ──────────────────────────
+   Ver CertWall.tsx. Tudo em CSS 3D; uma curva só, (0.2, 0, 0, 1). */
 
-.cert-pill {
-  display: inline-flex;
-  align-items: baseline;
-  gap: 0.5rem;
-  padding: 0.45rem 0.9rem;
-  border: 1px solid var(--line);
-  border-radius: 999px;
+.cert-wall {
+  --mx: 50%;
+  --my: 30%;
+  --wx: 0deg;
+  --wy: 0deg;
+  position: relative;
+  margin: 3rem auto 0;
+  max-width: 72rem;
+  perspective: 1600px;
+}
+
+/* Ambiente: luz de galeria que acompanha o cursor pela parede. */
+.cert-wall__light {
+  /* Bem maior que a parede: senão a elipse da luz bate na borda da caixa e
+     aparece um retângulo recortado no céu. */
+  position: absolute;
+  inset: -40% -25%;
+  pointer-events: none;
+  background: radial-gradient(
+    34rem 22rem at calc(25% + var(--mx) / 2) calc(30% + var(--my) / 2.5),
+    color-mix(in srgb, var(--accent) 9%, transparent),
+    transparent 70%
+  );
+}
+
+.cert-wall__plane {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  column-gap: 2rem;
+  row-gap: 3.25rem;
+  padding: 2.25rem 2.5rem 2.5rem;
+  transform-style: preserve-3d;
+  transform: rotateX(var(--wx)) rotateY(var(--wy));
+  transition: transform 700ms cubic-bezier(0.2, 0, 0, 1);
+}
+
+.cert-hang {
+  transform-style: preserve-3d;
+  transform: translateY(var(--drop)) translateZ(var(--z));
+}
+
+.cert-piece {
+  --gx: 0%;
+  position: relative;
+  display: block;
+  transform-style: preserve-3d;
+  transform: rotate(var(--rot));
+  transform-origin: 50% -1.5rem;
+  transition:
+    transform 360ms cubic-bezier(0.2, 0, 0, 1),
+    opacity 220ms cubic-bezier(0.2, 0, 0, 1),
+    filter 220ms cubic-bezier(0.2, 0, 0, 1);
+}
+
+/* Prego e arame: o quadro pende de um ponto só, por isso gira em volta dele. */
+.cert-piece::before,
+.cert-piece::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  pointer-events: none;
+}
+.cert-piece::before {
+  top: -1.55rem;
+  width: 6px;
+  height: 6px;
+  margin-left: -3px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 35%, #c9d3e6, #4a5568 70%);
+  box-shadow: 0 2px 3px rgba(0, 0, 0, 0.7);
+  z-index: 1;
+}
+.cert-piece::after {
+  top: -1.35rem;
+  width: 44%;
+  height: 1.35rem;
+  transform: translateX(-50%);
+  background:
+    linear-gradient(to top right, transparent calc(50% - 0.6px), rgba(200, 212, 235, 0.35) 50%, transparent calc(50% + 0.6px)) left / 50% 100% no-repeat,
+    linear-gradient(to top left, transparent calc(50% - 0.6px), rgba(200, 212, 235, 0.35) 50%, transparent calc(50% + 0.6px)) right / 50% 100% no-repeat;
+}
+
+.cert-frame {
+  display: block;
+  padding: 7px;
+  border-radius: 3px;
+  background: linear-gradient(145deg, #232b3c, #0a0d15 55%, #171d2b);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.09),
+    0 16px 26px -12px rgba(0, 0, 0, 0.85),
+    0 36px 60px -30px rgba(0, 0, 0, 0.7);
+  transition: box-shadow 360ms cubic-bezier(0.2, 0, 0, 1);
+}
+.cert-frame__mat {
+  position: relative;
+  display: block;
+  padding: 9px;
+  background: #111726;
+  /* As medidas da miniatura (cqw) são relativas a esta caixa. Não dá pra pôr
+     o container na própria miniatura: o padding dela em cqw procuraria um
+     container acima e cairia na largura da tela. */
+  container-type: inline-size;
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 255, 255, 0.05),
+    inset 0 3px 8px rgba(0, 0, 0, 0.65);
+}
+/* Reflexo no vidro: faixa clara que corre com o cursor. */
+.cert-frame__glass {
+  position: absolute;
+  inset: 9px;
+  pointer-events: none;
+  background:
+    linear-gradient(105deg, transparent 35%, rgba(255, 255, 255, 0.16) 47%, transparent 58%) calc(100% - var(--gx)) 0 / 260% 100% no-repeat,
+    linear-gradient(180deg, rgba(255, 255, 255, 0.05), transparent 40%);
+  opacity: 0.35;
+  transition: opacity 220ms cubic-bezier(0.2, 0, 0, 1);
+}
+
+/* Primária: o quadro sai da parede e endireita. */
+.cert-piece:hover,
+.cert-piece:focus-visible {
+  transform: rotate(0deg) translateZ(70px) translateY(-6px);
+}
+.cert-piece:hover .cert-frame,
+.cert-piece:focus-visible .cert-frame {
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.12),
+    0 0 0 1px color-mix(in srgb, var(--accent) 40%, transparent),
+    0 30px 50px -18px rgba(0, 0, 0, 0.9),
+    0 0 60px -10px color-mix(in srgb, var(--accent) 30%, transparent);
+}
+.cert-piece:hover .cert-frame__glass,
+.cert-piece:focus-visible .cert-frame__glass {
+  opacity: 1;
+}
+/* Secundária: os vizinhos recuam pra luz cair no quadro escolhido. */
+.cert-wall__plane:has(.cert-piece:hover) .cert-piece:not(:hover) {
+  opacity: 0.5;
+  filter: saturate(0.6);
+}
+a.cert-piece:focus-visible {
+  outline: none;
+}
+a.cert-piece:focus-visible .cert-frame {
+  outline: 2px solid var(--accent);
+  outline-offset: 4px;
+}
+
+/* Plaquinha embaixo do quadro: é ela que o leitor de tela lê. */
+.cert-plaque {
+  display: block;
+  margin-top: 0.85rem;
+}
+.cert-plaque__name {
+  display: block;
   font-family: var(--font-display), system-ui, sans-serif;
-  font-size: 0.82rem;
+  font-size: 0.8rem;
   font-weight: 500;
   line-height: 1.3;
-  color: color-mix(in srgb, var(--foreground) 85%, transparent);
-  background: color-mix(in srgb, var(--surface) 60%, transparent);
+  color: color-mix(in srgb, var(--foreground) 88%, transparent);
+  text-wrap: pretty;
 }
-.cert-pill__year {
+.cert-plaque__meta {
+  display: block;
+  margin-top: 0.25rem;
+  font-size: 0.68rem;
   color: var(--muted);
 }
-.cert-pill--link {
-  transition:
-    border-color 120ms cubic-bezier(0.2, 0, 0, 1),
-    background-color 120ms cubic-bezier(0.2, 0, 0, 1),
-    color 120ms cubic-bezier(0.2, 0, 0, 1),
-    transform 220ms cubic-bezier(0.2, 0, 0, 1);
+.cert-plaque__meta::first-letter {
+  text-transform: uppercase;
 }
-.cert-pill__arrow {
+.cert-plaque__cta {
   display: inline-block;
+  margin-top: 0.45rem;
+  font-family: var(--font-display), system-ui, sans-serif;
+  font-size: 0.75rem;
+  font-weight: 500;
   color: var(--accent);
-  transition: transform 220ms cubic-bezier(0.2, 0, 0, 1);
+  opacity: 0.75;
+  transition: opacity 120ms cubic-bezier(0.2, 0, 0, 1);
 }
-.cert-pill--link:hover,
-.cert-pill--link:focus-visible {
-  border-color: color-mix(in srgb, var(--accent) 55%, transparent);
-  background: color-mix(in srgb, var(--accent) 10%, transparent);
-  color: var(--foreground);
-  transform: translateY(-2px);
-}
-.cert-pill--link:hover .cert-pill__arrow,
-.cert-pill--link:focus-visible .cert-pill__arrow {
-  transform: translate(2px, -2px);
-}
-.cert-pill--link:focus-visible {
-  outline: 2px solid var(--accent);
-  outline-offset: 2px;
+.cert-piece:hover .cert-plaque__cta,
+.cert-piece:focus-visible .cert-plaque__cta {
+  opacity: 1;
 }
 
-.cert-groups[data-phase='wait'] .cert-pill-item {
+/* Miniaturas: medidas em cqw pra escalar junto com o quadro. */
+.cert-face {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  aspect-ratio: 1.414;
+  overflow: hidden;
+  padding: 7cqw 8cqw;
+  font-family: var(--font-sans), system-ui, sans-serif;
+  line-height: 1.15;
+}
+.cert-face > * {
+  position: relative;
+}
+.cf-kicker {
+  font-size: 4.3cqw;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.01em;
+}
+.cf-small {
+  margin-top: 3.4cqw;
+  font-size: 3.1cqw;
+}
+.cf-person {
+  margin-top: 0.8cqw;
+  font-size: 5.6cqw;
+}
+.cf-course {
+  margin-top: 0.8cqw;
+  font-size: 5.8cqw;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.cf-foot {
+  margin-top: auto;
+  display: flex;
+  justify-content: space-between;
+  gap: 4cqw;
+  font-size: 2.9cqw;
+  opacity: 0.75;
+}
+
+.cert-face--asimov {
+  color: #fff;
+  background:
+    radial-gradient(rgba(255, 255, 255, 0.07) 0.5cqw, transparent 0.6cqw) 0 0 / 3.4cqw 3.4cqw,
+    linear-gradient(112deg, #5fa197 0%, #2b5552 32%, #152120 68%, #111a1a 100%);
+}
+.cert-face--asimov .cf-small {
+  color: #63ecd8;
+}
+.cert-face--asimov .cf-watermark {
+  position: absolute;
+  top: -3cqw;
+  right: 1cqw;
+  writing-mode: vertical-rl;
+  font-size: 21cqw;
+  font-weight: 300;
+  letter-spacing: 0.04em;
+  color: rgba(255, 255, 255, 0.06);
+}
+
+.cert-face--anthropic {
+  color: #1a1915;
+  background: linear-gradient(160deg, #f4f2ea, #e9e6db);
+}
+.cert-face--anthropic .cf-kicker {
+  font-family: var(--font-mono), monospace;
+  font-size: 2.9cqw;
+  font-weight: 500;
+  letter-spacing: 0.22em;
+  color: #6b6960;
+}
+.cert-face--anthropic .cf-rule {
+  margin-top: 2.6cqw;
+  width: 12cqw;
+  height: 0.6cqw;
+  background: #d97757;
+}
+.cert-face--anthropic .cf-small {
+  color: #6b6960;
+}
+.cert-face--anthropic .cf-person {
+  font-family: var(--font-serif), Georgia, serif;
+  font-style: italic;
+  font-size: 7cqw;
+}
+.cert-face--anthropic .cf-course {
+  font-family: var(--font-display), system-ui, sans-serif;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+.cert-face--d2l {
+  color: #0f1b33;
+  background: linear-gradient(160deg, #fbfcff, #e8eefb);
+  padding-left: 11cqw;
+}
+.cert-face--d2l .cf-band {
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 3.4cqw;
+  background: linear-gradient(#2a6df4, #5b9cff);
+}
+.cert-face--d2l .cf-kicker {
+  color: #2a6df4;
+}
+.cert-face--d2l .cf-small {
+  color: #50607e;
+}
+.cert-face--d2l .cf-course {
+  font-weight: 600;
+  margin-top: 3cqw;
+}
+
+/* Entrada: os quadros são pendurados em cascata. `translate` é uma
+   propriedade separada de `transform`, então soma com a profundidade. */
+.cert-wall[data-phase='wait'] .cert-hang {
   opacity: 0;
 }
-.cert-groups[data-phase='play'] .cert-pill-item {
-  animation: cert-in 320ms cubic-bezier(0.2, 0, 0, 1) both;
+.cert-wall[data-phase='play'] .cert-hang {
+  animation: cert-hang-in 520ms cubic-bezier(0.2, 0, 0, 1) both;
   animation-delay: calc(var(--i) * 30ms);
 }
-@keyframes cert-in {
-  from { opacity: 0; transform: translateY(8px); }
-  to   { opacity: 1; transform: none; }
+@keyframes cert-hang-in {
+  from { opacity: 0; translate: 0 -22px; }
+  to   { opacity: 1; translate: 0 0; }
+}
+
+@media (max-width: 1023px) {
+  .cert-wall__plane {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    column-gap: 1.75rem;
+  }
+}
+
+/* Celular: a parede vira uma fileira que desliza de lado, sem 3D. */
+@media (max-width: 767px) {
+  .cert-wall {
+    perspective: none;
+  }
+  .cert-wall__plane {
+    display: flex;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scroll-padding-inline: 1.5rem;
+    gap: 1.5rem;
+    padding: 2rem 1.5rem 1.5rem;
+    transform: none;
+    scrollbar-width: none;
+  }
+  .cert-wall__plane::-webkit-scrollbar {
+    display: none;
+  }
+  .cert-hang {
+    flex: 0 0 76%;
+    scroll-snap-align: start;
+    transform: none;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .cert-groups[data-phase='wait'] .cert-pill-item {
-    opacity: 1;
-  }
-  .cert-pill--link:hover,
-  .cert-pill--link:focus-visible {
+  .cert-wall__plane,
+  .cert-hang,
+  .cert-piece,
+  .cert-piece:hover,
+  .cert-piece:focus-visible {
     transform: none;
+  }
+  .cert-wall[data-phase='wait'] .cert-hang {
+    opacity: 1;
   }
 }

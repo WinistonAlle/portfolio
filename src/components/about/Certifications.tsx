@@ -1,31 +1,39 @@
 import TituloAcento from '@/components/text/TituloAcento';
-import { certifications, type Issuer } from '@/data/certifications';
-import CertificationsReveal from './CertificationsReveal';
+import { certifications } from '@/data/certifications';
+import CertWall, { type WallItem } from './CertWall';
 
-/* Certificações no fim da página Sobre mim. Secundária aos projetos, então
-   compacta: uma linha por instituição e os cursos como pílulas. Cada pílula
-   com `url` abre a credencial em nova aba; sem `url` ela aparece, mas não é
-   link (não existe link morto na página).
+/* Certificações no fim da página Sobre mim, como uma parede de galeria: cada
+   certificado é um quadro pendurado, com uma miniatura no estilo da
+   instituição e uma plaquinha embaixo. Ideia tirada da foto de referência de
+   quadros na parede que o usuário guardou.
 
-   Tudo aqui é servidor. O único pedaço de cliente é a entrada em cascata. */
+   O servidor monta os textos (data por extenso no idioma da página) e o
+   cliente só cuida do 3D e da entrada. */
 
-type Labels = { eyebrow: string; title: string; newTab: string };
+type Labels = { eyebrow: string; title: string; newTab: string; view: string };
 
 export default function Certifications({ lang, labels }: { lang: 'pt' | 'en'; labels: Labels }) {
-  const monthYear = new Intl.DateTimeFormat(lang === 'pt' ? 'pt-BR' : 'en-US', {
-    month: 'long',
-    year: 'numeric',
-    timeZone: 'UTC',
-  });
+  const fmt = (locale: string, date: string) =>
+    new Intl.DateTimeFormat(locale, { month: 'long', year: 'numeric', timeZone: 'UTC' }).format(
+      new Date(`${date}-01T00:00:00Z`),
+    );
 
-  const issuers = [...new Set(certifications.map((c) => c.issuer))] as Issuer[];
-  let i = 0;
+  const items: WallItem[] = certifications.map((c) => ({
+    id: `${c.issuer}-${c.name}`,
+    name: c.name,
+    issuer: c.issuer,
+    issued: fmt(lang === 'pt' ? 'pt-BR' : 'en-US', c.date),
+    /* A miniatura imita o papel de verdade, então fala a língua do
+       certificado e não a da página: Anthropic emite em inglês. */
+    faceDate: fmt(c.issuer === 'Anthropic' ? 'en-US' : 'pt-BR', c.date),
+    url: c.url,
+  }));
 
   return (
-    <section aria-labelledby="certificacoes" className="relative w-full pb-28">
+    <section aria-labelledby="certificacoes" className="relative w-full pb-32">
       <div className="mx-auto w-full max-w-6xl px-6 lg:px-10">
         <p className="font-mono text-xs tracking-[0.18em] text-muted uppercase">
-          {labels.eyebrow} · {certifications.length}
+          {labels.eyebrow} · {items.length}
         </p>
         <h2
           id="certificacoes"
@@ -33,62 +41,9 @@ export default function Certifications({ lang, labels }: { lang: 'pt' | 'en'; la
         >
           <TituloAcento texto={labels.title} />
         </h2>
-
-        <CertificationsReveal className="cert-groups mt-8 border-t border-line">
-          {issuers.map((issuer) => {
-            const list = certifications.filter((c) => c.issuer === issuer);
-            return (
-              <div
-                key={issuer}
-                className="grid grid-cols-1 gap-3 border-b border-line py-5 md:grid-cols-[11rem_minmax(0,1fr)] md:gap-8"
-              >
-                <h3 className="flex items-baseline gap-2 pt-1.5 font-display text-sm font-semibold">
-                  {issuer}
-                  <span className="font-mono text-[0.65rem] font-normal text-muted tabular-nums">
-                    {list.length}
-                  </span>
-                </h3>
-                <ul className="flex flex-wrap gap-2">
-                  {list.map((c) => {
-                    const body = (
-                      <>
-                        <span>{c.name}</span>
-                        <span className="cert-pill__year font-mono text-[0.65rem] tabular-nums">
-                          <span className="sr-only">, </span>
-                          {c.date.slice(0, 4)}
-                        </span>
-                        {c.url && (
-                          <>
-                            <span aria-hidden="true" className="cert-pill__arrow">↗</span>
-                            <span className="sr-only"> ({labels.newTab})</span>
-                          </>
-                        )}
-                      </>
-                    );
-                    return (
-                      <li key={c.name} className="cert-pill-item" style={{ ['--i' as string]: i++ }}>
-                        {c.url ? (
-                          <a
-                            href={c.url}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            title={monthYear.format(new Date(`${c.date}-01T00:00:00Z`))}
-                            className="cert-pill cert-pill--link"
-                          >
-                            {body}
-                          </a>
-                        ) : (
-                          <span className="cert-pill">{body}</span>
-                        )}
-                      </li>
-                    );
-                  })}
-                </ul>
-              </div>
-            );
-          })}
-        </CertificationsReveal>
       </div>
+
+      <CertWall items={items} labels={{ newTab: labels.newTab, view: labels.view }} />
     </section>
   );
 }

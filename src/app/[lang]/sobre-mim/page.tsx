@@ -170,6 +170,7 @@ export default async function SobreMimPage(
           eyebrow: dict.about.certEyebrow,
           title: dict.about.certTitle,
           newTab: dict.about.certNewTab,
+          view: dict.about.certView,
         }}
       />
 

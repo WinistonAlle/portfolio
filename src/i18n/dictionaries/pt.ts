@@ -66,6 +66,7 @@ const pt = {
     timelineTitle: 'De gestão financeira a desenvolvedor, em três anos.',
     certEyebrow: 'Certificações',
     certTitle: 'O que eu venho *estudando*.',
+    certView: 'Ver credencial',
     certNewTab: 'abre a credencial em nova aba',
     ctaTitle: 'Agora me conta o que você precisa.',
     ctaText:
