@@ -2,7 +2,7 @@
    curso e de instituição não se traduz: é o mesmo texto nos dois idiomas,
    igual nome de projeto e de tecnologia em projects.ts.
 
-   `date` é ano-mês: ordena a lista e vira "outubro de 2026" no cartão.
+   `date` é ano-mês: ordena a lista e vira "outubro de 2026" na dica da pílula.
    `url` é o link da credencial. Sem ele a linha aparece, mas não é clicável. */
 
 export type Issuer = 'Anthropic' | 'Asimov Academy' | 'D2L';
@@ -13,13 +13,6 @@ export type Certification = {
   /** 'AAAA-MM' */
   date: string;
   url?: string;
-};
-
-/** Sigla do selo de cada instituição no cartão da credencial. */
-export const ISSUER_MARK: Record<Issuer, string> = {
-  Anthropic: 'A',
-  'Asimov Academy': 'AA',
-  D2L: 'D2L',
 };
 
 const CERTIFICATIONS: Certification[] = [

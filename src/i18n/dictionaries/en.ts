@@ -59,13 +59,7 @@ const en: typeof pt = {
     timelineTitle: 'From finance to developer, in three years.',
     certEyebrow: 'Certifications',
     certTitle: "What I've been *studying*.",
-    certAll: 'All',
-    certFilterLabel: 'Filter certifications by issuer',
-    certIssuedIn: 'Issued',
-    certVerify: 'View credential',
     certNewTab: 'opens the credential in a new tab',
-    certCountOne: 'certification shown',
-    certCountMany: 'certifications shown',
     ctaTitle: 'Now tell me what you need.',
     ctaText:
       "A job, freelance work or just an idea you want to sanity-check: reach out and we'll sort the rest over email. And if you'd rather see the code before talking to me, the projects are right there.",

@@ -1408,182 +1408,72 @@ body.scroll-locked .site-header {
 }
 
 /* ── Certificações (Sobre mim) ─────────────────────────────────────────────
-   Índice numerado + cartão de credencial. Curva única (0.2, 0, 0, 1), a
-   mesma do resto do site. Ver CertificationsIndex.tsx. */
+   Pílulas por instituição. Curva única do site (0.2, 0, 0, 1); hover em
+   120ms; entrada em cascata de 30ms (12 pílulas = 360ms). */
 
-.cert-row {
-  --sx: 50%;
-  position: relative;
-  display: grid;
-  grid-template-columns: 2.25rem minmax(0, 1fr) auto;
+.cert-pill {
+  display: inline-flex;
   align-items: baseline;
-  gap: 0.75rem;
-  padding: 1rem 0.75rem 1rem 0.5rem;
-  border-radius: 0.5rem;
-  isolation: isolate;
+  gap: 0.5rem;
+  padding: 0.45rem 0.9rem;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  font-family: var(--font-display), system-ui, sans-serif;
+  font-size: 0.82rem;
+  font-weight: 500;
+  line-height: 1.3;
+  color: color-mix(in srgb, var(--foreground) 85%, transparent);
+  background: color-mix(in srgb, var(--surface) 60%, transparent);
 }
-
-/* Holofote que acompanha o cursor na horizontal + filete de acento à esquerda. */
-.cert-row::before,
-.cert-row::after {
-  content: '';
-  position: absolute;
-  pointer-events: none;
-  opacity: 0;
-  transition: opacity 120ms cubic-bezier(0.2, 0, 0, 1), transform 220ms cubic-bezier(0.2, 0, 0, 1);
-}
-.cert-row::before {
-  inset: 0;
-  z-index: -1;
-  border-radius: inherit;
-  background: radial-gradient(
-    18rem 6rem at var(--sx) 50%,
-    color-mix(in srgb, var(--accent) 12%, transparent),
-    transparent 70%
-  );
-}
-.cert-row::after {
-  left: 0;
-  top: 22%;
-  bottom: 22%;
-  width: 2px;
-  border-radius: 2px;
-  background: var(--accent);
-  transform: scaleY(0.2);
-}
-.cert-row[data-on]::before,
-.cert-row:focus-visible::before,
-.cert-row[data-on]::after,
-.cert-row:focus-visible::after {
-  opacity: 1;
-}
-.cert-row[data-on]::after,
-.cert-row:focus-visible::after {
-  transform: scaleY(1);
-}
-
-.cert-n {
+.cert-pill__year {
   color: var(--muted);
-  transition: color 120ms cubic-bezier(0.2, 0, 0, 1);
 }
-.cert-name {
-  color: color-mix(in srgb, var(--foreground) 82%, transparent);
-  transition: color 120ms cubic-bezier(0.2, 0, 0, 1);
+.cert-pill--link {
+  transition:
+    border-color 120ms cubic-bezier(0.2, 0, 0, 1),
+    background-color 120ms cubic-bezier(0.2, 0, 0, 1),
+    color 120ms cubic-bezier(0.2, 0, 0, 1),
+    transform 220ms cubic-bezier(0.2, 0, 0, 1);
 }
-.cert-main {
+.cert-pill__arrow {
+  display: inline-block;
+  color: var(--accent);
   transition: transform 220ms cubic-bezier(0.2, 0, 0, 1);
 }
-.cert-row[data-on] .cert-main,
-.cert-row:focus-visible .cert-main {
-  transform: translateX(4px);
-}
-.cert-row[data-on] .cert-n,
-.cert-row:focus-visible .cert-n {
-  color: var(--accent);
-}
-.cert-row[data-on] .cert-name,
-.cert-row:focus-visible .cert-name {
+.cert-pill--link:hover,
+.cert-pill--link:focus-visible {
+  border-color: color-mix(in srgb, var(--accent) 55%, transparent);
+  background: color-mix(in srgb, var(--accent) 10%, transparent);
   color: var(--foreground);
+  transform: translateY(-2px);
 }
-a.cert-row:focus-visible {
+.cert-pill--link:hover .cert-pill__arrow,
+.cert-pill--link:focus-visible .cert-pill__arrow {
+  transform: translate(2px, -2px);
+}
+.cert-pill--link:focus-visible {
   outline: 2px solid var(--accent);
   outline-offset: 2px;
 }
 
-/* Entrada em cascata: 30ms por linha. */
-.cert-list[data-phase='wait'] .cert-item {
+.cert-groups[data-phase='wait'] .cert-pill-item {
   opacity: 0;
 }
-.cert-list[data-phase='play'] .cert-item {
-  animation: cert-in 360ms cubic-bezier(0.2, 0, 0, 1) both;
+.cert-groups[data-phase='play'] .cert-pill-item {
+  animation: cert-in 320ms cubic-bezier(0.2, 0, 0, 1) both;
   animation-delay: calc(var(--i) * 30ms);
 }
 @keyframes cert-in {
-  from { opacity: 0; transform: translateY(10px); }
+  from { opacity: 0; transform: translateY(8px); }
   to   { opacity: 1; transform: none; }
-}
-
-/* Cartão de credencial: primo do crachá do topo da página. */
-.cert-card {
-  --rx: 0deg;
-  --ry: 0deg;
-  --gx: 30%;
-  position: relative;
-  overflow: hidden;
-  border-radius: 1.25rem;
-  border: 1px solid var(--line);
-  background:
-    linear-gradient(160deg, color-mix(in srgb, var(--accent) 9%, transparent), transparent 45%),
-    var(--surface);
-  box-shadow:
-    0 30px 60px -30px rgba(0, 0, 0, 0.8),
-    inset 0 1px 0 rgba(255, 255, 255, 0.06);
-  transform: rotateX(var(--rx)) rotateY(var(--ry));
-  transition: transform 160ms cubic-bezier(0.2, 0, 0, 1);
-  will-change: transform;
-}
-/* Brilho que atravessa o cartão seguindo o cursor (secundária) e respira
-   devagar sozinho (ambiente). */
-.cert-card__glow {
-  position: absolute;
-  inset: -40%;
-  pointer-events: none;
-  background: radial-gradient(
-    closest-side at var(--gx) 35%,
-    color-mix(in srgb, var(--accent) 22%, transparent),
-    transparent
-  );
-  opacity: 0.55;
-  animation: cert-breathe 7s ease-in-out infinite alternate;
-}
-@keyframes cert-breathe {
-  from { opacity: 0.35; }
-  to   { opacity: 0.7; }
-}
-.cert-card__body {
-  position: relative;
-  padding: 1.75rem;
-  animation: cert-swap 260ms cubic-bezier(0.2, 0, 0, 1) both;
-}
-@keyframes cert-swap {
-  from { opacity: 0; transform: translateY(6px); }
-  to   { opacity: 1; transform: none; }
-}
-.cert-seal {
-  display: grid;
-  place-items: center;
-  min-width: 2.75rem;
-  height: 2.75rem;
-  padding: 0 0.6rem;
-  border-radius: 999px;
-  border: 1px solid color-mix(in srgb, var(--accent) 45%, transparent);
-  background: color-mix(in srgb, var(--accent) 10%, transparent);
-  box-shadow: 0 0 0 4px color-mix(in srgb, var(--accent) 6%, transparent);
-  color: var(--foreground);
-  font-size: 0.8rem;
-  font-weight: 700;
-  letter-spacing: 0.02em;
-}
-/* Picote de ingresso entre o título e a data. */
-.cert-perf {
-  height: 1px;
-  margin-inline: -1.75rem;
-  background-image: linear-gradient(90deg, var(--line) 50%, transparent 50%);
-  background-size: 8px 1px;
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .cert-card {
-    transform: none;
-  }
-  .cert-card__glow {
-    animation: none;
-  }
-  .cert-list[data-phase='wait'] .cert-item {
+  .cert-groups[data-phase='wait'] .cert-pill-item {
     opacity: 1;
   }
-  .cert-row[data-on] .cert-main,
-  .cert-row:focus-visible .cert-main {
+  .cert-pill--link:hover,
+  .cert-pill--link:focus-visible {
     transform: none;
   }
 }

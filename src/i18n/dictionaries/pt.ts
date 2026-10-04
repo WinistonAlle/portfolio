@@ -66,13 +66,7 @@ const pt = {
     timelineTitle: 'De gestão financeira a desenvolvedor, em três anos.',
     certEyebrow: 'Certificações',
     certTitle: 'O que eu venho *estudando*.',
-    certAll: 'Todas',
-    certFilterLabel: 'Filtrar certificações por instituição',
-    certIssuedIn: 'Emitida em',
-    certVerify: 'Ver credencial',
     certNewTab: 'abre a credencial em nova aba',
-    certCountOne: 'certificação exibida',
-    certCountMany: 'certificações exibidas',
     ctaTitle: 'Agora me conta o que você precisa.',
     ctaText:
       'Vaga, projeto freelance ou só uma ideia pra validar: me chama que a gente combina o resto por e-mail. E se quiser ver o código antes de falar comigo, os projetos estão logo ali.',

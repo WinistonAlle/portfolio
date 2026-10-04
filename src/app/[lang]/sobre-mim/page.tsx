@@ -169,13 +169,7 @@ export default async function SobreMimPage(
         labels={{
           eyebrow: dict.about.certEyebrow,
           title: dict.about.certTitle,
-          all: dict.about.certAll,
-          filterLabel: dict.about.certFilterLabel,
-          issuedIn: dict.about.certIssuedIn,
-          verify: dict.about.certVerify,
           newTab: dict.about.certNewTab,
-          countOne: dict.about.certCountOne,
-          countMany: dict.about.certCountMany,
         }}
       />
 
