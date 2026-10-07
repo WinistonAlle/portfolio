@@ -16,7 +16,7 @@ const nextConfig: NextConfig = {
   async headers() {
     return [
       {
-        source: '/:arquivo(card.glb|badge-front.png|badge-back.png|lanyard-band.png)',
+        source: '/:arquivo(card.glb|badge-front.png|badge-back-v2.png|lanyard-band.png)',
         headers: [
           {
             key: 'Cache-Control',

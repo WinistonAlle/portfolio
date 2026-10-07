@@ -597,7 +597,14 @@ body.scroll-locked .site-header {
 /* Fase 1: conteúdo preso em tela, escalando. */
 .portal__viewport {
   position: fixed;
-  inset: 0;
+  /* 100svh e não `inset: 0`: no celular a caixa `fixed` cresce e encolhe com
+     a barra de endereço, e o site centrado nela escorregava em relação à cena
+     3D, que mede 100svh. Com as duas na mesma altura fixa, o encaixe não se
+     mexe durante a rolagem. */
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100svh;
   z-index: 20;
   display: grid;
   place-items: center;
@@ -778,6 +785,7 @@ body.scroll-locked .site-header {
  * `place-items: stretch` tira o centramento que sobrava junto. */
 .portal--entered .portal__viewport {
   position: static;
+  height: auto;
   display: block;
   place-items: stretch;
 }

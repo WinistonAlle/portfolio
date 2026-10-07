@@ -93,7 +93,7 @@ export default function CrachaCartao({
           </span>
           <span className="cracha__face cracha__face--verso">
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src="/badge-back.png" alt="" draggable={false} />
+            <img src="/badge-back-v2.png" alt="" draggable={false} />
           </span>
         </span>
       </button>

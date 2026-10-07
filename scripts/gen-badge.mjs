@@ -104,8 +104,8 @@ function frontSVG() {
 
 function backSVG() {
   const stats = [
-    ['4', 'sistemas em produção'],
-    ['255', 'usuários atendidos'],
+    ['12', 'sistemas em produção'],
+    ['250+', 'pessoas usando todo dia'],
     ['1', 'ERP legado integrado'],
   ];
   const rows = stats
@@ -114,7 +114,7 @@ function backSVG() {
       return `
       <text x="${PAD}" y="${y}" font-family="${FONT}" font-size="72" font-weight="700"
             fill="${C.accent}">${n}</text>
-      <text x="${PAD + 150}" y="${y}" font-family="${FONT}" font-size="32"
+      <text x="${PAD + 200}" y="${y}" font-family="${FONT}" font-size="32"
             fill="${C.text}" opacity="0.9">${esc(t)}</text>
       <rect x="${PAD}" y="${y + 40}" width="${W - PAD * 2}" height="1" fill="${C.line}"/>`;
     })
@@ -236,7 +236,7 @@ await sharp(Buffer.from(frontSVG()))
   .png()
   .toFile('public/badge-front.png');
 
-await sharp(Buffer.from(backSVG())).png().toFile('public/badge-back.png');
+await sharp(Buffer.from(backSVG())).png().toFile('public/badge-back-v2.png');
 await band();
 
 console.log(`ok — ${W}x${H}`);

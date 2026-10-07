@@ -93,12 +93,15 @@ export function colarNaTela(
  *  página abre, o `.portal__viewport` ainda está na subida de entrada (1,1s
  *  de transição), e a medida feita nessa hora deslocava o site para cima da
  *  tela 3D pelo resto da abertura. */
-export function medirCaixa(el: HTMLElement): Caixa {
+export function medirCaixa(el: HTMLElement, largura?: number, altura?: number): Caixa {
   const width = el.offsetWidth, height = el.offsetHeight;
   const raiz = document.documentElement;
+  /* `largura`/`altura`: o tamanho da cena (100svh). No celular ele difere da
+     altura da janela, que muda com a barra de endereço; centralizar por ela
+     faria o site escorregar em relação à tela 3D durante a rolagem. */
   return {
-    left: (raiz.clientWidth - width) / 2,
-    top: (raiz.clientHeight - height) / 2,
+    left: ((largura ?? raiz.clientWidth) - width) / 2,
+    top: ((altura ?? raiz.clientHeight) - height) / 2,
     width,
     height,
   };

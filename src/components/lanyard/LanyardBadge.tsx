@@ -174,7 +174,7 @@ export default function LanyardBadge({
             fov={FOV}
             anchor={[stage.anchorX, 4, 0]}
             frontImage="/badge-front.png"
-            backImage="/badge-back.png"
+            backImage="/badge-back-v2.png"
             imageFit="cover"
             lanyardImage="/lanyard-band.png"
             lanyardWidth={1.1}

@@ -41,6 +41,7 @@ import {
 import {
   colarNaTela, medirCaixa, opacidadeDeFrente, projetarCantos, soltarTela, type Caixa,
 } from './tela-viva';
+import { alturaVh } from './altura-estavel';
 
 const clamp01 = (v: number) => (v < 0 ? 0 : v > 1 ? 1 : v);
 const range = (p: number, a: number, b: number) => clamp01((p - a) / (b - a));
@@ -169,7 +170,7 @@ export default function MacbookIntro3D({
     let raf = 0;
     function tick() {
       if (!vw || !vh) { resize(); return; }
-      const travel = (introVh / 100) * vh;
+      const travel = (introVh / 100) * alturaVh();
       const intro = reduced || travel <= 0
         ? 1
         : clamp01(window.scrollY / travel);

@@ -17,6 +17,7 @@ import {
 import {
   colarNaTela, medirCaixa, opacidadeDeFrente, projetarCantos, soltarTela, type Caixa,
 } from '@/components/macbook/tela-viva';
+import { alturaVh } from '@/components/macbook/altura-estavel';
 
 const clamp01 = (v: number) => (v < 0 ? 0 : v > 1 ? 1 : v);
 const range = (p: number, a: number, b: number) => clamp01((p - a) / (b - a));
@@ -93,7 +94,7 @@ export default function PhoneIntro3D({
       if (!w || !h) return;
       /* A caixa do portal muda quando ele descobre o aspecto da tela, que
          chega depois deste componente montar: mede sempre. */
-      if (telaHtml) caixa = medirCaixa(telaHtml);
+      if (telaHtml) caixa = medirCaixa(telaHtml, canvas!.clientWidth, canvas!.clientHeight);
       if (w === vw && h === vh && model) return;
       vw = w; vh = h;
       renderer.setSize(vw, vh, false);
@@ -109,7 +110,7 @@ export default function PhoneIntro3D({
 
     function tick() {
       if (!model) { resize(); if (!model) return; }
-      const travel = (introVh / 100) * window.innerHeight;
+      const travel = (introVh / 100) * alturaVh();
       const intro = travel > 0 ? clamp01(window.scrollY / travel) : 1;
       const boot = range(intro, ...BOOT);
       if (boot !== lastBoot) cbRef.current.onHandoff?.(boot);
@@ -154,7 +155,7 @@ export default function PhoneIntro3D({
     /* Observador só da caixa do portal, separado do de cima: durante o zoom
        ela cresce a cada quadro, e isso não pode refazer a cena inteira. */
     const roCaixa = new ResizeObserver(() => {
-      if (telaHtml) { caixa = medirCaixa(telaHtml); dirty = true; }
+      if (telaHtml) { caixa = medirCaixa(telaHtml, canvas.clientWidth, canvas.clientHeight); dirty = true; }
     });
     if (telaHtml) roCaixa.observe(telaHtml);
     resize();

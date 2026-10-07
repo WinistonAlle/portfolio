@@ -25,6 +25,7 @@
 import dynamic from 'next/dynamic';
 import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { MacbookPro } from './MacbookPro';
+import { alturaVh } from './altura-estavel';
 import { canRun3D } from './can-run-3d';
 import Salvaguarda3D from '@/components/3d/Salvaguarda3D';
 import AneisDaAbertura from '@/components/background/AneisDaAbertura';
@@ -201,8 +202,8 @@ export default function MacbookPortal({
       rafRef.current = 0;
       /* A cena 3D consome a primeira fatia da rolagem; o zoom só começa
          depois dela. Sem 3D o deslocamento é zero e nada muda. */
-      const intro = on3D ? (introVh / 100) * window.innerHeight : 0;
-      const percurso = (travel / 100) * window.innerHeight;
+      const intro = on3D ? (introVh / 100) * alturaVh() : 0;
+      const percurso = (travel / 100) * alturaVh();
       const p =
         percurso > 0
           ? Math.min(1, Math.max(0, (window.scrollY - intro) / percurso))
@@ -411,7 +412,7 @@ export default function MacbookPortal({
           type="button"
           className="portal__rolar"
           onClick={() => {
-            const fim = ((on3D ? introVh : 0) + travel) / 100 * window.innerHeight + 4;
+            const fim = ((on3D ? introVh : 0) + travel) / 100 * alturaVh() + 4;
             rolarAte(fim, celular ? 3.2 : 4.4, true);
           }}
         >
