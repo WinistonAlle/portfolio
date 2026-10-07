@@ -130,6 +130,17 @@ export default function LanyardBadge({
     setPodeWebGL(temWebGL());
   }, []);
 
+  /* Abaixo de 1024px quem aparece é o CrachaCartao (CSS), e a cena 3D nem é
+     montada: three + rapier + modelo ficam fora do celular. */
+  const [telaLarga, setTelaLarga] = useState(false);
+  useEffect(() => {
+    const mq = window.matchMedia('(min-width: 1024px)');
+    const atualizar = () => setTelaLarga(mq.matches);
+    atualizar();
+    mq.addEventListener('change', atualizar);
+    return () => mq.removeEventListener('change', atualizar);
+  }, []);
+
   return (
     <div ref={slotRef} className="relative h-full w-full">
       <div
@@ -150,7 +161,7 @@ export default function LanyardBadge({
             com rede embaixo. Quando não dá, fica a imagem do crachá parada, que
             já é a camada de espera logo acima: a seção continua fazendo sentido
             e o resto da página não vai junto. Ver Salvaguarda3D. */}
-        {stage ? (
+        {stage && telaLarga ? (
           <Salvaguarda3D ativo={podeWebGL} alternativa={null}>
           <Lanyard
             onReveal={() => setRevelou(true)}

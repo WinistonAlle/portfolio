@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { preload } from 'react-dom';
+import CrachaCartao from '@/components/lanyard/CrachaCartao';
 import LanyardBadge from '@/components/lanyard/LanyardBadge';
 import StackPreguicoso from '@/components/home/secoes/StackPreguicoso';
 import { Iphone16Pro } from '@/components/iphone/Iphone16Pro';
@@ -74,6 +75,13 @@ export default async function SobreMimPage(
           {/* pt extra só nesta coluna: descer o grid inteiro arrastaria o
               canvas do crachá junto e a fita descolaria do topo da página */}
           <div className="relative z-10 max-w-4xl lg:pt-56">
+            {/* No celular e no tablet o crachá vem ANTES do texto, como
+                cartão interativo em CSS; a cena 3D fica só no computador. */}
+            {/* O `lg:hidden` vai num invólucro: o CSS do cartão define o
+                próprio display e venceria a classe do Tailwind. */}
+            <div className="mb-12 lg:hidden">
+              <CrachaCartao dica={dict.about.crachaDica} rotuloVirar={dict.about.crachaVirar} />
+            </div>
             {/* Mesmo padrão dos outros títulos do site: Bricolage em negrito
                 com uma expressão em serifa itálica, marcada no dicionário. */}
             <h1 className="text-[clamp(2.2rem,4.6vw,3.6rem)] leading-[1.05] font-bold tracking-[-0.03em] text-balance">
@@ -107,7 +115,7 @@ export default async function SobreMimPage(
               padding do grid (não do conteúdo), o que já cancela o pt-24 sem
               precisar de margem negativa — o mesmo efeito que a margem tinha
               antes. */}
-          <div className="relative z-0 h-[62vh] min-h-[420px] lg:absolute lg:top-0 lg:right-0 lg:z-0 lg:h-[104vh] lg:w-[47.5%] lg:min-h-0">
+          <div className="relative z-0 hidden lg:absolute lg:top-0 lg:right-0 lg:z-0 lg:block lg:h-[104vh] lg:w-[47.5%] lg:min-h-0">
             <LanyardBadge />
           </div>
         </div>
