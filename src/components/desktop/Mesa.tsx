@@ -21,6 +21,7 @@ import { useRouter } from 'next/navigation';
 import TituloAcento from '@/components/text/TituloAcento';
 import { usePixelTransition } from '@/components/transition/PixelTransition';
 import TransitionLink from '@/components/transition/TransitionLink';
+import { rolarAte } from '@/components/scroll/SmoothScroll';
 import { SOCIALS } from '@/data/socials';
 import type { Locale } from '@/i18n/config';
 import {
@@ -431,6 +432,14 @@ export default function Mesa({
   const [notif, setNotif] = useState<'fora' | 'dentro' | 'saindo'>('fora');
   const secaoRef = useRef<HTMLElement>(null);
 
+  /* Desce até onde a mesa termina, descontando o header que aparece preso
+     no topo assim que ela sai de cena. */
+  const descer = () => {
+    const secao = secaoRef.current;
+    if (!secao) return;
+    rolarAte(secao.getBoundingClientRect().bottom + window.scrollY - 72);
+  };
+
   /* Depois que a mesa sai de cena, o header do site volta, preso no topo:
      a barra de menu ficou lá em cima e o resto da página precisa de
      navegação. A classe vai no body porque o header mora no layout raiz. */
@@ -671,12 +680,12 @@ export default function Mesa({
           </p>
         </div>
 
-        {/* A página continua embaixo da mesa: o traço que escorre diz isso
-            sem virar botão. */}
-        <div className="mesa-rolar" aria-hidden="true">
-          <span className="hero-rolar" />
+        {/* A página continua embaixo da mesa. O traço que escorre avisa, e
+            clicar desce até a primeira seção. */}
+        <button type="button" className="mesa-rolar" onClick={descer}>
+          <span className="hero-rolar" aria-hidden="true" />
           <span>{t.rolar}</span>
-        </div>
+        </button>
 
         {notif !== 'fora' && (
           <div
@@ -761,12 +770,12 @@ export default function Mesa({
             <span className="ios-app__rotulo">{t.idioma}</span>
           </TransitionLink>
         </div>
-        <span className="ios-rolar" aria-hidden="true">
+        <button type="button" className="ios-rolar" onClick={descer}>
           {t.rolar}
-          <svg viewBox="0 0 12 12" width="11" height="11">
+          <svg viewBox="0 0 12 12" width="11" height="11" aria-hidden="true">
             <path d="M2 4.5 6 8.5l4-4" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
           </svg>
-        </span>
+        </button>
         <nav className="ios-dock" aria-label="Dock">
           {dockIos.map((app) => linkIos(app, true))}
         </nav>

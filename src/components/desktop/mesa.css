@@ -271,6 +271,33 @@ body.mesa-passou:has(.mesa) .site-header:not(.site-header--hidden) {
   color: rgba(255, 255, 255, 0.72);
 }
 
+/* "Role para ver mais": no canto de baixo à esquerda, na altura do Dock.
+   É botão: clicar desce até a primeira seção. */
+.mesa-rolar,
+.ios-rolar {
+  font: inherit;
+  border: 0;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.mesa-rolar {
+  background: none;
+  padding: 6px 8px 6px 0;
+  transition: color 0.15s;
+}
+
+.mesa-rolar:hover,
+.mesa-rolar:focus-visible {
+  color: #fff;
+  outline: none;
+}
+
+.mesa-rolar:focus-visible span:last-child {
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
 /* "Role para ver mais": no canto de baixo à esquerda, na altura do Dock. */
 .mesa-rolar {
   position: absolute;

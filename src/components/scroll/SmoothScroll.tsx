@@ -39,6 +39,16 @@ export function jumpScrollTo(top: number) {
   window.scrollTo({ top, behavior: 'instant' as ScrollBehavior });
 }
 
+/** Rola até `top` com a mesma inércia do resto do site (ou o smooth nativo,
+ *  sem o Lenis). É o que os "Role para ver mais" clicáveis usam. */
+export function rolarAte(top: number) {
+  if (lenis) {
+    lenis.scrollTo(top, { duration: 1.1 });
+    return;
+  }
+  window.scrollTo({ top, behavior: 'smooth' });
+}
+
 /**
  * Leva ao topo e ignora a rolagem que ainda está chegando.
  *
