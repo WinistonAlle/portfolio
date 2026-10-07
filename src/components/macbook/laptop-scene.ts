@@ -20,7 +20,14 @@ export type LaptopModel = {
   lid: THREE.Group;
   screen: THREE.Mesh<THREE.PlaneGeometry, THREE.MeshStandardMaterial>;
   stickers: THREE.Mesh<THREE.PlaneGeometry, THREE.MeshStandardMaterial>;
-  backlight: THREE.Mesh<THREE.PlaneGeometry, THREE.MeshBasicMaterial>;
+  backlight: THREE.Mesh<THREE.PlaneGeometry, THREE.ShaderMaterial>;
+  /** 0..1: a onda que acende o teclado do centro para as bordas. Uniforme
+   *  compartilhado pela retroiluminação e pelas legendas das teclas. */
+  ondaTeclado: { value: number };
+  /** Luz acima das teclas: acende com a onda e faz as bordas delas brilharem. */
+  luzTeclas: THREE.PointLight;
+  /** Texturas que moram em uniformes e não são achadas pelo `material.map`. */
+  texturas: THREE.Texture[];
   materials: Record<string, THREE.MeshStandardMaterial>;
 };
 
@@ -162,7 +169,7 @@ export async function makeStickerAtlas(baseUrl = '/tech-stickers/'): Promise<THR
 /* O monograma WA no centro da tampa, onde um MacBook leva a maçã. Mesmos
    polígonos do logo (public/logo/, grade de 256), desenhados no atlas: é
    gravação na tampa, não adesivo, então vai sem sombra e sem inclinação. */
-function desenharWA(ctx: CanvasRenderingContext2D, cx: number, cy: number, largura: number) {
+export function desenharWA(ctx: CanvasRenderingContext2D, cx: number, cy: number, largura: number) {
   const k = largura / 222;                 // o desenho ocupa x 17..239
   const X = (x: number) => cx + (x - 128) * k;
   const Y = (y: number) => cy + (y - 128) * k;
@@ -312,15 +319,89 @@ export function buildLaptop(): LaptopModel {
   const blTex = new THREE.CanvasTexture(bl);
   blTex.colorSpace = THREE.SRGBColorSpace;
   blTex.anisotropy = 8;
-  const backlight = new THREE.Mesh(
-    new THREE.PlaneGeometry(KB_W, KB_D),
-    new THREE.MeshBasicMaterial({ name: 'backlight', map: blTex, toneMapped: false }),
-  );
+  /* A luz do teclado não sobe por igual: ela acende numa onda que sai do
+     centro e alcança as bordas, com uma crista azulada na frente. É o mesmo
+     uniforme (`ondaTeclado`) na retroiluminação e nas legendas, dirigido em
+     poseLaptop, então as duas camadas acendem juntas. */
+  const ondaTeclado = { value: 0 };
+  const luzDoTeclado = (map: THREE.Texture, base: number, transparente: boolean) =>
+    new THREE.ShaderMaterial({
+      uniforms: { map: { value: map }, uOnda: ondaTeclado, uBase: { value: base }, uAspecto: { value: KB_W / KB_D } },
+      transparent: transparente,
+      depthWrite: !transparente,
+      vertexShader: 'varying vec2 vUv; void main(){ vUv = uv; gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0); }',
+      fragmentShader: `
+        uniform sampler2D map; uniform float uOnda; uniform float uBase; uniform float uAspecto;
+        varying vec2 vUv;
+        void main(){
+          vec4 t = texture2D(map, vUv);
+          vec2 c = (vUv - 0.5) * vec2(uAspecto, 1.0);
+          float d = length(c) / length(vec2(uAspecto, 1.0) * 0.5);
+          float frente = uOnda * 1.35;
+          float aceso = 1.0 - smoothstep(frente - 0.22, frente, d);
+          float crista = exp(-pow((d - frente) / 0.07, 2.0)) * (1.0 - smoothstep(0.78, 1.0, uOnda));
+          float k = uBase + (1.0 - uBase) * aceso;
+          float lum = dot(t.rgb, vec3(0.3333));
+          vec3 cor = t.rgb * k + vec3(0.36, 0.61, 1.0) * crista * lum * 0.9;
+          gl_FragColor = vec4(cor, t.a);
+          #include <colorspace_fragment>
+        }`,
+    });
+
+  const backlight = new THREE.Mesh(new THREE.PlaneGeometry(KB_W, KB_D), luzDoTeclado(blTex, 0.18, false));
   backlight.name = 'backlight';
   backlight.rotation.x = -90 * DEG;
   backlight.position.set(0, deckY, KB_Z);
-  backlight.material.color.setScalar(0.18);
   root.add(backlight);
+
+  /* Legendas das teclas: um canvas transparente com a letra de cada tecla,
+     num plano rente ao topo delas. Layout de MacBook (QWERTY). Vai no mesmo
+     material da retroiluminação, então a letra é o que acende, como numa
+     tecla retroiluminada de verdade. A ordem é a mesma do `layout`. */
+  const LEGENDAS: string[][] = [
+    ['esc', 'F1', 'F2', 'F3', 'F4', 'F5', 'F6', 'F7', 'F8', 'F9', 'F10', 'F11', 'F12', ''],
+    ['`', '1', '2', '3', '4', '5', '6', '7', '8', '9', '0', '-', '=', '⌫'],
+    ['⇥', 'Q', 'W', 'E', 'R', 'T', 'Y', 'U', 'I', 'O', 'P', '[', ']', '\\'],
+    ['⇪', 'A', 'S', 'D', 'F', 'G', 'H', 'J', 'K', 'L', ';', "'", '↵'],
+    ['⇧', 'Z', 'X', 'C', 'V', 'B', 'N', 'M', ',', '.', '/', '⇧'],
+    ['fn', '⌃', '⌥', '⌘', '', '⌘', '⌥', '←', '↑', '↓', '→'],
+  ];
+  const LPX = 2048;
+  const lg = document.createElement('canvas');
+  lg.width = LPX; lg.height = Math.round(LPX * KB_D / KB_W);
+  const lx = lg.getContext('2d')!;
+  const lsx = LPX / KB_W, lsz = lg.height / KB_D;
+  lx.fillStyle = '#eef3ff';
+  lx.textAlign = 'center';
+  lx.textBaseline = 'middle';
+  const rotulos = LEGENDAS.flat();
+  layout.forEach((k, i) => {
+    const txt = rotulos[i];
+    if (!txt) return;
+    /* Palavra (esc, F5, fn) vai pequena; letra e símbolo vão grandes. Tecla
+       de meia altura (fileira de função, setas de cima e de baixo) encolhe. */
+    const baixa = k.d < u * 0.8;
+    const px = u * lsx * (txt.length > 1 ? 0.2 : baixa ? 0.26 : 0.36);
+    lx.font = `600 ${px}px -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, sans-serif`;
+    lx.fillText(txt, (k.x + KB_W / 2) * lsx, (k.z + KB_D / 2) * lsz + px * 0.04);
+  });
+  const lgTex = new THREE.CanvasTexture(lg);
+  lgTex.colorSpace = THREE.SRGBColorSpace;
+  lgTex.anisotropy = 8;
+  const legendas = new THREE.Mesh(new THREE.PlaneGeometry(KB_W, KB_D), luzDoTeclado(lgTex, 0.3, true));
+  legendas.name = 'key-legends';
+  legendas.rotation.x = -90 * DEG;
+  /* Topo da tecla: deck + 1,1mm de centro + metade da espessura (0,65mm). */
+  legendas.position.set(0, deckY + 0.0011 + 0.00065 + 0.00012, KB_Z);
+  legendas.renderOrder = 2;
+  root.add(legendas);
+
+  /* Luz pontual acima do teclado, no tom da retroiluminação. É ela que dá
+     vida às teclas durante o giro: as bordas pegam brilho e ele se move com a
+     câmera. A intensidade sobe com a onda, em poseLaptop. */
+  const luzTeclas = new THREE.PointLight(0xa9c8ff, 0, 0.7, 2);
+  luzTeclas.position.set(0, deckY + 0.09, KB_Z + KB_D * 0.1);
+  root.add(luzTeclas);
 
   /* Teclas agrupadas por tamanho: uma InstancedMesh por formato. Escalar uma
      geometria única deformaria o arredondamento das teclas largas (a barra de
@@ -347,12 +428,14 @@ export function buildLaptop(): LaptopModel {
   }
 
   /* Trackpad: da cor do corpo, como no MacBook, e não uma placa preta. O que
-     o separa do alumínio em volta é só o acabamento (vidro, mais liso) e um
-     filete escuro fino na borda, que é a fresta de verdade. */
+     o separa do alumínio em volta é só o acabamento (um pouco mais liso) e
+     um filete escuro fino na borda, que é a fresta de verdade. Não pode ser
+     liso demais: a luz das teclas fica logo acima e estourava um ponto
+     branco no meio dele. */
   const padW = KB_W * 0.46, padD = BASE_D * 0.31;
   const padZ = KB_Z + KB_D / 2 + 0.008 + padD / 2;
   const padVidro = new THREE.MeshStandardMaterial({
-    name: 'trackpad', color: 0xb9bec6, metalness: 0.7, roughness: 0.2, envMapIntensity: 1.2,
+    name: 'trackpad', color: 0xb9bec6, metalness: 0.7, roughness: 0.38, envMapIntensity: 1.2,
   });
   const fresta = new THREE.Mesh(
     new THREE.ShapeGeometry(roundedRect(padW + 0.0012, padD + 0.0012, 0.0052), 12),
@@ -424,7 +507,8 @@ export function buildLaptop(): LaptopModel {
   stickers.renderOrder = 1;
   lid.add(stickers);
 
-  return { root, lid, screen, stickers, backlight,
+  return { root, lid, screen, stickers, backlight, ondaTeclado, luzTeclas,
+    texturas: [blTex, lgTex],
     materials: { alu, aluDark, glass, rubber, keycap, padVidro } };
 }
 
@@ -542,7 +626,12 @@ export function poseLaptop(model: LaptopModel, p: number, lidFinal = LID_FINAL) 
   model.root.rotation.x = 4 * DEG * spin;
   /* A retroiluminação acende junto com a abertura — a tampa levantando é o
      gesto que liga o aparelho. */
-  model.backlight.material.color.setScalar(0.18 + 0.82 * opened);
+  /* A onda corre num trecho curto da abertura, quando o teclado já está à
+     vista: esticada pela abertura inteira ela passaria devagar demais pra
+     ser percebida como onda. */
+  const onda = easeInOut(range(p, 0.36, 0.66));
+  model.ondaTeclado.value = onda;
+  model.luzTeclas.intensity = 0.045 * onda;
   /* A tela acende com a tampa. Vai só até 1.15 porque ela é o FUNDO do site
      que entra por cima: acesa demais, vazaria uma borda clara em volta do
      conteúdo no momento do handoff. */

@@ -78,7 +78,10 @@ export default function PhoneIntro3D({
         const mesh = o as THREE.Mesh;
         mesh.geometry?.dispose?.();
         const mat = mesh.material as THREE.Material | THREE.Material[] | undefined;
-        for (const x of Array.isArray(mat) ? mat : mat ? [mat] : []) x.dispose();
+        for (const x of Array.isArray(mat) ? mat : mat ? [mat] : []) {
+          (x as THREE.MeshStandardMaterial).map?.dispose();
+          x.dispose();
+        }
       });
     };
 

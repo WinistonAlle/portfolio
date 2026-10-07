@@ -260,6 +260,7 @@ export default function MacbookIntro3D({
           m.dispose();
         }
       });
+      for (const t of model.texturas) t.dispose();
       env.dispose();
       shadowTex.dispose();
       renderer.dispose();

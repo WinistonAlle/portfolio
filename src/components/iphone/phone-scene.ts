@@ -15,7 +15,7 @@
  */
 
 import * as THREE from 'three';
-import type { Pose } from '@/components/macbook/laptop-scene';
+import { desenharWA, type Pose } from '@/components/macbook/laptop-scene';
 
 const DEG = Math.PI / 180;
 
@@ -121,6 +121,28 @@ export function buildPhone(aspect: number): PhoneModel {
   tras.rotation.y = Math.PI;
   tras.position.z = -BODY_T / 2 - 0.0002;
   root.add(tras);
+
+  /* Monograma WA no centro das costas, onde o iPhone leva a maçã. Um plano
+     com textura transparente, rente ao vidro; material liso e metálico, pra
+     ele pegar reflexo no giro como um logo espelhado. */
+  const waCv = document.createElement('canvas');
+  waCv.width = waCv.height = 512;
+  desenharWA(waCv.getContext('2d')!, 256, 256, 440);
+  const waTex = new THREE.CanvasTexture(waCv);
+  waTex.colorSpace = THREE.SRGBColorSpace;
+  waTex.anisotropy = 8;
+  const waLado = bodyW * 0.42;
+  const wa = new THREE.Mesh(
+    new THREE.PlaneGeometry(waLado, waLado),
+    new THREE.MeshStandardMaterial({
+      name: 'wa-logo', map: waTex, transparent: true, depthWrite: false,
+      metalness: 0.5, roughness: 0.25, envMapIntensity: 1.3,
+    }),
+  );
+  wa.rotation.y = Math.PI;
+  wa.position.set(0, 0, -BODY_T / 2 - 0.0005);
+  wa.renderOrder = 1;
+  root.add(wa);
 
   const platoLado = bodyW * 0.47;
   const plato = new THREE.Mesh(
