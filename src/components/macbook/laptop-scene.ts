@@ -115,7 +115,7 @@ const STICKERS = [
   // x, y em fração do atlas; s = largura em fração da largura do atlas; rot em graus
   { file: 'react.png',    x: 0.29, y: 0.40, s: 0.205, rot: -9 },
   { file: 'python.png',   x: 0.615, y: 0.28, s: 0.170, rot: 7 },
-  { file: 'docker.png',   x: 0.455, y: 0.665, s: 0.190, rot: -16 },
+  { file: 'docker.png',   x: 0.405, y: 0.745, s: 0.180, rot: -16 },  // abaixo do WA do centro
   { file: 'claude.png',   x: 0.795, y: 0.615, s: 0.150, rot: 12 },   // quase na borda
   { file: 'n8n.png',      x: 0.185, y: 0.735, s: 0.150, rot: -4 },
   { file: 'apple-v2.png', x: 0.795, y: 0.215, s: 0.155, rot: 19 },
@@ -151,10 +151,37 @@ export async function makeStickerAtlas(baseUrl = '/tech-stickers/'): Promise<THR
     ctx.restore();
   });
 
+  desenharWA(ctx, W / 2, H / 2, W * 0.2);
+
   const tex = new THREE.CanvasTexture(cv);
   tex.colorSpace = THREE.SRGBColorSpace;
   tex.anisotropy = 8;
   return tex;
+}
+
+/* O monograma WA no centro da tampa, onde um MacBook leva a maçã. Mesmos
+   polígonos do logo (public/logo/, grade de 256), desenhados no atlas: é
+   gravação na tampa, não adesivo, então vai sem sombra e sem inclinação. */
+function desenharWA(ctx: CanvasRenderingContext2D, cx: number, cy: number, largura: number) {
+  const k = largura / 222;                 // o desenho ocupa x 17..239
+  const X = (x: number) => cx + (x - 128) * k;
+  const Y = (y: number) => cy + (y - 128) * k;
+  const poli = (pts: number[][]) => {
+    ctx.beginPath();
+    pts.forEach(([x, y], i) => (i ? ctx.lineTo(X(x), Y(y)) : ctx.moveTo(X(x), Y(y))));
+    ctx.closePath();
+    ctx.fill();
+  };
+  ctx.save();
+  ctx.fillStyle = 'rgba(243,246,255,0.94)';
+  poli([[17, 64], [47, 64], [83, 192], [53, 192]]);
+  poli([[87, 112], [117, 112], [83, 192], [53, 192]]);
+  poli([[87, 112], [117, 112], [151, 192], [121, 192]]);
+  poli([[165, 64], [195, 64], [151, 192], [121, 192]]);
+  poli([[165, 64], [195, 64], [239, 192], [209, 192]]);
+  ctx.fillStyle = '#5b9cff';
+  poli([[163.94, 150], [196.06, 150], [202.25, 168], [157.75, 168]]);
+  ctx.restore();
 }
 
 /* ----------------------------------------------------------------- modelo */
