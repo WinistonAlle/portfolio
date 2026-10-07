@@ -5,7 +5,7 @@ import './MagicRings.css';
 
 /* MagicRings, do React Bits (variante JavaScript + CSS).
  *
- * Quatro mudanças em relação ao original, todas por causa de onde ele roda
+ * Cinco mudanças em relação ao original, todas por causa de onde ele roda
  * aqui — o fundo da abertura do MacBook, que é o momento mais pesado da home:
  *
  * 1. `pointerEvents: 'none'` no contêiner e os ouvintes de mouse só existem se
@@ -17,6 +17,9 @@ import './MagicRings.css';
  *    efeito de brilho difuso, e ele divide a GPU com a cena 3D do notebook.
  * 3. `setPixelRatio` ANTES de `setSize`, que é a ordem que o three espera —
  *    invertida, o buffer nasce com o tamanho errado até o primeiro resize.
+ * 5. `resize` ignora chamadas sem mudança de tamanho e redesenha na hora
+ *    quando muda: `setSize` apaga o buffer, e no celular isso piscava a cada
+ *    movimento da barra de endereço.
  * 4. Limpeza tolerante: `removeChild` dentro de try, porque o React pode já
  *    ter tirado o nó quando o efeito desmonta, e `geometry.dispose()`, que o
  *    original esquecia.
@@ -192,16 +195,27 @@ export default function MagicRings({
     const quad = new THREE.Mesh(geometry, material);
     scene.add(quad);
 
+    let lw = 0;
+    let lh = 0;
+    let jaDesenhou = false;
     const resize = () => {
       const w = mount.clientWidth;
       const h = mount.clientHeight;
       if (!w || !h) return;
+      /* Mesmo tamanho: não mexe. `setSize` apaga o buffer, e no celular o
+         evento de resize dispara à toa enquanto a barra de endereço anda. */
+      if (w === lw && h === lh) return;
+      lw = w;
+      lh = h;
       const dpr = Math.min(window.devicePixelRatio || 1, dprMax);
       /* Nesta ordem: `setSize` usa o pixel ratio corrente para dimensionar o
          buffer, então trocá-lo depois deixa o primeiro quadro fora de escala. */
       renderer.setPixelRatio(dpr);
       renderer.setSize(w, h);
       uniforms.uResolution.value.set(w * dpr, h * dpr);
+      /* Redesenha na hora: sem isso o canvas fica vazio até o próximo quadro,
+         e essa lacuna é uma piscada. */
+      if (jaDesenhou) renderer.render(scene, camera);
     };
     resize();
     window.addEventListener('resize', resize);
@@ -272,6 +286,7 @@ export default function MagicRings({
       uniforms.uCoverageAlpha.value = p.alphaMode === 'coverage' ? 1 : 0;
 
       renderer.render(scene, camera);
+      jaDesenhou = true;
     };
     frameId = 0;
 

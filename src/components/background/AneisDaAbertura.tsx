@@ -33,8 +33,9 @@ const MagicRings = dynamic(() => import('./MagicRings'), { ssr: false });
 export default function AneisDaAbertura({
   leve = false,
 }: {
-  /** Celular: mesma cena, com menos anéis e resolução 1x. É fragmento em tela
-   *  cheia rodando junto com o iPhone 3D num aparelho de GPU bem menor. */
+  /** Celular: mesma cena, com menos anéis, meia resolução e sem desfoque de
+   *  CSS. É fragmento em tela cheia rodando junto com o iPhone 3D num
+   *  aparelho de GPU bem menor. */
   leve?: boolean;
 }) {
   const [podeWebGL, setPodeWebGL] = useState(false);
@@ -47,7 +48,9 @@ export default function AneisDaAbertura({
   return (
     <div
       aria-hidden
-      className="pointer-events-none fixed inset-0"
+      /* 100svh e não `inset-0`: no celular a caixa `fixed` cresce e encolhe
+         com a barra de endereço, e cada mudança redimensionava o canvas. */
+      className="pointer-events-none fixed top-0 left-0 h-svh w-full"
       style={{
         zIndex: 2,
         /* Some junto com a abertura. O `--p` vem do `.portal`, que é ancestral
@@ -76,13 +79,17 @@ export default function AneisDaAbertura({
           /* Devagar: o assunto da tela é o notebook girando. Fundo que corre
              mais que o primeiro plano rouba o olho. */
           speed={0.55}
-          attenuation={26}
-          lineThickness={8}
+          attenuation={leve ? 15 : 26}
+          lineThickness={leve ? 12 : 8}
           baseRadius={0.3}
           radiusStep={0.14}
           scaleRate={0.22}
           opacity={0.55}
-          blur={14}
+          /* No celular sem `filter: blur`: desfoque de CSS em cima de um canvas
+             WebGL em tela cheia é recomposto a cada quadro e pisca no Safari.
+             A suavidade vem de desenhar em meia resolução e deixar o
+             navegador ampliar, o que ainda custa um quarto dos pixels. */
+          blur={leve ? 0 : 14}
           noiseAmount={0}
           rotation={-12}
           ringGap={1.35}
@@ -97,7 +104,7 @@ export default function AneisDaAbertura({
           alphaMode="luminance"
           /* 1.5 e não 2: é fragmento puro em tela cheia, dividindo GPU com a
              cena 3D do notebook no momento mais pesado da home. */
-          dprMax={leve ? 1 : 1.5}
+          dprMax={leve ? 0.5 : 1.5}
         />
       </Salvaguarda3D>
     </div>
