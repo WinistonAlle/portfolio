@@ -57,19 +57,71 @@ export function buildPhone(aspect: number): PhoneModel {
   const bodyR = SCREEN_W * SCREEN_ROUND + BEZEL;
 
   /* Titânio natural, no tom do alumínio do notebook: um titânio preto sumia
-     no fundo escuro e o giro virava uma silhueta. */
+     no fundo escuro e o giro virava uma silhueta. Polido na moldura. */
   const titanio = new THREE.MeshStandardMaterial({
-    name: 'titanium', color: 0xa4a8b0, metalness: 0.82, roughness: 0.3, envMapIntensity: 1.25,
+    name: 'titanium', color: 0xb0b4bc, metalness: 0.9, roughness: 0.24, envMapIntensity: 1.35,
   });
-  const vidroTras = new THREE.MeshStandardMaterial({
-    name: 'back-glass', color: 0x8c9099, metalness: 0.35, roughness: 0.42, envMapIntensity: 1,
+  /* Vidro traseiro fosco com verniz por cima (clearcoat): o fosco dá a cor, e
+     o verniz dá o brilho que corre pela peça enquanto ela gira. */
+  const vidroTras = new THREE.MeshPhysicalMaterial({
+    name: 'back-glass', color: 0x8f949e, metalness: 0.25, roughness: 0.5,
+    clearcoat: 0.7, clearcoatRoughness: 0.22, envMapIntensity: 1.1,
+  });
+  /* O platô das câmeras é o mesmo vidro, só que polido. */
+  const vidroPlato = new THREE.MeshPhysicalMaterial({
+    name: 'camera-plateau', color: 0x9a9fa9, metalness: 0.3, roughness: 0.2,
+    clearcoat: 1, clearcoatRoughness: 0.08, envMapIntensity: 1.3,
+  });
+  const aco = new THREE.MeshStandardMaterial({
+    name: 'steel', color: 0xdfe2e7, metalness: 0.78, roughness: 0.3, envMapIntensity: 1.6,
   });
   const preto = new THREE.MeshStandardMaterial({
     name: 'black', color: 0x020203, metalness: 0, roughness: 0.3, envMapIntensity: 0.5,
   });
-  const lente = new THREE.MeshStandardMaterial({
-    name: 'lens', color: 0x10141f, metalness: 0.6, roughness: 0.06, envMapIntensity: 2.2,
+  const escuro = new THREE.MeshStandardMaterial({
+    name: 'dark', color: 0x16181d, metalness: 0.3, roughness: 0.6,
   });
+  /* Faixas de antena: plástico um tom mais escuro que o titânio. */
+  const antena = new THREE.MeshStandardMaterial({
+    name: 'antenna', color: 0x7e838c, metalness: 0.2, roughness: 0.6,
+  });
+
+  /* Vidro das lentes: uma textura radial com os anéis internos da objetiva,
+     o reflexo azulado do tratamento e um brilho de janela. Um círculo preto
+     chapado, como era, lê como furo e não como lente. */
+  const lc = document.createElement('canvas');
+  lc.width = lc.height = 256;
+  const lx = lc.getContext('2d')!;
+  const g = lx.createRadialGradient(128, 128, 4, 128, 128, 128);
+  g.addColorStop(0, '#0b1226');
+  g.addColorStop(0.22, '#05070e');
+  g.addColorStop(0.34, '#1b2c55');
+  g.addColorStop(0.42, '#060810');
+  g.addColorStop(0.6, '#0a0e1a');
+  g.addColorStop(0.68, '#27324f');
+  g.addColorStop(0.74, '#05060b');
+  g.addColorStop(1, '#010103');
+  lx.fillStyle = g;
+  lx.fillRect(0, 0, 256, 256);
+  lx.globalCompositeOperation = 'lighter';
+  const rf = lx.createRadialGradient(92, 84, 2, 92, 84, 60);
+  rf.addColorStop(0, 'rgba(150,190,255,0.75)');
+  rf.addColorStop(0.4, 'rgba(110,120,255,0.22)');
+  rf.addColorStop(1, 'rgba(0,0,0,0)');
+  lx.fillStyle = rf;
+  lx.fillRect(0, 0, 256, 256);
+  lx.strokeStyle = 'rgba(255,255,255,0.5)';
+  lx.lineWidth = 5;
+  lx.lineCap = 'round';
+  lx.beginPath();
+  lx.arc(128, 128, 96, Math.PI * 1.08, Math.PI * 1.38);
+  lx.stroke();
+  const lenteTex = new THREE.CanvasTexture(lc);
+  lenteTex.colorSpace = THREE.SRGBColorSpace;
+  const lente = new THREE.MeshStandardMaterial({
+    name: 'lens', map: lenteTex, metalness: 0.5, roughness: 0.08, envMapIntensity: 1.8,
+  });
+
   /* Igual à tela do notebook: acende com o giro, e só até um ponto, porque é
      o fundo do conteúdo que vai entrar por cima. */
   const tela = new THREE.MeshStandardMaterial({
@@ -144,58 +196,116 @@ export function buildPhone(aspect: number): PhoneModel {
   wa.renderOrder = 1;
   root.add(wa);
 
-  const platoLado = bodyW * 0.47;
-  const plato = new THREE.Mesh(
-    new THREE.ExtrudeGeometry(roundedRect(platoLado, platoLado, platoLado * 0.24), {
-      depth: 0.0012, bevelEnabled: true, bevelThickness: 0.0004, bevelSize: 0.0004, bevelSegments: 2, curveSegments: 16,
-    }),
-    titanio,
-  );
+  /* ---------------------------------------------------------------- câmeras
+     Platô de vidro polido no canto de cima, levantado do vidro fosco, com
+     três objetivas, flash, sensor de profundidade e microfone. Cada objetiva
+     é um anel de aço que sobe do platô, um aro preto por dentro e o vidro. */
+  const platoLado = bodyW * 0.5;
+  const platoAlt = 0.0011;
+  const platoGeo = new THREE.ExtrudeGeometry(roundedRect(platoLado, platoLado, platoLado * 0.27), {
+    depth: platoAlt, bevelEnabled: true, bevelThickness: 0.0005, bevelSize: 0.0005,
+    bevelSegments: 3, curveSegments: 20,
+  });
+  const plato = new THREE.Mesh(platoGeo, vidroPlato);
   /* Visto de trás, o platô fica no canto de cima à esquerda; no sistema do
      modelo (tela para +z) isso é x positivo. */
-  const platoX = bodyW / 2 - platoLado / 2 - 0.0028;
-  const platoY = bodyH / 2 - platoLado / 2 - 0.0028;
+  const platoX = bodyW / 2 - platoLado / 2 - 0.003;
+  const platoY = bodyH / 2 - platoLado / 2 - 0.003;
   plato.rotation.y = Math.PI;
   plato.position.set(platoX, platoY, -BODY_T / 2 - 0.0002);
   root.add(plato);
 
-  const r = platoLado * 0.2;
+  const zPlato = -BODY_T / 2 - 0.0002 - platoAlt - 0.0005;   // face de fora do platô
+  const r = platoLado * 0.215;
+  const deCostas = (m: THREE.Mesh, x: number, y: number, z: number) => {
+    m.rotation.y = Math.PI;
+    m.position.set(x, y, z);
+    root.add(m);
+    return m;
+  };
   const lentes: [number, number][] = [
-    [platoX + platoLado * 0.22, platoY + platoLado * 0.22],
-    [platoX + platoLado * 0.22, platoY - platoLado * 0.22],
-    [platoX - platoLado * 0.22, platoY],
+    [platoX + platoLado * 0.215, platoY + platoLado * 0.215],
+    [platoX + platoLado * 0.215, platoY - platoLado * 0.215],
+    [platoX - platoLado * 0.215, platoY],
   ];
   for (const [x, y] of lentes) {
-    const anel = new THREE.Mesh(new THREE.CylinderGeometry(r, r * 1.04, 0.0022, 32), titanio);
+    const anel = new THREE.Mesh(new THREE.CylinderGeometry(r * 0.96, r, 0.002, 40), aco);
     anel.rotation.x = Math.PI / 2;
-    anel.position.set(x, y, -BODY_T / 2 - 0.0018);
+    anel.position.set(x, y, zPlato - 0.001);
     root.add(anel);
-    const vidro = new THREE.Mesh(new THREE.CircleGeometry(r * 0.78, 32), lente);
-    vidro.rotation.y = Math.PI;
-    vidro.position.set(x, y, -BODY_T / 2 - 0.0030);
-    root.add(vidro);
+    /* O aro de aço fica com 20% do raio à vista: mais fino que isso ele some
+       a esta distância e a objetiva volta a parecer um furo preto. */
+    deCostas(new THREE.Mesh(new THREE.CircleGeometry(r * 0.8, 40), preto), x, y, zPlato - 0.00202);
+    deCostas(new THREE.Mesh(new THREE.CircleGeometry(r * 0.7, 40), lente), x, y, zPlato - 0.00206);
   }
-  const flash = new THREE.Mesh(
-    new THREE.CircleGeometry(r * 0.3, 20),
-    new THREE.MeshStandardMaterial({ color: 0xe8e2cf, roughness: 0.4 }),
-  );
-  flash.rotation.y = Math.PI;
-  flash.position.set(platoX - platoLado * 0.22, platoY + platoLado * 0.3, -BODY_T / 2 - 0.0016);
-  root.add(flash);
 
-  /* Botões laterais: ação e volume à esquerda, power à direita. */
-  const botao = (y: number, h: number, lado: 1 | -1) => {
-    const b = new THREE.Mesh(
-      new THREE.CapsuleGeometry(0.0007, h, 4, 10),
-      titanio,
-    );
-    b.position.set(lado * (bodyW / 2 + 0.0003), y, 0);
+  /* Flash (dois tons, com aro), sensor de profundidade e microfone, na
+     coluna livre do platô. */
+  const colX = platoX - platoLado * 0.215;
+  const flashY = platoY + platoLado * 0.3;
+  deCostas(new THREE.Mesh(new THREE.CircleGeometry(r * 0.36, 28), aco), colX, flashY, zPlato - 0.00004);
+  deCostas(
+    new THREE.Mesh(
+      new THREE.CircleGeometry(r * 0.29, 28),
+      new THREE.MeshStandardMaterial({ name: 'flash', color: 0xf3e9c8, roughness: 0.35, emissive: 0x4a3f1c, emissiveIntensity: 0.5 }),
+    ),
+    colX, flashY, zPlato - 0.00008,
+  );
+  deCostas(new THREE.Mesh(new THREE.CircleGeometry(r * 0.32, 28), preto), colX, platoY - platoLado * 0.3, zPlato - 0.00004);
+  deCostas(new THREE.Mesh(new THREE.CircleGeometry(r * 0.07, 12), preto), platoX + platoLado * 0.02, platoY + platoLado * 0.02, zPlato - 0.00004);
+
+  /* ------------------------------------------------------------- moldura */
+  /* Botões em pílula: a cápsula é achatada na largura e esticada na
+     espessura do aparelho, como o botão de verdade. Ação e volume à esquerda
+     (visto de frente), power à direita. */
+  const botao = (y: number, h: number, lado: 1 | -1, mat: THREE.Material = titanio, salto = 0.00035) => {
+    const b = new THREE.Mesh(new THREE.CapsuleGeometry(0.0008, h, 6, 14), mat);
+    b.scale.set(0.55, 1, 2.1);
+    b.position.set(lado * (bodyW / 2 + salto), y, 0);
     root.add(b);
   };
-  botao(bodyH * 0.3, bodyH * 0.035, -1);
-  botao(bodyH * 0.19, bodyH * 0.07, -1);
-  botao(bodyH * 0.08, bodyH * 0.07, -1);
-  botao(bodyH * 0.16, bodyH * 0.11, 1);
+  botao(bodyH * 0.31, bodyH * 0.03, -1);
+  botao(bodyH * 0.2, bodyH * 0.065, -1);
+  botao(bodyH * 0.095, bodyH * 0.065, -1);
+  botao(bodyH * 0.17, bodyH * 0.1, 1);
+  /* Controle da câmera: rente à moldura e mais escuro, embaixo do power. */
+  botao(-bodyH * 0.12, bodyH * 0.06, 1, escuro, -0.0002);
+
+  /* Linhas de antena: quatro faixas finas que cortam a moldura perto dos
+     cantos, duas nas laterais e duas em cima e embaixo. */
+  const faixa = 0.0011, fundo = BODY_T * 0.86;
+  for (const lado of [-1, 1]) {
+    for (const y of [bodyH / 2 - bodyR * 1.25, -bodyH / 2 + bodyR * 1.25]) {
+      const f = new THREE.Mesh(new THREE.BoxGeometry(0.0006, faixa, fundo), antena);
+      f.position.set(lado * (bodyW / 2 - 0.00022), y, 0);
+      root.add(f);
+    }
+  }
+  for (const [x, y] of [[-bodyW / 2 + bodyR * 1.3, bodyH / 2], [bodyW / 2 - bodyR * 1.3, -bodyH / 2]] as const) {
+    const f = new THREE.Mesh(new THREE.BoxGeometry(faixa, 0.0006, fundo), antena);
+    f.position.set(x, y - Math.sign(y) * 0.00022, 0);
+    root.add(f);
+  }
+
+  /* Base: porta USB-C no centro e os furos do alto-falante e do microfone. */
+  const usb = new THREE.Mesh(new THREE.CapsuleGeometry(0.0012, 0.0058, 6, 14), preto);
+  usb.rotation.z = Math.PI / 2;
+  usb.scale.set(1, 1, 0.9);
+  usb.position.set(0, -bodyH / 2 + 0.0005, 0);
+  root.add(usb);
+  const furo = new THREE.CylinderGeometry(0.00052, 0.00052, 0.0012, 12);
+  for (const lado of [-1, 1]) {
+    for (let i = 0; i < (lado === 1 ? 5 : 3); i++) {
+      const f = new THREE.Mesh(furo, preto);
+      f.position.set(lado * (0.0085 + i * 0.0021), -bodyH / 2 + 0.0004, 0);
+      root.add(f);
+    }
+  }
+
+  /* Câmera frontal dentro da ilha dinâmica: um ponto de vidro com reflexo. */
+  const selfie = new THREE.Mesh(new THREE.CircleGeometry(SCREEN_W * 0.028, 24), lente);
+  selfie.position.set(SCREEN_W * 0.085, screenH / 2 - SCREEN_W * 0.075, BODY_T / 2 + 0.00075);
+  root.add(selfie);
 
   return { root, screen, screenW: SCREEN_W, screenH };
 }

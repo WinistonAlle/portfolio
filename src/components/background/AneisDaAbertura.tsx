@@ -30,7 +30,13 @@ const MagicRings = dynamic(() => import('./MagicRings'), { ssr: false });
  *   site já teve canvas comendo o gesto de rolagem; fundo decorativo não
  *   disputa ponteiro com ninguém.
  */
-export default function AneisDaAbertura() {
+export default function AneisDaAbertura({
+  leve = false,
+}: {
+  /** Celular: mesma cena, com menos anéis e resolução 1x. É fragmento em tela
+   *  cheia rodando junto com o iPhone 3D num aparelho de GPU bem menor. */
+  leve?: boolean;
+}) {
   const [podeWebGL, setPodeWebGL] = useState(false);
   useEffect(() => {
     setPodeWebGL(temWebGL());
@@ -66,7 +72,7 @@ export default function AneisDaAbertura() {
              padrão do React Bits não tem relação com nada aqui. */
           color="#5b9cff"
           colorTwo="#a47bff"
-          ringCount={7}
+          ringCount={leve ? 5 : 7}
           /* Devagar: o assunto da tela é o notebook girando. Fundo que corre
              mais que o primeiro plano rouba o olho. */
           speed={0.55}
@@ -91,7 +97,7 @@ export default function AneisDaAbertura() {
           alphaMode="luminance"
           /* 1.5 e não 2: é fragmento puro em tela cheia, dividindo GPU com a
              cena 3D do notebook no momento mais pesado da home. */
-          dprMax={1.5}
+          dprMax={leve ? 1 : 1.5}
         />
       </Salvaguarda3D>
     </div>

@@ -361,10 +361,10 @@ export default function MacbookPortal({
       {/* A cena vive atrás do portal (z-index 5 contra 20 do viewport) e sai
           por opacidade quando o notebook já saiu de quadro. */}
       {/* Os anéis são o fundo desta abertura, e só dela. Mesma condição da
-          cena 3D (`on3D`): onde o notebook 3D não roda — celular, movimento
-          reduzido, máquina sem fôlego — um shader em tela cheia seria
-          exatamente o que não se deve acrescentar. */}
-      {on3D && !entered && !celular && <AneisDaAbertura />}
+          cena 3D (`on3D`): onde ela não roda (movimento reduzido, máquina sem
+          fôlego) um shader em tela cheia seria exatamente o que não se deve
+          acrescentar. No celular vão numa versão mais leve. */}
+      {on3D && !entered && <AneisDaAbertura leve={celular} />}
 
       {/* `canRun3D` já reprova a maioria das máquinas sem condição, mas ele
           responde ANTES: se o contexto morrer no meio (driver caindo, GPU
