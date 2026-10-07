@@ -11,6 +11,7 @@
 
 import { usePathname } from 'next/navigation';
 import TransitionLink from '@/components/transition/TransitionLink';
+import LogoWA from '@/components/ui/LogoWA';
 import { usePixelTransition } from '@/components/transition/PixelTransition';
 import { LOCALE_FLAG, pathWithLocale, type Locale } from '@/i18n/config';
 
@@ -54,8 +55,10 @@ export default function Header({
   return (
     <header className={`site-header${hidden ? ' site-header--hidden' : ''}`}>
       <div className="mx-auto flex h-[72px] w-full max-w-7xl items-center justify-between gap-3 px-4 sm:px-6 lg:px-10">
-        <TransitionLink href={`/${locale}`} className="site-header__brand">
-          Winiston Alle
+        {/* A marca é o monograma WA. O nome continua sendo o nome acessível
+            do link: leitor de tela anuncia "Winiston Alle", não um desenho. */}
+        <TransitionLink href={`/${locale}`} className="site-header__brand" aria-label="Winiston Alle">
+          <LogoWA className="site-header__logo" />
         </TransitionLink>
         {/* gap menor no celular: com gap-6 a barra estourava a tela. */}
         <nav className="flex items-center gap-3 sm:gap-6 lg:gap-8">

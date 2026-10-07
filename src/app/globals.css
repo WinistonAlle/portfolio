@@ -357,8 +357,24 @@ body.scroll-locked .site-header {
   transition: color 0.2s ease;
 }
 
-.site-header__brand:hover {
-  color: var(--accent);
+.site-header__brand {
+  display: inline-flex;
+  align-items: center;
+}
+
+/* Monograma WA (LogoWA.tsx). Altura de um título pequeno: presença sem
+   competir com a navegação. */
+.site-header__logo {
+  display: block;
+  height: 26px;
+  width: auto;
+  transition: transform 0.2s cubic-bezier(0.2, 0, 0, 1);
+}
+
+/* Sem trocar a cor no hover: o W e o A ficariam no mesmo azul da barra e
+   ela sumiria. Um leve crescimento basta. */
+.site-header__brand:hover .site-header__logo {
+  transform: scale(1.06);
 }
 
 .site-header__link {
