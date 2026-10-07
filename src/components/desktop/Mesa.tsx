@@ -429,6 +429,24 @@ export default function Mesa({
      está olhando. */
   const pronta = !chromeHidden && !bootActive;
   const [notif, setNotif] = useState<'fora' | 'dentro' | 'saindo'>('fora');
+  const secaoRef = useRef<HTMLElement>(null);
+
+  /* Depois que a mesa sai de cena, o header do site volta, preso no topo:
+     a barra de menu ficou lá em cima e o resto da página precisa de
+     navegação. A classe vai no body porque o header mora no layout raiz. */
+  useEffect(() => {
+    const secao = secaoRef.current;
+    if (!secao) return;
+    const io = new IntersectionObserver(
+      ([e]) => document.body.classList.toggle('mesa-passou', !e.isIntersecting),
+      { rootMargin: '-73px 0px 0px 0px' },
+    );
+    io.observe(secao);
+    return () => {
+      io.disconnect();
+      document.body.classList.remove('mesa-passou');
+    };
+  }, []);
 
   useEffect(() => {
     if (!pronta) return;
@@ -580,7 +598,7 @@ export default function Mesa({
   );
 
   return (
-    <section className="mesa" aria-label={t.app}>
+    <section className="mesa" aria-label={t.app} ref={secaoRef}>
       {/* ---------------- Mac ---------------- */}
       <div className={`mesa-mac${pronta ? ' mesa-mac--pronta' : ''}`}>
         <Papel />

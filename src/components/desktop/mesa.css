@@ -4,10 +4,33 @@
  * macOS isso é a SF Pro. Só o título (que é o "papel de parede" falando) fica
  * com a voz do site, Bricolage com o acento em serifa. */
 
-/* Sem header na home: a barra de menu da mesa faz o papel dele. O header
-   continua existindo nas outras páginas, e volta sozinho quando a home sai. */
+/* Na home, enquanto a mesa está na tela, quem faz o papel do header é a
+   barra de menu dela. Passada a mesa, o header desce preso no topo (a
+   classe mesa-passou vem do Mesa.tsx). Fixo e fora do fluxo só aqui: nas
+   outras páginas ele continua no topo do documento, como sempre. */
 body:has(.mesa) .site-header {
-  display: none;
+  position: fixed;
+  inset: 0 0 auto;
+  transform: translateY(-100%);
+  visibility: hidden;
+  transition:
+    transform 0.22s cubic-bezier(0.4, 0, 1, 1),
+    visibility 0s linear 0.22s;
+}
+
+body.mesa-passou:has(.mesa) .site-header:not(.site-header--hidden) {
+  transform: none;
+  visibility: visible;
+  transition:
+    transform 0.32s cubic-bezier(0.2, 0, 0, 1),
+    visibility 0s;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  body:has(.mesa) .site-header,
+  body.mesa-passou:has(.mesa) .site-header:not(.site-header--hidden) {
+    transition: none;
+  }
 }
 
 .mesa {
