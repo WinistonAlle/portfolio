@@ -703,7 +703,12 @@ body.scroll-locked .site-header {
   font-weight: 500;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: color-mix(in srgb, var(--foreground) 72%, transparent);
+  color: color-mix(in srgb, var(--foreground) 88%, transparent);
+  /* No fim da abertura o aviso fica por cima do alumínio claro do notebook:
+     a sombra escura garante a leitura em qualquer fundo. */
+  text-shadow:
+    0 1px 2px rgba(5, 7, 14, 0.9),
+    0 0 14px rgba(5, 7, 14, 0.85);
   cursor: pointer;
   transform: translateX(-50%);
   -webkit-tap-highlight-color: transparent;

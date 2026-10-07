@@ -218,9 +218,11 @@ export function buildLaptop(): LaptopModel {
   const ROWS: Row[] = [
     { h: 0.62, w: [1.25, 1,1,1,1,1,1,1,1,1,1,1,1, 1.25] },
     { h: 1,    w: [1,1,1,1,1,1,1,1,1,1,1,1,1, 1.5] },
-    { h: 1,    w: [1.5, 1,1,1,1,1,1,1,1,1,1,1,1] },
-    { h: 1,    w: [1.75, 1,1,1,1,1,1,1,1,1,1, 1.75] },
-    { h: 1,    w: [2.25, 1,1,1,1,1,1,1,1,1, 2.25] },
+    /* Estas três já somaram 13,5u: faltava uma tecla em cada, e o vão que
+       sobrava no canto direito mostrava o fundo preto da retroiluminação. */
+    { h: 1,    w: [1.5, 1,1,1,1,1,1,1,1,1,1,1,1,1] },
+    { h: 1,    w: [1.75, 1,1,1,1,1,1,1,1,1,1,1, 1.75] },
+    { h: 1,    w: [2.25, 1,1,1,1,1,1,1,1,1,1, 2.25] },
     { h: 1,    w: [1,1,1, 1.25, 5, 1.25, 1, 'arrows'] },
   ];
 
@@ -317,11 +319,25 @@ export function buildLaptop(): LaptopModel {
     root.add(im);
   }
 
-  const pad = new THREE.Mesh(
-    new THREE.PlaneGeometry(KB_W * 0.38, BASE_D * 0.27), aluDark);
+  /* Trackpad: da cor do corpo, como no MacBook, e não uma placa preta. O que
+     o separa do alumínio em volta é só o acabamento (vidro, mais liso) e um
+     filete escuro fino na borda, que é a fresta de verdade. */
+  const padW = KB_W * 0.46, padD = BASE_D * 0.31;
+  const padZ = KB_Z + KB_D / 2 + 0.008 + padD / 2;
+  const padVidro = new THREE.MeshStandardMaterial({
+    name: 'trackpad', color: 0xb9bec6, metalness: 0.7, roughness: 0.2, envMapIntensity: 1.2,
+  });
+  const fresta = new THREE.Mesh(
+    new THREE.ShapeGeometry(roundedRect(padW + 0.0012, padD + 0.0012, 0.0052), 12),
+    new THREE.MeshStandardMaterial({ name: 'trackpad-gap', color: 0x4a4f58, metalness: 0.5, roughness: 0.6 }),
+  );
+  fresta.rotation.x = -90 * DEG;
+  fresta.position.set(0, deckY, padZ);
+  root.add(fresta);
+  const pad = new THREE.Mesh(new THREE.ShapeGeometry(roundedRect(padW, padD, 0.0046), 12), padVidro);
   pad.name = 'trackpad';
   pad.rotation.x = -90 * DEG;
-  pad.position.set(0, deckY, KB_Z + KB_D / 2 + 0.010 + BASE_D * 0.135);
+  pad.position.set(0, deckY + 0.00012, padZ);
   root.add(pad);
 
   for (const [sx, sz] of [[-1, -1], [1, -1]]) {
@@ -382,7 +398,7 @@ export function buildLaptop(): LaptopModel {
   lid.add(stickers);
 
   return { root, lid, screen, stickers, backlight,
-    materials: { alu, aluDark, glass, rubber, keycap } };
+    materials: { alu, aluDark, glass, rubber, keycap, padVidro } };
 }
 
 /* Ambiente sem HDRI: um degradê equiretangular 16x64 passado pelo PMREM.
