@@ -202,6 +202,12 @@ const pt = {
       place: 'Gostinho Mineiro',
       line: 'Efetivado. Hoje respondo pelos sistemas internos, incluindo o portal de pedidos usado por cerca de 250 funcionários todo dia.',
     },
+    'coro-hub': {
+      month: 'Setembro',
+      role: 'Head de Marketing, Design e Finanças',
+      place: 'Coro Hub, como sócio fundador',
+      line: 'Abri com três sócios uma empresa de automação com IA. Cuido da marca, do conteúdo, do design e das finanças.',
+    },
   },
 };
 

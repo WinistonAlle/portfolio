@@ -186,6 +186,12 @@ const en: typeof pt = {
       place: 'Gostinho Mineiro',
       line: 'Hired full time. Today I own the internal systems, including the ordering portal used by around 250 employees every day.',
     },
+    'coro-hub': {
+      month: 'September',
+      role: 'Head of Marketing, Design and Finance',
+      place: 'Coro Hub, as co-founder',
+      line: 'Started an AI automation company with three partners. I run the brand, content, design and finance.',
+    },
   },
 };
 

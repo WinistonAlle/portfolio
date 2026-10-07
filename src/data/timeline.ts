@@ -8,7 +8,8 @@ export type TimelineEntry = {
   /** Usado no atributo datetime do <time>, formato AAAA-MM. */
   iso: string;
   year: string;
-  /** Último ponto da linha: ganha o pulso de "ainda acontecendo". */
+  /** Ainda acontecendo: ganha o pulso e o selo de agora. Pode haver mais de
+   *  um, quando duas etapas correm em paralelo. */
   current?: boolean;
 };
 
@@ -18,4 +19,6 @@ export const TIMELINE: TimelineEntry[] = [
   { id: 'ucb', iso: '2024-07', year: '2024' },
   { id: 'gm-estagio', iso: '2025-11', year: '2025' },
   { id: 'gm-junior', iso: '2026-02', year: '2026', current: true },
+  /* Em paralelo à Gostinho Mineiro: as duas continuam acontecendo. */
+  { id: 'coro-hub', iso: '2026-09', year: '2026', current: true },
 ];
