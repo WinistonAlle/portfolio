@@ -125,7 +125,7 @@ export default async function SobreMimPage(
         </div>
 
         <div className="mt-4 w-full">
-          <StackPreguicoso conexoesTitulo={dict.about.stackConexoes} />
+          <StackPreguicoso />
         </div>
       </section>
 

@@ -16,12 +16,10 @@ export default function SecaoStack({
   locale,
   titulo,
   verMais,
-  conexoesTitulo,
 }: {
   locale: Locale;
   titulo: string;
   verMais: string;
-  conexoesTitulo: string;
 }) {
   return (
     <section className="relative w-full pb-24">
@@ -35,7 +33,7 @@ export default function SecaoStack({
           fazem a largura ser o gargalo do encaixe, então tela cheia é o que
           deixa o grafo maior. */}
       <div className="mt-4 w-full">
-        <StackPreguicoso conexoesTitulo={conexoesTitulo} />
+        <StackPreguicoso />
       </div>
 
       <div className="mx-auto w-full max-w-7xl px-6 lg:px-10">

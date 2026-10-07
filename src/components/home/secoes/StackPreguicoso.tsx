@@ -28,7 +28,7 @@ const StackGraph = dynamic(() => import('@/components/stack/StackGraph'), {
    montado: não faz sentido rodar a física dele escondido. */
 const COMPUTADOR = '(min-width: 641px)';
 
-export default function StackPreguicoso({ conexoesTitulo }: { conexoesTitulo: string }) {
+export default function StackPreguicoso() {
   const alvo = useRef<HTMLDivElement>(null);
   const [perto, setPerto] = useState(false);
 
@@ -58,7 +58,7 @@ export default function StackPreguicoso({ conexoesTitulo }: { conexoesTitulo: st
 
   return (
     <>
-      <StackLista conexoesTitulo={conexoesTitulo} />
+      <StackLista />
       <div ref={alvo} className="stack-grafo">
         {perto ? <StackGraph /> : <div style={{ height: 520 }} aria-hidden />}
       </div>

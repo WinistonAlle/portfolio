@@ -70,7 +70,6 @@ const en: typeof pt = {
     ctaProjects: 'See the projects',
     ctaContact: 'Get in touch',
     stackTitle: 'Everything I work with, and how the pieces *talk to each other*.',
-    stackConexoes: 'Where the pieces meet',
     workText:
       "I'm a systems developer at Gostinho Mineiro, a food manufacturer in Brasília. I joined as an intern and today I own the company's internal systems. The ordering portal I built is used by around 250 employees every day; before it existed, orders arrived over WhatsApp and someone in billing typed them into the system one by one. My focus is frontend and AI: interfaces people use without being trained, and automation that takes manual work out of the way.",
     timelineNow: 'Where I am today',

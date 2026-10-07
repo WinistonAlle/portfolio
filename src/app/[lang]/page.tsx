@@ -45,7 +45,6 @@ export default async function Home(props: PageProps<'/[lang]'>) {
         locale={lang}
         titulo={dict.about.stackTitle}
         verMais={dict.home.stackVerMais}
-        conexoesTitulo={dict.about.stackConexoes}
       />
       <SecaoProjetos locale={lang} dict={dict} limite={6} />
       <SecaoContato locale={lang} dict={dict} />
