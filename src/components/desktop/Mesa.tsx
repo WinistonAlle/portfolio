@@ -549,7 +549,8 @@ export default function Mesa({
     </div>
   );
 
-  /* iPhone: quatro na grade, quatro no Dock, sem repetir. */
+  /* iPhone: quatro na grade, quatro no Dock, sem repetir. No Dock também vai o
+     nome embaixo (o iOS não mostra), pra ninguém ter que adivinhar o ícone. */
   const appsIos = [
     { id: 'sobre', rotulo: nav.about, href: rotas.sobre, icone: <AppFoto foto={FOTO} /> },
     { id: 'gh', rotulo: gh.label, href: gh.href, externo: true, icone: appGithub },
@@ -749,7 +750,7 @@ export default function Mesa({
           </svg>
         </span>
         <nav className="ios-dock" aria-label="Dock">
-          {dockIos.map((app) => linkIos(app, false))}
+          {dockIos.map((app) => linkIos(app, true))}
         </nav>
       </div>
 
