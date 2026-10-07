@@ -1706,4 +1706,131 @@ export const PROJECTS: Project[] = [
       },
     ],
   },
+  {
+    n: '17',
+    slug: 'chega-ai',
+    name: 'Chega Aí',
+    status: 'wip',
+    context: 'Produto próprio',
+    groups: ['outros', 'sites'],
+    line: {
+      pt: 'Convite digital de festa com a voz de quem faz a festa: o convidado ouve, confirma presença e entra na portaria com um QR.',
+      en: 'A digital party invitation in the voice of whoever is throwing it: guests listen, RSVP and get through the door with a QR code.',
+    },
+    stat: {
+      pt: [
+        'Em desenvolvimento: roda completo na minha máquina, ainda sem data pra ir ao ar',
+        'Editor em 7 etapas com prévia ao vivo, gravação de áudio no navegador e confirmações em tempo real',
+        'Pagamento via Mercado Pago, hoje em modo simulado; falta só rodar no sandbox',
+        '67 testes de unidade e de RLS e 24 de ponta a ponta, no computador e no celular',
+      ],
+      en: [
+        'In development: it runs end to end on my machine, with no launch date yet',
+        'A 7 step editor with live preview, in-browser audio recording and real-time RSVPs',
+        'Payments through Mercado Pago, in simulated mode for now; only the sandbox run is left',
+        '67 unit and RLS tests and 24 end to end tests, on desktop and mobile',
+      ],
+    },
+    tags: ['Next.js', 'TypeScript', 'Supabase', 'Mercado Pago'],
+    media: {
+      frame: 'desktop',
+      src: '/cases/chega-ai/capa.jpg',
+      video: '/cases/chega-ai/scroll.mp4',
+      poster: '/cases/chega-ai/poster.jpg',
+      alt: {
+        pt: 'Hero do Chega Aí, com o título O convite que fala e um celular mostrando um convite de casamento com áudio',
+        en: 'Chega Aí hero, with the headline The invitation that talks and a phone showing a wedding invitation with audio',
+      },
+    },
+    problem: {
+      pt: [
+        'Convite de festa hoje é uma arte no WhatsApp: bonita, mas muda. Ninguém confirma presença direito, o anfitrião passa a semana cobrando resposta no privado, e na porta do buffet a lista é um papel que alguém risca à mão.',
+        'O Chega Aí começa por onde o convite de papel nunca chegou: a voz. Quem faz a festa grava os recados, o convidado ouve, e a partir daí o convite resolve o resto da festa, da confirmação à portaria.',
+      ],
+      en: [
+        'Party invitations today are a graphic sent on WhatsApp: pretty, but silent. Nobody RSVPs properly, the host spends the week chasing answers in private messages, and at the venue door the list is a sheet of paper someone crosses off by hand.',
+        'Chega Aí starts where the paper invitation never went: the voice. The host records the messages, the guest listens, and from there the invitation takes care of the rest of the party, from the RSVP to the door.',
+      ],
+    },
+    solution: {
+      pt: [
+        'O anfitrião monta o convite em 7 etapas com a prévia ao lado, grava cada áudio pelo celular (até um minuto) e pode mandar um link pra avó gravar também, sem cadastro. O convidado abre o link, ouve, responde às perguntas e confirma com acompanhantes; o painel do anfitrião atualiza na hora, sem recarregar.',
+        'Depois da confirmação, o convite vira a festa: QR de entrada com check-in por câmera ou PIN da equipe, mural de recados com moderação, lista de presentes com cotas por Pix e cartão, e artes prontas pra imprimir. Buffets assinam um plano próprio e publicam os convites dos clientes com a marca deles, no próprio endereço.',
+        'Todas as tabelas têm RLS testado, os formulários públicos têm limite de tentativas e o IP é guardado só como hash. Ainda está em desenvolvimento: o pagamento roda em modo simulado até eu ter as credenciais de teste do Mercado Pago, e falta testar a gravação no Safari do iPhone.',
+      ],
+      en: [
+        'The host builds the invitation in 7 steps with the preview alongside, records each audio clip on the phone (up to a minute) and can send grandma a link to record one too, no sign up needed. The guest opens the link, listens, answers the questions and RSVPs with their plus ones; the host dashboard updates instantly, without reloading.',
+        'After the RSVP, the invitation becomes the party: an entry QR checked in by camera or by the staff PIN, a moderated guestbook, a gift list with Pix and card contributions, and print-ready artwork. Party venues have their own plan and publish their clients’ invitations under their own brand, on their own address.',
+        'Every table has tested RLS, public forms are rate limited and IP addresses are stored only as a hash. It is still in development: payments run in simulated mode until I have Mercado Pago test credentials, and recording still needs testing in Safari on the iPhone.',
+      ],
+    },
+    gallery: [
+      {
+        src: '/cases/chega-ai/como-funciona.jpg',
+        alt: {
+          pt: 'Três cartões: escolher a festa e o tema, gravar as respostas e mandar o link',
+          en: 'Three cards: pick the party and theme, record the answers and send the link',
+        },
+        caption: {
+          pt: 'Os três passos, cada um mostrando o que acontece de verdade: os temas lado a lado, o microfone gravando e a conversa no WhatsApp com o link do convite.',
+          en: 'The three steps, each showing what actually happens: the themes side by side, the microphone recording and the WhatsApp chat with the invitation link.',
+        },
+      },
+      {
+        src: '/cases/chega-ai/recursos.jpg',
+        alt: {
+          pt: 'Seção escura com os recursos: confirmação de presença, presentes, mural, check-in e artes',
+          en: 'Dark section with the features: RSVP, gifts, guestbook, check-in and artwork',
+        },
+        caption: {
+          pt: 'Do “vou sim” ao “pode entrar”: a confirmação com os números de convidados, a lista de presentes com a cota enchendo, o mural, o check-in na porta e as artes pra imprimir.',
+          en: 'From “I’ll be there” to “come on in”: the RSVP with guest counts, the gift list with a contribution filling up, the guestbook, the door check-in and the print-ready artwork.',
+        },
+      },
+      {
+        src: '/cases/chega-ai/precos.jpg',
+        alt: {
+          pt: 'Planos grátis e completo, com abas para festa infantil, aniversário e casamento',
+          en: 'Free and full plans, with tabs for kids party, birthday and wedding',
+        },
+        caption: {
+          pt: 'Paga uma vez, sem mensalidade. O grátis fica 24 horas no ar e, quando a pessoa libera o completo, o link continua o mesmo. Os preços saem de um único arquivo de configuração.',
+          en: 'Pay once, no subscription. The free plan stays live for 24 hours, and when the host unlocks the full one, the link stays the same. Prices come from a single configuration file.',
+        },
+      },
+      {
+        src: '/cases/chega-ai/buffets.jpg',
+        alt: {
+          pt: 'Seção laranja para buffets, com um convite no endereço próprio do buffet',
+          en: 'Orange section for party venues, with an invitation on the venue’s own address',
+        },
+        caption: {
+          pt: 'Para buffets e cerimoniais: o convite sai com a marca do buffet, no endereço dele, com mensalidade fixa e uma taxa por convite publicado.',
+          en: 'For party venues and planners: the invitation carries the venue’s brand, on its own address, with a flat monthly fee and a charge per published invitation.',
+        },
+      },
+      {
+        src: '/cases/chega-ai/perguntas.jpg',
+        alt: {
+          pt: 'Perguntas frequentes à direita, com o título Ficou alguma dúvida? à esquerda',
+          en: 'Frequently asked questions on the right, with the headline Any questions? on the left',
+        },
+        caption: {
+          pt: 'As dúvidas que mais aparecem, respondidas antes de alguém perguntar: o convidado não baixa aplicativo nem cria conta, e o convite não aparece no Google.',
+          en: 'The questions that come up most, answered before anyone asks: guests do not download an app or create an account, and the invitation does not show up on Google.',
+        },
+      },
+      {
+        src: '/cases/chega-ai/chamada.jpg',
+        alt: {
+          pt: 'Chamada final com o título Bora fazer o convite que todo mundo vai querer ouvir',
+          en: 'Closing call to action with the headline Let’s make the invitation everyone will want to hear',
+        },
+        caption: {
+          pt: 'A chamada final, com os balões da marca. A logo é um par de balões que também são aspas: a festa e a fala no mesmo desenho.',
+          en: 'The closing call to action, with the brand’s balloons. The logo is a pair of balloons that are also quotation marks: the party and the voice in one drawing.',
+        },
+      },
+    ],
+  },
 ];
