@@ -31,6 +31,7 @@ export const SCREEN_ROUND = 0.13;
 export type PhoneModel = {
   root: THREE.Group;
   screen: THREE.Mesh<THREE.ShapeGeometry, THREE.MeshStandardMaterial>;
+  screenW: number;
   screenH: number;
 };
 
@@ -174,7 +175,7 @@ export function buildPhone(aspect: number): PhoneModel {
   botao(bodyH * 0.08, bodyH * 0.07, -1);
   botao(bodyH * 0.16, bodyH * 0.11, 1);
 
-  return { root, screen, screenH };
+  return { root, screen, screenW: SCREEN_W, screenH };
 }
 
 /* ------------------------------------------------------------- coreografia */
@@ -196,6 +197,10 @@ export const BOOT: [number, number] = [0.8, 0.97];
 
 export const cameraT = (p: number) => easeInOut(range(p, ...PHASES.camera));
 
+/** O quanto a tela já acendeu; é também a opacidade da tela inicial colada
+ *  nela (tela-viva.ts). */
+export const brilhoTela = (p: number) => easeOut(range(p, ...PHASES.luz));
+
 export function posePhone(model: PhoneModel, p: number) {
   const giro = 1 - easeInOut(range(p, ...PHASES.spin));
   /* Mais de meia volta: começa passando das costas, de lado, e o giro
@@ -203,7 +208,7 @@ export function posePhone(model: PhoneModel, p: number) {
   model.root.rotation.y = (180 + 32) * DEG * giro;
   model.root.rotation.x = 14 * DEG * giro;
   model.root.rotation.z = -9 * DEG * giro;
-  model.screen.material.emissiveIntensity = 1.15 * easeOut(range(p, ...PHASES.luz));
+  model.screen.material.emissiveIntensity = 1.15 * brilhoTela(p);
 }
 
 /* ------------------------------------------------------------- câmera */

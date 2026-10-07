@@ -12,8 +12,11 @@ import { useEffect, useRef } from 'react';
 import * as THREE from 'three';
 import { applyCamera, makeEnvironment } from '@/components/macbook/laptop-scene';
 import {
-  BOOT, buildPhone, cameraT, heroPose, lerpFov, posePhone, solveFinalPose, FOV_HERO,
+  BOOT, brilhoTela, buildPhone, cameraT, heroPose, lerpFov, posePhone, solveFinalPose, FOV_HERO,
 } from './phone-scene';
+import {
+  colarNaTela, medirCaixa, opacidadeDeFrente, projetarCantos, soltarTela, type Caixa,
+} from '@/components/macbook/tela-viva';
 
 const clamp01 = (v: number) => (v < 0 ? 0 : v > 1 ? 1 : v);
 const range = (p: number, a: number, b: number) => clamp01((p - a) / (b - a));
@@ -60,6 +63,11 @@ export default function PhoneIntro3D({
     scene.add(key, rim, hemi);
 
     let model: ReturnType<typeof buildPhone> | null = null;
+    /* A tela inicial vai colada na tela 3D desde que ela acende
+       (tela-viva.ts), como no notebook. */
+    const telaHtml = canvas.closest('.portal')?.querySelector<HTMLElement>('.portal__screen') ?? null;
+    if (telaHtml) telaHtml.style.willChange = 'transform, opacity';
+    let caixa: Caixa | null = null;
     let vw = 0, vh = 0, dirty = true, first = true, lastIntro = -1, lastBoot = -1;
     let final = { position: new THREE.Vector3(), target: new THREE.Vector3(), up: new THREE.Vector3(0, 1, 0) };
     let hero = final;
@@ -80,6 +88,9 @@ export default function PhoneIntro3D({
     function resize() {
       const w = canvas!.clientWidth, h = canvas!.clientHeight;
       if (!w || !h) return;
+      /* A caixa do portal muda quando ele descobre o aspecto da tela, que
+         chega depois deste componente montar: mede sempre. */
+      if (telaHtml) caixa = medirCaixa(telaHtml);
       if (w === vw && h === vh && model) return;
       vw = w; vh = h;
       renderer.setSize(vw, vh, false);
@@ -108,6 +119,17 @@ export default function PhoneIntro3D({
       camera.updateProjectionMatrix();
       applyCamera(camera, hero, final, t >= 0.999 ? 1 : t);
       renderer.render(scene, camera);
+
+      if (telaHtml && caixa) {
+        if (t >= 0.999) colarNaTela(telaHtml, caixa, null, 1);
+        else {
+          const brilho = brilhoTela(intro) * opacidadeDeFrente(model.screen, camera);
+          const cantos = brilho > 0
+            ? projetarCantos(model.screen, model.screenW, model.screenH, camera, vw, vh)
+            : null;
+          colarNaTela(telaHtml, caixa, cantos, brilho);
+        }
+      }
       if (first) { first = false; cbRef.current.onReady?.(); }
     }
 
@@ -115,6 +137,7 @@ export default function PhoneIntro3D({
       e.preventDefault();
       cancelAnimationFrame(raf);
       canvas.style.display = 'none';
+      soltarTela(telaHtml);
       cbRef.current.onHandoff?.(1);
     };
     canvas.addEventListener('webglcontextlost', onLost);
@@ -125,14 +148,22 @@ export default function PhoneIntro3D({
     const ro = new ResizeObserver(() => { resize(); tick(); });
     window.addEventListener('scroll', onScroll, { passive: true });
     ro.observe(canvas);
+    /* Observador só da caixa do portal, separado do de cima: durante o zoom
+       ela cresce a cada quadro, e isso não pode refazer a cena inteira. */
+    const roCaixa = new ResizeObserver(() => {
+      if (telaHtml) { caixa = medirCaixa(telaHtml); dirty = true; }
+    });
+    if (telaHtml) roCaixa.observe(telaHtml);
     resize();
     loop();
 
     return () => {
+      soltarTela(telaHtml);
       cancelAnimationFrame(raf);
       canvas.removeEventListener('webglcontextlost', onLost);
       window.removeEventListener('scroll', onScroll);
       ro.disconnect();
+      roCaixa.disconnect();
       if (model) descartar(model);
       env.dispose();
       renderer.dispose();

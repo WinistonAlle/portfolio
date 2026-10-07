@@ -34,10 +34,13 @@
 import { useEffect, useRef } from 'react';
 import * as THREE from 'three';
 import {
-  buildLaptop, makeStickerAtlas, makeEnvironment, poseLaptop, PHASES, BOOT, cameraT,
+  buildLaptop, makeStickerAtlas, makeEnvironment, poseLaptop, brilhoTela, PHASES, BOOT, cameraT,
   lerpFov, screenRectTarget, solveFinalPose, heroPose, applyCamera,
   FOV_HERO, GEO, type LaptopModel, type Pose,
 } from './laptop-scene';
+import {
+  colarNaTela, medirCaixa, opacidadeDeFrente, projetarCantos, soltarTela, type Caixa,
+} from './tela-viva';
 
 const clamp01 = (v: number) => (v < 0 ? 0 : v > 1 ? 1 : v);
 const range = (p: number, a: number, b: number) => clamp01((p - a) / (b - a));
@@ -127,6 +130,12 @@ export default function MacbookIntro3D({
       dirty = true;
     });
 
+    /* O elemento do portal que leva o site. Ele vai colado na tela 3D a
+       abertura inteira (tela-viva.ts), em vez de esperar a câmera parar. */
+    const telaHtml = canvas.closest('.portal')?.querySelector<HTMLElement>('.portal__screen') ?? null;
+    if (telaHtml) telaHtml.style.willChange = 'transform, opacity';
+    let caixa: Caixa | null = null;
+
     let vw = 0, vh = 0, dirty = true, lastIntro = -1, lastFade = -1, first = true;
     let finalPose: Pose = heroPose(model), hero: Pose = finalPose, lidFinal = 84;
 
@@ -153,6 +162,7 @@ export default function MacbookIntro3D({
       camera.aspect = vw / vh;
       camera.updateProjectionMatrix();
       solve();
+      if (telaHtml) caixa = medirCaixa(telaHtml);
       dirty = true;
     }
 
@@ -185,6 +195,19 @@ export default function MacbookIntro3D({
       shadow.visible = shadow.material.opacity > 0.01;
 
       renderer.render(scene, camera);
+
+      if (telaHtml && caixa) {
+        if (t >= 0.999) {
+          /* Câmera assentada: a tela 3D é exatamente o retângulo do portal. */
+          colarNaTela(telaHtml, caixa, null, 1);
+        } else {
+          const brilho = reduced ? 1 : brilhoTela(intro) * opacidadeDeFrente(model.screen, camera);
+          const cantos = brilho > 0
+            ? projetarCantos(model.screen, GEO.SCREEN_W, GEO.SCREEN_H, camera, vw, vh)
+            : null;
+          colarNaTela(telaHtml, caixa, cantos, brilho);
+        }
+      }
       if (first) { first = false; cbRef.current.onReady?.(); }
     }
 
@@ -194,6 +217,7 @@ export default function MacbookIntro3D({
       e.preventDefault();
       cancelAnimationFrame(raf);
       canvas.style.display = 'none';
+      soltarTela(telaHtml);
       cbRef.current.onHandoff?.(1);
     };
     canvas.addEventListener('webglcontextlost', onLost);
@@ -208,15 +232,23 @@ export default function MacbookIntro3D({
     window.addEventListener('scroll', onScroll, { passive: true });
     resize();
     ro.observe(document.documentElement);
+    /* Observador só da caixa do portal, separado do de cima: durante o zoom
+       ela cresce a cada quadro, e isso não pode refazer a cena inteira. */
+    const roCaixa = new ResizeObserver(() => {
+      if (telaHtml) { caixa = medirCaixa(telaHtml); dirty = true; }
+    });
+    if (telaHtml) roCaixa.observe(telaHtml);
     loop();
 
     return () => {
       disposed = true;
+      soltarTela(telaHtml);
       cancelAnimationFrame(raf);
       canvas.removeEventListener('webglcontextlost', onLost);
       window.removeEventListener('resize', resize);
       window.removeEventListener('scroll', onScroll);
       ro.disconnect();
+      roCaixa.disconnect();
       /* Libera tudo: depois do handoff o portal é de mão única, então nada
          disso volta a ser usado e não faz sentido segurar VRAM. */
       scene.traverse((o) => {
@@ -224,8 +256,7 @@ export default function MacbookIntro3D({
         mesh.geometry?.dispose?.();
         const mat = mesh.material as THREE.Material | THREE.Material[] | undefined;
         for (const m of Array.isArray(mat) ? mat : mat ? [mat] : []) {
-          const std = m as THREE.MeshStandardMaterial;
-          std.map?.dispose();
+          (m as THREE.MeshStandardMaterial).map?.dispose();
           m.dispose();
         }
       });

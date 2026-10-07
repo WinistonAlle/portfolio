@@ -481,6 +481,10 @@ export const BOOT: [number, number] = [0.84, 0.99];
  *  curva para a lente e para a pose. */
 export const cameraT = (p: number) => easeInOut(range(p, ...PHASES.camera));
 
+/** O quanto a tela já acendeu: acompanha a tampa abrindo. É também a
+ *  opacidade do site colado nela (ver tela-viva.ts). */
+export const brilhoTela = (p: number) => easeOut(range(p, ...PHASES.open));
+
 export function poseLaptop(model: LaptopModel, p: number, lidFinal = LID_FINAL) {
   const spin = 1 - easeInOut(range(p, ...PHASES.spin));
   model.root.rotation.y = 180 * DEG * spin;
@@ -488,7 +492,7 @@ export function poseLaptop(model: LaptopModel, p: number, lidFinal = LID_FINAL) 
      faz a coisa parecer um objeto pousado na mesa e não um poster girando. */
   model.root.rotation.z = -3.5 * DEG * spin;
 
-  const opened = easeOut(range(p, ...PHASES.open));
+  const opened = brilhoTela(p);
   const settled = easeInOut(range(p, ...PHASES.settle));
   const angle = LID_OPEN * opened + (lidFinal - LID_OPEN) * settled;
   model.lid.rotation.x = (90 - angle) * DEG;
