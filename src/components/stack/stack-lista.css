@@ -23,23 +23,65 @@
     position: relative;
   }
 
-  .stack-lista__arvore::before {
-    content: '';
+  /* Trilho apagado, e por cima a fita de LED que acende com a rolagem
+     (StackLed.tsx escreve --fill). Mesma receita da linha do tempo: fita em
+     degradê com brilho, corrente descendo por dentro e a cabeça mais clara. */
+  .stack-lista__trilho {
     position: absolute;
     top: 22px;
     bottom: 0;
     left: var(--trilho);
-    width: 1px;
-    background: linear-gradient(
-      to bottom,
-      rgba(243, 246, 255, 0.5),
-      rgba(91, 156, 255, 0.35) 30%,
-      rgba(95, 104, 115, 0.25)
+    width: 2px;
+    margin-left: -1px;
+    border-radius: 2px;
+    background: var(--line);
+  }
+
+  .stack-lista__led {
+    position: absolute;
+    inset: 0 0 auto;
+    height: calc(var(--fill, 0) * 100%);
+    border-radius: inherit;
+    background: linear-gradient(180deg, color-mix(in srgb, var(--accent) 45%, white), var(--accent));
+    box-shadow: 0 0 12px 1px color-mix(in srgb, var(--accent) 65%, transparent);
+    opacity: clamp(0, calc(var(--fill, 0) * 18), 1);
+  }
+
+  .stack-lista__led::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background-image: linear-gradient(
+      180deg,
+      transparent 0%,
+      color-mix(in srgb, white 70%, transparent) 45%,
+      transparent 90%
     );
+    background-size: 100% 120px;
+    background-repeat: repeat-y;
+    animation: timeline-led-flow 2.8s linear infinite;
+    mix-blend-mode: screen;
+    opacity: 0.22;
+  }
+
+  .stack-lista__led::after {
+    content: '';
+    position: absolute;
+    bottom: -3px;
+    left: 50%;
+    width: 8px;
+    height: 8px;
+    translate: -50% 0;
+    border-radius: 999px;
+    background: color-mix(in srgb, var(--accent) 70%, white);
+    box-shadow: 0 0 16px 5px color-mix(in srgb, var(--accent) 55%, transparent);
+    opacity: clamp(0, calc((1 - var(--fill, 0)) * 12), 1);
   }
 
   .stack-lista__nucleo {
     position: relative;
+    z-index: 1;
     display: grid;
     place-items: center;
     width: 44px;
@@ -63,8 +105,16 @@
   }
 
   .stack-lista__pilar {
+    --lit: 0;
     position: relative;
     padding-left: 56px;
+  }
+
+  /* Apagado até a fita chegar: o nome e as ferramentas do pilar ganham força
+     junto com o ponto. Nunca somem de todo, pra lista ler mesmo sem rolar. */
+  .stack-lista__nome,
+  .stack-lista__itens {
+    opacity: calc(0.45 + var(--lit) * 0.55);
   }
 
   .stack-lista__no {
@@ -74,10 +124,11 @@
     width: 11px;
     height: 11px;
     border-radius: 50%;
-    background: var(--cor);
+    z-index: 1;
+    background: color-mix(in srgb, var(--cor) calc(30% + var(--lit) * 70%), var(--surface));
     box-shadow:
       0 0 0 4px var(--background),
-      0 0 14px color-mix(in srgb, var(--cor) 70%, transparent);
+      0 0 calc(var(--lit) * 16px) color-mix(in srgb, var(--cor) 75%, transparent);
   }
 
   .stack-lista__nome {

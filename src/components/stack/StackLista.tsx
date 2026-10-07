@@ -7,9 +7,11 @@
  * ferramentas.
  *
  * Lê os mesmos dados do grafo (stack-dados.ts) e não tem estado nenhum:
- * renderiza no servidor e chega pronta no HTML. */
+ * renderiza no servidor e chega pronta no HTML. O único pedaço de cliente é
+ * o LED do trilho (StackLed), que acende com a rolagem. */
 
 import { GRAPH } from './stack-dados';
+import StackLed from './StackLed';
 import './stack-lista.css';
 
 type No = (typeof GRAPH.nodes)[number];
@@ -32,6 +34,7 @@ export default function StackLista() {
   return (
     <div className="stack-lista">
       <div className="stack-lista__arvore">
+      <StackLed />
       <div className="stack-lista__nucleo" aria-hidden="true">
         W
       </div>
