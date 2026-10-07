@@ -1103,7 +1103,7 @@ export const PROJECTS: Project[] = [
       },
     },
     links: [
-      { kind: 'site', href: 'https://winiston.vercel.app' },
+      { kind: 'site', href: 'https://winiston.com.br' },
       { kind: 'github', href: 'https://github.com/WinistonAlle/portfolio' },
     ],
     gallery: [

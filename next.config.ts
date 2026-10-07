@@ -13,6 +13,19 @@ const nextConfig: NextConfig = {
      cada visita à página "sobre mim". Estes arquivos são gerados (npm run
      badge) e trocam de conteúdo só quando trocam de nome, então revalidar não
      compra nada. */
+  /* Um endereço só: winiston.com.br. O endereço antigo da Vercel e o `www`
+     redirecionam de forma permanente (308), levando junto o caminho, pra link
+     antigo continuar funcionando e o buscador juntar tudo num domínio.
+     Só o host exato: os endereços de prévia da Vercel (winiston-xxxx...) não
+     entram, senão ninguém conseguiria abrir uma prévia. */
+  async redirects() {
+    return ['winiston.vercel.app', 'www.winiston.com.br'].map((host) => ({
+      source: '/:caminho*',
+      has: [{ type: 'host' as const, value: host }],
+      destination: 'https://winiston.com.br/:caminho*',
+      permanent: true,
+    }));
+  },
   async headers() {
     return [
       {
