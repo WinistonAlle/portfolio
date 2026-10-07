@@ -52,7 +52,7 @@ const pt = {
     mesa: {
       app: 'Winiston',
       sobreArquivo: 'sobre-mim.md',
-      contatoArquivo: 'Winiston.vcf',
+      contatoArquivo: 'Meu contato',
       fotoLegenda: 'Desenvolvedor full-stack',
       notifTitulo: 'Bem-vindo ao meu portfólio',
       notifTexto: 'Clique nos ícones para abrir. Role para ver o resto.',
