@@ -12,6 +12,7 @@ import ParticlesBackground from '@/components/background/ParticlesBackground';
 import Header from '@/components/Header';
 import { PixelTransitionProvider } from '@/components/transition/PixelTransition';
 import SmoothScroll from '@/components/scroll/SmoothScroll';
+import { SITE_URL } from '@/config/site';
 import { getDictionary } from '@/i18n';
 import { HTML_LANG, LOCALES, isLocale } from '@/i18n/config';
 
@@ -67,8 +68,31 @@ export async function generateMetadata(): Promise<Metadata> {
   const dict = await getDictionary(atual);
 
   return {
+    /* Base dos endereços relativos dos metadados: é o que transforma '/pt'
+       em https://winiston.com.br/pt nas tags de idioma e no cartão de
+       compartilhamento. Sem ela o Next resolve contra o endereço do deploy. */
+    metadataBase: new URL(SITE_URL),
     title: dict.meta.title,
     description: dict.meta.description,
+    /* Cartão que aparece quando o link é colado no WhatsApp, LinkedIn etc. */
+    openGraph: {
+      type: 'website',
+      siteName: 'Winiston Alle',
+      title: dict.meta.title,
+      description: dict.meta.description,
+      url: `/${atual}`,
+      locale: atual === 'pt' ? 'pt_BR' : 'en_US',
+      /* 1200x630, uma por idioma (public/og/). Feitas fora do build, como
+         imagem pronta: o título muda pouco e assim não há fonte nem
+         renderização no servidor a cada compartilhamento. */
+      images: [{ url: `/og/${atual}.jpg`, width: 1200, height: 630, alt: dict.meta.title }],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: dict.meta.title,
+      description: dict.meta.description,
+      images: [`/og/${atual}.jpg`],
+    },
     /* hreflang: diz ao buscador que estas duas páginas são a MESMA página em
        idiomas diferentes, e não conteúdo duplicado. Sem isso, as duas
        competem entre si no índice em vez de se complementarem. */
