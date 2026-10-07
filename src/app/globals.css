@@ -635,7 +635,7 @@ body.scroll-locked .site-header {
   );
   overflow: hidden;
   background: var(--background);
-  border-radius: calc(var(--vw, 100vw) * var(--s) * 0.012 * (1 - var(--p)));
+  border-radius: calc(var(--vw, 100vw) * var(--s) * var(--screen-round, 0.012) * (1 - var(--p)));
 }
 
 .portal__content {

@@ -2,7 +2,7 @@
 
 import dynamic from 'next/dynamic';
 import { useEffect, type ReactNode } from 'react';
-import Hero from '@/components/Hero';
+import Mesa, { type DadosMesa, type TextoMesa } from '@/components/desktop/Mesa';
 import { aquecerCracha } from '@/components/lanyard/aquecer-cracha';
 import MacbookPortal from '@/components/macbook/MacbookPortal';
 import type { Locale } from '@/i18n/config';
@@ -30,6 +30,7 @@ export default function HomeShell({
   t,
   nav,
   switchLabel,
+  dados,
   children,
 }: {
   locale: Locale;
@@ -38,9 +39,11 @@ export default function HomeShell({
     ctaProjects: string;
     ctaAbout: string;
     rolar: string;
+    mesa: TextoMesa;
   };
   nav: Nav;
   switchLabel: string;
+  dados: DadosMesa;
   /* As seções que vêm abaixo do hero.
      Chegam por `children` e não por import porque são Server Components e leem
      o dicionário, que tem `server-only`: importá-las aqui, de dentro de um
@@ -59,8 +62,17 @@ export default function HomeShell({
       <BootIntro />
       {/* A home inteira mora dentro do MacBook: a abertura é só a moldura
           sobre o fundo animado, e a rolagem entra no site. */}
-      <MacbookPortal header={{ locale, nav, switchLabel }}>
-        <Hero locale={locale} t={t} />
+      {/* Sem header dentro do notebook: a barra de menu da mesa é o header
+          da home. */}
+      <MacbookPortal>
+        <Mesa
+          locale={locale}
+          title={t.title}
+          nav={nav}
+          switchLabel={switchLabel}
+          t={t.mesa}
+          dados={dados}
+        />
       </MacbookPortal>
 
       {/* Fora do portal de propósito: dentro, este conteúdo seria emoldurado e

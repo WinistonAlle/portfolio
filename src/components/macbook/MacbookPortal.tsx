@@ -43,6 +43,20 @@ const MacbookIntro3D = dynamic(() => import('./MacbookIntro3D'), {
   ssr: false,
 });
 
+/* No celular a abertura é outra: um iPhone girando, e o zoom entra na tela
+   dele. Mesmo motivo do ssr:false de cima. */
+const PhoneIntro3D = dynamic(() => import('@/components/iphone/PhoneIntro3D'), {
+  ssr: false,
+});
+
+/* Abertura do celular: mais curta que a do notebook. Numa tela de mão, três
+   telas de rolagem só de abertura cansam. */
+const PHONE_INTRO_VH = 120;
+const PHONE_TRAVEL_VH = 80;
+const PHONE_START_SCALE = 0.6;
+/* Mesmo raio de canto da tela 3D do celular (SCREEN_ROUND em phone-scene). */
+const PHONE_SCREEN_ROUND = 0.13;
+
 /* Rolagem que a cena 3D consome antes de o zoom do portal começar. Some com o
    travelVh: o total é o que a pessoa rola até ver o site, e é esse número que
    importa vigiar, não este sozinho. */
@@ -52,13 +66,11 @@ const MacbookIntro3D = dynamic(() => import('./MacbookIntro3D'), {
    mexer na coreografia. */
 const INTRO_VH = 190;
 
-/* Abaixo disto, nem cena 3D nem moldura: o boot entrega direto a home.
-
-   O portal existe pra mostrar o site rodando DENTRO de um notebook. Num
-   aparelho de 390px o notebook ocupa ~218px, e o que está na tela dele fica
-   ilegível — sobra a rolagem do zoom sem a ideia que ela servia. No celular o
-   loading já faz o papel de abertura sozinho. */
-const SEM_PORTAL = '(max-width: 640px)';
+/* Abaixo disto o notebook não serve: num aparelho de 390px ele ocupa ~218px
+   e o que está na tela dele fica ilegível. No celular a abertura é um iPhone
+   girando (PhoneIntro3D), que preenche a tela em pé. Sem 3D, nem moldura nem
+   zoom: o boot entrega direto a home. */
+const CELULAR = '(max-width: 640px)';
 
 /* Geometria da tela dentro do SVG (viewBox 650x400). */
 const SCREEN_W_RATIO = 501.22 / 650;
@@ -78,7 +90,7 @@ export default function MacbookPortal({
   /* Props do Header pra cópia que aparece DENTRO da tela do notebook. Chegam
      por aqui porque o Header precisa de idioma e de texto traduzido, e este
      componente é de cliente: quem tem essas coisas é a página, no servidor. */
-  header: { locale: Locale; nav: Nav; switchLabel: string };
+  header?: { locale: Locale; nav: Nav; switchLabel: string };
   startScale?: number;
   travelVh?: number;
 }) {
@@ -105,8 +117,13 @@ export default function MacbookPortal({
   /* Primeiro quadro 3D pintado. Até lá quem aparece é a moldura SVG, senão
      existiria um instante de tela vazia esperando o bundle do three. */
   const [ready3D, setReady3D] = useState(false);
-  /* Celular: sem moldura e sem zoom, o site começa já entrado. */
+  /* Celular sem 3D: sem moldura e sem zoom, o site começa já entrado. */
   const [skipPortal, setSkipPortal] = useState(false);
+  /* Celular: a abertura é o iPhone, não o notebook. */
+  const [celular, setCelular] = useState(false);
+  /* Aspecto da viewport (largura / 100svh): no celular a tela 3D tem a
+     proporção da própria tela de quem olha. */
+  const [aspectoTela, setAspectoTela] = useState(0.46);
   /* Rede de segurança: se o bundle do three não pintar o primeiro quadro em
      tempo razoável (rede ruim, GPU recusando contexto depois do canRun3D),
      cai pro SVG em vez de deixar a pessoa olhando um vazio. */
@@ -124,12 +141,33 @@ export default function MacbookPortal({
        atravessar a intro, o efeito sai caro e entrega pouco.
 
        No celular vale o portal de sempre, que é o caminho que já existia. */
-    const telaPequena = window.matchMedia(SEM_PORTAL).matches;
-    setSkipPortal(telaPequena);
-    setUse3D(!reduced && !telaPequena && canRun3D());
+    const telaPequena = window.matchMedia(CELULAR).matches;
+    const pode3D = !reduced && canRun3D();
+    setCelular(telaPequena);
+    setSkipPortal(telaPequena && !pode3D);
+    setUse3D(pode3D);
+    if (telaPequena) {
+      const regua = document.createElement('div');
+      regua.style.cssText = 'position:fixed;top:0;height:100svh;width:0;visibility:hidden';
+      document.body.appendChild(regua);
+      const h = regua.getBoundingClientRect().height || window.innerHeight;
+      regua.remove();
+      setAspectoTela(document.documentElement.clientWidth / h);
+    }
   }, []);
 
   const on3D = use3D === true && !failed3D;
+  const introVh = celular ? PHONE_INTRO_VH : INTRO_VH;
+  const travel = celular ? PHONE_TRAVEL_VH : travelVh;
+  const escala0 = celular ? PHONE_START_SCALE : startScale;
+
+  /* Celular cujo 3D falhou: não há moldura SVG de reserva, então entra
+     direto, como faria sem 3D. */
+  useEffect(() => {
+    if (!celular || !failed3D) return;
+    rootRef.current?.style.setProperty('--p', '1');
+    setEntered(true);
+  }, [celular, failed3D]);
 
   useEffect(() => {
     if (!on3D || ready3D) return;
@@ -156,11 +194,11 @@ export default function MacbookPortal({
       rafRef.current = 0;
       /* A cena 3D consome a primeira fatia da rolagem; o zoom só começa
          depois dela. Sem 3D o deslocamento é zero e nada muda. */
-      const intro = on3D ? (INTRO_VH / 100) * window.innerHeight : 0;
-      const travel = (travelVh / 100) * window.innerHeight;
+      const intro = on3D ? (introVh / 100) * window.innerHeight : 0;
+      const percurso = (travel / 100) * window.innerHeight;
       const p =
-        travel > 0
-          ? Math.min(1, Math.max(0, (window.scrollY - intro) / travel))
+        percurso > 0
+          ? Math.min(1, Math.max(0, (window.scrollY - intro) / percurso))
           : 1;
       root.style.setProperty('--p', p.toFixed(4));
       if (p >= 1) setEntered(true);
@@ -179,7 +217,7 @@ export default function MacbookPortal({
       window.removeEventListener('resize', onScroll);
       if (rafRef.current) cancelAnimationFrame(rafRef.current);
     };
-  }, [travelVh, on3D, skipPortal]);
+  }, [travel, introVh, on3D, skipPortal]);
 
   /* O MacBook sobe para dentro de quadro quando o boot termina. A espera
      curta é para ele entrar com a cortina de pixel já abrindo, e não atrás
@@ -274,13 +312,14 @@ export default function MacbookPortal({
       style={
         {
           '--p': 0,
-          '--s0': startScale,
+          '--s0': escala0,
           /* O inverso vai pronto para o CSS multiplicar em vez de dividir:
              `calc()` aceita divisão por variável, mas multiplicação não tem
              canto escuro em navegador nenhum. */
-          '--inv-s0': 1 / startScale,
+          '--inv-s0': 1 / escala0,
           '--screen-ratio': SCREEN_W_RATIO,
-          '--screen-aspect': SCREEN_ASPECT,
+          '--screen-aspect': celular ? aspectoTela : SCREEN_ASPECT,
+          '--screen-round': celular ? PHONE_SCREEN_ROUND : 0.012,
           '--svg-aspect': SVG_ASPECT,
           '--screen-offset': SCREEN_Y_OFFSET,
           /* Não é cross-fade: o canvas continua atrás. É a tela do laptop
@@ -301,7 +340,7 @@ export default function MacbookPortal({
         <div
           className="portal__rail"
           style={{
-            height: `calc(${(on3D ? INTRO_VH : 0) + travelVh}vh + 100svh)`,
+            height: `calc(${(on3D ? introVh : 0) + travel}vh + 100svh)`,
           }}
         />
       )}
@@ -321,7 +360,7 @@ export default function MacbookPortal({
           cena 3D (`on3D`): onde o notebook 3D não roda — celular, movimento
           reduzido, máquina sem fôlego — um shader em tela cheia seria
           exatamente o que não se deve acrescentar. */}
-      {on3D && !entered && <AneisDaAbertura />}
+      {on3D && !entered && !celular && <AneisDaAbertura />}
 
       {/* `canRun3D` já reprova a maioria das máquinas sem condição, mas ele
           responde ANTES: se o contexto morrer no meio (driver caindo, GPU
@@ -331,12 +370,21 @@ export default function MacbookPortal({
           cena 3D a abertura vira a versão 2D, que é o que roda no celular. */}
       {on3D && !entered && (
         <Salvaguarda3D alternativa={null} ativo>
-          <MacbookIntro3D
-            startScale={startScale}
-            introVh={INTRO_VH}
-            onHandoff={setBoot}
-            onReady={() => setReady3D(true)}
-          />
+          {celular ? (
+            <PhoneIntro3D
+              startScale={escala0}
+              introVh={introVh}
+              onHandoff={setBoot}
+              onReady={() => setReady3D(true)}
+            />
+          ) : (
+            <MacbookIntro3D
+              startScale={startScale}
+              introVh={INTRO_VH}
+              onHandoff={setBoot}
+              onReady={() => setReady3D(true)}
+            />
+          )}
         </Salvaguarda3D>
       )}
 
@@ -346,7 +394,7 @@ export default function MacbookPortal({
             {/* Antes de entrar, o header mora aqui dentro, como se fosse o
                 topo do site rodando na tela do notebook. Some ao entrar: o
                 header real do layout assume a partir daí. */}
-            {!entered && <Header inPortal {...header} />}
+            {!entered && header && <Header inPortal {...header} />}
             {children}
           </div>
         </div>

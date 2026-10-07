@@ -4,6 +4,7 @@ import SecaoSobre from '@/components/home/secoes/SecaoSobre';
 import SecaoStack from '@/components/home/secoes/SecaoStack';
 import SecaoProjetos from '@/components/home/secoes/SecaoProjetos';
 import SecaoContato from '@/components/home/secoes/SecaoContato';
+import { PROJECTS } from '@/data/projects';
 import { getDictionary } from '@/i18n';
 import { isLocale } from '@/i18n/config';
 
@@ -21,12 +22,19 @@ export default async function Home(props: PageProps<'/[lang]'>) {
 
   const dict = await getDictionary(lang);
 
+  const dados = {
+    total: PROJECTS.length,
+    live: PROJECTS.filter((p) => p.status === 'live').length,
+    nomes: PROJECTS.map((p) => p.name),
+  };
+
   return (
     <HomeShell
       locale={lang}
       t={dict.home}
       nav={dict.nav}
       switchLabel={dict.header.switchLabel}
+      dados={dados}
     >
       {/* As seções são montadas AQUI, no servidor, e entregues prontas ao
           HomeShell, que é de cliente. É a mesma regra que rege o resto do

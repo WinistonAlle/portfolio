@@ -46,6 +46,25 @@ const pt = {
     projetosTitulo: 'O trabalho mais *recente*.',
     projetosVerTodos: 'Ver os {n} projetos',
     contatoTitulo: 'Vamos conversar?',
+
+    /* Área de trabalho do hero (desktop/Desktop.tsx). Os nomes imitam os do
+       macOS em português: "Lixo", "Captura de Tela ... às ...". */
+    mesa: {
+      app: 'Winiston',
+      sobreArquivo: 'sobre-mim.md',
+      contatoArquivo: 'Winiston.vcf',
+      fotoLegenda: 'Desenvolvedor full-stack',
+      notifTitulo: 'Bem-vindo ao meu portfólio',
+      notifTexto: 'Clique nos ícones para abrir. Role para ver o resto.',
+      notifAgora: 'agora',
+      rolar: 'Role para ver mais',
+      producao: 'Em produção',
+      producaoSub: 'sistemas no ar, usados todo dia',
+      projetosSub: '{n} projetos',
+      lixo: 'Lixo',
+      idioma: 'English',
+      dica: 'Clique nos ícones para abrir',
+    },
   },
 
   about: {

@@ -39,6 +39,23 @@ const en: typeof pt = {
     projetosTitulo: 'The most *recent* work.',
     projetosVerTodos: 'See all {n} projects',
     contatoTitulo: 'Shall we talk?',
+
+    mesa: {
+      app: 'Winiston',
+      sobreArquivo: 'about-me.md',
+      contatoArquivo: 'Winiston.vcf',
+      fotoLegenda: 'Full-stack developer',
+      notifTitulo: 'Welcome to my portfolio',
+      notifTexto: 'Click the icons to open them. Scroll to see the rest.',
+      notifAgora: 'now',
+      rolar: 'Scroll to see more',
+      producao: 'In production',
+      producaoSub: 'systems live, used every day',
+      projetosSub: '{n} projects',
+      lixo: 'Trash',
+      idioma: 'Português',
+      dica: 'Click the icons to open them',
+    },
   },
 
   about: {

@@ -1,0 +1,981 @@
+/* Área de trabalho do hero (Mesa.tsx).
+ *
+ * A interface do sistema usa a fonte do sistema, como no Mac de verdade: no
+ * macOS isso é a SF Pro. Só o título (que é o "papel de parede" falando) fica
+ * com a voz do site, Bricolage com o acento em serifa. */
+
+/* Sem header na home: a barra de menu da mesa faz o papel dele. O header
+   continua existindo nas outras páginas, e volta sozinho quando a home sai. */
+body:has(.mesa) .site-header {
+  display: none;
+}
+
+.mesa {
+  --sistema: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Helvetica Neue', system-ui, sans-serif;
+  --vidro: rgba(22, 27, 44, 0.62);
+  --vidro-borda: rgba(255, 255, 255, 0.16);
+  position: relative;
+  isolation: isolate;
+  height: 100svh;
+  overflow: hidden;
+  font-family: var(--sistema);
+  color: #fff;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Papel de parede: imagem pronta, com as ondas e o grão já assados. Ver o
+   comentário de Papel em Mesa.tsx. */
+.mesa__papel {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: #050c22 url('/mesa/papel-mac.webp') center / cover no-repeat;
+}
+
+.mesa__papel--ios {
+  background-image: url('/mesa/papel-ios.webp');
+  background-position: bottom right;
+}
+
+/* ---------- Barra de menu ---------- */
+
+.mesa-menu {
+  position: absolute;
+  inset: 0 0 auto;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 28px;
+  padding: 0 8px;
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: -0.005em;
+  background: rgba(6, 10, 24, 0.5);
+  text-shadow: 0 0.5px 1px rgba(0, 0, 0, 0.25);
+}
+
+.mesa-menu__lado,
+.mesa-menu__nav {
+  display: flex;
+  align-items: center;
+  height: 100%;
+}
+
+.mesa-menu__maca {
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 22px;
+  margin-top: -2px;
+}
+
+.mesa-menu__app {
+  padding: 0 10px 0 6px;
+  font-weight: 700;
+}
+
+.mesa-menu__item,
+.mesa-menu__extra {
+  display: inline-flex;
+  align-items: center;
+  height: 22px;
+  padding: 0 9px;
+  border-radius: 5px;
+  color: inherit;
+  white-space: nowrap;
+}
+
+.mesa-menu__item:hover,
+.mesa-menu__item:focus-visible {
+  background: rgba(255, 255, 255, 0.2);
+  outline: none;
+}
+
+.mesa-menu__extra {
+  padding: 0 7px;
+}
+
+/* Fonte de entrada: caixa com a sigla, borda arredondada, como no Mac. */
+.mesa-menu__idioma span {
+  display: inline-grid;
+  place-items: center;
+  min-width: 22px;
+  height: 15px;
+  padding: 0 3px;
+  border: 1.2px solid currentColor;
+  border-radius: 3.5px;
+  font-size: 9.5px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
+.mesa-menu__hora {
+  padding: 0 10px 0 7px;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+/* ---------- Widgets ---------- */
+
+.mesa-widgets {
+  position: absolute;
+  top: calc(28px + 22px);
+  left: 22px;
+  display: flex;
+  gap: 18px;
+}
+
+.widget {
+  position: relative;
+  overflow: hidden;
+  width: 196px;
+  height: 196px;
+  border-radius: 24px;
+  background: var(--vidro);
+  box-shadow:
+    inset 0 0 0 0.5px var(--vidro-borda),
+    0 10px 30px rgba(0, 0, 0, 0.28);
+}
+
+.widget--foto img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  user-select: none;
+}
+
+/* Legenda do widget de Fotos: nome por cima de um degradê no pé da imagem. */
+.widget__legenda {
+  position: absolute;
+  inset: auto 0 0;
+  display: flex;
+  flex-direction: column;
+  padding: 30px 14px 12px;
+  font-size: 11.5px;
+  color: rgba(255, 255, 255, 0.78);
+  background: linear-gradient(to top, rgba(4, 8, 24, 0.82), transparent);
+}
+
+.widget__legenda > * ,
+.widget__legenda {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.widget__legenda strong {
+  font-size: 14px;
+  font-weight: 600;
+  color: #fff;
+}
+
+.widget--producao {
+  display: flex;
+  flex-direction: column;
+  padding: 16px 18px 18px;
+}
+
+.widget__rotulo {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13.5px;
+  font-weight: 600;
+  color: #30d158;
+}
+
+.widget__ponto {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: currentColor;
+  box-shadow: 0 0 8px currentColor;
+  animation: widget-pulso 2.6s ease-in-out infinite;
+}
+
+@keyframes widget-pulso {
+  50% {
+    opacity: 0.45;
+  }
+}
+
+.widget__numero {
+  margin-top: auto;
+  font-size: 68px;
+  font-weight: 600;
+  line-height: 1;
+  letter-spacing: -0.04em;
+  font-variant-numeric: tabular-nums;
+}
+
+.widget__sub {
+  margin-top: 8px;
+  font-size: 13px;
+  line-height: 1.25;
+  color: rgba(255, 255, 255, 0.62);
+}
+
+/* ---------- Título ---------- */
+
+.mesa-titulo {
+  position: absolute;
+  left: 30px;
+  bottom: calc(96px + 7svh);
+  max-width: min(60vw, 900px);
+}
+
+.mesa-titulo__texto {
+  font-family: var(--font-display), system-ui, sans-serif;
+  font-size: clamp(2.6rem, 5vw, 5.4rem);
+  font-weight: 700;
+  line-height: 1.02;
+  letter-spacing: -0.035em;
+  text-wrap: balance;
+  max-width: 13ch;
+  text-shadow: 0 2px 30px rgba(3, 8, 24, 0.35);
+}
+
+.mesa-titulo__dica {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 20px;
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.72);
+}
+
+/* "Role para ver mais": no canto de baixo à esquerda, na altura do Dock. */
+.mesa-rolar {
+  position: absolute;
+  left: 30px;
+  bottom: 26px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.mesa-rolar .hero-rolar {
+  height: 40px;
+  background: linear-gradient(to bottom, transparent, #fff);
+}
+
+/* ---------- Arquivos ---------- */
+
+/* Coluna no canto de cima à direita, que é onde o Finder empilha o que cai
+   na mesa. Célula de 96px, ícone de 64. */
+.mesa-arquivos {
+  position: absolute;
+  /* Começa abaixo da faixa da notificação de boas-vindas, pra ela nunca
+     cobrir a pasta Projetos. */
+  top: calc(28px + 104px);
+  right: 16px;
+  display: grid;
+  gap: 10px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.mesa-arquivo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 116px;
+  padding: 4px 0;
+  border-radius: 10px;
+  color: #fff;
+  outline: none;
+  cursor: pointer;
+}
+
+.mesa-arquivo__icone {
+  display: grid;
+  place-items: center;
+  width: 92px;
+  height: 92px;
+  border-radius: 8px;
+  filter: drop-shadow(0 2px 3px rgba(0, 0, 0, 0.35));
+  transition: transform 0.16s cubic-bezier(0.2, 0, 0, 1);
+}
+
+/* Passar o mouse acende o item e levanta o ícone: é o que diz "isto abre"
+   pra quem não pensou em clicar numa mesa. */
+.mesa-arquivo:hover .mesa-arquivo__icone {
+  background: rgba(255, 255, 255, 0.1);
+  transform: translateY(-2px) scale(1.04);
+}
+
+.mesa-arquivo:active .mesa-arquivo__icone {
+  transform: scale(0.96);
+}
+
+.mesa-arquivo__nome {
+  margin-top: 3px;
+  padding: 1px 4px;
+  border-radius: 4px;
+  max-width: 116px;
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 1.25;
+  text-align: center;
+  overflow-wrap: anywhere;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-shadow:
+    0 1px 2px rgba(0, 0, 0, 0.75),
+    0 0 6px rgba(0, 0, 0, 0.35);
+}
+
+/* Assim que a mesa liga, os ícones dão um pulinho em sequência: o olho vai
+   pra eles e entende que são coisa de clicar. Uma vez só. */
+.mesa-mac--pronta .mesa-arquivos li {
+  animation: mesa-pulinho 0.62s cubic-bezier(0.3, 0, 0.3, 1) both;
+  animation-delay: calc(0.5s + var(--i) * 90ms);
+}
+
+@keyframes mesa-pulinho {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  35% {
+    transform: translateY(-10px);
+    animation-timing-function: cubic-bezier(0.5, 0, 0.75, 0);
+  }
+  70% {
+    transform: translateY(0);
+  }
+  85% {
+    transform: translateY(-3px);
+  }
+}
+
+/* "Mostrar informações do item": a linha azul embaixo do nome. */
+.mesa-arquivo__info {
+  font-size: 11px;
+  color: #6cb8ff;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.6);
+}
+
+/* Selecionado, como no Finder: fundo cinza atrás do ícone e o nome numa
+   pílula azul de destaque, sem sombra no texto. */
+.mesa-arquivo--sel .mesa-arquivo__icone,
+.mesa-arquivo:focus-visible .mesa-arquivo__icone {
+  background: rgba(0, 0, 0, 0.28);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.12);
+}
+
+.mesa-arquivo--sel .mesa-arquivo__nome,
+.mesa-arquivo:focus-visible .mesa-arquivo__nome {
+  background: #0a64d9;
+  text-shadow: none;
+}
+
+/* ---------- Notificação ---------- */
+
+/* Banner da Central de Notificações: desce no canto de cima à direita,
+   fica uns segundos e sai pela direita. */
+.mesa-notif {
+  position: absolute;
+  top: calc(28px + 10px);
+  right: 12px;
+  z-index: 20;
+  display: grid;
+  grid-template-columns: 40px 1fr auto;
+  align-items: center;
+  gap: 12px;
+  width: 360px;
+  padding: 12px 14px;
+  border-radius: 18px;
+  font-size: 13px;
+  line-height: 1.3;
+  color: rgba(255, 255, 255, 0.82);
+  background: rgba(44, 50, 70, 0.9);
+  box-shadow:
+    inset 0 0 0 0.5px rgba(255, 255, 255, 0.2),
+    0 12px 36px rgba(0, 0, 0, 0.35);
+  animation: notif-entra 0.5s cubic-bezier(0.2, 0, 0, 1) both;
+  cursor: pointer;
+}
+
+.mesa-notif--saindo {
+  animation: notif-sai 0.34s cubic-bezier(0.4, 0, 1, 1) both;
+}
+
+@keyframes notif-entra {
+  from {
+    opacity: 0;
+    transform: translateX(110%);
+  }
+}
+
+@keyframes notif-sai {
+  to {
+    opacity: 0;
+    transform: translateX(110%);
+  }
+}
+
+.mesa-notif__icone {
+  display: block;
+  width: 46px;
+  height: 46px;
+  margin: -3px;
+}
+
+.mesa-notif__texto {
+  display: flex;
+  flex-direction: column;
+}
+
+.mesa-notif__texto strong {
+  font-weight: 600;
+  color: #fff;
+}
+
+.mesa-notif__hora {
+  align-self: start;
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+/* O "x" do Mac só aparece com o mouse em cima, no canto de cima à esquerda. */
+.mesa-notif__fechar {
+  position: absolute;
+  top: -7px;
+  left: -7px;
+  display: grid;
+  place-items: center;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  font-size: 14px;
+  line-height: 1;
+  color: rgba(255, 255, 255, 0.85);
+  background: rgba(70, 76, 96, 0.95);
+  box-shadow: inset 0 0 0 0.5px rgba(255, 255, 255, 0.25);
+  opacity: 0;
+  cursor: pointer;
+  transition: opacity 0.12s;
+}
+
+.mesa-notif:hover .mesa-notif__fechar,
+.mesa-notif__fechar:focus-visible {
+  opacity: 1;
+}
+
+/* ---------- Dock ---------- */
+
+.dock {
+  position: absolute;
+  left: 50%;
+  bottom: 6px;
+  z-index: 10;
+  display: flex;
+  align-items: flex-end;
+  padding: 5px 5px 5px;
+  border-radius: 22px;
+  transform: translateX(-50%);
+  background: rgba(40, 50, 78, 0.5);
+  box-shadow:
+    inset 0 0 0 0.5px rgba(255, 255, 255, 0.22),
+    0 0 0 0.5px rgba(0, 0, 0, 0.35),
+    0 10px 40px rgba(0, 0, 0, 0.3);
+}
+
+.dock__item {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  outline: none;
+}
+
+.dock__icone {
+  --tam: 62px;
+  display: block;
+  width: var(--tam);
+  height: var(--tam);
+  transition:
+    width 0.18s cubic-bezier(0.2, 0, 0, 1),
+    height 0.18s cubic-bezier(0.2, 0, 0, 1);
+}
+
+/* Com o cursor dentro, quem anda é o laço do JS a cada quadro; transição por
+   cima disso só atrasaria a ampliação. */
+.dock--ativo .dock__icone {
+  transition: none;
+}
+
+.dock__aceso {
+  position: absolute;
+  bottom: -4px;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.85);
+}
+
+.dock__divisor {
+  align-self: center;
+  width: 1px;
+  height: 50px;
+  margin: 0 7px;
+  background: rgba(255, 255, 255, 0.24);
+}
+
+.dock__dica {
+  position: absolute;
+  bottom: calc(100% + 12px);
+  left: 50%;
+  padding: 4px 11px;
+  border-radius: 7px;
+  font-size: 13px;
+  font-weight: 500;
+  white-space: nowrap;
+  color: rgba(255, 255, 255, 0.92);
+  background: rgba(36, 38, 48, 0.82);
+  box-shadow:
+    inset 0 0 0 0.5px rgba(255, 255, 255, 0.18),
+    0 4px 14px rgba(0, 0, 0, 0.3);
+  transform: translateX(-50%);
+  opacity: 0;
+  pointer-events: none;
+}
+
+.dock__item:hover .dock__dica,
+.dock__item:focus-visible .dock__dica {
+  opacity: 1;
+}
+
+.dock__item:focus-visible .dock__icone {
+  border-radius: 14px;
+  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.7);
+}
+
+/* O pulo de quem está abrindo. Dois pulos que perdem altura, aceleração de
+   gravidade na descida. */
+.dock__item--pula .dock__icone {
+  animation: dock-pulo 0.72s cubic-bezier(0.3, 0, 0.3, 1);
+}
+
+@keyframes dock-pulo {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  25% {
+    transform: translateY(-24px);
+    animation-timing-function: cubic-bezier(0.5, 0, 0.75, 0);
+  }
+  50% {
+    transform: translateY(0);
+  }
+  72% {
+    transform: translateY(-10px);
+    animation-timing-function: cubic-bezier(0.5, 0, 0.75, 0);
+  }
+}
+
+/* ---------- Janela que vira página ---------- */
+
+.abertura {
+  position: fixed;
+  z-index: 1000;
+  overflow: hidden;
+  background: var(--background);
+  pointer-events: none;
+}
+
+.abertura--janela {
+  box-shadow:
+    0 0 0 0.5px rgba(255, 255, 255, 0.2),
+    0 30px 90px rgba(0, 0, 0, 0.55);
+}
+
+.abertura__barra {
+  display: flex;
+  align-items: center;
+  height: 52px;
+  padding: 0 20px;
+  background: #1d2230;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Helvetica Neue', system-ui, sans-serif;
+  transition:
+    opacity 0.3s cubic-bezier(0.4, 0, 1, 1),
+    transform 0.3s cubic-bezier(0.4, 0, 1, 1);
+}
+
+/* Tela cheia esconde a barra de título, como no Mac. */
+.abertura--cheia .abertura__barra {
+  opacity: 0;
+  transform: translateY(-100%);
+}
+
+.abertura__semaforo {
+  display: flex;
+  gap: 8px;
+}
+
+.abertura__semaforo i {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: #ff5f57;
+  box-shadow: inset 0 0 0 0.5px rgba(0, 0, 0, 0.2);
+}
+
+.abertura__semaforo i:nth-child(2) {
+  background: #febc2e;
+}
+
+.abertura__semaforo i:nth-child(3) {
+  background: #28c840;
+}
+
+.abertura__titulo {
+  flex: 1;
+  margin-right: 52px;
+  text-align: center;
+  font-size: 13px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.85);
+}
+
+/* iOS: o ícone vai junto no começo e some enquanto o app toma a tela. */
+.abertura__icone {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  animation: abertura-icone 0.3s cubic-bezier(0.4, 0, 1, 1) forwards;
+}
+
+.abertura__icone > svg {
+  width: min(100%, 140px);
+  height: auto;
+  aspect-ratio: 1;
+}
+
+@keyframes abertura-icone {
+  from {
+    opacity: 1;
+    transform: scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: scale(1.6);
+  }
+}
+
+/* ---------- iPhone ---------- */
+
+.mesa-ios {
+  display: none;
+}
+
+@media (max-width: 640px) {
+  .mesa-mac {
+    display: none;
+  }
+
+  .mesa {
+    height: auto;
+    min-height: 100svh;
+  }
+
+  .mesa-ios {
+    position: relative;
+    display: block;
+    min-height: 100svh;
+    padding: calc(env(safe-area-inset-top) + 22px) 22px calc(env(safe-area-inset-bottom) + 170px);
+  }
+
+  .ios-grade {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 26px 0;
+    justify-items: center;
+  }
+
+  .ios-grade .widget {
+    width: 100%;
+    max-width: none;
+    height: auto;
+    border-radius: 24px;
+  }
+
+  .ios-grade .widget--titulo,
+  .ios-grade .widget--foto,
+  .ios-grade .widget--producao {
+    grid-column: span 2;
+    width: calc(100% - 9px);
+    aspect-ratio: 1;
+  }
+
+  .ios-grade .widget--titulo {
+    grid-column: span 4;
+    width: 100%;
+    aspect-ratio: 338 / 158;
+    display: flex;
+    align-items: flex-end;
+    padding: 18px;
+  }
+
+  .ios-grade .widget--foto {
+    justify-self: start;
+  }
+
+  .ios-grade .widget--producao {
+    justify-self: end;
+  }
+
+  .widget--titulo__texto {
+    font-family: var(--font-display), system-ui, sans-serif;
+    font-size: clamp(1.45rem, 7vw, 1.9rem);
+    font-weight: 700;
+    line-height: 1.04;
+    letter-spacing: -0.03em;
+    text-wrap: balance;
+  }
+
+  .widget__numero {
+    font-size: 48px;
+  }
+
+  .ios-app {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+    width: 76px;
+    color: #fff;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  /* O SVG tem respiro em volta do quadrado (80,5 de 100), então a caixa é
+     maior que os 62px que o ícone ocupa de fato. */
+  .ios-app__icone {
+    display: block;
+    width: 77px;
+    height: 77px;
+    margin: -7px;
+    transition: transform 0.15s cubic-bezier(0.2, 0, 0, 1);
+  }
+
+  .ios-app:active .ios-app__icone {
+    transform: scale(0.92);
+  }
+
+  .ios-app__rotulo {
+    margin-top: 2px;
+    font-size: 12px;
+    font-weight: 500;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.45);
+    white-space: nowrap;
+  }
+
+  /* No lugar da pílula "Buscar" do iOS, logo acima do Dock. */
+  .ios-rolar {
+    position: absolute;
+    left: 50%;
+    bottom: calc(env(safe-area-inset-bottom) + 116px);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 7px 14px;
+    border-radius: 999px;
+    font-size: 13px;
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.92);
+    background: rgba(54, 70, 112, 0.45);
+    box-shadow: inset 0 0 0 0.5px rgba(255, 255, 255, 0.18);
+    transform: translateX(-50%);
+    white-space: nowrap;
+  }
+
+  .ios-rolar svg {
+    animation: ios-rolar 1.8s ease-in-out infinite;
+  }
+
+  @keyframes ios-rolar {
+    50% {
+      transform: translateY(3px);
+    }
+  }
+
+  .ios-dock {
+    position: absolute;
+    left: 12px;
+    right: 12px;
+    bottom: calc(env(safe-area-inset-bottom) + 12px);
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    height: 92px;
+    border-radius: 36px;
+    background: rgba(54, 70, 112, 0.45);
+    box-shadow: inset 0 0 0 0.5px rgba(255, 255, 255, 0.18);
+  }
+
+  .ios-dock .ios-app {
+    width: auto;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mesa-mac--pronta .mesa-arquivos li,
+  .mesa-notif,
+  .ios-rolar svg,
+  .widget__ponto,
+  .dock__item--pula .dock__icone {
+    animation: none;
+  }
+}
+
+/* ---------- Conteúdo da janela ---------- */
+
+/* Ao maximizar, o conteúdo some e sobra só o fundo da página: é esse fundo
+   que a página de destino encontra quando assume. */
+.abertura__doc,
+.finder {
+  transition: opacity 0.3s cubic-bezier(0.4, 0, 1, 1);
+}
+
+.abertura--cheia .abertura__doc,
+.abertura--cheia .finder {
+  opacity: 0;
+}
+
+.abertura__doc {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 56px 64px;
+}
+
+.abertura__doc span {
+  font-family: var(--font-display), system-ui, sans-serif;
+  font-size: 40px;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  color: #fff;
+  margin-bottom: 10px;
+}
+
+.abertura__doc i {
+  height: 10px;
+  width: 62%;
+  border-radius: 5px;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.abertura__doc i:nth-of-type(2) {
+  width: 54%;
+}
+
+.abertura__doc i:nth-of-type(3) {
+  width: 38%;
+}
+
+.finder {
+  display: flex;
+  height: 100%;
+  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Helvetica Neue', system-ui, sans-serif;
+  color: #fff;
+  background: #1c1f27;
+}
+
+.finder__lateral {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  flex: 0 0 196px;
+  padding: 18px 10px;
+  background: rgba(44, 48, 60, 0.92);
+  border-right: 1px solid rgba(0, 0, 0, 0.35);
+}
+
+.finder__lateral .abertura__semaforo {
+  margin: 0 0 22px 8px;
+}
+
+.finder__secao {
+  padding: 0 10px 6px;
+  font-size: 11px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.finder__fav {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  height: 26px;
+  padding: 0 10px;
+  border-radius: 6px;
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.finder__fav i {
+  width: 14px;
+  height: 11px;
+  border-radius: 2px;
+  background: #4aa3f5;
+}
+
+.finder__fav--sel {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.finder__main {
+  flex: 1;
+  min-width: 0;
+}
+
+.finder__barra {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  height: 52px;
+  padding: 0 18px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.4);
+}
+
+.finder__setas {
+  font-size: 22px;
+  letter-spacing: 10px;
+  color: rgba(255, 255, 255, 0.45);
+}
+
+.finder__titulo {
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.finder__grade {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(112px, 1fr));
+  gap: 18px 6px;
+  padding: 22px 18px;
+}
+
+.finder__item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  text-align: center;
+  color: rgba(255, 255, 255, 0.9);
+}
