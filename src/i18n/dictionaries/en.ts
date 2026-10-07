@@ -43,7 +43,7 @@ const en: typeof pt = {
     mesa: {
       app: 'Winiston',
       sobreArquivo: 'about-me.md',
-      contatoArquivo: 'My contact',
+      contatoArquivo: 'contact.exe',
       fotoLegenda: 'Full-stack developer',
       notifTitulo: 'Welcome to my portfolio',
       notifTexto: 'Click the icons to open them. Scroll to see the rest.',
