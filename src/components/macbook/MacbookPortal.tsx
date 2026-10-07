@@ -175,9 +175,12 @@ export default function MacbookPortal({
 
   useEffect(() => {
     if (!on3D || ready3D) return;
-    const timer = window.setTimeout(() => setFailed3D(true), 2500);
+    /* No celular o prazo é maior: rede e processador mais lentos, e lá a
+       reserva é pular a abertura inteira, não trocar pela moldura SVG. Com
+       2,5s o prazo estourava perto do fim do loading em aparelho real. */
+    const timer = window.setTimeout(() => setFailed3D(true), celular ? 7000 : 2500);
     return () => window.clearTimeout(timer);
-  }, [on3D, ready3D]);
+  }, [on3D, ready3D, celular]);
 
   useEffect(() => {
     const root = rootRef.current;
@@ -364,7 +367,12 @@ export default function MacbookPortal({
           cena 3D (`on3D`): onde ela não roda (movimento reduzido, máquina sem
           fôlego) um shader em tela cheia seria exatamente o que não se deve
           acrescentar. No celular vão numa versão mais leve. */}
-      {on3D && !entered && <AneisDaAbertura leve={celular} />}
+      {/* No celular os anéis só entram depois do boot e da cortina de pixels:
+          rodando junto com a cortina, eram um shader de tela cheia disputando
+          a GPU justo na hora em que o loading termina. */}
+      {on3D && !entered && (!celular || (!bootActive && !isTransitioning)) && (
+        <AneisDaAbertura leve={celular} />
+      )}
 
       {/* `canRun3D` já reprova a maioria das máquinas sem condição, mas ele
           responde ANTES: se o contexto morrer no meio (driver caindo, GPU
