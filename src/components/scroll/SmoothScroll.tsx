@@ -40,10 +40,17 @@ export function jumpScrollTo(top: number) {
 }
 
 /** Rola até `top` com a mesma inércia do resto do site (ou o smooth nativo,
- *  sem o Lenis). É o que os "Role para ver mais" clicáveis usam. */
-export function rolarAte(top: number) {
+ *  sem o Lenis). É o que os "Role para ver mais" clicáveis usam; `duracao`
+ *  em segundos, maior na abertura pra animação 3D ter tempo de ser vista. */
+export function rolarAte(top: number, duracao = 1.1, uniforme = false) {
   if (lenis) {
-    lenis.scrollTo(top, { duration: 1.1 });
+    /* `uniforme`: acelera e freia por igual. A curva padrão do Lenis gasta
+       quase todo o percurso no primeiro terço, e na abertura isso fazia o
+       notebook girar de uma vez e depois ficar parado. */
+    const easing = uniforme
+      ? (t: number) => (t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2)
+      : undefined;
+    lenis.scrollTo(top, { duration: duracao, ...(easing ? { easing } : {}) });
     return;
   }
   window.scrollTo({ top, behavior: 'smooth' });

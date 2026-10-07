@@ -34,7 +34,7 @@ import type { Locale } from '@/i18n/config';
 
 type Nav = { about: string; projects: string; contact: string };
 import { usePixelTransition } from '@/components/transition/PixelTransition';
-import { ancorarNoTopo } from '@/components/scroll/SmoothScroll';
+import { ancorarNoTopo, rolarAte } from '@/components/scroll/SmoothScroll';
 
 /* ssr:false porque não existe WebGL no servidor, e porque o bundle do three
    não pode entrar no HTML inicial. Enquanto ele não chega, quem está na tela é
@@ -82,6 +82,7 @@ const SCREEN_Y_OFFSET = ((21.32 + 345.17) / 2 - 400 / 2) / 400;
 export default function MacbookPortal({
   children,
   header,
+  rolar,
   startScale = 0.56,
   /** Quanta rolagem o zoom consome, em porcentagem da altura da tela. */
   travelVh = 130,
@@ -91,6 +92,9 @@ export default function MacbookPortal({
      por aqui porque o Header precisa de idioma e de texto traduzido, e este
      componente é de cliente: quem tem essas coisas é a página, no servidor. */
   header?: { locale: Locale; nav: Nav; switchLabel: string };
+  /* Texto do "Role para ver mais" da abertura. Clicar nele atravessa a
+     abertura inteira sozinho. */
+  rolar?: string;
   startScale?: number;
   travelVh?: number;
 }) {
@@ -98,7 +102,7 @@ export default function MacbookPortal({
   const rafRef = useRef(0);
   const [entered, setEntered] = useState(false);
   const [revealed, setRevealed] = useState(false);
-  const { setChromeHidden, bootActive } = usePixelTransition();
+  const { setChromeHidden, bootActive, isTransitioning } = usePixelTransition();
 
   /* O 3D é o extra; o caminho padrão é o portal de sempre. Detecção por
      CAPACIDADE e não por largura: um iPad Pro roda melhor que um notebook de
@@ -386,6 +390,26 @@ export default function MacbookPortal({
             />
           )}
         </Salvaguarda3D>
+      )}
+
+      {/* Durante a abertura (notebook ou iPhone), o aviso de que a página
+          continua, e um atalho: clicar rola sozinho até o fim do zoom, com a
+          animação passando inteira. Some quando a mesa assume a tela. */}
+      {/* `!isTransitioning`: logo depois do boot a cortina de pixels ainda está
+          abrindo por cima de tudo e engole o clique. O botão só entra quando
+          ela termina, já visível e clicável. */}
+      {rolar && !entered && !skipPortal && revealed && !bootActive && !isTransitioning && (
+        <button
+          type="button"
+          className="portal__rolar"
+          onClick={() => {
+            const fim = ((on3D ? introVh : 0) + travel) / 100 * window.innerHeight + 4;
+            rolarAte(fim, celular ? 3.2 : 4.4, true);
+          }}
+        >
+          <span>{rolar}</span>
+          <span className="hero-rolar" aria-hidden="true" />
+        </button>
       )}
 
       <div className="portal__viewport">

@@ -64,7 +64,7 @@ export default function HomeShell({
           sobre o fundo animado, e a rolagem entra no site. */}
       {/* Sem header dentro do notebook: a barra de menu da mesa é o header
           da home. */}
-      <MacbookPortal>
+      <MacbookPortal rolar={t.mesa.rolar}>
         <Mesa
           locale={locale}
           title={t.title}
