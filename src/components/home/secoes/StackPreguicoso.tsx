@@ -2,6 +2,7 @@
 
 import dynamic from 'next/dynamic';
 import { useEffect, useRef, useState } from 'react';
+import StackLista from '@/components/stack/StackLista';
 
 /* O mapa da stack, montado só quando chega perto da tela.
  *
@@ -23,7 +24,11 @@ const StackGraph = dynamic(() => import('@/components/stack/StackGraph'), {
   loading: () => <div style={{ height: 520 }} aria-hidden />,
 });
 
-export default function StackPreguicoso() {
+/* No celular quem aparece é a StackLista (trocada por CSS), e o grafo nem é
+   montado: não faz sentido rodar a física dele escondido. */
+const COMPUTADOR = '(min-width: 641px)';
+
+export default function StackPreguicoso({ conexoesTitulo }: { conexoesTitulo: string }) {
   const alvo = useRef<HTMLDivElement>(null);
   const [perto, setPerto] = useState(false);
 
@@ -36,6 +41,7 @@ export default function StackPreguicoso() {
       setPerto(true);
       return;
     }
+    if (!window.matchMedia(COMPUTADOR).matches) return;
     const obs = new IntersectionObserver(
       ([entrada]) => {
         if (!entrada.isIntersecting) return;
@@ -51,8 +57,11 @@ export default function StackPreguicoso() {
   }, []);
 
   return (
-    <div ref={alvo}>
-      {perto ? <StackGraph /> : <div style={{ height: 520 }} aria-hidden />}
-    </div>
+    <>
+      <StackLista conexoesTitulo={conexoesTitulo} />
+      <div ref={alvo} className="stack-grafo">
+        {perto ? <StackGraph /> : <div style={{ height: 520 }} aria-hidden />}
+      </div>
+    </>
   );
 }

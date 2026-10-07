@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { preload } from 'react-dom';
 import LanyardBadge from '@/components/lanyard/LanyardBadge';
-import StackGraph from '@/components/stack/StackGraph';
+import StackPreguicoso from '@/components/home/secoes/StackPreguicoso';
 import { Iphone16Pro } from '@/components/iphone/Iphone16Pro';
 import SlideIn from '@/components/scroll/SlideIn';
 import VideoLoop from '@/components/media/VideoLoop';
@@ -125,7 +125,7 @@ export default async function SobreMimPage(
         </div>
 
         <div className="mt-4 w-full">
-          <StackGraph />
+          <StackPreguicoso conexoesTitulo={dict.about.stackConexoes} />
         </div>
       </section>
 

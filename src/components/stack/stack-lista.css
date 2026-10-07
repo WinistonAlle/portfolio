@@ -1,0 +1,185 @@
+/* Stack em lista (StackLista.tsx). Só existe no celular; no computador quem
+   aparece é o grafo. A troca é por CSS, então a lista vem no HTML e não há
+   pulo enquanto o JS decide. */
+
+.stack-lista {
+  display: none;
+}
+
+@media (max-width: 640px) {
+  .stack-grafo {
+    display: none;
+  }
+
+  .stack-lista {
+    --trilho: 21px;
+    position: relative;
+    display: block;
+    padding: 8px 24px 28px;
+  }
+
+  /* O trilho que liga o núcleo aos pilares, no lugar das arestas do grafo. */
+  .stack-lista__arvore {
+    position: relative;
+  }
+
+  .stack-lista__arvore::before {
+    content: '';
+    position: absolute;
+    top: 22px;
+    bottom: 0;
+    left: var(--trilho);
+    width: 1px;
+    background: linear-gradient(
+      to bottom,
+      rgba(243, 246, 255, 0.5),
+      rgba(91, 156, 255, 0.35) 30%,
+      rgba(95, 104, 115, 0.25)
+    );
+  }
+
+  .stack-lista__nucleo {
+    position: relative;
+    display: grid;
+    place-items: center;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    font-family: var(--font-display), system-ui, sans-serif;
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--foreground);
+    background: var(--surface);
+    border: 1px solid rgba(243, 246, 255, 0.45);
+    box-shadow: 0 0 24px rgba(243, 246, 255, 0.18);
+  }
+
+  .stack-lista__pilares {
+    display: grid;
+    gap: 30px;
+    margin: 26px 0 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .stack-lista__pilar {
+    position: relative;
+    padding-left: 56px;
+  }
+
+  .stack-lista__no {
+    position: absolute;
+    top: 4px;
+    left: calc(var(--trilho) - 5px);
+    width: 11px;
+    height: 11px;
+    border-radius: 50%;
+    background: var(--cor);
+    box-shadow:
+      0 0 0 4px var(--background),
+      0 0 14px color-mix(in srgb, var(--cor) 70%, transparent);
+  }
+
+  .stack-lista__nome {
+    font-family: var(--font-display), system-ui, sans-serif;
+    font-size: 11.5px;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    color: color-mix(in srgb, var(--cor) 85%, white);
+  }
+
+  .stack-lista__itens {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px;
+    margin: 12px 0 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .stack-lista__item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-height: 48px;
+    padding: 7px 10px 7px 7px;
+    border-radius: 12px;
+    font-size: 13.5px;
+    line-height: 1.2;
+    color: var(--foreground);
+    background: color-mix(in srgb, var(--cor) 7%, var(--surface));
+    border: 1px solid color-mix(in srgb, var(--cor) 22%, transparent);
+  }
+
+  .stack-lista__icone {
+    display: grid;
+    flex: none;
+    place-items: center;
+    width: 32px;
+    height: 32px;
+    border-radius: 9px;
+    background: color-mix(in srgb, var(--cor, #93a4b8) 18%, transparent);
+  }
+
+  .stack-lista__icone img {
+    width: 18px;
+    height: 18px;
+  }
+
+  /* --------------- Onde as peças se encontram --------------- */
+
+  .stack-lista__conexoes {
+    margin-top: 44px;
+  }
+
+  .stack-lista__conexoes-titulo {
+    font-family: var(--font-display), system-ui, sans-serif;
+    font-size: 11.5px;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  .stack-lista__conexoes ul {
+    display: grid;
+    gap: 6px;
+    margin: 14px 0 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .stack-lista__conexao {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 6px 0;
+    font-size: 13.5px;
+    color: var(--foreground);
+    border-bottom: 1px solid var(--line);
+  }
+
+  .stack-lista__par {
+    display: flex;
+    flex: none;
+    align-items: center;
+  }
+
+  .stack-lista__par .stack-lista__icone:first-child {
+    --cor: var(--cor-a);
+  }
+
+  .stack-lista__par .stack-lista__icone:last-child {
+    --cor: var(--cor-b);
+  }
+
+  .stack-lista__par i {
+    width: 14px;
+    height: 1px;
+    background: linear-gradient(to right, var(--cor-a), var(--cor-b));
+  }
+
+  .stack-lista__e {
+    color: var(--muted);
+  }
+}
