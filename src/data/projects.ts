@@ -1960,4 +1960,153 @@ export const PROJECTS: Project[] = [
       },
     ],
   },
+  {
+    n: '19',
+    slug: 'dr-alipio',
+    name: 'Dr. Alípio Vigolvino',
+    status: 'wip',
+    context: 'Cliente',
+    groups: ['sites'],
+    line: {
+      pt: 'Site de um médico de saúde mental do adulto: para quem continua dando conta de tudo por fora, mas percebe que não está bem, e precisa de um caminho curto até a consulta.',
+      en: 'Website for a physician in adult mental health: for people who keep everything running on the outside but notice they are not well, and need a short path to an appointment.',
+    },
+    stat: {
+      pt: [
+        'Em desenvolvimento, publicado em endereço provisório na Vercel',
+        'Sete páginas em Astro, sem React nem biblioteca de animação no navegador',
+        'Lighthouse no celular: 98 de desempenho e 100 de acessibilidade na home',
+        'Recálculo forçado na rolagem: de 4,3 ms para 0,02 ms por quadro depois de unificar os efeitos num laço só',
+      ],
+      en: [
+        'In development, published at a provisional Vercel address',
+        'Seven pages in Astro, with no React or animation library sent to the browser',
+        'Lighthouse on mobile: 98 performance and 100 accessibility on the home page',
+        'Forced recalculation on scroll: from 4.3 ms to 0.02 ms per frame after merging the effects into a single loop',
+      ],
+    },
+    tags: ['Astro', 'TypeScript', 'Canvas', 'Vercel'],
+    media: {
+      frame: 'desktop',
+      src: '/cases/dr-alipio/capa.jpg',
+      video: '/cases/dr-alipio/scroll.mp4',
+      poster: '/cases/dr-alipio/poster.jpg',
+      alt: {
+        pt: 'Primeira tela do site, com o título Sua vida segue em frente, mas você não está bem e uma pilha de três fotos do médico',
+        en: 'First screen of the site, with the headline Your life keeps moving, but you are not well and a stack of three photos of the physician',
+      },
+    },
+    problem: {
+      pt: [
+        'O Dr. Alípio atende adultos com ansiedade, desânimo e dificuldade de concentração, online e presencial. O público dele é quem trabalha, cumpre compromissos e ninguém percebe nada, mas termina o dia esgotado. Essa pessoa demora a procurar ajuda porque acha que o que sente ainda não é grave o suficiente.',
+        'O site precisava falar com ela sem diagnosticar ninguém por lista de sintomas, sem prometer resultado e dentro das regras de publicidade médica. E precisava terminar num gesto simples: chamar a secretaria no WhatsApp.',
+      ],
+      en: [
+        'Dr. Alípio sees adults with anxiety, low mood and trouble concentrating, online and in person. His audience is people who work, keep their commitments and nobody notices anything, but end the day exhausted. That person takes a long time to seek help because they think what they feel is not serious enough yet.',
+        'The site had to speak to them without diagnosing anyone through a symptom list, without promising results and within medical advertising rules. And it had to end in one simple gesture: messaging the front desk on WhatsApp.',
+      ],
+    },
+    solution: {
+      pt: [
+        'A home segue a ordem em que a pessoa decide: primeiro se reconhece em quatro situações, depois entende que sintomas parecidos podem ter causas diferentes, vê como é o acompanhamento e o caminho do agendamento, e só então conhece quem vai atender. Cada página abre o WhatsApp com uma mensagem que já diz de onde a pessoa veio.',
+        'Em dois momentos a rolagem conduz a tela. Os cinco passos passam de lado enquanto a página fica presa, e um vídeo curto do médico avança quadro a quadro conforme a janela se abre. O vídeo virou 52 imagens desenhadas num canvas, com cerca de 1 MB em tela grande e menos da metade no celular, baixadas só quando a dobra se aproxima. Quem pede menos movimento no sistema vê o quadro final parado.',
+        'A primeira versão tinha efeito demais e engasgava. Medi dentro da própria página: os efeitos alternavam leitura de posição e escrita de estilo no mesmo quadro, e isso custava 4,3 ms de recálculo forçado por quadro num computador rápido. Passei tudo para um laço único, que lê primeiro e escreve depois, e o custo caiu para 0,02 ms. Depois o próprio médico pediu menos animação, e ficou só o que ajuda a ler.',
+      ],
+      en: [
+        'The home page follows the order in which the person decides: first they recognise themselves in four situations, then they understand that similar symptoms can have different causes, see what the follow-up is like and the path to booking, and only then meet who will see them. Each page opens WhatsApp with a message that already says where the person came from.',
+        'At two points scrolling drives the screen. The five steps move sideways while the page stays pinned, and a short video of the physician advances frame by frame as the window opens. The video became 52 images drawn on a canvas, about 1 MB on large screens and less than half of that on phones, downloaded only when the section gets close. Whoever asks the system for less motion sees the final frame, still.',
+        'The first version had too many effects and it stuttered. I measured inside the page itself: the effects alternated reading positions and writing styles within the same frame, which cost 4.3 ms of forced recalculation per frame on a fast computer. I moved everything into a single loop that reads first and writes after, and the cost dropped to 0.02 ms. Then the physician himself asked for less animation, and only what helps reading stayed.',
+      ],
+    },
+    gallery: [
+      {
+        src: '/cases/dr-alipio/sinais.jpg',
+        alt: {
+          pt: 'Dobra escura com o título Tudo parece exigir mais esforço do que deveria e quatro cards',
+          en: 'Dark section with the headline Does everything seem to take more effort than it should and four cards',
+        },
+        caption: {
+          pt: 'A pessoa se reconhece em quatro situações do dia a dia, antes de qualquer nome de diagnóstico. A borda do card acende perto do cursor.',
+          en: 'The person recognises themselves in four everyday situations, before any diagnosis is named. The card border lights up near the cursor.',
+        },
+      },
+      {
+        src: '/cases/dr-alipio/causas.jpg',
+        alt: {
+          pt: 'Seção Sintomas parecidos podem ter causas diferentes, com quatro causas ligadas por linhas a falta de foco',
+          en: 'Section Similar symptoms can have different causes, with four causes linked by lines to lack of focus',
+        },
+        caption: {
+          pt: 'O argumento central do médico em um desenho: a mesma queixa pode vir de quatro origens, e é isso que a consulta separa.',
+          en: 'The physician’s core argument in one drawing: the same complaint can come from four sources, and telling them apart is what the appointment is for.',
+        },
+      },
+      {
+        src: '/cases/dr-alipio/acompanhamento.jpg',
+        alt: {
+          pt: 'Seção de acompanhamento com quatro itens em duas colunas e o botão Agendar consulta',
+          en: 'Follow-up section with four items in two columns and the Book an appointment button',
+        },
+        caption: {
+          pt: 'O que a consulta inclui, em quatro frases. A copy desta versão veio do próprio médico.',
+          en: 'What the appointment includes, in four sentences. The copy in this version came from the physician himself.',
+        },
+      },
+      {
+        src: '/cases/dr-alipio/passos.jpg',
+        alt: {
+          pt: 'Cinco passos numerados lado a lado, com os passos três e quatro no centro da tela',
+          en: 'Five numbered steps side by side, with steps three and four in the centre of the screen',
+        },
+        caption: {
+          pt: 'Do agendamento ao acompanhamento em cinco passos. A página fica presa e a rolagem leva os passos para o lado.',
+          en: 'From booking to follow-up in five steps. The page stays pinned and scrolling moves the steps sideways.',
+        },
+      },
+      {
+        src: '/cases/dr-alipio/video-abrindo.jpg',
+        alt: {
+          pt: 'Janela no centro da tela com o médico escrevendo e o título Quem vai te atender por cima',
+          en: 'Window in the centre of the screen with the physician writing and the headline Who will see you over it',
+        },
+        caption: {
+          pt: 'O vídeo começa numa janela pequena, com ele de cabeça baixa escrevendo. A rolagem abre a janela e avança o vídeo ao mesmo tempo.',
+          en: 'The video starts in a small window, with him looking down and writing. Scrolling opens the window and advances the video at the same time.',
+        },
+      },
+      {
+        src: '/cases/dr-alipio/video.jpg',
+        alt: {
+          pt: 'Vídeo em tela cheia com o médico olhando para a câmera e a frase Ouvir antes de classificar',
+          en: 'Full screen video with the physician looking at the camera and the line Listen before labelling',
+        },
+        caption: {
+          pt: 'Com a tela cheia ele já levantou o rosto, e a frase entra. São 52 imagens desenhadas num canvas, baixadas só quando a dobra se aproxima.',
+          en: 'At full screen he has already looked up, and the line comes in. It is 52 images drawn on a canvas, downloaded only when the section gets close.',
+        },
+      },
+      {
+        src: '/cases/dr-alipio/quem.jpg',
+        alt: {
+          pt: 'Retrato do médico ao lado do texto de apresentação e das credenciais',
+          en: 'Portrait of the physician next to the introduction text and credentials',
+        },
+        caption: {
+          pt: 'A apresentação segue as regras de publicidade médica: médico, os dois CRMs e a formação em andamento, sem título de especialista.',
+          en: 'The introduction follows medical advertising rules: physician, both licence numbers and the ongoing training, with no specialist title.',
+        },
+      },
+      {
+        src: '/cases/dr-alipio/interna.jpg',
+        alt: {
+          pt: 'Abertura da página de Ansiedade, com o título Seu corpo está cansado, mas a cabeça não desliga',
+          en: 'Top of the Anxiety page, with the headline Your body is tired, but your head will not switch off',
+        },
+        caption: {
+          pt: 'Cada tema tem sua página, escrita a partir do que a pessoa sente e não de uma lista de sintomas.',
+          en: 'Each topic has its own page, written from what the person feels and not from a list of symptoms.',
+        },
+      },
+    ],
+  },
 ];
