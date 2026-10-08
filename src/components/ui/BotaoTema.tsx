@@ -1,7 +1,8 @@
 'use client';
 
 /* Alterna entre o tema escuro (padrão do site, sempre) e o claro, e guarda a
-   escolha neste navegador. O ícone certo aparece por CSS (.so-escuro /
+   escolha só durante a visita (sessionStorage): quem entra de novo no site
+   começa sempre no escuro. O ícone certo aparece por CSS (.so-escuro /
    .so-claro), então o botão não depende de estado do React nem pisca na
    hidratação.
 
@@ -22,7 +23,7 @@ export default function BotaoTema({ locale }: { locale: Locale }) {
       const novo = raiz.dataset.tema === 'claro' ? 'escuro' : 'claro';
       raiz.dataset.tema = novo;
       try {
-        localStorage.setItem('tema', novo);
+        sessionStorage.setItem('tema', novo);
       } catch {
         // Sem armazenamento (aba anônima): o tema vale só até recarregar.
       }

@@ -107,9 +107,10 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 /* Roda antes da primeira pintura, para a página não piscar no tema errado.
-   O padrão é SEMPRE o escuro (pedido do usuário): o claro só entra se a pessoa
-   escolheu no botão; o tema do aparelho não decide nada. */
-const TEMA_INICIAL = `try{document.documentElement.dataset.tema=localStorage.getItem('tema')==='claro'?'claro':'escuro'}catch(e){}`;
+   O padrão é SEMPRE o escuro (pedido do usuário): toda visita nova começa no
+   escuro. O claro vale só durante a visita em que a pessoa escolheu no botão
+   (sessionStorage), e o tema do aparelho não decide nada. */
+const TEMA_INICIAL = `try{document.documentElement.dataset.tema=sessionStorage.getItem('tema')==='claro'?'claro':'escuro'}catch(e){}`;
 
 export default async function RootLayout({ children }: LayoutProps<'/[lang]'>) {
   const atual = await lang();
