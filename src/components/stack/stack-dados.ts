@@ -3,8 +3,7 @@
 
 /* =========================================================================
    CONFIGURAÇÃO DA STACK — é aqui que se edita o conteúdo do grafo.
-   pillars: cor, profundidade (menor = mais perto da câmera), âncora do
-            cluster e raio de distribuição das folhas.
+   pillars: cor, profundidade, posição da etiqueta do grupo e leque das folhas.
    nodes:   { id, label, pillar, r (tamanho), hub, glow, mobile, note }
    edges:   [a, b] — hub↔folha e ligações cruzadas.
    Os ícones saem de /stack-icons/<id>.svg; sem arquivo, o nó cai no
@@ -32,29 +31,17 @@ export const GRAPH = {
     linux: 'L',
     erps: 'ERP',
   },
-  physics: {
-    repulsion: 11000,
-    spring: 0.014,
-    springLength: 92,
-    anchor: 0.014,
-    damping: 0.86,
-  },
+  /* Cada pilar: onde fica a etiqueta do grupo (anchor, em unidades do
+     desenho, y para baixo) e o leque das folhas em volta dela: `leque` é
+     [direção central, abertura] em graus e `raio` a distância até a etiqueta.
+     `depth` é a profundidade (negativo = mais perto de quem olha). O arranjo é
+     desenhado, não simulado: é o que garante que nada se cobre. */
   pillars: {
-    core: { color: '#f3f6ff', depth: -60, anchor: [0, 0, 0], radius: 0 },
-    frontend: {
-      color: '#5b9cff',
-      depth: -130,
-      anchor: [-205, -95, -10],
-      radius: 108,
-    },
-    ai: { color: '#f0a94c', depth: -130, anchor: [200, -62, -10], radius: 132 },
-    backend: {
-      color: '#93a4b8',
-      depth: 40,
-      anchor: [-145, 138, 20],
-      radius: 96,
-    },
-    infra: { color: '#5f6873', depth: 190, anchor: [158, 152, 30], radius: 92 },
+    core: { color: '#f3f6ff', depth: -40, anchor: [0, 0], leque: [0, 0], raio: 0 },
+    frontend: { color: '#5b9cff', depth: -70, anchor: [-225, -80], leque: [205, 130], raio: 138 },
+    ai: { color: '#f0a94c', depth: -70, anchor: [195, -80], leque: [325, 160], raio: 165 },
+    backend: { color: '#93a4b8', depth: 40, anchor: [-195, 120], leque: [125, 130], raio: 128 },
+    infra: { color: '#7f8a99', depth: 40, anchor: [195, 120], leque: [55, 100], raio: 136 },
   },
   nodes: [
     /* noIcon: o centro é o monograma "W" de propósito, então nem tenta
@@ -68,17 +55,19 @@ export const GRAPH = {
     { id: 'tw', label: 'Tailwind', pillar: 'frontend', r: 10 },
 
     { id: 'h-ai', label: 'IA & AUTOMAÇÃO', pillar: 'ai', r: 9, hub: true },
-    { id: 'claude', label: 'Claude / Anthropic API', pillar: 'ai', r: 15 },
+    /* A ordem é a do leque, de cima para baixo: rótulo curto no topo (onde os
+       discos ficam lado a lado) e os compridos na lateral, com espaço livre. */
+    { id: 'mcp', label: 'MCP', pillar: 'ai', r: 10 },
     { id: 'openai', label: 'OpenAI API', pillar: 'ai', r: 11 },
     { id: 'aisdk', label: 'Vercel AI SDK', pillar: 'ai', r: 12 },
+    { id: 'claude', label: 'Claude / Anthropic API', pillar: 'ai', r: 15 },
     { id: 'rag', label: 'RAG · embeddings + pgvector', pillar: 'ai', r: 12 },
-    { id: 'mcp', label: 'MCP', pillar: 'ai', r: 10 },
     { id: 'n8n', label: 'n8n', pillar: 'ai', r: 10 },
 
     { id: 'h-be', label: 'BACKEND & DADOS', pillar: 'backend', r: 8, hub: true },
-    { id: 'node', label: 'Node.js', pillar: 'backend', r: 10, mobile: 'hide' },
-    { id: 'python', label: 'Python', pillar: 'backend', r: 10, mobile: 'hide' },
-    { id: 'pg', label: 'PostgreSQL', pillar: 'backend', r: 10, mobile: 'hide' },
+    { id: 'node', label: 'Node.js', pillar: 'backend', r: 11, mobile: 'hide' },
+    { id: 'python', label: 'Python', pillar: 'backend', r: 11, mobile: 'hide' },
+    { id: 'pg', label: 'PostgreSQL', pillar: 'backend', r: 11, mobile: 'hide' },
     { id: 'supabase', label: 'Supabase', pillar: 'backend', r: 14 },
 
     {
@@ -89,9 +78,9 @@ export const GRAPH = {
       hub: true,
       mobile: 'hide',
     },
-    { id: 'docker', label: 'Docker', pillar: 'infra', r: 8, mobile: 'hide' },
-    { id: 'linux', label: 'Linux / WSL', pillar: 'infra', r: 8, mobile: 'hide' },
-    { id: 'erps', label: 'ERP CIGAM', pillar: 'infra', r: 8, mobile: 'hide' },
+    { id: 'docker', label: 'Docker', pillar: 'infra', r: 9.5, mobile: 'hide' },
+    { id: 'linux', label: 'Linux / WSL', pillar: 'infra', r: 9.5, mobile: 'hide' },
+    { id: 'erps', label: 'ERP CIGAM', pillar: 'infra', r: 9.5, mobile: 'hide' },
   ],
   edges: [
     ['w', 'h-fe'],

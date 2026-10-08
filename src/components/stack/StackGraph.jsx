@@ -1,11 +1,17 @@
 'use client';
 
-/* Grafo 3D da stack: nós ligados por arestas, orbitando devagar, com física de
-   repulsão/mola rodando a cada frame. Arrastar gira a câmera; passar o mouse
-   num nó acende ele e os vizinhos e apaga o resto.
+/* Grafo da stack em perspectiva: o centro (WA), uma etiqueta por grupo e as
+   tecnologias em leque em volta de cada etiqueta. O conjunto balança devagar
+   e acompanha o cursor, o que dá a profundidade; passar o mouse num nó acende
+   ele e os vizinhos e apaga o resto.
+ *
+ * Já foi um grafo solto, com física de repulsão e giro de 360 graus. Saiu
+ * porque, de lado, tudo empilhava: rótulo em cima de disco, disco em cima de
+ * disco. Agora as posições são desenhadas (stack-dados.ts) e o giro é só um
+ * balanço de poucos graus, então o arranjo que foi conferido é o que aparece.
  *
  * Portado de um componente vanilla que vivia num HTML solto (formato .dc.html,
- * com framework próprio). Aqui virou componente React: a simulação inteira
+ * com framework próprio). Aqui virou componente React: o desenho inteiro
  * mora dentro de um único useEffect, que devolve o cleanup de tudo (rAF,
  * observers e listeners). Convenção do repo para componente portado: .jsx com
  * tipos escritos à mão no .d.ts ao lado, igual CardSwap e Lanyard.
@@ -44,7 +50,23 @@ const COR_NO_CLARO = {
   '#5b9cff': '#1d5fd8',
   '#f0a94c': '#b36a00',
   '#93a4b8': '#55657e',
-  '#5f6873': '#4b5563',
+  '#7f8a99': '#4b5563',
+};
+/* Monograma WA (o mesmo de LogoWA.tsx), para o centro do grafo. */
+const LOGO_WA = [
+  [17, 64, 47, 64, 83, 192, 53, 192],
+  [87, 112, 117, 112, 83, 192, 53, 192],
+  [87, 112, 117, 112, 151, 192, 121, 192],
+  [165, 64, 195, 64, 151, 192, 121, 192],
+  [165, 64, 195, 64, 239, 192, 209, 192],
+];
+const LOGO_WA_BARRA = [163.94, 150, 196.06, 150, 202.25, 168, 157.75, 168];
+const poligono = (ctx, p) => {
+  ctx.beginPath();
+  ctx.moveTo(p[0], p[1]);
+  for (let i = 2; i < p.length; i += 2) ctx.lineTo(p[i], p[i + 1]);
+  ctx.closePath();
+  ctx.fill();
 };
 const iconCacheClaro = {};
 
@@ -104,7 +126,12 @@ export default function StackGraph({
     let edges = [];
     let mobile = false;
     let yaw = 0;
-    let pitch = -0.12;
+    let pitch = -0.1;
+    /* giro posto pelo arrasto: soma ao balanço e volta a zero ao soltar */
+    let yawMao = 0;
+    let pitchMao = 0;
+    /* inclinação que acompanha o cursor, suavizada */
+    let yawCursor = 0;
     let hover = null;
     let pointer = null;
     let drag = null;
@@ -144,52 +171,57 @@ export default function StackGraph({
         n.mono = GRAPH.mono[cfg.id] || cfg.label.charAt(0).toUpperCase();
         n.iconSrc = GRAPH.iconDir + cfg.id;
         n.labW = cfg.label.length * 6.4 + 8;
-        n.side =
-          cfg.hub || cfg.glow ? 'below' : p.anchor[0] < 0 ? 'left' : 'right';
-        n.faded = cfg.pillar === 'infra' || cfg.pillar === 'backend';
-        n.anchor = p.anchor.slice();
+        n.side = cfg.hub || cfg.glow ? 'below' : p.anchor[0] < 0 ? 'left' : 'right';
         n.x = p.anchor[0];
         n.y = p.anchor[1];
-        n.z = p.anchor[2];
-        n.vx = 0;
-        n.vy = 0;
-        n.vz = 0;
+        n.z = 0;
         n.neighbors = new Set();
         byId[n.id] = n;
         return n;
       });
 
-      /* folhas distribuídas em volta da âncora do pilar (ângulo áureo) */
-      const counts = {};
+      /* Folhas em leque em volta da etiqueta do grupo, na ordem em que estão
+         nos dados. Elas alternam de profundidade para o balanço ter paralaxe. */
+      const porPilar = {};
       nodes.forEach((n) => {
         if (n.pillar === 'core' || n.hub) return;
-        const p = GRAPH.pillars[n.pillar];
-        const k = (counts[n.pillar] = (counts[n.pillar] || 0) + 1);
-        const a = k * 2.399963;
-        const rad = p.radius * (0.65 + 0.35 * ((k % 3) / 2));
-        n.anchor = [
-          p.anchor[0] + Math.cos(a) * rad,
-          p.anchor[1] + Math.sin(a) * rad * 0.72,
-          p.anchor[2] + Math.sin(a * 1.7) * rad * 0.6,
-        ];
-        n.x = n.anchor[0];
-        n.y = n.anchor[1];
-        n.z = n.anchor[2];
+        (porPilar[n.pillar] ||= []).push(n);
+      });
+      Object.entries(porPilar).forEach(([nome, folhas]) => {
+        const p = GRAPH.pillars[nome];
+        const [centro, abertura] = p.leque;
+        folhas.forEach((n, i) => {
+          const t = folhas.length === 1 ? 0.5 : i / (folhas.length - 1);
+          const a = ((centro - abertura / 2 + abertura * t) * Math.PI) / 180;
+          n.x = p.anchor[0] + Math.cos(a) * p.raio;
+          n.y = p.anchor[1] + Math.sin(a) * p.raio;
+          n.z = i % 2 ? 38 : -38;
+          /* O rótulo vai para fora do leque, longe da etiqueta do grupo: de
+             lado nos discos laterais; em cima ou embaixo nos das pontas, onde
+             os discos ficam lado a lado e um rótulo lateral bateria no vizinho. */
+          const dx = n.x - p.anchor[0];
+          n.side =
+            Math.abs(dx) < p.raio * 0.55
+              ? n.y < p.anchor[1] ? 'above' : 'below'
+              : dx < 0 ? 'left' : 'right';
+        });
       });
 
       edges = GRAPH.edges
         .filter(([a, b]) => byId[a] && byId[b])
         .map(([a, b]) => {
           const e = { a: byId[a], b: byId[b] };
+          /* tronco: centro↔grupo. ramo: grupo↔folha. cruzada: folha↔folha. */
+          e.tipo = e.a.pillar === 'core' ? 'tronco' : e.a.hub ? 'ramo' : 'cruzada';
+          e.pilar = e.a.pillar === 'core' ? e.b : e.a;
           e.a.neighbors.add(e.b.id);
           e.b.neighbors.add(e.a.id);
           return e;
         });
     };
 
-    /* ---- logos: tenta svg/png/webp e pré-renderiza num canvas ----
-       Os pilares de apoio (backend/infra) entram dessaturados, então o
-       resultado já sai "assado" no cache e o draw só desenha bitmap. */
+    /* ---- logos: tenta svg/png/webp e pré-renderiza num canvas, para o
+       laço de desenho só copiar bitmap ---- */
     const loadIcons = () => {
       const exts = ['svg', 'png', 'webp'];
       loadedLogos = 0;
@@ -203,7 +235,7 @@ export default function StackGraph({
         /* hubs viram disco liso e o centro é monograma: nenhum dos dois
            desenha bitmap, então buscar arquivo só geraria 404 */
         if (n.hub || n.noIcon) return;
-        const key = `${n.iconSrc}|${n.faded ? 'f' : 'n'}`;
+        const key = n.iconSrc;
         if (iconCache[key] !== undefined) {
           n.baked = iconCache[key];
           n.bakedClaro = iconCacheClaro[key];
@@ -223,7 +255,6 @@ export default function StackGraph({
             cv.height = S;
             const c2 = cv.getContext('2d');
             if (!c2) return;
-            if (n.faded) c2.filter = 'grayscale(0.9) brightness(0.85)';
             const ar = img.width / img.height || 1;
             const iw = ar >= 1 ? S : S * ar;
             const ih = ar >= 1 ? S / ar : S;
@@ -273,74 +304,12 @@ export default function StackGraph({
       });
     };
 
-    /* ---- física ---- */
-    const step = (dt) => {
-      const P = GRAPH.physics;
-      for (let i = 0; i < nodes.length; i += 1) {
-        const a = nodes[i];
-        for (let j = i + 1; j < nodes.length; j += 1) {
-          const b = nodes[j];
-          let dx = b.x - a.x;
-          const dy = b.y - a.y;
-          const dz = b.z - a.z;
-          let d2 = dx * dx + dy * dy + dz * dz;
-          if (d2 < 1) {
-            dx = 1;
-            d2 = 1;
-          }
-          const d = Math.sqrt(d2);
-          const f = P.repulsion / d2 / d;
-          a.vx -= dx * f;
-          a.vy -= dy * f;
-          a.vz -= dz * f;
-          b.vx += dx * f;
-          b.vy += dy * f;
-          b.vz += dz * f;
-        }
-      }
-      for (const e of edges) {
-        const { a, b } = e;
-        const dx = b.x - a.x;
-        const dy = b.y - a.y;
-        const dz = b.z - a.z;
-        const d = Math.sqrt(dx * dx + dy * dy + dz * dz) || 1;
-        const f = ((d - P.springLength) * P.spring) / d;
-        a.vx += dx * f;
-        a.vy += dy * f;
-        a.vz += dz * f;
-        b.vx -= dx * f;
-        b.vy -= dy * f;
-        b.vz -= dz * f;
-      }
-      for (const n of nodes) {
-        if (n.pillar === 'core') {
-          n.x = 0;
-          n.y = 0;
-          n.z = 0;
-          n.vx = 0;
-          n.vy = 0;
-          n.vz = 0;
-          continue;
-        }
-        const k = P.anchor * (n.hub ? 2.4 : 1);
-        n.vx += (n.anchor[0] - n.x) * k;
-        n.vy += (n.anchor[1] - n.y) * k;
-        n.vz += (n.anchor[2] - n.z) * k;
-        n.vx *= P.damping;
-        n.vy *= P.damping;
-        n.vz *= P.damping;
-        n.x += n.vx * dt;
-        n.y += n.vy * dt;
-        n.z += n.vz * dt;
-      }
-    };
-
     /* ---- projeção 3D → 2D, com "fit to bounds" suavizado ---- */
     const project = () => {
-      const cy = Math.cos(yaw);
-      const sy = Math.sin(yaw);
-      const cp = Math.cos(pitch);
-      const sp = Math.sin(pitch);
+      const cy = Math.cos(yaw + yawMao + yawCursor);
+      const sy = Math.sin(yaw + yawMao + yawCursor);
+      const cp = Math.cos(pitch + pitchMao);
+      const sp = Math.sin(pitch + pitchMao);
       /* Meia-extensão a partir do centro (o nó core projeta sempre em 0,0).
          Medir assim, em vez do centro dos limites, é o que mantém o W
          cravado no meio: o centro dos limites muda a cada frame conforme o
@@ -357,12 +326,20 @@ export default function StackGraph({
         n.px = rx * s;
         n.py = ry * s;
         n.s0 = s;
-        n.alpha = Math.max(0.3, Math.min(1, (s - 0.42) / 0.42));
-        const m = n.r * s + 10;
+        /* O fundo perde só um pouco de força: antes a profundidade apagava
+           metade do grafo e ele lia como desbotado. */
+        n.alpha = Math.max(0.82, Math.min(1, (s - 0.5) / 0.13));
+        const m = n.hub ? n.labW * 0.62 + 16 : n.r * s + 10;
         const ml = m + (n.side === 'left' ? n.labW : 0);
         const mr = m + (n.side === 'right' ? n.labW : 0);
-        halfW = Math.max(halfW, ml - n.px, n.px + mr);
-        halfH = Math.max(halfH, m - n.py, n.py + m);
+        const vertical = !n.hub && (n.side === 'above' || n.side === 'below');
+        const mh = vertical ? Math.max(m, n.labW / 2) : 0;
+        halfW = Math.max(halfW, ml - n.px, n.px + mr, mh - n.px, n.px + mh);
+        halfH = Math.max(
+          halfH,
+          m + (n.side === 'above' && vertical ? 24 : 0) - n.py,
+          n.py + m + (n.side === 'below' && vertical ? 24 : 0),
+        );
       }
 
       /* margem interna do encaixe: sem moldura o desenho pode chegar mais
@@ -403,175 +380,144 @@ export default function StackGraph({
 
       const focus = hover;
       const lit = (id) => !focus || focus.id === id || focus.neighbors.has(id);
-      const order = nodes.slice().sort((a, b) => b.ss - a.ss);
-      const labels = [];
+      const order = nodes.slice().sort((a, b) => a.ss - b.ss);
 
       /* O canvas não enxerga variável de CSS: lê o tema do <html> a cada
-         quadro, assim a troca pelo botão vale na hora. */
+         quadro, assim a troca pelo botão vale na hora. No claro as cores dos
+         grupos escurecem (as originais são luz sobre preto). */
       const claro = document.documentElement.dataset.tema === 'claro';
-      /* No claro as cores dos grupos escurecem (as originais são luz sobre
-         preto e somem em fundo claro) e os discos viram brancos. */
       for (const n of nodes) n.cc = claro ? (COR_NO_CLARO[n.color] ?? n.color) : n.color;
-      /* arestas */
+      const tinta = claro ? '#0b1220' : '#f3f6ff';
+      const neutra = claro ? '#46546c' : '#aab4c4';
+
+      /* ---- arestas: o grupo dá a cor; ligação entre grupos é tracejada e
+         discreta, e só ganha força quando um dos lados está em foco ---- */
+      ctx.lineCap = 'round';
       for (const e of edges) {
-        const on =
-          !focus ||
-          (lit(e.a.id) &&
-            lit(e.b.id) &&
-            (focus.id === e.a.id || focus.id === e.b.id));
-        const depth = (e.a.alpha + e.b.alpha) / 2;
-        const base = 0.13 * depth;
-        const alpha = focus ? (on ? 0.52 * depth + 0.18 : base * dimOpacity) : base;
-        ctx.strokeStyle =
-          on && focus
-            ? `rgba(${claro ? '40,52,74' : '207,214,224'},${alpha.toFixed(3)})`
-            : `rgba(${claro ? '70,84,108' : '150,160,175'},${(alpha * (claro ? 1.6 : 1)).toFixed(3)})`;
-        ctx.lineWidth = Math.max(
-          0.5,
-          (on && focus ? 1.25 : 0.9) * ((e.a.ss + e.b.ss) / 2),
-        );
+        const on = focus && (focus.id === e.a.id || focus.id === e.b.id);
+        const ss = (e.a.ss + e.b.ss) / 2;
+        const cruzada = e.tipo === 'cruzada';
+        const base = cruzada ? (claro ? 0.2 : 0.16) : e.tipo === 'tronco' ? 0.55 : 0.4;
+        const alpha = focus ? (on ? 0.9 : base * dimOpacity) : base;
+        ctx.strokeStyle = rgba(cruzada ? (on ? tinta : neutra) : e.pilar.cc, alpha);
+        ctx.lineWidth = Math.max(0.6, (e.tipo === 'tronco' ? 1.5 : on ? 1.4 : 1) * ss);
+        ctx.setLineDash(cruzada && !on ? [2 * ss, 5 * ss] : []);
         ctx.beginPath();
         ctx.moveTo(e.a.sx, e.a.sy);
         ctx.lineTo(e.b.sx, e.b.sy);
         ctx.stroke();
       }
+      ctx.setLineDash([]);
 
-      /* nós, de trás para frente */
-      for (let i = order.length - 1; i >= 0; i -= 1) {
-        const n = order[i];
+      /* ---- nós, do fundo para a frente ---- */
+      const rotulos = [];
+      for (const n of order) {
         const on = lit(n.id);
-        const a = n.alpha * (focus ? (on ? 1 : dimOpacity) : 1);
-        const r = Math.max(2, n.r * n.ss);
-        const soft = n.ss < 0.82;
+        const emFoco = focus && focus.id === n.id;
+        const a = n.alpha * (focus && !on ? dimOpacity : 1);
+        const ss = n.ss;
 
-        /* halo só no nó sob o cursor: o centro tinha um halo permanente
-           gigante (raio 4.2× o do nó) que virava uma nuvem no meio do grafo */
-        if (focus && focus.id === n.id) {
-          const g = ctx.createRadialGradient(
-            n.sx,
-            n.sy,
-            r * 0.6,
-            n.sx,
-            n.sy,
-            r * 4.2,
-          );
-          g.addColorStop(0, rgba(n.cc, 0.3 * a));
-          g.addColorStop(1, rgba(n.cc, 0));
-          ctx.fillStyle = g;
-          ctx.beginPath();
-          ctx.arc(n.sx, n.sy, r * 4.2, 0, 6.2832);
-          ctx.fill();
-        }
-
+        /* etiqueta do grupo: uma pílula com o nome dentro */
         if (n.hub) {
-          /* marcador de pilar: disco simples, sem logo */
-          ctx.fillStyle = rgba(n.cc, a * 0.9);
+          const k = Math.max(0.85, Math.min(1.2, ss * 1.15));
+          ctx.font = `600 ${(10.5 * k).toFixed(1)}px ${FONT}`;
+          ctx.letterSpacing = `${(1.4 * k).toFixed(2)}px`;
+          const tw = ctx.measureText(n.label).width;
+          const pw = tw + 26 * k;
+          const ph = 26 * k;
           ctx.beginPath();
-          ctx.arc(n.sx, n.sy, r, 0, 6.2832);
+          ctx.roundRect(n.sx - pw / 2, n.sy - ph / 2, pw, ph, ph / 2);
+          ctx.fillStyle = rgba(claro ? '#ffffff' : '#0a1020', a);
           ctx.fill();
-          ctx.strokeStyle = rgba(claro ? '#ffffff' : '#05070e', 0.85);
-          ctx.lineWidth = 2 * n.ss;
-          ctx.stroke();
-        } else {
-          if (soft) {
-            /* halo macio nos nós do fundo, para dar profundidade */
-            const g = ctx.createRadialGradient(
-              n.sx,
-              n.sy,
-              r * 0.7,
-              n.sx,
-              n.sy,
-              r * 2.1,
-            );
-            g.addColorStop(0, rgba(n.cc, a * 0.22));
-            g.addColorStop(1, rgba(n.cc, 0));
-            ctx.fillStyle = g;
-            ctx.beginPath();
-            ctx.arc(n.sx, n.sy, r * 2.1, 0, 6.2832);
-            ctx.fill();
-          }
-          ctx.fillStyle = rgba(claro ? '#ffffff' : '#0c1220', Math.min(1, a * 0.97));
-          ctx.beginPath();
-          ctx.arc(n.sx, n.sy, r, 0, 6.2832);
+          ctx.fillStyle = rgba(n.cc, a * (claro ? 0.08 : 0.14));
           ctx.fill();
-          ctx.strokeStyle = rgba(
-            n.cc,
-            a * (n.glow ? 0.95 : soft ? 0.45 : 0.75),
-          );
-          ctx.lineWidth = Math.max(0.8, (n.glow ? 2.4 : 1.5) * n.ss);
+          ctx.strokeStyle = rgba(n.cc, a * (emFoco ? 1 : 0.7));
+          ctx.lineWidth = emFoco ? 1.8 : 1.2;
           ctx.stroke();
-
-          const s = r * (n.glow ? 1.15 : 1.24);
-          if (n.baked) {
-            ctx.globalAlpha = a;
-            ctx.drawImage(
-              (claro && n.bakedClaro) || n.baked,
-              n.sx - s / 2,
-              n.sy - s / 2,
-              s,
-              s,
-            );
-            ctx.globalAlpha = 1;
-          } else {
-            const fs = Math.max(
-              6.5,
-              r * (n.mono.length > 2 ? 0.62 : n.mono.length > 1 ? 0.78 : 1),
-            );
-            ctx.font = `600 ${fs.toFixed(1)}px ${FONT}`;
-            ctx.textAlign = 'center';
-            ctx.textBaseline = 'middle';
-            ctx.fillStyle = rgba(n.glow ? (claro ? '#0b1220' : '#f3f6ff') : n.cc, a * 0.95);
-            ctx.fillText(n.mono, n.sx, n.sy + r * 0.04);
-          }
+          ctx.fillStyle = rgba(n.cc, a);
+          ctx.textAlign = 'center';
+          ctx.textBaseline = 'middle';
+          ctx.fillText(n.label, n.sx + 0.7 * k, n.sy + 0.5);
+          ctx.letterSpacing = '0px';
+          continue;
         }
 
-        if (!n.glow) labels.push({ n, r, a, on });
+        const r = Math.max(4, n.r * ss);
+
+        /* profundidade: no escuro um halo da cor do grupo, no claro uma
+           sombra curta embaixo do disco */
+        const oy = claro ? r * 0.22 : 0;
+        const g = claro
+          ? ctx.createRadialGradient(n.sx, n.sy + oy, r * 0.7, n.sx, n.sy + oy, r * 1.55)
+          : ctx.createRadialGradient(n.sx, n.sy, r * 0.8, n.sx, n.sy, r * (emFoco ? 2.4 : 1.8));
+        g.addColorStop(0, claro ? rgba('#0b1220', a * 0.16) : rgba(n.cc, a * (emFoco ? 0.4 : 0.2)));
+        g.addColorStop(1, claro ? rgba('#0b1220', 0) : rgba(n.cc, 0));
+        ctx.fillStyle = g;
+        ctx.beginPath();
+        ctx.arc(n.sx, n.sy + oy, r * 2.4, 0, 6.2832);
+        ctx.fill();
+
+        /* disco */
+        const face = ctx.createLinearGradient(0, n.sy - r, 0, n.sy + r);
+        face.addColorStop(0, claro ? '#ffffff' : '#18223b');
+        face.addColorStop(1, claro ? '#f1f4fa' : '#0a101e');
+        ctx.globalAlpha = Math.min(1, a + 0.12);
+        ctx.fillStyle = face;
+        ctx.beginPath();
+        ctx.arc(n.sx, n.sy, r, 0, 6.2832);
+        ctx.fill();
+        ctx.globalAlpha = 1;
+        ctx.strokeStyle = rgba(n.glow ? tinta : n.cc, a * (emFoco || n.glow ? 1 : 0.8));
+        ctx.lineWidth = Math.max(1, (emFoco ? 2.4 : n.glow ? 2 : 1.5) * ss);
+        ctx.stroke();
+
+        if (n.glow) {
+          /* o centro é a marca: o monograma WA, não uma letra de fonte */
+          const k = (r * 1.2) / 230;
+          ctx.save();
+          ctx.translate(n.sx, n.sy);
+          ctx.scale(k, k);
+          ctx.translate(-128, -128);
+          ctx.fillStyle = rgba(tinta, a);
+          LOGO_WA.forEach((p) => poligono(ctx, p));
+          ctx.fillStyle = rgba(claro ? '#1d5fd8' : '#5b9cff', a);
+          poligono(ctx, LOGO_WA_BARRA);
+          ctx.restore();
+          continue;
+        }
+
+        const icone = (claro && n.bakedClaro) || n.baked;
+        if (icone) {
+          const s = r * 1.16;
+          ctx.globalAlpha = a;
+          ctx.drawImage(icone, n.sx - s / 2, n.sy - s / 2, s, s);
+          ctx.globalAlpha = 1;
+        } else {
+          const fs = Math.max(6.5, r * (n.mono.length > 2 ? 0.62 : n.mono.length > 1 ? 0.78 : 1));
+          ctx.font = `600 ${fs.toFixed(1)}px ${FONT}`;
+          ctx.textAlign = 'center';
+          ctx.textBaseline = 'middle';
+          ctx.fillStyle = rgba(n.cc, a);
+          ctx.fillText(n.mono, n.sx, n.sy + r * 0.04);
+        }
+        rotulos.push({ n, r, a, emFoco });
       }
 
-      /* labels numa segunda passada, por prioridade */
-      const prio = (l) =>
-        (focus && focus.id === l.n.id ? 100 : 0) +
-        (l.on ? 20 : 0) +
-        (l.n.hub ? 12 : 0) +
-        l.n.r * l.n.ss * 0.4;
-      labels.sort((p, q) => prio(q) - prio(p));
-
-      for (const l of labels) {
-        const n = l.n;
-        const big = n.r >= 15 || n.hub;
-        const fs = Math.max(
-          10,
-          Math.min(13.5, (n.hub ? 10.5 : 12) * Math.min(1.05, n.ss * 1.25)),
-        );
-        ctx.font = `${big ? '600' : '400'} ${fs.toFixed(1)}px ${FONT}`;
-        if (n.hub) ctx.letterSpacing = '0.14em';
-        const la =
-          l.a *
-          (n.hub ? 0.95 : big ? 0.95 : 0.72) *
-          (focus && !l.on ? Math.max(0.3, dimOpacity) : 1);
-        ctx.fillStyle = n.hub ? rgba(n.cc, la) : rgba(claro ? '#28344a' : '#dfe4ec', la);
-        /* zona morta: o lado do label só troca quando o nó cruza bem o
-           centro, senão fica piscando de um lado para o outro */
-        if (n.side !== 'below') {
-          const d = n.sx - w / 2;
-          if (d > 26) n.side = 'right';
-          else if (d < -26) n.side = 'left';
-        }
-        if (n.side === 'below') {
+      /* ---- rótulos, por cima de tudo ---- */
+      for (const { n, r, a, emFoco } of rotulos) {
+        const fs = Math.max(11, Math.min(14, 12.5 * n.ss * 1.1));
+        ctx.font = `${emFoco || n.r >= 26 ? '600' : '500'} ${fs.toFixed(1)}px ${FONT}`;
+        ctx.fillStyle = rgba(tinta, a * (emFoco ? 1 : 0.86));
+        const off = r + 9 * Math.max(0.7, n.ss);
+        if (n.side === 'above' || n.side === 'below') {
           ctx.textAlign = 'center';
-          ctx.textBaseline = 'top';
-          ctx.fillText(n.label, n.sx, n.sy + l.r + 5 * n.ss + 4);
+          ctx.textBaseline = n.side === 'above' ? 'bottom' : 'top';
+          ctx.fillText(n.label, n.sx, n.sy + (n.side === 'above' ? -off + 1 : off - 1));
         } else {
           ctx.textBaseline = 'middle';
           ctx.textAlign = n.side === 'right' ? 'left' : 'right';
-          const off = l.r + 7 * Math.max(0.6, n.ss);
-          ctx.fillText(
-            n.label,
-            n.sx + (n.side === 'right' ? off : -off),
-            n.sy,
-          );
+          ctx.fillText(n.label, n.sx + (n.side === 'right' ? off : -off), n.sy);
         }
-        if (n.hub) ctx.letterSpacing = '0px';
       }
 
       /* tooltip acompanha o nó em foco */
@@ -595,7 +541,6 @@ export default function StackGraph({
       if (isMobile() !== mobile) {
         build();
         loadIcons();
-        for (let i = 0; i < 300; i += 1) step(1);
       }
       dirty = true;
     };
@@ -631,8 +576,10 @@ export default function StackGraph({
       if (drag) {
         const dx = e.clientX - drag.x;
         const dy = e.clientY - drag.y;
-        yaw -= dx * 0.006;
-        pitch = Math.max(-0.55, Math.min(0.55, pitch + dy * 0.004));
+        /* O arrasto inclina até um limite: passar disso deixaria o grafo de
+           lado, que é justamente a pose em que tudo se cobre. */
+        yawMao = Math.max(-0.35, Math.min(0.35, yawMao - dx * 0.004));
+        pitchMao = Math.max(-0.3, Math.min(0.3, pitchMao + dy * 0.003));
         drag.x = e.clientX;
         drag.y = e.clientY;
         dirty = true;
@@ -684,8 +631,17 @@ export default function StackGraph({
       last = t;
       if (!visible || document.hidden) return;
       if (!reduced) {
-        yaw += (Math.PI * 2 * (dt * 16.67)) / (rotationSeconds * 1000);
-        step(dt);
+        /* Balanço lento em vez de giro: poucos graus para cada lado, em dois
+           ritmos diferentes para o movimento não parecer um pêndulo. */
+        const fase = (t / (rotationSeconds * 250)) * Math.PI * 2;
+        yaw = Math.sin(fase) * 0.2;
+        pitch = -0.1 + Math.sin(fase * 0.73) * 0.045;
+        const alvo = pointer && !drag ? (pointer.x / w - 0.5) * 0.24 : 0;
+        yawCursor += (alvo - yawCursor) * Math.min(1, 0.06 * dt);
+        if (!drag) {
+          yawMao *= 0.93 ** dt;
+          pitchMao *= 0.93 ** dt;
+        }
         dirty = true;
       }
       if (!dirty) return;
@@ -696,8 +652,6 @@ export default function StackGraph({
     build();
     loadIcons();
     resize();
-    /* pré-aquece a simulação para o grafo já nascer arrumado */
-    for (let i = 0; i < 420; i += 1) step(1);
     last = performance.now();
     raf = requestAnimationFrame(loop);
 
