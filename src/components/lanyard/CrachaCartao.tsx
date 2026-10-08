@@ -89,11 +89,15 @@ export default function CrachaCartao({
         <span className="cracha__giro">
           <span className="cracha__face">
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src="/badge-front.png" alt="" draggable={false} />
+            <img src="/badge-front.png" alt="" draggable={false} className="so-escuro" />
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src="/badge-front-claro.png" alt="" draggable={false} className="so-claro" />
           </span>
           <span className="cracha__face cracha__face--verso">
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src="/badge-back-v2.png" alt="" draggable={false} />
+            <img src="/badge-back-v2.png" alt="" draggable={false} className="so-escuro" />
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src="/badge-back-claro.png" alt="" draggable={false} className="so-claro" />
           </span>
         </span>
       </button>

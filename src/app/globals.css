@@ -59,6 +59,41 @@
 :root[data-tema='claro'] .portal__rolar {
   text-shadow: none;
 }
+/* Cubos do contato: misturar a superfície com preto dava cinza de concreto.
+   No claro as laterais puxam para o azul da página, como sombra de papel. */
+:root[data-tema='claro'] .cube__face--left {
+  fill: #dfe6f3;
+}
+:root[data-tema='claro'] .cube__face--right {
+  fill: #c5d0e4;
+}
+:root[data-tema='claro'] .cube__glyph path {
+  fill: color-mix(in srgb, var(--foreground) 62%, transparent);
+}
+/* Parede de certificados: moldura de alumínio claro com paspatur branco, e
+   sombra de quadro pendurado em parede clara. */
+:root[data-tema='claro'] .cert-frame {
+  background: linear-gradient(145deg, #ffffff, #cfd8e8 55%, #eef2f9);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.9),
+    0 0 0 1px rgba(11, 18, 32, 0.08),
+    0 16px 26px -14px rgba(11, 18, 32, 0.3),
+    0 36px 60px -34px rgba(11, 18, 32, 0.28);
+}
+:root[data-tema='claro'] .cert-frame__mat {
+  background: #f7f9fd;
+  box-shadow:
+    inset 0 0 0 1px rgba(11, 18, 32, 0.06),
+    inset 0 3px 8px rgba(11, 18, 32, 0.12);
+}
+:root[data-tema='claro'] .cert-piece:hover .cert-frame,
+:root[data-tema='claro'] .cert-piece:focus-visible .cert-frame {
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.9),
+    0 0 0 1px color-mix(in srgb, var(--accent) 45%, transparent),
+    0 30px 50px -20px rgba(11, 18, 32, 0.35),
+    0 0 60px -10px color-mix(in srgb, var(--accent) 22%, transparent);
+}
 /* A lista que o sistema desenha para o <select> acompanha o tema. */
 :root[data-tema='claro'] select {
   color-scheme: light;

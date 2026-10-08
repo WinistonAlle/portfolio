@@ -38,6 +38,16 @@ const MAX_FIT = 2.3;
    são as duas coisas que limitavam o crescimento. */
 const MAX_FIT_TOQUE = 3.2;
 
+/* Cor de cada grupo no tema claro (chave = cor do tema escuro). */
+const COR_NO_CLARO = {
+  '#f3f6ff': '#0b1220',
+  '#5b9cff': '#1d5fd8',
+  '#f0a94c': '#b36a00',
+  '#93a4b8': '#55657e',
+  '#5f6873': '#4b5563',
+};
+const iconCacheClaro = {};
+
 const rgba = (hex, a) => {
   const h = hex.replace('#', '');
   const v = parseInt(
@@ -196,6 +206,7 @@ export default function StackGraph({
         const key = `${n.iconSrc}|${n.faded ? 'f' : 'n'}`;
         if (iconCache[key] !== undefined) {
           n.baked = iconCache[key];
+          n.bakedClaro = iconCacheClaro[key];
           if (n.baked) loadedLogos += 1;
           return;
         }
@@ -217,6 +228,19 @@ export default function StackGraph({
             const iw = ar >= 1 ? S : S * ar;
             const ih = ar >= 1 ? S / ar : S;
             c2.drawImage(img, (S - iw) / 2, (S - ih) / 2, iw, ih);
+            /* Versão do tema claro: mesma arte com a luminância invertida
+               (o giro de matiz devolve a cor de quem é colorido). Assada uma
+               vez aqui, para o laço de desenho não pagar filtro por quadro. */
+            const cl = document.createElement('canvas');
+            cl.width = S;
+            cl.height = S;
+            const c3 = cl.getContext('2d');
+            if (c3) {
+              c3.filter = 'invert(1) hue-rotate(180deg)';
+              c3.drawImage(cv, 0, 0);
+            }
+            iconCacheClaro[key] = cl;
+            n.bakedClaro = cl;
             iconCache[key] = cv;
             n.baked = cv;
             loadedLogos += 1;
@@ -365,6 +389,9 @@ export default function StackGraph({
       /* O canvas não enxerga variável de CSS: lê o tema do <html> a cada
          quadro, assim a troca pelo botão vale na hora. */
       const claro = document.documentElement.dataset.tema === 'claro';
+      /* No claro as cores dos grupos escurecem (as originais são luz sobre
+         preto e somem em fundo claro) e os discos viram brancos. */
+      for (const n of nodes) n.cc = claro ? (COR_NO_CLARO[n.color] ?? n.color) : n.color;
       /* arestas */
       for (const e of edges) {
         const on =
@@ -408,8 +435,8 @@ export default function StackGraph({
             n.sy,
             r * 4.2,
           );
-          g.addColorStop(0, rgba(n.color, 0.3 * a));
-          g.addColorStop(1, rgba(n.color, 0));
+          g.addColorStop(0, rgba(n.cc, 0.3 * a));
+          g.addColorStop(1, rgba(n.cc, 0));
           ctx.fillStyle = g;
           ctx.beginPath();
           ctx.arc(n.sx, n.sy, r * 4.2, 0, 6.2832);
@@ -418,11 +445,11 @@ export default function StackGraph({
 
         if (n.hub) {
           /* marcador de pilar: disco simples, sem logo */
-          ctx.fillStyle = rgba(n.color, a * 0.9);
+          ctx.fillStyle = rgba(n.cc, a * 0.9);
           ctx.beginPath();
           ctx.arc(n.sx, n.sy, r, 0, 6.2832);
           ctx.fill();
-          ctx.strokeStyle = rgba('#05070e', 0.85);
+          ctx.strokeStyle = rgba(claro ? '#ffffff' : '#05070e', 0.85);
           ctx.lineWidth = 2 * n.ss;
           ctx.stroke();
         } else {
@@ -436,19 +463,19 @@ export default function StackGraph({
               n.sy,
               r * 2.1,
             );
-            g.addColorStop(0, rgba(n.color, a * 0.22));
-            g.addColorStop(1, rgba(n.color, 0));
+            g.addColorStop(0, rgba(n.cc, a * 0.22));
+            g.addColorStop(1, rgba(n.cc, 0));
             ctx.fillStyle = g;
             ctx.beginPath();
             ctx.arc(n.sx, n.sy, r * 2.1, 0, 6.2832);
             ctx.fill();
           }
-          ctx.fillStyle = rgba('#0c1220', Math.min(1, a * 0.97));
+          ctx.fillStyle = rgba(claro ? '#ffffff' : '#0c1220', Math.min(1, a * 0.97));
           ctx.beginPath();
           ctx.arc(n.sx, n.sy, r, 0, 6.2832);
           ctx.fill();
           ctx.strokeStyle = rgba(
-            n.color,
+            n.cc,
             a * (n.glow ? 0.95 : soft ? 0.45 : 0.75),
           );
           ctx.lineWidth = Math.max(0.8, (n.glow ? 2.4 : 1.5) * n.ss);
@@ -457,7 +484,13 @@ export default function StackGraph({
           const s = r * (n.glow ? 1.15 : 1.24);
           if (n.baked) {
             ctx.globalAlpha = a;
-            ctx.drawImage(n.baked, n.sx - s / 2, n.sy - s / 2, s, s);
+            ctx.drawImage(
+              (claro && n.bakedClaro) || n.baked,
+              n.sx - s / 2,
+              n.sy - s / 2,
+              s,
+              s,
+            );
             ctx.globalAlpha = 1;
           } else {
             const fs = Math.max(
@@ -467,7 +500,7 @@ export default function StackGraph({
             ctx.font = `600 ${fs.toFixed(1)}px ${FONT}`;
             ctx.textAlign = 'center';
             ctx.textBaseline = 'middle';
-            ctx.fillStyle = rgba(n.glow ? '#f3f6ff' : n.color, a * 0.95);
+            ctx.fillStyle = rgba(n.glow ? (claro ? '#0b1220' : '#f3f6ff') : n.cc, a * 0.95);
             ctx.fillText(n.mono, n.sx, n.sy + r * 0.04);
           }
         }
@@ -496,7 +529,7 @@ export default function StackGraph({
           l.a *
           (n.hub ? 0.95 : big ? 0.95 : 0.72) *
           (focus && !l.on ? Math.max(0.3, dimOpacity) : 1);
-        ctx.fillStyle = n.hub ? rgba(n.color, la) : rgba(claro ? '#28344a' : '#dfe4ec', la);
+        ctx.fillStyle = n.hub ? rgba(n.cc, la) : rgba(claro ? '#28344a' : '#dfe4ec', la);
         /* zona morta: o lado do label só troca quando o nó cruza bem o
            centro, senão fica piscando de um lado para o outro */
         if (n.side !== 'below') {

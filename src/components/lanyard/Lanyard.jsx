@@ -81,6 +81,7 @@ export default function Lanyard({
   frontImage = null,
   backImage = null,
   imageFit = 'cover',
+  cardMetalness = 0.8,
   lanyardImage = null,
   lanyardWidth = 1,
   anchor = [0, 4, 0],
@@ -157,6 +158,7 @@ export default function Lanyard({
             frontImage={frontImage}
             backImage={backImage}
             imageFit={imageFit}
+            cardMetalness={cardMetalness}
             lanyardImage={lanyardImage}
             lanyardWidth={lanyardWidth}
             anchor={anchor}
@@ -213,6 +215,7 @@ function Band({
   frontImage = null,
   backImage = null,
   imageFit = 'cover',
+  cardMetalness = 0.8,
   lanyardImage = null,
   lanyardWidth = 1,
   anchor = [0, 4, 0],
@@ -485,7 +488,7 @@ function Band({
                 clearcoat={isMobile ? 0 : 1}
                 clearcoatRoughness={0.15}
                 roughness={0.9}
-                metalness={0.8}
+                metalness={cardMetalness}
               />
             </mesh>
             <mesh

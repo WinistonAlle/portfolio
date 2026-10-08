@@ -8,6 +8,8 @@ export interface LanyardProps {
   frontImage?: string | null;
   backImage?: string | null;
   imageFit?: 'cover' | 'contain';
+  /** Quanto o cartão reflete o ambiente. Cartão branco com 0.8 sai cinza. */
+  cardMetalness?: number;
   lanyardImage?: string | null;
   lanyardWidth?: number;
   /** World position of the fixed rope anchor. The card rests ~1.9 units to its right. */

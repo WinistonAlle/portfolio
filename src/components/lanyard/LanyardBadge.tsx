@@ -1,9 +1,10 @@
 'use client';
 
 import dynamic from 'next/dynamic';
-import { useEffect, useRef, useState } from 'react';
+import { useDeferredValue, useEffect, useRef, useState } from 'react';
 import Salvaguarda3D from '@/components/3d/Salvaguarda3D';
 import { temWebGL } from '@/lib/tem-webgl';
+import { useTema } from '@/lib/tema';
 
 // The whole scene (three + rapier wasm) is client-only and heavy, so it is
 // split out and never prerendered. `ssr: false` is only legal inside a Client
@@ -64,6 +65,10 @@ export default function LanyardBadge({
 }: {
   active?: boolean;
 }) {
+  /* Trocar as imagens faz a cena suspender enquanto as texturas novas chegam.
+     Com o valor adiado, o React mantém o crachá atual na tela até lá, em vez
+     de derrubar a cena (e a física) para mostrar o carregamento. */
+  const claro = useDeferredValue(useTema()) === 'claro';
   const slotRef = useRef<HTMLDivElement>(null);
   const [stage, setStage] = useState<Stage | null>(null);
   /* A cena nasce invisível de propósito (a corda precisa de alguns quadros pra
@@ -173,10 +178,11 @@ export default function LanyardBadge({
             gravity={[0, -40, 0]}
             fov={FOV}
             anchor={[stage.anchorX, 4, 0]}
-            frontImage="/badge-front.png"
-            backImage="/badge-back-v2.png"
+            frontImage={claro ? '/badge-front-claro.png' : '/badge-front.png'}
+            backImage={claro ? '/badge-back-claro.png' : '/badge-back-v2.png'}
             imageFit="cover"
-            lanyardImage="/lanyard-band.png"
+            cardMetalness={claro ? 0.5 : 0.8}
+            lanyardImage={claro ? '/lanyard-band-claro.png' : '/lanyard-band.png'}
             lanyardWidth={1.1}
             paused={!active}
           />

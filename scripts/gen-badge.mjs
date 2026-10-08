@@ -6,14 +6,41 @@ const W = 1024;
 const H = Math.round(W * (2.25 / 1.6) ** 1 * 0 + W / 0.7111); // 1440
 const PAD = 76;
 
-const C = {
-  ink: '#05070E',
-  surface: '#0C1220',
-  line: 'rgba(255,255,255,0.13)',
-  text: '#F3F6FF',
-  muted: '#78879F',
-  accent: '#5B9CFF',
-};
+/* `TEMA=claro node scripts/gen-badge.mjs` gera o crachá do tema claro, em
+   arquivos com sufixo -claro. Sem a variável, gera o escuro de sempre. */
+const CLARO = process.env.TEMA === 'claro';
+const C = CLARO
+  ? {
+      ink: '#FFFFFF',
+      surface: '#EEF2F9',
+      line: 'rgba(11,18,32,0.14)',
+      text: '#0B1220',
+      muted: '#586780',
+      accent: '#1D5FD8',
+      frente: ['#FFFFFF', '#F7F9FD', '#E9EEF7'],
+      verso: ['#F7F9FD', '#E9EEF7'],
+      moldura: '#DFE6F2',
+      furo: 0.28,
+      // Fita no azul da marca: sobre página clara, a fita escura pesava.
+      fita: ['#123F97', '#174CB2', '#1D5BD0', '#2468E6', '#1D5BD0', '#174CB2', '#123F97'],
+      costura: '#FFFFFF',
+      costuraOp: 0.5,
+    }
+  : {
+      ink: '#05070E',
+      surface: '#0C1220',
+      line: 'rgba(255,255,255,0.13)',
+      text: '#F3F6FF',
+      muted: '#78879F',
+      accent: '#5B9CFF',
+      frente: ['#0D1526', '#05070E', '#080C18'],
+      verso: ['#05070E', '#0B1120'],
+      moldura: '#0A1120',
+      furo: 0.55,
+      fita: ['#03060b', '#0a1524', '#101e34', '#12223c', '#0d192c', '#080f1b', '#03060b'],
+      costura: '#5B9CFF',
+      costuraOp: 0.22,
+    };
 
 const FONT = "'Helvetica Neue', Helvetica, Arial, sans-serif";
 const MONO = "'SF Mono', Menlo, 'Courier New', monospace";
@@ -52,9 +79,9 @@ function frontSVG() {
   return `<svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="${H}" viewBox="0 0 ${W} ${H}">
   <defs>
     <linearGradient id="bg" x1="0" y1="0" x2="0.4" y2="1">
-      <stop offset="0%" stop-color="#0D1526"/>
-      <stop offset="55%" stop-color="${C.ink}"/>
-      <stop offset="100%" stop-color="#080C18"/>
+      <stop offset="0%" stop-color="${C.frente[0]}"/>
+      <stop offset="55%" stop-color="${C.frente[1]}"/>
+      <stop offset="100%" stop-color="${C.frente[2]}"/>
     </linearGradient>
     <linearGradient id="glow" x1="0" y1="0" x2="1" y2="0">
       <stop offset="0%" stop-color="${C.accent}" stop-opacity="0"/>
@@ -69,7 +96,7 @@ function frontSVG() {
 
   <!-- punch slot, mirrors the clip on the 3D model -->
   <rect x="${W / 2 - 92}" y="74" width="184" height="26" rx="13"
-        fill="#000" opacity="0.55"/>
+        fill="#000" opacity="${C.furo}"/>
 
   <!-- header -->
   ${label(PAD, 168, 'Portfólio')}
@@ -78,7 +105,7 @@ function frontSVG() {
 
   <!-- photo frame (image composited on top of this rect) -->
   <rect x="${PHOTO.x}" y="${PHOTO.y}" width="${PHOTO.w}" height="${PHOTO.h}"
-        rx="${PHOTO.r}" fill="#0A1120"/>
+        rx="${PHOTO.r}" fill="${C.moldura}"/>
 
   <!-- identity -->
   <text x="${PAD}" y="1078" font-family="${FONT}" font-size="76" font-weight="700"
@@ -123,14 +150,14 @@ function backSVG() {
   return `<svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="${H}" viewBox="0 0 ${W} ${H}">
   <defs>
     <linearGradient id="bg2" x1="0" y1="0" x2="0.3" y2="1">
-      <stop offset="0%" stop-color="${C.ink}"/>
-      <stop offset="100%" stop-color="#0B1120"/>
+      <stop offset="0%" stop-color="${C.verso[0]}"/>
+      <stop offset="100%" stop-color="${C.verso[1]}"/>
     </linearGradient>
   </defs>
   <rect width="${W}" height="${H}" fill="url(#bg2)"/>
   <rect x="6" y="6" width="${W - 12}" height="${H - 12}" rx="26"
         fill="none" stroke="${C.line}" stroke-width="2"/>
-  <rect x="${W / 2 - 92}" y="74" width="184" height="26" rx="13" fill="#000" opacity="0.55"/>
+  <rect x="${W / 2 - 92}" y="74" width="184" height="26" rx="13" fill="#000" opacity="${C.furo}"/>
 
   <text x="${PAD}" y="300" font-family="${FONT}" font-size="200" font-weight="700"
         fill="${C.text}" opacity="0.08">W</text>
@@ -176,13 +203,9 @@ async function band() {
   const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${BW}" height="${BH}">
     <defs>
       <linearGradient id="body" x1="0" y1="0" x2="0" y2="1">
-        <stop offset="0" stop-color="#03060b"/>
-        <stop offset="0.08" stop-color="#0a1524"/>
-        <stop offset="0.34" stop-color="#101e34"/>
-        <stop offset="0.5" stop-color="#12223c"/>
-        <stop offset="0.68" stop-color="#0d192c"/>
-        <stop offset="0.92" stop-color="#080f1b"/>
-        <stop offset="1" stop-color="#03060b"/>
+        ${[0, 0.08, 0.34, 0.5, 0.68, 0.92, 1]
+          .map((o, i) => `<stop offset="${o}" stop-color="${C.fita[i]}"/>`)
+          .join('')}
       </linearGradient>
 
       <!-- Sarja. Duas correções de escala aqui, as duas aprendidas errando:
@@ -205,16 +228,16 @@ async function band() {
     <rect width="${BW}" height="${BH}" fill="url(#twill)"/>
 
     <!-- costura: dois fios paralelos, levemente puxados para o azul -->
-    <line x1="0" y1="${seam}" x2="${BW}" y2="${seam}" stroke="${C.accent}"
-          stroke-width="1.4" stroke-dasharray="7 6" opacity="0.22"/>
-    <line x1="0" y1="${BH - seam}" x2="${BW}" y2="${BH - seam}" stroke="${C.accent}"
-          stroke-width="1.4" stroke-dasharray="7 6" opacity="0.22"/>
+    <line x1="0" y1="${seam}" x2="${BW}" y2="${seam}" stroke="${C.costura}"
+          stroke-width="1.4" stroke-dasharray="7 6" opacity="${C.costuraOp}"/>
+    <line x1="0" y1="${BH - seam}" x2="${BW}" y2="${BH - seam}" stroke="${C.costura}"
+          stroke-width="1.4" stroke-dasharray="7 6" opacity="${C.costuraOp}"/>
 
     <!-- vinco das bordas: a fita é dobrada e prensada nas duas pontas -->
     <rect y="0" width="${BW}" height="3" fill="#ffffff" opacity="0.05"/>
     <rect y="${BH - 3}" width="${BW}" height="3" fill="#ffffff" opacity="0.04"/>
   </svg>`;
-  await sharp(Buffer.from(svg)).png().toFile('public/lanyard-band.png');
+  await sharp(Buffer.from(svg)).png().toFile(`public/lanyard-band${CLARO ? '-claro' : ''}.png`);
 }
 
 /* --------------------------------------------------------------- build */
@@ -234,9 +257,11 @@ const photo = await sharp('assets/foto.png')
 await sharp(Buffer.from(frontSVG()))
   .composite([{ input: photo, left: PHOTO.x, top: PHOTO.y }])
   .png()
-  .toFile('public/badge-front.png');
+  .toFile(`public/badge-front${CLARO ? '-claro' : ''}.png`);
 
-await sharp(Buffer.from(backSVG())).png().toFile('public/badge-back-v2.png');
+await sharp(Buffer.from(backSVG()))
+  .png()
+  .toFile(`public/badge-back-${CLARO ? 'claro' : 'v2'}.png`);
 await band();
 
 console.log(`ok — ${W}x${H}`);
