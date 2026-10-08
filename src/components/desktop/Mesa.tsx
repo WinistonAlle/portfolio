@@ -66,7 +66,6 @@ export type TextoMesa = {
 
 export type DadosMesa = {
   total: number;
-  live: number;
   nomes: string[];
 };
 
@@ -560,7 +559,7 @@ export default function Mesa({
         <i className="widget__ponto" aria-hidden="true" />
         {t.producao}
       </span>
-      <span className="widget__numero">{dados.live}</span>
+      <span className="widget__numero">{dados.total}</span>
       <span className="widget__sub">{t.producaoSub}</span>
     </div>
   );

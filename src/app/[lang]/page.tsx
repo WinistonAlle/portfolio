@@ -24,7 +24,6 @@ export default async function Home(props: PageProps<'/[lang]'>) {
 
   const dados = {
     total: PROJECTS.length,
-    live: PROJECTS.filter((p) => p.status === 'live').length,
     nomes: PROJECTS.map((p) => p.name),
   };
 
