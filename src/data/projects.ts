@@ -1833,4 +1833,131 @@ export const PROJECTS: Project[] = [
       },
     ],
   },
+  {
+    n: '18',
+    slug: 'onboarding-clientes',
+    name: 'Onboarding de clientes',
+    status: 'live',
+    context: 'Produto próprio',
+    groups: ['outros'],
+    line: {
+      pt: 'O formulário que eu mando para quem contrata um site: o cliente responde e envia fotos por um link, no ritmo dele, e eu acompanho todo mundo num quadro.',
+      en: 'The form I send to whoever hires me for a website: the client answers and uploads photos through a link, at their own pace, and I follow everyone on a board.',
+    },
+    stat: {
+      pt: [
+        'No ar desde outubro de 2026, substituindo um Word e três pastas do Drive',
+        '11 etapas, cada campo salvo sozinho; o link não expira e reabre na etapa onde a pessoa parou',
+        'Sem login para o cliente: um link único por projeto, com upload direto para o Storage',
+        'Banco fechado por RLS sem nenhuma política pública; todo acesso passa pelo servidor',
+      ],
+      en: [
+        'Live since October 2026, replacing a Word file and three Drive folders',
+        '11 steps, every field saved on its own; the link never expires and reopens on the step where the person stopped',
+        'No login for the client: one unique link per project, uploading straight to Storage',
+        'Database locked by RLS with no public policy at all; every access goes through the server',
+      ],
+    },
+    tags: ['Next.js', 'TypeScript', 'Supabase', 'Tailwind CSS'],
+    media: {
+      frame: 'desktop',
+      src: '/cases/onboarding-clientes/capa.jpg',
+      video: '/cases/onboarding-clientes/scroll.mp4',
+      poster: '/cases/onboarding-clientes/poster.jpg',
+      alt: {
+        pt: 'Quadro com quatro colunas, de Link enviado a Projeto iniciado, e um cartão por cliente com progresso e selos',
+        en: 'Board with four columns, from Link sent to Project started, and one card per client with progress and badges',
+      },
+    },
+    problem: {
+      pt: [
+        'Todo site que eu faço começa com as mesmas perguntas: o que a pessoa vende, para quem, por quanto, o que prova que funciona. Eu mandava um Word para preencher e três pastas do Drive para a pessoa subir logo, fotos e prints.',
+        'O Word voltava pela metade, as fotos chegavam soltas pelo WhatsApp dias depois, e eu não tinha onde ver, de uma vez, quem já tinha respondido e o que ainda faltava de cada um.',
+      ],
+      en: [
+        'Every website I build starts with the same questions: what the person sells, to whom, for how much, what proves it works. I used to send a Word file to fill in and three Drive folders for the logo, photos and screenshots.',
+        'The Word file came back half done, the photos arrived loose over WhatsApp days later, and I had nowhere to see, at a glance, who had already answered and what was still missing from each one.',
+      ],
+    },
+    solution: {
+      pt: [
+        'Eu crio o cliente, copio o link e mando. Ele abre no celular, sem cadastro, e responde em 11 etapas. Cada campo é salvo sozinho enquanto a pessoa digita; se fechar a aba, o link reabre na etapa onde parou, com tudo carregado. Quem ainda não tem as fotos finaliza o texto e volta dias depois no mesmo link, sem preencher nada de novo.',
+        'Do meu lado é um quadro: Link enviado, Em preenchimento, Respondido e Projeto iniciado. O cartão anda sozinho quando o cliente começa e quando finaliza, e mostra o que falta: texto, fotos, identidade visual. Na página do cliente ficam as respostas na ordem do formulário, os arquivos por categoria com download em zip e um botão que copia tudo em Markdown, pronto para virar a copy do site.',
+        'As perguntas moram em um único arquivo de configuração: mudar o questionário não mexe em nenhuma tela. O cliente nunca fala com o banco. Toda leitura e gravação passa pelo servidor, que confere o link, e os arquivos sobem por endereço assinado depois de checar tipo e tamanho.',
+      ],
+      en: [
+        'I create the client, copy the link and send it. They open it on the phone, with no sign up, and answer in 11 steps. Every field is saved on its own as the person types; if they close the tab, the link reopens on the step where they stopped, with everything loaded. Whoever does not have the photos yet finishes the text and comes back days later on the same link, without filling anything in again.',
+        'On my side it is a board: Link sent, Filling in, Answered and Project started. The card moves by itself when the client starts and when they finish, and shows what is missing: text, photos, visual identity. The client page holds the answers in the order of the form, the files by category with a zip download and a button that copies everything as Markdown, ready to become the site copy.',
+        'The questions live in a single configuration file: changing the questionnaire touches no screen. The client never talks to the database. Every read and write goes through the server, which checks the link, and files go up through a signed address after type and size are checked.',
+      ],
+    },
+    gallery: [
+      {
+        src: '/cases/onboarding-clientes/formulario.jpg',
+        alt: {
+          pt: 'Primeira etapa do formulário, Serviço, com a lista das 11 etapas à esquerda e as respostas preenchidas',
+          en: 'First step of the form, Service, with the list of 11 steps on the left and the answers filled in',
+        },
+        caption: {
+          pt: 'O formulário que o cliente vê. A barra do topo e a lista ao lado mostram o que já foi respondido, e o aviso no canto diz quando salvou. Os clientes das telas são fictícios.',
+          en: 'The form the client sees. The top bar and the side list show what has been answered, and the note in the corner says when it saved. The clients on these screens are fictional.',
+        },
+      },
+      {
+        src: '/cases/onboarding-clientes/identidade.jpg',
+        alt: {
+          pt: 'Etapa de identidade visual com a opção Tenho parcialmente marcada e um aviso logo abaixo',
+          en: 'Visual identity step with the option I have part of it selected and a note right below',
+        },
+        caption: {
+          pt: 'Quem não tem logo ou cores definidas é avisado na hora de que isso se resolve, e o cartão dele ganha um selo no meu quadro. Eu fico sabendo antes de abrir o projeto.',
+          en: 'Whoever has no logo or defined colors is told right away that it can be sorted out, and their card gets a badge on my board. I know before I open the project.',
+        },
+      },
+      {
+        src: '/cases/onboarding-clientes/fotos.jpg',
+        alt: {
+          pt: 'Última etapa, Fotos, com a área de envio e as miniaturas das fotos já enviadas',
+          en: 'Last step, Photos, with the upload area and thumbnails of the photos already sent',
+        },
+        caption: {
+          pt: 'As fotos sobem direto para o Storage, com barra de progresso por arquivo. No celular a mesma área abre a câmera ou a galeria.',
+          en: 'Photos go straight to Storage, with a progress bar per file. On the phone the same area opens the camera or the gallery.',
+        },
+      },
+      {
+        src: '/cases/onboarding-clientes/sucesso.jpg',
+        alt: {
+          pt: 'Tela final com o título Tudo certo e o botão Avisar o Winiston no WhatsApp',
+          en: 'Final screen with the headline All set and the button Let Winiston know on WhatsApp',
+        },
+        caption: {
+          pt: 'Ao finalizar, um botão abre a conversa no WhatsApp com a mensagem pronta. Se as fotos ficaram para depois, a mensagem já diz isso.',
+          en: 'On finishing, a button opens the WhatsApp chat with the message ready. If the photos were left for later, the message already says so.',
+        },
+      },
+      {
+        src: '/cases/onboarding-clientes/detalhe.jpg',
+        alt: {
+          pt: 'Página de um cliente no painel, com as respostas por seção, anotações internas e as ações do link',
+          en: 'A client page in the dashboard, with answers by section, internal notes and the link actions',
+        },
+        caption: {
+          pt: 'A página de cada cliente: respostas na ordem do formulário, anotações que só eu vejo e o botão que copia tudo em Markdown.',
+          en: 'Each client page: answers in the order of the form, notes only I can see and the button that copies everything as Markdown.',
+        },
+      },
+      {
+        src: '/cases/onboarding-clientes/arquivos.jpg',
+        alt: {
+          pt: 'Arquivos do cliente agrupados em Fotos e Identidade visual, com miniaturas e botão de baixar tudo',
+          en: 'Client files grouped into Photos and Visual identity, with thumbnails and a download all button',
+        },
+        caption: {
+          pt: 'Os arquivos chegam separados por categoria, no lugar das três pastas do Drive. Cada um baixa sozinho ou a categoria inteira vem em um zip.',
+          en: 'Files arrive split by category, in place of the three Drive folders. Each one downloads on its own, or the whole category comes as a zip.',
+        },
+      },
+    ],
+  },
 ];
