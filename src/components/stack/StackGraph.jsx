@@ -228,16 +228,36 @@ export default function StackGraph({
             const iw = ar >= 1 ? S : S * ar;
             const ih = ar >= 1 ? S / ar : S;
             c2.drawImage(img, (S - iw) / 2, (S - ih) / 2, iw, ih);
-            /* Versão do tema claro: mesma arte com a luminância invertida
-               (o giro de matiz devolve a cor de quem é colorido). Assada uma
-               vez aqui, para o laço de desenho não pagar filtro por quadro. */
+            /* Versão do tema claro: mesma arte com a claridade invertida e a
+               cor mantida (ícone branco vira quase preto; o colorido continua
+               da cor dele). Feita pixel a pixel, e não com ctx.filter, porque
+               o Safari ignora filtro em canvas e o ícone saía branco sobre
+               branco. Assada uma vez aqui: o laço de desenho não paga nada. */
             const cl = document.createElement('canvas');
             cl.width = S;
             cl.height = S;
             const c3 = cl.getContext('2d');
             if (c3) {
-              c3.filter = 'invert(1) hue-rotate(180deg)';
               c3.drawImage(cv, 0, 0);
+              try {
+                const img2 = c3.getImageData(0, 0, S, S);
+                const d = img2.data;
+                for (let i = 0; i < d.length; i += 4) {
+                  if (d[i + 3] === 0) continue;
+                  const r = d[i];
+                  const g = d[i + 1];
+                  const b = d[i + 2];
+                  // Somar o mesmo valor aos três canais espelha a claridade
+                  // sem mexer no matiz nem na saturação.
+                  const k = 255 - Math.max(r, g, b) - Math.min(r, g, b);
+                  d[i] = r + k;
+                  d[i + 1] = g + k;
+                  d[i + 2] = b + k;
+                }
+                c3.putImageData(img2, 0, 0);
+              } catch {
+                // Imagem de outra origem trava a leitura de pixels: fica a original.
+              }
             }
             iconCacheClaro[key] = cl;
             n.bakedClaro = cl;
