@@ -16,6 +16,113 @@
   --header-h: 73px;
 }
 
+/* Tema claro (BotaoTema.tsx). Os mesmos papéis, com o azul escurecido para o
+   texto continuar legível sobre fundo claro. O data-tema é posto no <html>
+   antes da primeira pintura (layout.tsx) e o padrão é sempre o escuro. */
+:root[data-tema='claro'] {
+  --background: #f3f5fa;
+  --surface: #ffffff;
+  --foreground: #0b1220;
+  --muted: #586780;
+  --accent: #1d5fd8;
+  --line: rgba(11, 18, 32, 0.14);
+}
+/* Duas peças ficam sempre escuras: a animação de entrada (BootIntro), que é
+   desenhada com luz sobre preto, e a mesa do macOS/iOS (Mesa), que é a tela de
+   um aparelho, com papel de parede próprio. Redeclarar os tokens na própria
+   caixa mantém tudo dentro dela no escuro, sem tocar no resto da página. */
+:root[data-tema='claro'] .boot-intro,
+:root[data-tema='claro'] .mesa {
+  --background: #05070e;
+  --surface: #0c1220;
+  --foreground: #f3f6ff;
+  --muted: #78879f;
+  --accent: #5b9cff;
+  --line: rgba(255, 255, 255, 0.11);
+}
+/* Peças que nasceram com cor fixa de tema escuro e precisam virar no claro.
+   O cartão de projeto recebe o fundo por estilo inline (BorderGlow), daí o
+   !important; o resto repete o que a variante --light do próprio BorderGlow faz. */
+:root[data-tema='claro'] .border-glow-card {
+  --card-bg: var(--surface) !important;
+  border-color: rgb(11 18 32 / 12%);
+  box-shadow:
+    rgb(11 18 32 / 4%) 0 1px 2px,
+    rgb(11 18 32 / 6%) 0 8px 24px;
+}
+:root[data-tema='claro'] .border-glow-card::after,
+:root[data-tema='claro'] .border-glow-card > .edge-light {
+  mix-blend-mode: normal;
+}
+/* O "role para ver mais" sob o notebook tem um halo escuro que só faz sentido
+   sobre fundo escuro; no claro vira mancha. */
+:root[data-tema='claro'] .portal__rolar {
+  text-shadow: none;
+}
+/* A lista que o sistema desenha para o <select> acompanha o tema. */
+:root[data-tema='claro'] select {
+  color-scheme: light;
+}
+.so-claro,
+:root[data-tema='claro'] .so-escuro {
+  display: none;
+}
+:root[data-tema='claro'] .so-claro {
+  display: revert;
+}
+
+/* Troca de tema: a página antiga fica parada e a nova se abre em círculo a
+   partir do botão; o ícone gira junto como movimento secundário. */
+html.trocando-tema::view-transition-old(root),
+html.trocando-tema::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+html.trocando-tema::view-transition-new(root) {
+  animation: revelar-tema 720ms cubic-bezier(0.65, 0, 0.35, 1) both;
+}
+@keyframes revelar-tema {
+  from {
+    clip-path: circle(0 at var(--tema-x) var(--tema-y));
+  }
+  to {
+    clip-path: circle(var(--tema-raio) at var(--tema-x) var(--tema-y));
+  }
+}
+html.trocando-tema .theme-toggle svg {
+  animation: girar-icone 360ms cubic-bezier(0.2, 0, 0, 1) both;
+}
+@keyframes girar-icone {
+  from {
+    opacity: 0;
+    transform: rotate(-90deg) scale(0.6);
+  }
+}
+
+.theme-toggle {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  color: var(--muted);
+  cursor: pointer;
+  transition:
+    color 0.2s ease,
+    border-color 0.2s ease;
+}
+.theme-toggle:hover {
+  color: var(--foreground);
+  border-color: color-mix(in srgb, var(--foreground) 25%, transparent);
+}
+.theme-toggle:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+
 @theme inline {
   --color-background: var(--background);
   --color-surface: var(--surface);
@@ -469,7 +576,7 @@ body.scroll-locked .site-header {
 }
 
 .lang-switch:hover {
-  border-color: rgb(255 255 255 / 25%);
+  border-color: color-mix(in srgb, var(--foreground) 25%, transparent);
 }
 
 .lang-switch:focus-visible {

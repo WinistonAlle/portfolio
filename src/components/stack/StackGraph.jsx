@@ -362,6 +362,9 @@ export default function StackGraph({
       const order = nodes.slice().sort((a, b) => b.ss - a.ss);
       const labels = [];
 
+      /* O canvas não enxerga variável de CSS: lê o tema do <html> a cada
+         quadro, assim a troca pelo botão vale na hora. */
+      const claro = document.documentElement.dataset.tema === 'claro';
       /* arestas */
       for (const e of edges) {
         const on =
@@ -374,8 +377,8 @@ export default function StackGraph({
         const alpha = focus ? (on ? 0.52 * depth + 0.18 : base * dimOpacity) : base;
         ctx.strokeStyle =
           on && focus
-            ? `rgba(207,214,224,${alpha.toFixed(3)})`
-            : `rgba(150,160,175,${alpha.toFixed(3)})`;
+            ? `rgba(${claro ? '40,52,74' : '207,214,224'},${alpha.toFixed(3)})`
+            : `rgba(${claro ? '70,84,108' : '150,160,175'},${(alpha * (claro ? 1.6 : 1)).toFixed(3)})`;
         ctx.lineWidth = Math.max(
           0.5,
           (on && focus ? 1.25 : 0.9) * ((e.a.ss + e.b.ss) / 2),
@@ -493,7 +496,7 @@ export default function StackGraph({
           l.a *
           (n.hub ? 0.95 : big ? 0.95 : 0.72) *
           (focus && !l.on ? Math.max(0.3, dimOpacity) : 1);
-        ctx.fillStyle = n.hub ? rgba(n.color, la) : rgba('#dfe4ec', la);
+        ctx.fillStyle = n.hub ? rgba(n.color, la) : rgba(claro ? '#28344a' : '#dfe4ec', la);
         /* zona morta: o lado do label só troca quando o nó cruza bem o
            centro, senão fica piscando de um lado para o outro */
         if (n.side !== 'below') {

@@ -106,6 +106,11 @@ export async function generateMetadata(): Promise<Metadata> {
   };
 }
 
+/* Roda antes da primeira pintura, para a página não piscar no tema errado.
+   O padrão é SEMPRE o escuro (pedido do usuário): o claro só entra se a pessoa
+   escolheu no botão; o tema do aparelho não decide nada. */
+const TEMA_INICIAL = `try{document.documentElement.dataset.tema=localStorage.getItem('tema')==='claro'?'claro':'escuro'}catch(e){}`;
+
 export default async function RootLayout({ children }: LayoutProps<'/[lang]'>) {
   const atual = await lang();
   /* Um caminho como /fr chega aqui como segmento válido de rota, mas não é
@@ -119,7 +124,11 @@ export default async function RootLayout({ children }: LayoutProps<'/[lang]'>) {
     <html
       lang={HTML_LANG[atual]}
       className={`${display.variable} ${geistSans.variable} ${serifAccent.variable} ${mono.variable} h-full antialiased`}
+      suppressHydrationWarning
     >
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: TEMA_INICIAL }} />
+      </head>
       <body className="min-h-full flex flex-col">
         <ParticlesBackground />
         <PixelTransitionProvider>

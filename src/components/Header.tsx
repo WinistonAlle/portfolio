@@ -11,6 +11,7 @@
 
 import { usePathname } from 'next/navigation';
 import TransitionLink from '@/components/transition/TransitionLink';
+import BotaoTema from '@/components/ui/BotaoTema';
 import LogoWA from '@/components/ui/LogoWA';
 import { usePixelTransition } from '@/components/transition/PixelTransition';
 import { LOCALE_FLAG, pathWithLocale, type Locale } from '@/i18n/config';
@@ -104,6 +105,7 @@ export default function Header({
               {LOCALE_FLAG.en}
             </span>
           </TransitionLink>
+          <BotaoTema locale={locale} />
         </nav>
       </div>
       {/* filete aceso na borda de baixo: fica sempre inteiro, não acompanha
