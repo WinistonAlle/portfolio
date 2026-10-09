@@ -2167,4 +2167,120 @@ export const PROJECTS: Project[] = [
       },
     ],
   },
+  {
+    n: '20',
+    slug: 'painel-tv',
+    name: 'Painel de Operações',
+    status: 'live',
+    context: 'Cliente',
+    groups: ['gostinho-mineiro'],
+    line: {
+      pt: 'O monitoramento dos sistemas da empresa virou um escritório em 3D: cada sistema é um boneco, e dá para ver de longe, na TV da sala, quem está bem e quem caiu.',
+      en: 'Monitoring for the company systems became a 3D office: each system is a character, and from across the room, on the wall TV, you can tell who is fine and who is down.',
+    },
+    stat: {
+      pt: [
+        '71 checagens a cada 30 segundos, em 7 sistemas e no que eles usam de fora',
+        '18 personagens, cada um com barra de vida em cinco degraus',
+        'As sondas só leem: nenhuma escreve, reinicia ou entra com o usuário de outro sistema',
+      ],
+      en: [
+        '71 checks every 30 seconds, across 7 systems and what they rely on outside',
+        '18 characters, each with a five-step health bar',
+        'Probes only read: none writes, restarts or signs in as another system',
+      ],
+    },
+    tags: ['React', 'TypeScript', 'Three.js', 'Node', 'SQLite'],
+    media: {
+      frame: 'desktop',
+      src: '/cases/painel-tv/capa.jpg',
+      video: '/cases/painel-tv/tour.mp4',
+      poster: '/cases/painel-tv/poster.jpg',
+      alt: {
+        pt: 'Escritório em 3D visto de cima, com um boneco por sistema e o mostrador do servidor no canto',
+        en: '3D office seen from above, with one character per system and the server gauge in the corner',
+      },
+    },
+    problem: {
+      pt: [
+        'Sete sistemas rodam num servidor só, dentro da empresa, e dependem de coisas que ninguém ali controla: a internet, o ERP na nuvem, a SEFAZ. Quando algo parava, quem avisava era o usuário, no balcão ou pelo telefone.',
+        'Os casos que mais doeram nem eram queda. Era sistema de pé e travado por dentro: fila que não andava, nota que não saía, rotina agendada que parou de rodar sem avisar.',
+      ],
+      en: [
+        'Seven systems run on a single server inside the company, and depend on things nobody there controls: the internet link, the cloud ERP, the tax authority. When something stopped, the user was the one who reported it, at the counter or over the phone.',
+        'The cases that hurt most were not even outages. They were systems standing but stuck inside: a queue that did not move, an invoice that did not go out, a scheduled job that quietly stopped running.',
+      ],
+    },
+    solution: {
+      pt: [
+        'Um coletor roda no próprio servidor e faz 71 checagens a cada 30 segundos: processos, páginas, bancos, rotinas agendadas, endereços públicos e leituras de uma linha em cada assunto do ERP. Ele só lê, e guarda as últimas 24 horas num banco que é só dele.',
+        'A tela começou como painel de sala de controle, com cartões apagados quando está tudo normal. Depois virou um escritório: cada sistema é um boneco com barra de vida. Falha isolada é um espirro, erro repetido adoece aos poucos, serviço fora do ar derruba na hora. O servidor é o zelador, e é ele quem atravessa o prédio para socorrer quem caiu.',
+        'Duas regras deixam a cena honesta. Só o culpado adoece: quem depende de algo que caiu fica esperando na porta, com o pedido na mão. E pendência de negócio não é doença, é papel empilhando na mesa.',
+        'No computador a maquete aceita clique: gira, aproxima e abre a ficha de cada sistema, checagem por checagem. Na TV ela fica parada na vista geral, e se a máquina esquentar a cena 3D dá lugar aos cartões sozinha.',
+      ],
+      en: [
+        'A collector runs on the server itself and performs 71 checks every 30 seconds: processes, pages, databases, scheduled jobs, public addresses and one-row reads on each ERP subject. It only reads, and keeps the last 24 hours in a database of its own.',
+        'The screen started as a control-room board, with cards that stay dark when everything is normal. Then it became an office: each system is a character with a health bar. A single failure is a sneeze, repeated errors make it sick little by little, a service that is down drops on the spot. The server is the janitor, and he is the one who crosses the building to help whoever fell.',
+        'Two rules keep the scene honest. Only the culprit gets sick: whoever depends on something that fell waits at the door, order in hand. And a business backlog is not an illness, it is paper piling up on the desk.',
+        'On a computer the model takes clicks: it rotates, zooms and opens a sheet for each system, check by check. On the TV it stays on the overview, and if the machine runs hot the 3D scene gives way to the cards by itself.',
+      ],
+    },
+    gallery: [
+      {
+        src: '/cases/painel-tv/ficha.jpg',
+        alt: {
+          pt: 'Câmera aproximada numa sala, com a ficha do sistema aberta ao lado',
+          en: 'Camera zoomed into one room, with the system sheet open beside it',
+        },
+        caption: {
+          pt: 'Um clique no boneco aproxima a câmera e abre a ficha: o que é o sistema, a saúde, de quem ele depende e cada checagem com as últimas 24 horas em fatias de 15 minutos.',
+          en: 'One click on a character zooms the camera in and opens the sheet: what the system is, its health, what it depends on, and each check with the last 24 hours in 15-minute slices.',
+        },
+      },
+      {
+        src: '/cases/painel-tv/queda.jpg',
+        alt: {
+          pt: 'Sala com o chão vermelho, um boneco caído e outro ajoelhado ao lado, sob uma faixa de alerta',
+          en: 'Room with a red floor, one character on the ground and another kneeling beside it, under an alert banner',
+        },
+        caption: {
+          pt: 'Sistema fora do ar: o boneco cai, o chão da sala fica vermelho e a faixa do topo diz o que parou e desde quando. O servidor sai da sala dele e vai socorrer. Esta queda é encenada por um parâmetro no endereço, nada foi derrubado para a foto.',
+          en: 'System down: the character falls, the room floor turns red and the top banner says what stopped and since when. The server leaves his room to help. This fall is staged through a URL parameter, nothing was taken down for the picture.',
+        },
+      },
+      {
+        src: '/cases/painel-tv/espera.jpg',
+        alt: {
+          pt: 'Vários bonecos parados na beira das salas com crachá cinza, e um caído na rua',
+          en: 'Several characters standing at the edge of their rooms with grey badges, and one down in the street',
+        },
+        caption: {
+          pt: 'A internet caiu, e só ela adoece. Quem depende dela vai para a beira da sala e espera, com o crachá cinza. Assim a tela aponta a causa, em vez de acender vermelho em tudo.',
+          en: 'The internet link fell, and it alone gets sick. Whoever depends on it walks to the edge of the room and waits, badge turned grey. That way the screen points at the cause instead of lighting everything red.',
+        },
+      },
+      {
+        src: '/cases/painel-tv/cartoes.jpg',
+        alt: {
+          pt: 'Oito cartões com as checagens de cada sistema, um deles vermelho, sob uma faixa de alerta',
+          en: 'Eight cards with the checks for each system, one of them red, under an alert banner',
+        },
+        caption: {
+          pt: 'A mesma informação em cartões, que é a versão leve e a que entra sozinha se o servidor esquentar. Tudo apagado quando está normal: a cor aparece só no que foge do normal. Este alerta também é simulado.',
+          en: 'The same information as cards, which is the light version and the one that takes over by itself if the server runs hot. Everything stays dark when normal: colour shows up only on what is off. This alert is simulated too.',
+        },
+      },
+      {
+        src: '/cases/painel-tv/cafe.jpg',
+        alt: {
+          pt: 'Bonecos reunidos em volta de uma mesa pequena no pátio, com balões de fala',
+          en: 'Characters gathered around a small table in the yard, with speech bubbles',
+        },
+        caption: {
+          pt: 'Às 10h e às 15h30 o pessoal da casa vai até a mesa do pátio pegar pão de queijo. Não mede nada. É o que faz alguém olhar para a TV num dia em que está tudo bem, e é nesse dia que o painel precisa continuar sendo olhado.',
+          en: 'At 10 and at 3:30 pm the in-house crew walks to the table in the yard for cheese bread. It measures nothing. It is what makes someone look at the TV on a day when everything is fine, and that is the day the board still needs to be looked at.',
+        },
+      },
+    ],
+  },
 ];
