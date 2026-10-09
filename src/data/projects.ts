@@ -1964,7 +1964,7 @@ export const PROJECTS: Project[] = [
     n: '19',
     slug: 'dr-alipio',
     name: 'Dr. Alípio Vigolvino',
-    status: 'wip',
+    status: 'live',
     context: 'Cliente',
     groups: ['sites'],
     line: {
@@ -1973,27 +1973,27 @@ export const PROJECTS: Project[] = [
     },
     stat: {
       pt: [
-        'Em desenvolvimento, publicado em endereço provisório na Vercel',
-        'Sete páginas em Astro, sem React nem biblioteca de animação no navegador',
-        'Lighthouse no celular: 98 de desempenho e 100 de acessibilidade na home',
+        'No ar na Vercel, em endereço provisório até o domínio próprio',
+        'Sete páginas em Astro, sem React: a única biblioteca no navegador é a da rolagem fluida',
+        'Lighthouse no celular: 92 de desempenho e 100 de acessibilidade na home',
         'Recálculo forçado na rolagem: de 4,3 ms para 0,02 ms por quadro depois de unificar os efeitos num laço só',
       ],
       en: [
-        'In development, published at a provisional Vercel address',
-        'Seven pages in Astro, with no React or animation library sent to the browser',
-        'Lighthouse on mobile: 98 performance and 100 accessibility on the home page',
+        'Live on Vercel, at a provisional address until the custom domain',
+        'Seven pages in Astro, with no React: the only library sent to the browser is the smooth scrolling one',
+        'Lighthouse on mobile: 92 performance and 100 accessibility on the home page',
         'Forced recalculation on scroll: from 4.3 ms to 0.02 ms per frame after merging the effects into a single loop',
       ],
     },
     tags: ['Astro', 'TypeScript', 'Canvas', 'Vercel'],
     media: {
       frame: 'desktop',
-      src: '/cases/dr-alipio/capa.jpg',
-      video: '/cases/dr-alipio/scroll.mp4',
-      poster: '/cases/dr-alipio/poster.jpg',
+      src: '/cases/dr-alipio/capa-v2.jpg',
+      video: '/cases/dr-alipio/scroll-v2.mp4',
+      poster: '/cases/dr-alipio/poster-v2.jpg',
       alt: {
-        pt: 'Primeira tela do site, com o título Sua vida segue em frente, mas você não está bem e uma pilha de três fotos do médico',
-        en: 'First screen of the site, with the headline Your life keeps moving, but you are not well and a stack of three photos of the physician',
+        pt: 'Primeira tela do site, com o nome do médico no cabeçalho, o título Sua vida segue em frente, mas você não está bem e uma pilha de três fotos dele',
+        en: 'First screen of the site, with the headline Your life keeps moving, but you are not well and a stack of three photos of the physician, with his name in the header',
       },
     },
     problem: {
@@ -2009,18 +2009,31 @@ export const PROJECTS: Project[] = [
     solution: {
       pt: [
         'A home segue a ordem em que a pessoa decide: primeiro se reconhece em quatro situações, depois entende que sintomas parecidos podem ter causas diferentes, vê como é o acompanhamento e o caminho do agendamento, e só então conhece quem vai atender. Cada página abre o WhatsApp com uma mensagem que já diz de onde a pessoa veio.',
-        'Em dois momentos a rolagem conduz a tela. Os cinco passos passam de lado enquanto a página fica presa, e um vídeo curto do médico avança quadro a quadro conforme a janela se abre. O vídeo virou 52 imagens desenhadas num canvas, com cerca de 1 MB em tela grande e menos da metade no celular, baixadas só quando a dobra se aproxima. Quem pede menos movimento no sistema vê o quadro final parado.',
+        'Em dois momentos a rolagem conduz a tela. Os cinco passos passam de lado enquanto a página fica presa, e um vídeo curto do médico avança quadro a quadro conforme a janela se abre. O vídeo virou 52 imagens desenhadas num canvas, com cerca de 2 MB em tela grande e menos da metade no celular, baixadas só quando a dobra se aproxima. Quem pede menos movimento no sistema vê o quadro final parado.',
         'A primeira versão tinha efeito demais e engasgava. Medi dentro da própria página: os efeitos alternavam leitura de posição e escrita de estilo no mesmo quadro, e isso custava 4,3 ms de recálculo forçado por quadro num computador rápido. Passei tudo para um laço único, que lê primeiro e escreve depois, e o custo caiu para 0,02 ms. Depois o próprio médico pediu menos animação, e ficou só o que ajuda a ler.',
+        'Quando a identidade visual dele ficou pronta, o site passou a segui-la: azul profundo, verde sálvia e cinza claro, títulos numa letra geométrica fina próxima à do logotipo, e uma abertura em que a marca se desenha antes de a página aparecer. O verde da marca não tem contraste para texto, então em texto ele entra mais fechado no fundo claro e mais aberto no escuro.',
       ],
       en: [
         'The home page follows the order in which the person decides: first they recognise themselves in four situations, then they understand that similar symptoms can have different causes, see what the follow-up is like and the path to booking, and only then meet who will see them. Each page opens WhatsApp with a message that already says where the person came from.',
-        'At two points scrolling drives the screen. The five steps move sideways while the page stays pinned, and a short video of the physician advances frame by frame as the window opens. The video became 52 images drawn on a canvas, about 1 MB on large screens and less than half of that on phones, downloaded only when the section gets close. Whoever asks the system for less motion sees the final frame, still.',
+        'At two points scrolling drives the screen. The five steps move sideways while the page stays pinned, and a short video of the physician advances frame by frame as the window opens. The video became 52 images drawn on a canvas, about 2 MB on large screens and less than half of that on phones, downloaded only when the section gets close. Whoever asks the system for less motion sees the final frame, still.',
         'The first version had too many effects and it stuttered. I measured inside the page itself: the effects alternated reading positions and writing styles within the same frame, which cost 4.3 ms of forced recalculation per frame on a fast computer. I moved everything into a single loop that reads first and writes after, and the cost dropped to 0.02 ms. Then the physician himself asked for less animation, and only what helps reading stayed.',
+        'When his visual identity was ready, the site started following it: deep blue, sage green and light grey, headlines in a thin geometric typeface close to the logotype, and an opening in which the brand draws itself before the page appears. The brand green lacks contrast for text, so in text it goes darker on the light background and lighter on the dark one.',
       ],
     },
     gallery: [
       {
-        src: '/cases/dr-alipio/sinais.jpg',
+        src: '/cases/dr-alipio/abertura-v2.jpg',
+        alt: {
+          pt: 'Tela clara com o símbolo AV, o nome Dr Alípio Vigolvino e a linha Médico, Saúde Mental no centro',
+          en: 'Light screen with the AV symbol, the name Dr Alípio Vigolvino and the line Physician, Mental Health in the centre',
+        },
+        caption: {
+          pt: 'A abertura: o A e o V se desenham, entram as linhas e o nome letra por letra, e a marca sai para revelar a página. Aparece ao abrir o site e ao atualizar, não nas trocas de página.',
+          en: 'The opening: the A and the V draw themselves, the lines and the name come in letter by letter, and the brand leaves to reveal the page. It plays when the site opens and on reload, not when moving between pages.',
+        },
+      },
+      {
+        src: '/cases/dr-alipio/sinais-v2.jpg',
         alt: {
           pt: 'Dobra escura com o título Tudo parece exigir mais esforço do que deveria e quatro cards',
           en: 'Dark section with the headline Does everything seem to take more effort than it should and four cards',
@@ -2031,7 +2044,7 @@ export const PROJECTS: Project[] = [
         },
       },
       {
-        src: '/cases/dr-alipio/causas.jpg',
+        src: '/cases/dr-alipio/causas-v2.jpg',
         alt: {
           pt: 'Seção Sintomas parecidos podem ter causas diferentes, com quatro causas ligadas por linhas a falta de foco',
           en: 'Section Similar symptoms can have different causes, with four causes linked by lines to lack of focus',
@@ -2042,7 +2055,7 @@ export const PROJECTS: Project[] = [
         },
       },
       {
-        src: '/cases/dr-alipio/acompanhamento.jpg',
+        src: '/cases/dr-alipio/acompanhamento-v2.jpg',
         alt: {
           pt: 'Seção de acompanhamento com quatro itens em duas colunas e o botão Agendar consulta',
           en: 'Follow-up section with four items in two columns and the Book an appointment button',
@@ -2053,7 +2066,7 @@ export const PROJECTS: Project[] = [
         },
       },
       {
-        src: '/cases/dr-alipio/passos.jpg',
+        src: '/cases/dr-alipio/passos-v2.jpg',
         alt: {
           pt: 'Cinco passos numerados lado a lado, com os passos três e quatro no centro da tela',
           en: 'Five numbered steps side by side, with steps three and four in the centre of the screen',
@@ -2064,7 +2077,7 @@ export const PROJECTS: Project[] = [
         },
       },
       {
-        src: '/cases/dr-alipio/video-abrindo.jpg',
+        src: '/cases/dr-alipio/video-abrindo-v2.jpg',
         alt: {
           pt: 'Janela no centro da tela com o médico escrevendo e o título Quem vai te atender por cima',
           en: 'Window in the centre of the screen with the physician writing and the headline Who will see you over it',
@@ -2075,7 +2088,7 @@ export const PROJECTS: Project[] = [
         },
       },
       {
-        src: '/cases/dr-alipio/video.jpg',
+        src: '/cases/dr-alipio/video-v2.jpg',
         alt: {
           pt: 'Vídeo em tela cheia com o médico olhando para a câmera e a frase Ouvir antes de classificar',
           en: 'Full screen video with the physician looking at the camera and the line Listen before labelling',
@@ -2086,7 +2099,7 @@ export const PROJECTS: Project[] = [
         },
       },
       {
-        src: '/cases/dr-alipio/quem.jpg',
+        src: '/cases/dr-alipio/quem-v2.jpg',
         alt: {
           pt: 'Retrato do médico ao lado do texto de apresentação e das credenciais',
           en: 'Portrait of the physician next to the introduction text and credentials',
@@ -2097,7 +2110,7 @@ export const PROJECTS: Project[] = [
         },
       },
       {
-        src: '/cases/dr-alipio/interna.jpg',
+        src: '/cases/dr-alipio/interna-v2.jpg',
         alt: {
           pt: 'Abertura da página de Ansiedade, com o título Seu corpo está cansado, mas a cabeça não desliga',
           en: 'Top of the Anxiety page, with the headline Your body is tired, but your head will not switch off',
