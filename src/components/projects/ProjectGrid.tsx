@@ -96,7 +96,7 @@ export default function ProjectGrid({
 
       {/* Fragment e não <li> em volta: o ProjectCard já é o próprio <li>, e
           envolver de novo daria lista dentro de item de lista. */}
-      <ul className="mt-8 grid grid-cols-1 gap-6 md:grid-cols-2 lg:gap-8">
+      <ul className="mt-8 grid grid-cols-1 gap-6 md:grid-cols-2 lg:gap-8 xl:grid-cols-3 xl:gap-6">
         {visiveis.map((i) => (
           <Fragment key={i.slug}>{i.card}</Fragment>
         ))}
