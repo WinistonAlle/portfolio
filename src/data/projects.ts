@@ -1076,30 +1076,30 @@ export const PROJECTS: Project[] = [
     context: 'Produto próprio',
     groups: ['outros', 'sites'],
     line: {
-      pt: 'O site que você está lendo agora: bilíngue, com abertura em 3D e um case por projeto.',
-      en: 'The site you are reading right now: bilingual, with a 3D opening and one case per project.',
+      pt: 'O site que você está lendo agora: bilíngue, com abertura em 3D no computador e no celular, e um case por projeto.',
+      en: 'The site you are reading right now: bilingual, with a 3D opening on desktop and on phones, and one case per project.',
     },
     stat: {
       pt: [
-        'Quinze cases, cada um com vídeo do sistema rodando de verdade',
+        'Dezenove cases, cada um com vídeo do sistema rodando de verdade',
         'Português e inglês na mesma base: tradução faltando quebra o build',
-        'A abertura é um MacBook 3D em three.js, guiado pela rolagem',
+        'A abertura é um MacBook 3D em three.js, guiado pela rolagem; no celular, um iPhone',
       ],
       en: [
-        'Fifteen cases, each with video of the system actually running',
+        'Nineteen cases, each with video of the system actually running',
         'Portuguese and English from one source: a missing translation breaks the build',
-        'The opening is a 3D MacBook in three.js, driven by scroll',
+        'The opening is a 3D MacBook in three.js, driven by scroll; on phones, an iPhone',
       ],
     },
     tags: ['Next.js', 'TypeScript', 'three.js', 'Tailwind'],
     media: {
       frame: 'desktop',
-      src: '/cases/portfolio/home.jpg',
-      video: '/cases/portfolio/tour.mp4',
-      poster: '/cases/portfolio/poster.jpg',
+      src: '/cases/portfolio/home-v2.jpg',
+      video: '/cases/portfolio/tour-v2.mp4',
+      poster: '/cases/portfolio/poster-v2.jpg',
       alt: {
-        pt: 'Home do portfólio, com o retrato recortado no meio e adesivos de tecnologia em volta',
-        en: 'Portfolio home, with the cut-out portrait in the middle and technology stickers around it',
+        pt: 'Home do portfólio como uma área de trabalho de Mac, com barra de menu, widgets, ícones e o título Sistemas e sites que empresas usam todo dia',
+        en: 'Portfolio home as a Mac desktop, with menu bar, widgets, icons and the headline Systems and sites that companies use every day',
       },
     },
     links: [
@@ -1108,18 +1108,62 @@ export const PROJECTS: Project[] = [
     ],
     gallery: [
       {
-        src: '/cases/portfolio/abertura3d.jpg',
+        src: '/cases/portfolio/abertura3d-v2.jpg',
         alt: {
           pt: 'MacBook 3D fechado, de costas, com adesivos de tecnologia na tampa',
           en: 'Closed 3D MacBook seen from behind, technology stickers on the lid',
         },
         caption: {
-          pt: 'O site abre com este MacBook, em three.js puro, sem biblioteca de React por cima: ele gira, abre, e a câmera entra até a tela dele virar exatamente a moldura onde o site aparece. Nada disso é animação com duração própria, é tudo função da rolagem, então quem desce rápido chega ao site rápido. Os adesivos são os mesmos da home, desenhados num atlas único pra tampa inteira custar uma textura só. E sim: este é o único lugar do portfólio onde a moldura do case é o próprio site.',
-          en: 'The site opens with this MacBook, in plain three.js with no React layer on top: it spins, opens, and the camera moves in until its screen becomes exactly the frame the site appears in. None of it is an animation with a duration of its own, it is all a function of scroll, so scrolling fast gets you to the site fast. The stickers are the same ones from the home page, drawn into a single atlas so the whole lid costs one texture. And yes: this is the one place in the portfolio where the case mockup is the site itself.',
+          pt: 'O site abre com este MacBook, em three.js puro, sem biblioteca de React por cima: ele gira, abre, e a câmera entra até a tela dele virar exatamente a moldura onde o site aparece. Nada disso é animação com duração própria, é tudo função da rolagem, então quem desce rápido chega ao site rápido. Os adesivos da tampa são desenhados num atlas único, pra tampa inteira custar uma textura só. E sim: este é o único lugar do portfólio onde a moldura do case é o próprio site.',
+          en: 'The site opens with this MacBook, in plain three.js with no React layer on top: it spins, opens, and the camera moves in until its screen becomes exactly the frame the site appears in. None of it is an animation with a duration of its own, it is all a function of scroll, so scrolling fast gets you to the site fast. The lid stickers are drawn into a single atlas so the whole lid costs one texture. And yes: this is the one place in the portfolio where the case mockup is the site itself.',
         },
       },
       {
-        src: '/cases/portfolio/cracha.jpg',
+        src: '/cases/portfolio/abertura-tela-v2.jpg',
+        alt: {
+          pt: 'MacBook 3D aberto, de frente, com a home do portfólio aparecendo na tela dele',
+          en: '3D MacBook open, facing the viewer, with the portfolio home showing on its screen',
+        },
+        caption: {
+          pt: 'Quando a tampa abre, o que aparece na tela do MacBook já é o site de verdade, projetado sobre a tela 3D, e não uma foto dele. Por isso a passagem para a página inteira não tem troca: o zoom só termina de encaixar o que já estava ali.',
+          en: 'When the lid opens, what shows on the MacBook screen is already the real site, projected onto the 3D screen, not a picture of it. That is why the move to the full page has no swap: the zoom just finishes fitting what was already there.',
+        },
+      },
+      {
+        src: '/cases/portfolio/home-v2.jpg',
+        alt: {
+          pt: 'Home do portfólio como área de trabalho de Mac, com widgets de foto e de total de sistemas, ícones de pasta e arquivo, e o Dock embaixo',
+          en: 'Portfolio home as a Mac desktop, with photo and system-count widgets, folder and file icons, and the Dock at the bottom',
+        },
+        caption: {
+          pt: 'A home é uma mesa de macOS: a barra de menu faz o papel do cabeçalho, e cada ícone abre uma janela que vira a página. O número do widget é contado a partir dos próprios dados dos projetos.',
+          en: 'The home is a macOS desktop: the menu bar plays the role of the header, and each icon opens a window that becomes the page. The widget number is counted from the project data itself.',
+        },
+      },
+      {
+        src: '/cases/portfolio/iphone-v2.jpg',
+        alt: {
+          pt: 'Três telas de celular lado a lado: um iPhone 3D de costas com o monograma WA, o mesmo iPhone de frente com a home na tela, e a home ocupando a tela inteira',
+          en: 'Three phone screens side by side: a 3D iPhone seen from behind with the WA monogram, the same iPhone from the front with the home on its screen, and the home filling the whole screen',
+        },
+        caption: {
+          pt: 'No celular o notebook ficaria pequeno demais para ler, então a abertura é um iPhone: ele gira, mostra a tela e o zoom entra nela. Lá dentro a home vira uma tela inicial de iPhone, com os mesmos atalhos em forma de aplicativo.',
+          en: 'On a phone the laptop would be too small to read, so the opening is an iPhone: it spins, shows its screen and the zoom moves into it. Inside, the home becomes an iPhone home screen, with the same shortcuts as apps.',
+        },
+      },
+      {
+        src: '/cases/portfolio/projetos-v2.jpg',
+        alt: {
+          pt: 'Página de projetos, com filtros por grupo e uma grade de cards em três colunas',
+          en: 'Projects page, with group filters and a three-column grid of cards',
+        },
+        caption: {
+          pt: 'Os projetos em grade, com filtro por grupo. Um mesmo projeto pode aparecer em mais de um filtro, porque as etiquetas respondem a perguntas diferentes: para quem foi feito e o que é.',
+          en: 'The projects in a grid, filtered by group. The same project can show up under more than one filter, because the labels answer different questions: who it was made for and what it is.',
+        },
+      },
+      {
+        src: '/cases/portfolio/cracha-v2.jpg',
         alt: {
           pt: 'Página sobre mim, com um crachá pendurado num cordão ao lado do texto',
           en: 'About me page, with a badge hanging from a lanyard beside the text',
@@ -1130,10 +1174,10 @@ export const PROJECTS: Project[] = [
         },
       },
       {
-        src: '/cases/portfolio/stack.jpg',
+        src: '/cases/portfolio/stack-v2.jpg',
         alt: {
-          pt: 'Mapa da stack, com as ferramentas ligadas por linhas em torno de um núcleo central',
-          en: 'Stack map, with tools connected by lines around a central core',
+          pt: 'Mapa da stack, com as ferramentas em leques ligados por linhas ao monograma WA no centro',
+          en: 'Stack map, with tools in fans connected by lines to the WA monogram in the centre',
         },
         caption: {
           pt: 'Lista de tecnologia não diz nada: todo mundo tem uma. Aqui as peças aparecem ligadas, agrupadas por frente, porque o que interessa não é quais eu sei, é como elas se encaixam num sistema.',
@@ -1141,7 +1185,7 @@ export const PROJECTS: Project[] = [
         },
       },
       {
-        src: '/cases/portfolio/contato.jpg',
+        src: '/cases/portfolio/contato-v2.jpg',
         alt: {
           pt: 'Página de contato, com os canais em blocos isométricos e um formulário curto embaixo',
           en: 'Contact page, with channels as isometric blocks and a short form below',
@@ -1996,6 +2040,7 @@ export const PROJECTS: Project[] = [
         en: 'First screen of the site, with the headline Your life keeps moving, but you are not well and a stack of three photos of the physician, with his name in the header',
       },
     },
+    links: [{ kind: 'site', href: 'https://dr-alipio.vercel.app' }],
     problem: {
       pt: [
         'O Dr. Alípio atende adultos com ansiedade, desânimo e dificuldade de concentração, online e presencial. O público dele é quem trabalha, cumpre compromissos e ninguém percebe nada, mas termina o dia esgotado. Essa pessoa demora a procurar ajuda porque acha que o que sente ainda não é grave o suficiente.',
