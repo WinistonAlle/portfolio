@@ -157,6 +157,8 @@ export default function MagicRings({
       return;
     }
 
+    /* Ver MacbookIntro3D: conferir erro de shader segura a página na primeira visita. */
+    renderer.debug.checkShaderErrors = false;
     renderer.setClearColor(0x000000, 0);
     mount.appendChild(renderer.domElement);
 
@@ -194,6 +196,10 @@ export default function MagicRings({
     const material = new THREE.ShaderMaterial({ vertexShader, fragmentShader, uniforms, transparent: true });
     const quad = new THREE.Mesh(geometry, material);
     scene.add(quad);
+    /* O shader compila em paralelo; até terminar, nada é desenhado. Desenhar
+       antes faria o navegador esperar a compilação com a página parada. */
+    let compilado = false;
+    renderer.compileAsync(scene, camera).catch(() => {}).then(() => { compilado = true; });
 
     let lw = 0;
     let lh = 0;
@@ -215,7 +221,7 @@ export default function MagicRings({
       uniforms.uResolution.value.set(w * dpr, h * dpr);
       /* Redesenha na hora: sem isso o canvas fica vazio até o próximo quadro,
          e essa lacuna é uma piscada. */
-      if (jaDesenhou) renderer.render(scene, camera);
+      if (jaDesenhou && compilado) renderer.render(scene, camera);
     };
     resize();
     window.addEventListener('resize', resize);
@@ -285,6 +291,7 @@ export default function MagicRings({
       uniforms.uBurst.value = p.clickBurst ? burstRef.current : 0;
       uniforms.uCoverageAlpha.value = p.alphaMode === 'coverage' ? 1 : 0;
 
+      if (!compilado) return;
       renderer.render(scene, camera);
       jaDesenhou = true;
     };

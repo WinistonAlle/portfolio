@@ -29,7 +29,7 @@ import { alturaVh } from './altura-estavel';
 import { canRun3D } from './can-run-3d';
 import Salvaguarda3D from '@/components/3d/Salvaguarda3D';
 import AneisDaAbertura from '@/components/background/AneisDaAbertura';
-import { definirAbertura } from '@/components/background/abertura';
+import { definirAbertura, marcarCenaPronta } from '@/components/background/abertura';
 import Header from '@/components/Header';
 import type { Locale } from '@/i18n/config';
 
@@ -179,7 +179,11 @@ export default function MacbookPortal({
     /* No celular o prazo é maior: rede e processador mais lentos, e lá a
        reserva é pular a abertura inteira, não trocar pela moldura SVG. Com
        2,5s o prazo estourava perto do fim do loading em aparelho real. */
-    const timer = window.setTimeout(() => setFailed3D(true), celular ? 7000 : 2500);
+    /* No computador eram 2,5s, do tempo em que a cena travava a página pra
+       compilar os shaders. Agora ela compila em paralelo e, na primeira visita,
+       leva mais que isso sem travar nada: o prazo curto trocaria a cena pela
+       moldura SVG justamente em quem está vendo o site pela primeira vez. */
+    const timer = window.setTimeout(() => setFailed3D(true), 7000);
     return () => window.clearTimeout(timer);
   }, [on3D, ready3D, celular]);
 
@@ -388,14 +392,14 @@ export default function MacbookPortal({
               startScale={escala0}
               introVh={introVh}
               onHandoff={setBoot}
-              onReady={() => setReady3D(true)}
+              onReady={() => { setReady3D(true); marcarCenaPronta(); }}
             />
           ) : (
             <MacbookIntro3D
               startScale={startScale}
               introVh={INTRO_VH}
               onHandoff={setBoot}
-              onReady={() => setReady3D(true)}
+              onReady={() => { setReady3D(true); marcarCenaPronta(); }}
             />
           )}
         </Salvaguarda3D>

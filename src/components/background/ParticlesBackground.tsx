@@ -4,7 +4,7 @@ import dynamic from 'next/dynamic';
 import { useEffect, useState } from 'react';
 import Salvaguarda3D from '@/components/3d/Salvaguarda3D';
 import { temWebGL } from '@/lib/tem-webgl';
-import { aberturaAtiva, assinarAbertura } from './abertura';
+import { aberturaAtiva, aoCenaPronta, assinarAbertura } from './abertura';
 
 const Particles = dynamic(() => import('./Particles'), { ssr: false });
 
@@ -46,7 +46,28 @@ export default function ParticlesBackground() {
     return assinarAbertura(setNaAbertura);
   }, []);
 
-  if (!podeWebGL) return null;
+  /* Na home, as partículas esperam a cena do notebook ficar pronta (mais um
+     respiro), pra não disputar a compilação de shader com ela. Nas outras
+     páginas não há abertura e elas nascem na hora. O teto de 7s é a rede de
+     segurança pra quando a cena 3D não roda (celular sem 3D, GPU recusada). */
+  const [liberado, setLiberado] = useState(false);
+  useEffect(() => {
+    if (!/^\/(pt|en)?\/?$/.test(window.location.pathname)) {
+      setLiberado(true);
+      return;
+    }
+    let prazo = window.setTimeout(() => setLiberado(true), 7000);
+    const cancelar = aoCenaPronta(() => {
+      window.clearTimeout(prazo);
+      prazo = window.setTimeout(() => setLiberado(true), 1200);
+    });
+    return () => {
+      window.clearTimeout(prazo);
+      cancelar();
+    };
+  }, []);
+
+  if (!podeWebGL || !liberado) return null;
 
   return (
     <div

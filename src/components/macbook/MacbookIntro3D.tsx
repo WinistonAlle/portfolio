@@ -34,7 +34,7 @@
 import { useEffect, useRef } from 'react';
 import * as THREE from 'three';
 import {
-  buildLaptop, makeStickerAtlas, makeEnvironment, poseLaptop, brilhoTela, PHASES, BOOT, cameraT,
+  buildLaptop, makeStickerAtlas, makeEnvironmentAsync, poseLaptop, brilhoTela, PHASES, BOOT, cameraT,
   lerpFov, screenRectTarget, solveFinalPose, heroPose, applyCamera,
   FOV_HERO, GEO, type LaptopModel, type Pose,
 } from './laptop-scene';
@@ -87,10 +87,14 @@ export default function MacbookIntro3D({
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
     renderer.toneMappingExposure = 1.5;
     renderer.outputColorSpace = THREE.SRGBColorSpace;
+    /* Sem a conferência de erro de shader: ela lê o log de compilação de forma
+       síncrona e segura a página até a placa de vídeo responder. Os shaders
+       são os do próprio three, não há o que depurar em produção. */
+    renderer.debug.checkShaderErrors = false;
 
     const scene = new THREE.Scene();
-    const env = makeEnvironment(renderer);
-    scene.environment = env;
+    /* O ambiente chega depois, sem travar: ver `makeEnvironmentAsync`. */
+    let env: THREE.Texture | null = null;
     const camera = new THREE.PerspectiveCamera(FOV_HERO, 1, 0.02, 30);
 
     const key = new THREE.DirectionalLight(0xdce6ff, 3.2); key.position.set(0.6, 1.1, 0.9);
@@ -126,8 +130,10 @@ export default function MacbookIntro3D({
     let disposed = false;
     makeStickerAtlas(stickersBase).then((tex) => {
       if (disposed) { tex.dispose(); return; }
+      /* Só troca a textura: o material já nasceu com mapa, então não há
+         `needsUpdate` nem shader novo para compilar aqui. */
       model.stickers.material.map = tex;
-      model.stickers.material.needsUpdate = true;
+      model.stickers.userData.atlasChegou = true;
       dirty = true;
     });
 
@@ -168,7 +174,11 @@ export default function MacbookIntro3D({
     }
 
     let raf = 0;
+    /* Nada é desenhado até os shaders estarem compilados. Desenhar antes
+       obrigaria o navegador a esperar a compilação com a página parada. */
+    let compilado = false;
     function tick() {
+      if (!compilado) return;
       if (!vw || !vh) { resize(); return; }
       const travel = (introVh / 100) * alturaVh();
       const intro = reduced || travel <= 0
@@ -239,7 +249,18 @@ export default function MacbookIntro3D({
       if (telaHtml) { caixa = medirCaixa(telaHtml); dirty = true; }
     });
     if (telaHtml) roCaixa.observe(telaHtml);
-    loop();
+    void (async () => {
+      const ambiente = await makeEnvironmentAsync(renderer);
+      if (disposed) { ambiente.dispose(); return; }
+      env = ambiente;
+      scene.environment = ambiente;
+      /* Pede todos os materiais da cena de uma vez e espera em paralelo. */
+      await renderer.compileAsync(scene, camera).catch(() => {});
+      if (disposed) return;
+      compilado = true;
+      dirty = true;
+      loop();
+    })();
 
     return () => {
       disposed = true;
@@ -262,7 +283,7 @@ export default function MacbookIntro3D({
         }
       });
       for (const t of model.texturas) t.dispose();
-      env.dispose();
+      env?.dispose();
       shadowTex.dispose();
       renderer.dispose();
     };

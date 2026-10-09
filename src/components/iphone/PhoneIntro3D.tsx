@@ -54,6 +54,7 @@ export default function PhoneIntro3D({
     renderer.outputColorSpace = THREE.SRGBColorSpace;
 
     const scene = new THREE.Scene();
+    renderer.debug.checkShaderErrors = false; // ver MacbookIntro3D
     const env = makeEnvironment(renderer);
     scene.environment = env;
     const camera = new THREE.PerspectiveCamera(FOV_HERO, 1, 0.005, 10);

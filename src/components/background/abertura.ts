@@ -34,3 +34,30 @@ export function assinarAbertura(avisar: (v: boolean) => void) {
     inscritos.delete(avisar);
   };
 }
+
+/* Segundo sinal: "a cena 3D da abertura já pintou o primeiro quadro".
+ *
+ * Quem escuta é o fundo de partículas. Ele abre um contexto WebGL e compila os
+ * próprios shaders, e a placa de vídeo atende um pedido por vez: nascendo junto
+ * com a cena do notebook, os dois entravam na mesma fila e a página esperava
+ * pelos dois. Agora as partículas só nascem depois que a abertura está de pé. */
+let cenaPronta = false;
+const aguardandoCena = new Set<() => void>();
+
+export function marcarCenaPronta() {
+  if (cenaPronta) return;
+  cenaPronta = true;
+  for (const avisar of aguardandoCena) avisar();
+  aguardandoCena.clear();
+}
+
+export function aoCenaPronta(avisar: () => void) {
+  if (cenaPronta) {
+    avisar();
+    return () => {};
+  }
+  aguardandoCena.add(avisar);
+  return () => {
+    aguardandoCena.delete(avisar);
+  };
+}

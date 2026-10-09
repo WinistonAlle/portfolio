@@ -494,13 +494,21 @@ export function buildLaptop(): LaptopModel {
 
   /* Plano dos adesivos na face de TRÁS da tampa, 0.6mm afastado. Girado 180°
      em Y: assim o texto do atlas lê certo para quem está atrás. */
+  const esperaDosAdesivos = new THREE.DataTexture(new Uint8Array([0, 0, 0, 0]), 1, 1);
+  esperaDosAdesivos.colorSpace = THREE.SRGBColorSpace;
+  esperaDosAdesivos.needsUpdate = true;
   const stickers = new THREE.Mesh(
     new THREE.PlaneGeometry(LID_W, LID_H),
     new THREE.MeshStandardMaterial({
       name: 'stickers', transparent: true, roughness: 0.55, metalness: 0.05,
       depthWrite: false, opacity: 0,
+      /* Textura de espera, 1 pixel transparente. O shader de um material COM
+         mapa é outro programa: nascendo já com um, a chegada do atlas é só
+         troca de textura, e não uma recompilação no meio da abertura. */
+      map: esperaDosAdesivos,
     }),
   );
+  stickers.userData.atlasChegou = false;
   stickers.name = 'stickers';
   stickers.rotation.y = 180 * DEG;
   stickers.position.set(0, LID_H / 2, -LID_T / 2 - 0.0006);
@@ -508,7 +516,7 @@ export function buildLaptop(): LaptopModel {
   lid.add(stickers);
 
   return { root, lid, screen, stickers, backlight, ondaTeclado, luzTeclas,
-    texturas: [blTex, lgTex],
+    texturas: [blTex, lgTex, esperaDosAdesivos],
     materials: { alu, aluDark, glass, rubber, keycap, padVidro } };
 }
 
@@ -541,6 +549,60 @@ export function makeEnvironment(renderer: THREE.WebGLRenderer): THREE.Texture {
   const env = pmrem.fromEquirectangular(tex).texture;
   pmrem.dispose(); tex.dispose();
   return env;
+}
+
+/** Espera os shaders já pedidos ao renderer terminarem de compilar, sem travar
+ *  a página. Sem a extensão de compilação paralela, `isReady()` já nasce
+ *  verdadeiro e isto resolve na hora (o navegador compila do jeito antigo). */
+export function programasProntos(renderer: THREE.WebGLRenderer, limiteMs = 6000): Promise<void> {
+  const inicio = performance.now();
+  return new Promise((ok) => {
+    const olhar = () => {
+      const programas = renderer.info.programs ?? [];
+      const prontos = programas.every((p) => (p as unknown as { isReady(): boolean }).isReady());
+      if (prontos || performance.now() - inicio > limiteMs) ok();
+      else setTimeout(olhar, 30);
+    };
+    olhar();
+  });
+}
+
+/* O mesmo ambiente, sem congelar a página na primeira visita.
+ *
+ * Medido em 09/10/2026 num Chrome com cache de shader vazio: o PMREM compila
+ * três programas (equiretangular, borrão e GGX), e o three pergunta o
+ * resultado de forma síncrona no primeiro uso. A thread principal ficava
+ * parada esperando a placa de vídeo: cerca de 7 segundos somando esta cena, os
+ * anéis e as partículas. Quem já visitou tem os shaders em cache e não sente;
+ * quem abre pela primeira vez sentia tudo.
+ *
+ * Aqui os três programas são PEDIDOS antes (`compile` só dispara, não espera),
+ * a função aguarda a compilação em paralelo e só então gera o ambiente, que aí
+ * custa os ~3ms de sempre. Usa campos internos do PMREMGenerator; se uma
+ * versão futura do three mudar esses nomes, cai no caminho antigo, que
+ * funciona igual, só que travando. */
+export async function makeEnvironmentAsync(renderer: THREE.WebGLRenderer): Promise<THREE.Texture> {
+  try {
+    const pmrem = new THREE.PMREMGenerator(renderer);
+    const interno = pmrem as unknown as {
+      _setSize(n: number): void;
+      _allocateTargets(): THREE.WebGLRenderTarget;
+      _compileMaterial(m: THREE.Material): void;
+      _blurMaterial: THREE.Material | null;
+      _ggxMaterial: THREE.Material | null;
+    };
+    interno._setSize(4); // 16 de largura / 4, o mesmo que fromEquirectangular calcula
+    const sobra = interno._allocateTargets();
+    pmrem.compileEquirectangularShader();
+    if (interno._blurMaterial) interno._compileMaterial(interno._blurMaterial);
+    if (interno._ggxMaterial) interno._compileMaterial(interno._ggxMaterial);
+    sobra.dispose();
+    await programasProntos(renderer);
+    pmrem.dispose();
+  } catch {
+    /* segue pelo caminho síncrono */
+  }
+  return makeEnvironment(renderer);
 }
 
 /* ------------------------------------------------------------- coreografia
@@ -639,7 +701,7 @@ export function poseLaptop(model: LaptopModel, p: number, lidFinal = LID_FINAL) 
 
   /* Os adesivos só existem enquanto dá para vê-los: apagar o material depois
      do giro tira um blend transparente de cada quadro da parte mais pesada. */
-  model.stickers.material.opacity = model.stickers.material.map
+  model.stickers.material.opacity = model.stickers.userData.atlasChegou
     ? clamp01(1 - range(p, 0.30, 0.44) * 1) * 1
     : 0;
   model.stickers.visible = model.stickers.material.opacity > 0.01;
