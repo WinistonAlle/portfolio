@@ -328,6 +328,30 @@ export function AppIdioma() {
   );
 }
 
+/* Currículo no iPhone: folha com a orelha dobrada e a faixa "PDF", no
+   vermelho que todo leitor de PDF usa. */
+export function AppCurriculo() {
+  return (
+    <Squircle id="curriculo" de="#ff7a66" para="#d8321f">
+      <path d="M33 25h24l12 12v36a3 3 0 0 1-3 3H33a3 3 0 0 1-3-3V28a3 3 0 0 1 3-3Z" fill="#fff" />
+      <path d="M57 25v9a3 3 0 0 0 3 3h9Z" fill="#f3c4bd" />
+      <rect x="36" y="33" width="14" height="3" rx="1.5" fill="#3a1410" />
+      <path d="M36 43h27M36 49h27M36 55h18" stroke="#c9a39d" strokeWidth="2" strokeLinecap="round" />
+      <text
+        x="49.5"
+        y="70.5"
+        textAnchor="middle"
+        fontSize="9"
+        fontWeight="800"
+        fill="#d8321f"
+        fontFamily="-apple-system, BlinkMacSystemFont, 'Helvetica Neue', sans-serif"
+      >
+        PDF
+      </text>
+    </Squircle>
+  );
+}
+
 /* Arquivos do iPhone: folha branca com a pasta azul no meio. */
 export function AppArquivos() {
   return (

@@ -54,6 +54,7 @@ const pt = {
       sobreArquivo: 'sobre-mim.md',
       contatoArquivo: 'contato.exe',
       curriculoArquivo: 'curriculo.pdf',
+      curriculoApp: 'Currículo',
       fotoLegenda: 'Desenvolvedor full-stack',
       notifTitulo: 'Bem-vindo ao meu portfólio',
       notifTexto: 'Clique nos ícones para abrir. Role para ver o resto.',

@@ -45,6 +45,7 @@ const en: typeof pt = {
       sobreArquivo: 'about-me.md',
       contatoArquivo: 'contact.exe',
       curriculoArquivo: 'resume-pt.pdf',
+      curriculoApp: 'Résumé (PT)',
       fotoLegenda: 'Full-stack developer',
       notifTitulo: 'Welcome to my portfolio',
       notifTexto: 'Click the icons to open them. Scroll to see the rest.',

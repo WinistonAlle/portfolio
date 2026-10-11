@@ -27,6 +27,7 @@ import { CURRICULO_PDF } from '@/config/site';
 import type { Locale } from '@/i18n/config';
 import {
   AppArquivos,
+  AppCurriculo,
   AppFinder,
   AppFoto,
   AppIdioma,
@@ -53,6 +54,7 @@ export type TextoMesa = {
   sobreArquivo: string;
   contatoArquivo: string;
   curriculoArquivo: string;
+  curriculoApp: string;
   fotoLegenda: string;
   notifTitulo: string;
   notifTexto: string;
@@ -586,12 +588,14 @@ export default function Mesa({
     </div>
   );
 
-  /* iPhone: quatro na grade, quatro no Dock, sem repetir. No Dock também vai o
+  /* iPhone: quatro na grade (mais o de idioma, na linha de baixo), quatro no
+     Dock, sem repetir. No Dock também vai o
      nome embaixo (o iOS não mostra), pra ninguém ter que adivinhar o ícone. */
   const appsIos = [
     { id: 'sobre', rotulo: nav.about, href: rotas.sobre, icone: <AppFoto foto={FOTO} /> },
     { id: 'gh', rotulo: gh.label, href: gh.href, externo: true, icone: appGithub },
     { id: 'ig', rotulo: ig.label, href: ig.href, externo: true, icone: appInstagram },
+    { id: 'curriculo', rotulo: t.curriculoApp, href: CURRICULO_PDF, externo: true, icone: <AppCurriculo /> },
   ];
   const dockIos = [
     { id: 'projetos', rotulo: nav.projects, href: rotas.projetos, icone: <AppArquivos /> },

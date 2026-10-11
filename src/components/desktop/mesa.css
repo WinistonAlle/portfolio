@@ -898,6 +898,35 @@ body.mesa-passou:has(.mesa) .site-header:not(.site-header--hidden) {
   .ios-dock .ios-app {
     width: auto;
   }
+
+  /* Com o Currículo a grade ganhou uma linha. Em celular baixo ela empurrava
+     o Dock pra fora da primeira tela, então a folga sai do cartão do título
+     e do espaço entre as linhas. */
+  @media (max-height: 780px) {
+    .ios-grade {
+      gap: 16px 0;
+    }
+
+    .ios-grade .widget--titulo {
+      aspect-ratio: auto;
+      padding: 16px 18px;
+    }
+  }
+
+  @media (max-height: 700px) {
+    .mesa-ios {
+      padding-top: calc(env(safe-area-inset-top) + 14px);
+    }
+
+    .ios-grade {
+      gap: 12px 0;
+    }
+
+    .ios-grade .widget--foto,
+    .ios-grade .widget--producao {
+      aspect-ratio: 1 / 0.9;
+    }
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
