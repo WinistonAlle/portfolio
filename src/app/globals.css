@@ -2005,3 +2005,269 @@ a.cert-piece:focus-visible .cert-frame {
     opacity: 1;
   }
 }
+
+/* ── Currículo (Sobre mim): folha que se abre ──────────────────────────────
+   Ver Curriculo.tsx e CurriculoDobra.tsx. Fechada, mostra o resumo e uma
+   espiada do resto; a mesma curva das certificações, (0.2, 0, 0, 1). */
+
+.cv {
+  /* Cor cheia, sem transparência: o degradê da espiada precisa terminar
+     exatamente na cor da folha. */
+  --cv-bg: color-mix(in srgb, var(--surface) 82%, var(--background));
+  --cv-espiada: 8.5rem;
+  padding: clamp(1.5rem, 4vw, 3rem) clamp(1.25rem, 4vw, 3rem) 0;
+  border: 1px solid var(--line);
+  border-radius: 1.5rem;
+  background: var(--cv-bg);
+}
+
+.cv__topo {
+  padding-bottom: clamp(1.5rem, 3vw, 2rem);
+}
+.cv__nome {
+  font-family: var(--font-display), system-ui, sans-serif;
+  font-size: clamp(1.5rem, 2.4vw, 1.9rem);
+  font-weight: 700;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+}
+.cv__cargo {
+  margin-top: 0.45rem;
+  font-size: 0.95rem;
+  color: var(--muted);
+}
+
+/* Rótulo à esquerda, conteúdo à direita, um fio em cima: a página de um
+   currículo, não uma grade de cartões. */
+.cv__bloco {
+  display: grid;
+  gap: 0.9rem;
+  padding-block: clamp(1.5rem, 3vw, 2rem);
+  border-top: 1px solid var(--line);
+}
+.cv__rotulo {
+  padding-top: 0.3rem;
+}
+@media (min-width: 768px) {
+  .cv__bloco {
+    grid-template-columns: 10.5rem minmax(0, 1fr);
+    gap: 2rem;
+  }
+}
+
+.cv__texto {
+  max-width: 68ch;
+  font-size: 1rem;
+  line-height: 1.7;
+  color: color-mix(in srgb, var(--foreground) 78%, var(--muted));
+}
+.cv__texto--item {
+  margin-top: 0.4rem;
+  font-size: 0.95rem;
+  color: var(--muted);
+}
+
+.cv__item + .cv__item {
+  margin-top: 1.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--line);
+}
+.cv__cabeca {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.25rem 1.5rem;
+}
+.cv__titulo {
+  font-family: var(--font-display), system-ui, sans-serif;
+  font-size: 1.05rem;
+  font-weight: 600;
+  line-height: 1.3;
+  letter-spacing: -0.01em;
+}
+.cv__periodo,
+.cv__stack,
+.cv__estado {
+  font-family: var(--font-mono), ui-monospace, monospace;
+  font-size: 0.75rem;
+  color: var(--muted);
+}
+.cv__periodo {
+  white-space: nowrap;
+}
+.cv__estado {
+  margin-left: 0.75rem;
+  font-weight: 400;
+  letter-spacing: 0;
+}
+.cv__stack {
+  margin-top: 0.6rem;
+}
+.cv__sub {
+  margin-top: 0.2rem;
+  font-size: 0.95rem;
+  color: var(--muted);
+}
+.cv__nota {
+  margin-top: 0.2rem;
+  font-size: 0.875rem;
+  font-style: italic;
+  color: var(--muted);
+}
+
+.cv__pontos {
+  display: grid;
+  gap: 0.7rem;
+  max-width: 68ch;
+  margin-top: 1rem;
+}
+.cv__pontos li {
+  position: relative;
+  padding-left: 1.1rem;
+  font-size: 0.95rem;
+  line-height: 1.65;
+  color: var(--muted);
+}
+.cv__pontos li::before {
+  content: '';
+  position: absolute;
+  top: 0.78em;
+  left: 0;
+  width: 0.45rem;
+  height: 1px;
+  background: var(--accent);
+}
+
+.cv__par {
+  display: grid;
+  gap: 0.15rem;
+  padding-block: 0.7rem;
+  font-size: 0.95rem;
+  line-height: 1.6;
+}
+.cv__par:first-child {
+  padding-top: 0;
+}
+.cv__par:last-child {
+  padding-bottom: 0;
+}
+.cv__par + .cv__par {
+  border-top: 1px solid var(--line);
+}
+.cv__par dt {
+  font-weight: 500;
+}
+.cv__par dd {
+  color: var(--muted);
+}
+@media (min-width: 640px) {
+  .cv__par {
+    grid-template-columns: 13rem minmax(0, 1fr);
+    gap: 1.5rem;
+  }
+}
+
+/* A dobra. A linha do grid vai de 0fr a 1fr; o min-height do filho é a
+   espiada, que por isso não precisa de altura medida. */
+.cv__resto {
+  position: relative;
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 380ms cubic-bezier(0.2, 0, 0, 1);
+}
+.cv__resto-dentro {
+  min-height: var(--cv-espiada);
+  overflow: hidden;
+}
+.cv__resto::after {
+  content: '';
+  position: absolute;
+  inset: auto 0 0;
+  height: var(--cv-espiada);
+  background: linear-gradient(to bottom, transparent, var(--cv-bg) 88%);
+  pointer-events: none;
+  transition: opacity 260ms cubic-bezier(0.2, 0, 0, 1);
+}
+/* Abrir leva mais tempo que fechar: é o que a pessoa pediu para ver. */
+.cv__dobra[data-aberto='true'] .cv__resto {
+  grid-template-rows: 1fr;
+  transition-duration: 560ms;
+}
+.cv__dobra[data-aberto='true'] .cv__resto::after {
+  opacity: 0;
+}
+
+.cv__alternar {
+  display: flex;
+  justify-content: center;
+  padding-block: 0.5rem 1.75rem;
+}
+.cv__dobra[data-aberto='true'] .cv__alternar {
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--line);
+}
+.cv__botao {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  min-height: 2.75rem;
+  padding: 0 1.25rem;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  color: var(--foreground);
+  cursor: pointer;
+  transition:
+    border-color 180ms cubic-bezier(0.2, 0, 0, 1),
+    background-color 180ms cubic-bezier(0.2, 0, 0, 1);
+}
+.cv__botao:hover {
+  border-color: color-mix(in srgb, var(--accent) 60%, transparent);
+  background: color-mix(in srgb, var(--accent) 8%, transparent);
+}
+.cv__botao:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+.cv__seta {
+  width: 0.75rem;
+  height: 0.75rem;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  transition: transform 220ms cubic-bezier(0.2, 0, 0, 1);
+}
+.cv__dobra[data-aberto='true'] .cv__seta {
+  transform: rotate(180deg);
+}
+
+/* Ícone do botão de baixar (também no topo da página). */
+.cv-baixar {
+  position: relative;
+  z-index: 2;
+  width: 0.9rem;
+  height: 0.9rem;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.4;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.cv-baixar__seta {
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.specular-button:hover .cv-baixar__seta {
+  transform: translateY(1.5px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cv__resto,
+  .cv__resto::after,
+  .cv__botao,
+  .cv__seta,
+  .cv-baixar__seta {
+    transition: none;
+  }
+}

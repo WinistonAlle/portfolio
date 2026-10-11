@@ -14,6 +14,7 @@ import { isLocale } from '@/i18n/config';
 import TituloAcento from '@/components/text/TituloAcento';
 import CtaBlock from '@/components/ui/CtaBlock';
 import Certifications from '@/components/about/Certifications';
+import Curriculo, { IconeBaixar } from '@/components/about/Curriculo';
 import { CURRICULO_PDF } from '@/config/site';
 
 /* O modelo do crachá só era pedido depois que o chunk do three baixava,
@@ -96,16 +97,19 @@ export default async function SobreMimPage(
             </p>
 
             <div className="mt-9 flex flex-wrap items-center gap-3">
-              <GlowButton href={`/${lang}/projetos`}>
+              {/* O currículo é a ação em destaque daqui: quem abre o "sobre
+                  mim" está avaliando a pessoa, e o arquivo é o que ela leva
+                  embora. Os outros dois ficam como alternativas, lado a lado. */}
+              <GlowButton href={CURRICULO_PDF} external tintOpacity={0.22}>
+                {dict.about.ctaResume}
+                <IconeBaixar />
+              </GlowButton>
+              <GlowButton href={`/${lang}/projetos`} variant="secondary">
                 {dict.about.ctaProjects}
                 <GlowArrow />
               </GlowButton>
               <GlowButton href={`/${lang}/contato`} variant="secondary">
                 {dict.about.ctaContact}
-              </GlowButton>
-              <GlowButton href={CURRICULO_PDF} external variant="quiet">
-                {dict.about.ctaResume}
-                <GlowArrow dir="diagonal" />
               </GlowButton>
             </div>
           </div>
@@ -174,6 +178,26 @@ export default async function SobreMimPage(
           prev: dict.about.certPrev,
           next: dict.about.certNext,
           page: dict.about.certPages,
+        }}
+      />
+
+      {/* O currículo vem depois das certificações e antes da trajetória: os
+          dois contam a mesma história, ele em tópicos e ela em linha do tempo. */}
+      <Curriculo
+        lang={lang}
+        labels={{
+          title: dict.about.cvTitle,
+          meta: dict.about.cvMeta,
+          download: dict.about.cvDownload,
+          open: dict.about.cvOpen,
+          close: dict.about.cvClose,
+          role: dict.about.cvRole,
+          summary: dict.about.cvSummary,
+          skills: dict.about.cvSkills,
+          experience: dict.about.cvExperience,
+          projects: dict.about.cvProjects,
+          education: dict.about.cvEducation,
+          languages: dict.about.cvLanguages,
         }}
       />
 
