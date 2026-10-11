@@ -14,6 +14,7 @@ import { isLocale } from '@/i18n/config';
 import TituloAcento from '@/components/text/TituloAcento';
 import CtaBlock from '@/components/ui/CtaBlock';
 import Certifications from '@/components/about/Certifications';
+import { CURRICULO_PDF } from '@/config/site';
 
 /* O modelo do crachá só era pedido depois que o chunk do three baixava,
    parseava e montava — mais de um segundo depois do HTML, atrás de tudo que o
@@ -101,6 +102,10 @@ export default async function SobreMimPage(
               </GlowButton>
               <GlowButton href={`/${lang}/contato`} variant="secondary">
                 {dict.about.ctaContact}
+              </GlowButton>
+              <GlowButton href={CURRICULO_PDF} external variant="quiet">
+                {dict.about.ctaResume}
+                <GlowArrow dir="diagonal" />
               </GlowButton>
             </div>
           </div>

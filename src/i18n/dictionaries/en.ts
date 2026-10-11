@@ -44,6 +44,7 @@ const en: typeof pt = {
       app: 'Winiston',
       sobreArquivo: 'about-me.md',
       contatoArquivo: 'contact.exe',
+      curriculoArquivo: 'resume-pt.pdf',
       fotoLegenda: 'Full-stack developer',
       notifTitulo: 'Welcome to my portfolio',
       notifTexto: 'Click the icons to open them. Scroll to see the rest.',
@@ -69,6 +70,8 @@ const en: typeof pt = {
       ", I'm 24 and I study software engineering. I model the database, write the backend, build the interface and look after the server the whole thing runs on. What I build is in production, used every day by hundreds of people. Outside of work I keep my own projects going, like a habit tracker and an iOS poker app. I work at something until it's actually good, not until it's acceptable.",
     ctaProjects: 'See the projects',
     ctaContact: 'Get in touch',
+    /* O PDF só existe em português, e o botão avisa antes do clique. */
+    ctaResume: 'Résumé (in Portuguese)',
     crachaDica: 'Tap to flip, drag to tilt',
     crachaVirar: 'Flip the badge',
     stackTitle: 'Everything I work with, and how the pieces *talk to each other*.',

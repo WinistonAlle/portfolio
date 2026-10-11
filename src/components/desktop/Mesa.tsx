@@ -23,6 +23,7 @@ import { usePixelTransition } from '@/components/transition/PixelTransition';
 import TransitionLink from '@/components/transition/TransitionLink';
 import { rolarAte } from '@/components/scroll/SmoothScroll';
 import { SOCIALS } from '@/data/socials';
+import { CURRICULO_PDF } from '@/config/site';
 import type { Locale } from '@/i18n/config';
 import {
   AppArquivos,
@@ -51,6 +52,7 @@ export type TextoMesa = {
   app: string;
   sobreArquivo: string;
   contatoArquivo: string;
+  curriculoArquivo: string;
   fotoLegenda: string;
   notifTitulo: string;
   notifTexto: string;
@@ -551,6 +553,15 @@ export default function Mesa({
       titulo: nav.contact,
       icone: <Cartao size={80} foto={FOTO} />,
     },
+    /* O único que não é rota: abre o PDF em outra aba, sem a animação de
+       janela (o `abrir` deixa link externo seguir o caminho nativo). */
+    {
+      id: 'curriculo',
+      nome: t.curriculoArquivo,
+      href: CURRICULO_PDF,
+      externo: true,
+      icone: <Documento size={80} extensao="PDF" />,
+    },
   ];
 
   const producao = (
@@ -722,10 +733,11 @@ export default function Mesa({
             <li key={a.id} style={{ '--i': i } as React.CSSProperties}>
               <a
                 href={a.href}
+                {...(a.externo ? { target: '_blank', rel: 'noopener' } : {})}
                 className={`mesa-arquivo${selecionado === a.id ? ' mesa-arquivo--sel' : ''}`}
                 onClick={(e) => {
                   setSelecionado(a.id);
-                  abrir(e, { href: a.href, titulo: a.titulo ?? a.nome, modo: 'janela' });
+                  abrir(e, { href: a.href, titulo: a.titulo ?? a.nome, externo: a.externo, modo: 'janela' });
                 }}
               >
                 <span className="mesa-arquivo__icone" data-icone>

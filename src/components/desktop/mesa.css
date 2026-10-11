@@ -334,6 +334,22 @@ body.mesa-passou:has(.mesa) .site-header:not(.site-header--hidden) {
   padding: 0;
 }
 
+/* Tela baixa (notebook de 768px com a barra do navegador): quatro ícones
+   empilhados passariam do pé da mesa. O Finder faz o mesmo: quando a coluna
+   enche, abre outra à esquerda. */
+@media (max-height: 700px) {
+  .mesa-arquivos {
+    grid-template-rows: repeat(2, auto);
+    grid-auto-flow: column;
+    direction: rtl;
+  }
+
+  /* O rtl é só pra coluna nova nascer à esquerda; o texto continua normal. */
+  .mesa-arquivos li {
+    direction: ltr;
+  }
+}
+
 .mesa-arquivo {
   display: flex;
   flex-direction: column;
