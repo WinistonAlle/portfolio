@@ -2032,12 +2032,12 @@ export const PROJECTS: Project[] = [
     tags: ['Astro', 'TypeScript', 'Canvas', 'Vercel'],
     media: {
       frame: 'desktop',
-      src: '/cases/dr-alipio/capa-v2.jpg',
+      src: '/cases/dr-alipio/capa-v3.jpg',
       video: '/cases/dr-alipio/scroll-v2.mp4',
       poster: '/cases/dr-alipio/poster-v2.jpg',
       alt: {
-        pt: 'Primeira tela do site, com o nome do médico no cabeçalho, o título Sua vida segue em frente, mas você não está bem e uma pilha de três fotos dele',
-        en: 'First screen of the site, with the headline Your life keeps moving, but you are not well and a stack of three photos of the physician, with his name in the header',
+        pt: 'Primeira tela do site: um cartão azul escuro com o nome do médico, o título Sua vida segue em frente, mas você não está bem, o botão Agendar consulta e a foto dele de braços cruzados saindo pela borda do cartão',
+        en: 'First screen of the site: a dark blue card with the physician’s name, the headline Your life keeps moving, but you are not well, the booking button and his photo with arms crossed breaking out of the card’s edge',
       },
     },
     links: [{ kind: 'site', href: 'https://dr-alipio.vercel.app' }],
