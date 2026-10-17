@@ -18,6 +18,7 @@ const pt = {
   nav: {
     about: 'Sobre mim',
     projects: 'Projetos',
+    plans: 'Planos',
     contact: 'Contato',
   },
 
@@ -233,6 +234,86 @@ const pt = {
       place: 'Coro Hub, como sócio fundador',
       line: 'Abri com três sócios uma empresa de automação com IA. Cuido da marca, do conteúdo, do design e das finanças.',
     },
+  },
+
+  /* Página de planos e preços (/pt/planos, /en/plans). Os valores ficam em R$
+     nos dois idiomas: quem contrata paga em real. Item com `nota` mostra uma
+     linha pequena embaixo do nome. */
+  plans: {
+    metaTitle: 'Planos e preços de sites | Winiston Alle',
+    metaDescription:
+      'Landing page a partir de R$ 800, site institucional a partir de R$ 1.200 e planos mensais de manutenção a partir de R$ 69. Preços abertos, sem surpresa.',
+    title: 'Sites que trazem *clientes*, não só visitas.',
+    intro: 'Você paga o site uma vez e escolhe se quer que eu cuide dele todo mês.',
+    sitesTitle: 'O site',
+    sitesText: 'Pagamento único. O site é seu.',
+    sites: [
+      { nome: 'Landing page simples', preco: 'R$ 800' },
+      { nome: 'Landing page completa', preco: 'R$ 1.000' },
+      { nome: 'Site institucional', nota: 'Até 4 páginas', preco: 'R$ 1.200' },
+      { nome: 'Institucional + blog ou painel', preco: 'R$ 1.600' },
+      { nome: 'Loja, agendamento ou sistema', prefixo: 'a partir de', preco: 'R$ 2.500' },
+    ],
+    sitesNote: 'Página extra no institucional: R$ 150',
+    monthlyTitle: 'Depois que o site vai ao ar',
+    monthlyText: 'Planos mensais pra quem não quer se preocupar com hospedagem, segurança e ajustes.',
+    perMonth: '/mês',
+    recommended: 'Recomendado',
+    monthly: [
+      {
+        nome: 'Essencial',
+        preco: 'R$ 69',
+        itens: [
+          'Hospedagem, SSL e domínio inclusos',
+          'Backup e monitoramento',
+          'Atualizações de segurança',
+          '1 alteração pequena por mês',
+          'Resposta em até 2 dias úteis',
+        ],
+      },
+      {
+        nome: 'Crescimento',
+        preco: 'R$ 150',
+        destaque: true,
+        itens: [
+          'Tudo do Essencial',
+          'Relatório mensal de resultados',
+          'Mapa de calor e gravação de sessões',
+          '1 melhoria por mês baseada em dados',
+          'Google Meu Negócio atualizado',
+          '2 alterações pequenas por mês',
+          'Resposta em até 1 dia útil',
+        ],
+      },
+    ],
+    annualNote: 'Pagando anual, você paga 10 meses e leva 12.',
+    combosTitle: 'Comece pagando *menos*.',
+    combosText: 'Entrada reduzida no site + plano Crescimento por 12 meses.',
+    combos: [
+      { nome: 'Landing page simples', entrada: 'R$ 400', mensal: '+ R$ 150/mês' },
+      { nome: 'Landing page completa', entrada: 'R$ 500', mensal: '+ R$ 150/mês' },
+      { nome: 'Site institucional', entrada: 'R$ 600', mensal: '+ R$ 150/mês' },
+    ],
+    faqTitle: 'Perguntas frequentes',
+    faq: [
+      { p: 'O domínio fica no meu nome?', r: 'Sim, sempre no seu CPF ou CNPJ.' },
+      {
+        p: 'O que é uma alteração pequena?',
+        r: 'Trocar texto, foto, telefone, preço, horário, incluir depoimento ou ajustar cor e botão.',
+      },
+      {
+        p: 'Posso cancelar?',
+        r: 'Sim, com aviso de 30 dias. Os planos têm fidelidade de 6 meses e o combo, de 12.',
+      },
+      {
+        p: 'Preciso de plano?',
+        r: 'Não. Sem plano, eu publico o site numa hospedagem no seu nome e você cuida dela.',
+      },
+    ],
+    ctaTitle: 'Vamos ver qual faz sentido pro seu negócio?',
+    ctaText: 'Me chama no WhatsApp e me conta o que você precisa.',
+    ctaButton: 'Chamar no WhatsApp',
+    whatsappMessage: 'Oi Winiston! Vi a página de planos e quero saber mais sobre um site.',
   },
 };
 

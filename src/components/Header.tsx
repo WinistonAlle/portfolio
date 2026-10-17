@@ -14,9 +14,9 @@ import TransitionLink from '@/components/transition/TransitionLink';
 import BotaoTema from '@/components/ui/BotaoTema';
 import LogoWA from '@/components/ui/LogoWA';
 import { usePixelTransition } from '@/components/transition/PixelTransition';
-import { LOCALE_FLAG, pathWithLocale, type Locale } from '@/i18n/config';
+import { LOCALE_FLAG, pathWithLocale, slugLocal, type Locale } from '@/i18n/config';
 
-type Nav = { about: string; projects: string; contact: string };
+type Nav = { about: string; projects: string; plans: string; contact: string };
 
 export default function Header({
   locale,
@@ -50,6 +50,7 @@ export default function Header({
   const itens = [
     { label: nav.about, href: `/${locale}/sobre-mim` },
     { label: nav.projects, href: `/${locale}/projetos` },
+    { label: nav.plans, href: `/${locale}/${slugLocal('planos', locale)}` },
     { label: nav.contact, href: `/${locale}/contato` },
   ];
 

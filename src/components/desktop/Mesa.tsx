@@ -47,7 +47,7 @@ import './mesa.css';
 
 const FOTO = '/winiston-hero.webp';
 
-type Nav = { about: string; projects: string; contact: string };
+type Nav = { about: string; projects: string; plans: string; contact: string };
 
 export type TextoMesa = {
   app: string;

@@ -19,12 +19,29 @@ const nextConfig: NextConfig = {
      Só o host exato: os endereços de prévia da Vercel (winiston-xxxx...) não
      entram, senão ninguém conseguiria abrir uma prévia. */
   async redirects() {
-    return ['winiston.vercel.app', 'www.winiston.com.br'].map((host) => ({
+    const dominio = ['winiston.vercel.app', 'www.winiston.com.br'].map((host) => ({
       source: '/:caminho*',
       has: [{ type: 'host' as const, value: host }],
       destination: 'https://winiston.com.br/:caminho*',
       permanent: true,
     }));
+    /* Endereço de planos no idioma errado vai pro certo (ver rewrites). */
+    const planos = [
+      { source: '/en/planos', destination: '/en/plans', permanent: true },
+      { source: '/pt/plans', destination: '/pt/planos', permanent: true },
+    ];
+    return [...dominio, ...planos];
+  },
+  /* /en/plans é a mesma página de /en/planos (a pasta da rota é a do
+     português, ver SLUGS_TRADUZIDOS). O endereço oficial em inglês é /plans:
+     quem cair no outro é levado pra ele, e quem pede /pt/plans vai pro
+     português. beforeFiles: precisa valer antes da rota dinâmica [lang]. */
+  async rewrites() {
+    return {
+      beforeFiles: [{ source: '/en/plans', destination: '/en/planos' }],
+      afterFiles: [],
+      fallback: [],
+    };
   },
   async headers() {
     return [

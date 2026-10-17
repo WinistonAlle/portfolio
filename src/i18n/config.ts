@@ -47,10 +47,29 @@ export const LOCALE_FLAG: Record<Locale, string> = {
   en: '🇺🇸',
 };
 
+/* Páginas cujo endereço muda com o idioma. As outras usam o mesmo nome nos
+   dois (/en/sobre-mim); "planos" ganhou endereço próprio em inglês porque é a
+   página que vai ser divulgada pra cliente. A pasta da rota é a do português
+   (app/[lang]/planos); o endereço em inglês chega nela por uma reescrita no
+   next.config. */
+export const SLUGS_TRADUZIDOS: Record<string, Localized<string>> = {
+  planos: { pt: 'planos', en: 'plans' },
+};
+
+/** Primeiro segmento depois do idioma, no idioma pedido. */
+export function slugLocal(slug: keyof typeof SLUGS_TRADUZIDOS, locale: Locale): string {
+  return SLUGS_TRADUZIDOS[slug][locale];
+}
+
 /** Troca o prefixo de idioma de um caminho, preservando o resto. */
 export function pathWithLocale(pathname: string, locale: Locale): string {
   const partes = pathname.split('/').filter(Boolean);
   if (partes.length && isLocale(partes[0])) partes[0] = locale;
   else partes.unshift(locale);
+  /* /pt/planos vira /en/plans, e não /en/planos. */
+  const traduzido = Object.values(SLUGS_TRADUZIDOS).find(
+    (s) => s.pt === partes[1] || s.en === partes[1],
+  );
+  if (traduzido) partes[1] = traduzido[locale];
   return `/${partes.join('/')}`;
 }

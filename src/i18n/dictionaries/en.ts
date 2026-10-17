@@ -20,6 +20,7 @@ const en: typeof pt = {
   nav: {
     about: 'About',
     projects: 'Projects',
+    plans: 'Plans',
     contact: 'Contact',
   },
 
@@ -218,6 +219,83 @@ const en: typeof pt = {
       place: 'Coro Hub, as co-founder',
       line: 'Started an AI automation company with three partners. I run the brand, content, design and finance.',
     },
+  },
+
+  plans: {
+    metaTitle: 'Website plans and pricing | Winiston Alle',
+    metaDescription:
+      'Landing pages from R$ 800, business websites from R$ 1,200 and monthly care plans from R$ 69. Upfront prices, no surprises.',
+    title: 'Websites that bring in *customers*, not just visitors.',
+    intro: 'You pay for the website once, then choose whether you want me to look after it every month.',
+    sitesTitle: 'The website',
+    sitesText: 'One-time payment. The website is yours.',
+    sites: [
+      { nome: 'Simple landing page', preco: 'R$ 800' },
+      { nome: 'Full landing page', preco: 'R$ 1,000' },
+      { nome: 'Business website', nota: 'Up to 4 pages', preco: 'R$ 1,200' },
+      { nome: 'Business website + blog or dashboard', preco: 'R$ 1,600' },
+      { nome: 'Online store, booking or custom system', prefixo: 'from', preco: 'R$ 2,500' },
+    ],
+    sitesNote: 'Extra page on a business website: R$ 150',
+    monthlyTitle: 'Once the website is live',
+    monthlyText: 'Monthly plans for when you would rather not worry about hosting, security and updates.',
+    perMonth: '/month',
+    recommended: 'Recommended',
+    monthly: [
+      {
+        nome: 'Essential',
+        preco: 'R$ 69',
+        itens: [
+          'Hosting, SSL and domain included',
+          'Backups and uptime monitoring',
+          'Security updates',
+          '1 small change per month',
+          'Reply within 2 business days',
+        ],
+      },
+      {
+        nome: 'Growth',
+        preco: 'R$ 150',
+        destaque: true,
+        itens: [
+          'Everything in Essential',
+          'Monthly results report',
+          'Heatmaps and session recordings',
+          '1 data-driven improvement per month',
+          'Google Business Profile kept up to date',
+          '2 small changes per month',
+          'Reply within 1 business day',
+        ],
+      },
+    ],
+    annualNote: 'Pay yearly and get 12 months for the price of 10.',
+    combosTitle: 'Start by paying *less*.',
+    combosText: 'A reduced upfront price on the website + the Growth plan for 12 months.',
+    combos: [
+      { nome: 'Simple landing page', entrada: 'R$ 400', mensal: '+ R$ 150/month' },
+      { nome: 'Full landing page', entrada: 'R$ 500', mensal: '+ R$ 150/month' },
+      { nome: 'Business website', entrada: 'R$ 600', mensal: '+ R$ 150/month' },
+    ],
+    faqTitle: 'Frequently asked questions',
+    faq: [
+      { p: 'Is the domain registered in my name?', r: 'Yes, always under your own personal or company tax ID.' },
+      {
+        p: 'What counts as a small change?',
+        r: 'Swapping text, a photo, phone number, price or opening hours, adding a testimonial, or adjusting a color or button.',
+      },
+      {
+        p: 'Can I cancel?',
+        r: 'Yes, with 30 days notice. Plans have a 6-month minimum term, and the combo has a 12-month one.',
+      },
+      {
+        p: 'Do I need a plan?',
+        r: 'No. Without a plan, I publish the website on hosting in your name and you look after it.',
+      },
+    ],
+    ctaTitle: 'Want to see which one fits your business?',
+    ctaText: 'Message me on WhatsApp and tell me what you need.',
+    ctaButton: 'Message me on WhatsApp',
+    whatsappMessage: 'Hi Winiston! I saw the plans page and would like to know more about a website.',
   },
 };
 

@@ -33,7 +33,7 @@ import { definirAbertura, marcarCenaPronta } from '@/components/background/abert
 import Header from '@/components/Header';
 import type { Locale } from '@/i18n/config';
 
-type Nav = { about: string; projects: string; contact: string };
+type Nav = { about: string; projects: string; plans: string; contact: string };
 import { usePixelTransition } from '@/components/transition/PixelTransition';
 import { ancorarNoTopo, rolarAte } from '@/components/scroll/SmoothScroll';
 
