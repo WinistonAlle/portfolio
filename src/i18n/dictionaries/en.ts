@@ -27,6 +27,14 @@ const en: typeof pt = {
     switchLabel: 'Ler em português',
   },
 
+  cookies: {
+    label: 'Cookie notice',
+    message:
+      'I use Microsoft Clarity, with analytics cookies, to see how people move through the site. No ads.',
+    accept: 'Accept',
+    decline: 'Decline',
+  },
+
   home: {
     title: 'Systems and websites *businesses use* every day.',
     ctaProjects: 'See the projects',

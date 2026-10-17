@@ -28,6 +28,14 @@ const pt = {
     switchLabel: 'Read in English',
   },
 
+  cookies: {
+    label: 'Aviso de cookies',
+    message:
+      'Uso o Microsoft Clarity, com cookies de análise, para ver como as pessoas navegam pelo site. Nada de anúncio.',
+    accept: 'Aceitar',
+    decline: 'Recusar',
+  },
+
   home: {
     /* Hero: o maior espaço da página diz o que eu faço e pra quem, em vez do
        rótulo "PORTFÓLIO". */

@@ -11,6 +11,7 @@ import { lang } from 'next/root-params';
 import '../globals.css';
 import ParticlesBackground from '@/components/background/ParticlesBackground';
 import Header from '@/components/Header';
+import AvisoCookies from '@/components/ui/AvisoCookies';
 import { PixelTransitionProvider } from '@/components/transition/PixelTransition';
 import SmoothScroll from '@/components/scroll/SmoothScroll';
 import { SITE_URL } from '@/config/site';
@@ -117,8 +118,9 @@ const TEMA_INICIAL = `try{document.documentElement.dataset.tema=sessionStorage.g
    lazyOnload, no tempo ocioso do navegador: a visita fria já disputa CPU com
    o shader da abertura, e analytics não pode custar quadro.
    O id do <Script> NÃO pode ser "clarity": elemento com id vira global
-   (window.clarity), o snippet acha que já iniciou e nada é enviado. */
-const CLARITY = `(function(c,l,a,r,i,t,y){c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);})(window,document,"clarity","script","yz81s764fa");`;
+   (window.clarity), o snippet acha que já iniciou e nada é enviado.
+   Sem cookie até a pessoa aceitar no AvisoCookies (consentv2). */
+const CLARITY = `(function(c,l,a,r,i,t,y){c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);})(window,document,"clarity","script","yz81s764fa");var a;try{a=localStorage.getItem('cookies')==='aceito'}catch(e){}clarity('consentv2',{ad_Storage:'denied',analytics_Storage:a?'granted':'denied'});`;
 
 export default async function RootLayout({ children }: LayoutProps<'/[lang]'>) {
   const atual = await lang();
@@ -152,6 +154,7 @@ export default async function RootLayout({ children }: LayoutProps<'/[lang]'>) {
             switchLabel={dict.header.switchLabel}
           />
           {children}
+          <AvisoCookies texto={dict.cookies} />
         </PixelTransitionProvider>
         <Script id="ms-clarity-init" strategy="lazyOnload">
           {CLARITY}
