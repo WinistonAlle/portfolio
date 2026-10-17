@@ -255,7 +255,7 @@ const en: typeof pt = {
       },
       {
         nome: 'Growth',
-        preco: 'R$ 150',
+        preco: 'R$ 149',
         destaque: true,
         itens: [
           'Everything in Essential',
@@ -272,9 +272,9 @@ const en: typeof pt = {
     combosTitle: 'Start by paying *less*.',
     combosText: 'A reduced upfront price on the website + the Growth plan for 12 months.',
     combos: [
-      { nome: 'Simple landing page', entrada: 'R$ 400', mensal: '+ R$ 150/month' },
-      { nome: 'Full landing page', entrada: 'R$ 500', mensal: '+ R$ 150/month' },
-      { nome: 'Business website', entrada: 'R$ 600', mensal: '+ R$ 150/month' },
+      { nome: 'Simple landing page', entrada: 'R$ 400', mensal: '+ R$ 149/month' },
+      { nome: 'Full landing page', entrada: 'R$ 500', mensal: '+ R$ 149/month' },
+      { nome: 'Business website', entrada: 'R$ 600', mensal: '+ R$ 149/month' },
     ],
     faqTitle: 'Frequently asked questions',
     faq: [

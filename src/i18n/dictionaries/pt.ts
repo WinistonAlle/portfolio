@@ -273,7 +273,7 @@ const pt = {
       },
       {
         nome: 'Crescimento',
-        preco: 'R$ 150',
+        preco: 'R$ 149',
         destaque: true,
         itens: [
           'Tudo do Essencial',
@@ -290,9 +290,9 @@ const pt = {
     combosTitle: 'Comece pagando *menos*.',
     combosText: 'Entrada reduzida no site + plano Crescimento por 12 meses.',
     combos: [
-      { nome: 'Landing page simples', entrada: 'R$ 400', mensal: '+ R$ 150/mês' },
-      { nome: 'Landing page completa', entrada: 'R$ 500', mensal: '+ R$ 150/mês' },
-      { nome: 'Site institucional', entrada: 'R$ 600', mensal: '+ R$ 150/mês' },
+      { nome: 'Landing page simples', entrada: 'R$ 400', mensal: '+ R$ 149/mês' },
+      { nome: 'Landing page completa', entrada: 'R$ 500', mensal: '+ R$ 149/mês' },
+      { nome: 'Site institucional', entrada: 'R$ 600', mensal: '+ R$ 149/mês' },
     ],
     faqTitle: 'Perguntas frequentes',
     faq: [
