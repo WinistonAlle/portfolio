@@ -6,6 +6,7 @@ import {
   JetBrains_Mono,
 } from 'next/font/google';
 import { notFound } from 'next/navigation';
+import Script from 'next/script';
 import { lang } from 'next/root-params';
 import '../globals.css';
 import ParticlesBackground from '@/components/background/ParticlesBackground';
@@ -112,6 +113,11 @@ export async function generateMetadata(): Promise<Metadata> {
    (sessionStorage), e o tema do aparelho não decide nada. */
 const TEMA_INICIAL = `try{document.documentElement.dataset.tema=sessionStorage.getItem('tema')==='claro'?'claro':'escuro'}catch(e){}`;
 
+/* Microsoft Clarity (mapa de calor e gravação de sessão). Entra com
+   lazyOnload, no tempo ocioso do navegador: a visita fria já disputa CPU com
+   o shader da abertura, e analytics não pode custar quadro. */
+const CLARITY = `(function(c,l,a,r,i,t,y){c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);})(window,document,"clarity","script","yz81s764fa");`;
+
 export default async function RootLayout({ children }: LayoutProps<'/[lang]'>) {
   const atual = await lang();
   /* Um caminho como /fr chega aqui como segmento válido de rota, mas não é
@@ -145,6 +151,9 @@ export default async function RootLayout({ children }: LayoutProps<'/[lang]'>) {
           />
           {children}
         </PixelTransitionProvider>
+        <Script id="clarity" strategy="lazyOnload">
+          {CLARITY}
+        </Script>
       </body>
     </html>
   );
