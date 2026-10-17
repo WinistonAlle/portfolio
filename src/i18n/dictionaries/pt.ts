@@ -31,7 +31,7 @@ const pt = {
   cookies: {
     label: 'Aviso de cookies',
     message:
-      'Uso cookies de análise para entender como as pessoas navegam pelo site. Nada de anúncio.',
+      'Este site usa cookies para melhorar sua experiência e analisar o tráfego.',
     accept: 'Aceitar',
     decline: 'Recusar',
   },

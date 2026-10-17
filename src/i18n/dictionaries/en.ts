@@ -30,7 +30,7 @@ const en: typeof pt = {
   cookies: {
     label: 'Cookie notice',
     message:
-      'I use analytics cookies to understand how people move through the site. No ads.',
+      'This site uses cookies to improve your experience and analyze traffic.',
     accept: 'Accept',
     decline: 'Decline',
   },
