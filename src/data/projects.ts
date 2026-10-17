@@ -138,9 +138,9 @@ export const PROJECTS: Project[] = [
     tags: ['HTML', 'CSS', 'JavaScript', 'Vercel'],
     media: {
       frame: 'desktop',
-      src: '/cases/aluplex/capa.jpg',
+      src: '/cases/aluplex/capa.webp',
       video: '/cases/aluplex/scroll.mp4',
-      poster: '/cases/aluplex/poster.jpg',
+      poster: '/cases/aluplex/poster.webp',
       alt: {
         pt: 'Topo da landing da Aluplex, com uma fachada de vidro ao fundo',
         en: 'Top of the Aluplex landing page, with a glass façade behind it',
@@ -152,7 +152,7 @@ export const PROJECTS: Project[] = [
     ],
     gallery: [
       {
-        src: '/cases/aluplex/solucoes.jpg',
+        src: '/cases/aluplex/solucoes.webp',
         alt: {
           pt: 'Grade com as cinco soluções da Aluplex',
           en: "Grid with Aluplex's five solutions",
@@ -163,7 +163,7 @@ export const PROJECTS: Project[] = [
         },
       },
       {
-        src: '/cases/aluplex/obras.jpg',
+        src: '/cases/aluplex/obras.webp',
         alt: {
           pt: 'Carrossel de obras entregues, com a peça central colorida',
           en: 'Carousel of completed jobs, with the centre item in colour',
@@ -174,7 +174,7 @@ export const PROJECTS: Project[] = [
         },
       },
       {
-        src: '/cases/aluplex/numeros.jpg',
+        src: '/cases/aluplex/numeros.webp',
         alt: {
           pt: 'Seção de engenharia com os números da empresa',
           en: "Engineering section with the company's numbers",
@@ -185,7 +185,7 @@ export const PROJECTS: Project[] = [
         },
       },
       {
-        src: '/cases/aluplex/orcamento.jpg',
+        src: '/cases/aluplex/orcamento.webp',
         alt: {
           pt: 'Formulário de orçamento com escopo e faixa de investimento',
           en: 'Quote form with scope and budget range',
@@ -223,9 +223,9 @@ export const PROJECTS: Project[] = [
     tags: ['React', 'JavaScript', 'CSS', 'Vercel'],
     media: {
       frame: 'desktop',
-      src: '/cases/alucraft/capa.jpg',
+      src: '/cases/alucraft/capa.webp',
       video: '/cases/alucraft/scroll.mp4',
-      poster: '/cases/alucraft/poster.jpg',
+      poster: '/cases/alucraft/poster.webp',
       alt: {
         pt: 'Hero da Alucraft, com a fachada de um prédio ocupando a tela inteira',
         en: 'Alucraft hero, with a building façade filling the whole screen',
@@ -237,7 +237,7 @@ export const PROJECTS: Project[] = [
     ],
     gallery: [
       {
-        src: '/cases/alucraft/catalogo.jpg',
+        src: '/cases/alucraft/catalogo.webp',
         alt: {
           pt: 'Carrossel de produtos da Alucraft, com a peça central em destaque',
           en: 'Alucraft product carousel, with the centre item brought forward',
@@ -248,7 +248,7 @@ export const PROJECTS: Project[] = [
         },
       },
       {
-        src: '/cases/alucraft/garantias.jpg',
+        src: '/cases/alucraft/garantias.webp',
         alt: {
           pt: 'Seção com as três garantias da Alucraft',
           en: "Section with Alucraft's three guarantees",
@@ -259,7 +259,7 @@ export const PROJECTS: Project[] = [
         },
       },
       {
-        src: '/cases/alucraft/etapas.jpg',
+        src: '/cases/alucraft/etapas.webp',
         alt: {
           pt: 'As quatro etapas do processo e os depoimentos de clientes',
           en: 'The four stages of the process and the customer testimonials',
@@ -270,7 +270,7 @@ export const PROJECTS: Project[] = [
         },
       },
       {
-        src: '/cases/alucraft/orcamento.jpg',
+        src: '/cases/alucraft/orcamento.webp',
         alt: {
           pt: 'Formulário de orçamento da Alucraft',
           en: 'Alucraft quote form',
@@ -308,9 +308,9 @@ export const PROJECTS: Project[] = [
     tags: ['React', 'Vite', 'TypeScript', 'Vercel'],
     media: {
       frame: 'desktop',
-      src: '/cases/gostinho-mineiro/capa.jpg',
+      src: '/cases/gostinho-mineiro/capa.webp',
       video: '/cases/gostinho-mineiro/scroll.mp4',
-      poster: '/cases/gostinho-mineiro/poster.jpg',
+      poster: '/cases/gostinho-mineiro/poster.webp',
       alt: {
         pt: 'Topo do site da Gostinho Mineiro, com pães de queijo ao fundo',
         en: 'Top of the Gostinho Mineiro site, with cheese breads behind it',
@@ -322,7 +322,7 @@ export const PROJECTS: Project[] = [
     ],
     gallery: [
       {
-        src: '/cases/gostinho-mineiro/linha.jpg',
+        src: '/cases/gostinho-mineiro/linha.webp',
         alt: {
           pt: 'Página da linha de pães de queijo',
           en: 'Page for the cheese bread product line',
@@ -333,7 +333,7 @@ export const PROJECTS: Project[] = [
         },
       },
       {
-        src: '/cases/gostinho-mineiro/galeria.jpg',
+        src: '/cases/gostinho-mineiro/galeria.webp',
         alt: {
           pt: 'Galeria de fotos de produto sob a marca #GostinhoMineiro',
           en: 'Product photo gallery under the #GostinhoMineiro brand',
@@ -344,7 +344,7 @@ export const PROJECTS: Project[] = [
         },
       },
       {
-        src: '/cases/gostinho-mineiro/contato.jpg',
+        src: '/cases/gostinho-mineiro/contato.webp',
         alt: {
           pt: 'Formulário de atendimento comercial',
           en: 'Sales enquiry form',
@@ -355,7 +355,7 @@ export const PROJECTS: Project[] = [
         },
       },
       {
-        src: '/cases/gostinho-mineiro/onde.jpg',
+        src: '/cases/gostinho-mineiro/onde.webp',
         alt: {
           pt: 'Seção de localização com mapa e horário de atendimento',
           en: 'Location section with a map and opening hours',
@@ -393,9 +393,9 @@ export const PROJECTS: Project[] = [
     tags: ['Expo', 'React Native', 'TypeScript', 'Supabase'],
     media: {
       frame: 'desktop',
-      src: '/cases/habit-exe/capa.jpg',
+      src: '/cases/habit-exe/capa.webp',
       video: '/cases/habit-exe/scroll.mp4',
-      poster: '/cases/habit-exe/poster.jpg',
+      poster: '/cases/habit-exe/poster.webp',
       alt: {
         pt: 'Topo da landing do habit.exe, em verde sobre preto, com um terminal ao lado',
         en: 'Top of the habit.exe landing page, green on black, with a terminal beside it',
@@ -406,7 +406,7 @@ export const PROJECTS: Project[] = [
     ],
     gallery: [
       {
-        src: '/cases/habit-exe/features.jpg',
+        src: '/cases/habit-exe/features.webp',
         alt: {
           pt: 'Seção de mecânicas do habit.exe, com um checklist de hábitos ao lado',
           en: 'habit.exe mechanics section, with a habit checklist beside it',
@@ -417,7 +417,7 @@ export const PROJECTS: Project[] = [
         },
       },
       {
-        src: '/cases/habit-exe/comandos.jpg',
+        src: '/cases/habit-exe/comandos.webp',
         alt: {
           pt: 'Os três comandos do habit.exe escritos como linha de comando',
           en: "habit.exe's three commands written as a command line",
@@ -428,7 +428,7 @@ export const PROJECTS: Project[] = [
         },
       },
       {
-        src: '/cases/habit-exe/depoimentos.jpg',
+        src: '/cases/habit-exe/depoimentos.webp',
         alt: {
           pt: 'Depoimentos formatados como log do git',
           en: 'Testimonials formatted as a git log',
@@ -439,7 +439,7 @@ export const PROJECTS: Project[] = [
         },
       },
       {
-        src: '/cases/habit-exe/waitlist.jpg',
+        src: '/cases/habit-exe/waitlist.webp',
         alt: {
           pt: 'Formulário de lista de espera do habit.exe',
           en: 'habit.exe waiting list form',
@@ -477,9 +477,9 @@ export const PROJECTS: Project[] = [
     tags: ['React', 'TypeScript', 'Supabase', 'Tailwind'],
     media: {
       frame: 'desktop',
-      src: '/cases/delivery-gm/capa.jpg',
+      src: '/cases/delivery-gm/capa.webp',
       video: '/cases/delivery-gm/scroll.mp4',
-      poster: '/cases/delivery-gm/poster.jpg',
+      poster: '/cases/delivery-gm/poster.webp',
       alt: {
         pt: 'Topo do catálogo do delivery da Gostinho Mineiro, com os produtos em destaque',
         en: 'Top of the Gostinho Mineiro delivery catalog, with the featured products',
@@ -515,7 +515,7 @@ export const PROJECTS: Project[] = [
     },
     gallery: [
       {
-        src: '/cases/delivery-gm/combos.jpg',
+        src: '/cases/delivery-gm/combos.webp',
         alt: {
           pt: 'Combos prontos, busca e filtros por categoria no catálogo',
           en: 'Ready-made bundles, search and category filters in the catalog',
@@ -526,7 +526,7 @@ export const PROJECTS: Project[] = [
         },
       },
       {
-        src: '/cases/delivery-gm/carrinho.jpg',
+        src: '/cases/delivery-gm/carrinho.webp',
         alt: {
           pt: 'Carrinho aberto, com aviso de frete grátis atingido e o peso total',
           en: 'Open cart, showing free delivery unlocked and the total weight',
@@ -537,7 +537,7 @@ export const PROJECTS: Project[] = [
         },
       },
       {
-        src: '/cases/delivery-gm/preparo.jpg',
+        src: '/cases/delivery-gm/preparo.webp',
         alt: {
           pt: 'Página de modos de preparo, com vídeos por produto',
           en: 'Preparation guides page, with a video per product',
@@ -548,7 +548,7 @@ export const PROJECTS: Project[] = [
         },
       },
       {
-        src: '/cases/delivery-gm/admin.jpg',
+        src: '/cases/delivery-gm/admin.webp',
         alt: {
           pt: 'Painel de produtos do admin, com 187 itens cadastrados',
           en: 'Admin product panel, with 187 items registered',
@@ -559,7 +559,7 @@ export const PROJECTS: Project[] = [
         },
       },
       {
-        src: '/cases/delivery-gm/temas.jpg',
+        src: '/cases/delivery-gm/temas.webp',
         alt: {
           pt: 'Tela de temas do site, com opções sazonais',
           en: 'Site themes screen, with seasonal options',
@@ -570,7 +570,7 @@ export const PROJECTS: Project[] = [
         },
       },
       {
-        src: '/cases/delivery-gm/funil.jpg',
+        src: '/cases/delivery-gm/funil.webp',
         alt: {
           pt: 'Painel de recuperação de clientes, com o funil de saída por etapa',
           en: 'Customer recovery panel, with the drop-off funnel by stage',
@@ -612,9 +612,9 @@ export const PROJECTS: Project[] = [
          duas vezes, e reaproveitar o mesmo nome deixa o navegador servindo a
          imagem antiga, porque a URL não muda. Nome que descreve o conteúdo
          muda junto com ele. */
-      src: '/cases/catalogo-funcionarios/entrada.jpg',
+      src: '/cases/catalogo-funcionarios/entrada.webp',
       video: '/cases/catalogo-funcionarios/scroll.mp4',
-      poster: '/cases/catalogo-funcionarios/poster.jpg',
+      poster: '/cases/catalogo-funcionarios/poster.webp',
       alt: {
         pt: 'Tela de entrada do sistema, com as opções Sou Funcionário e Sou Cliente',
         en: 'System entry screen, with the options I am an Employee and I am a Customer',
@@ -650,7 +650,7 @@ export const PROJECTS: Project[] = [
     },
     gallery: [
       {
-        src: '/cases/catalogo-funcionarios/vitrine.jpg',
+        src: '/cases/catalogo-funcionarios/vitrine.webp',
         alt: {
           pt: 'Destaques do catálogo, com as fotos e os preços dos produtos em linha',
           en: 'Catalog highlights, with product photos and prices in a row',
@@ -661,7 +661,7 @@ export const PROJECTS: Project[] = [
         },
       },
       {
-        src: '/cases/catalogo-funcionarios/catalogo.jpg',
+        src: '/cases/catalogo-funcionarios/catalogo.webp',
         alt: {
           pt: 'Catálogo interno, com o saldo do funcionário no topo',
           en: "Internal catalog, with the employee's balance at the top",
@@ -672,7 +672,7 @@ export const PROJECTS: Project[] = [
         },
       },
       {
-        src: '/cases/catalogo-funcionarios/pedidos.jpg',
+        src: '/cases/catalogo-funcionarios/pedidos.webp',
         alt: {
           pt: 'Administração de pedidos, com a faixa de pedido liberado para hoje',
           en: 'Order administration, with the banner for an order released for today',
@@ -683,7 +683,7 @@ export const PROJECTS: Project[] = [
         },
       },
       {
-        src: '/cases/catalogo-funcionarios/relatorios.jpg',
+        src: '/cases/catalogo-funcionarios/relatorios.webp',
         alt: {
           pt: 'Relatório de pedidos, com faturamento, ticket médio e comparação entre meses',
           en: 'Order report, with revenue, average ticket and a month-to-month comparison',
@@ -694,7 +694,7 @@ export const PROJECTS: Project[] = [
         },
       },
       {
-        src: '/cases/catalogo-funcionarios/auditoria.jpg',
+        src: '/cases/catalogo-funcionarios/auditoria.webp',
         alt: {
           pt: 'Histórico operacional, com o registro das sincronizações',
           en: 'Operational history, with a record of every sync',
@@ -705,7 +705,7 @@ export const PROJECTS: Project[] = [
         },
       },
       {
-        src: '/cases/catalogo-funcionarios/painel.jpg',
+        src: '/cases/catalogo-funcionarios/painel.webp',
         alt: {
           pt: 'Painel de operação, com as ações de sincronizar, restaurar saldo e liberar pedido',
           en: 'Operations panel, with actions to sync, restore balance and release an order',
@@ -743,9 +743,9 @@ export const PROJECTS: Project[] = [
     tags: ['React', 'Vite', 'React Router', 'JavaScript'],
     media: {
       frame: 'desktop',
-      src: '/cases/marsbeer/capa.jpg',
+      src: '/cases/marsbeer/capa.webp',
       video: '/cases/marsbeer/scroll.mp4',
-      poster: '/cases/marsbeer/poster.jpg',
+      poster: '/cases/marsbeer/poster.webp',
       alt: {
         pt: 'Topo do site da MARS BEER, com três garrafas rotuladas ao lado do título',
         en: 'Top of the MARS BEER site, with three labelled bottles beside the headline',
@@ -759,7 +759,7 @@ export const PROJECTS: Project[] = [
     ],
     gallery: [
       {
-        src: '/cases/marsbeer/login.jpg',
+        src: '/cases/marsbeer/login.webp',
         alt: {
           pt: 'Tela de login dividida, com escolha entre Administrador e Cliente',
           en: 'Split login screen, choosing between Administrator and Customer',
@@ -770,7 +770,7 @@ export const PROJECTS: Project[] = [
         },
       },
       {
-        src: '/cases/marsbeer/loja.jpg',
+        src: '/cases/marsbeer/loja.webp',
         alt: {
           pt: 'Loja com as cervejas em cards e o resumo do pedido ao lado',
           en: 'Shop with the beers as cards and the order summary beside them',
@@ -781,7 +781,7 @@ export const PROJECTS: Project[] = [
         },
       },
       {
-        src: '/cases/marsbeer/crud.jpg',
+        src: '/cases/marsbeer/crud.webp',
         alt: {
           pt: 'Cadastro de cervejas, com busca e as ações de editar e excluir',
           en: 'Beer registry, with search and the edit and delete actions',
@@ -792,7 +792,7 @@ export const PROJECTS: Project[] = [
         },
       },
       {
-        src: '/cases/marsbeer/relatorio.jpg',
+        src: '/cases/marsbeer/relatorio.webp',
         alt: {
           pt: 'Relatório de pedidos cruzando cliente, cerveja, quantidade e total',
           en: 'Order report joining customer, beer, quantity and total',
@@ -830,9 +830,9 @@ export const PROJECTS: Project[] = [
     tags: ['React', 'TypeScript', 'Node', 'CIGAM'],
     media: {
       frame: 'desktop',
-      src: '/cases/pdv/capa.jpg',
+      src: '/cases/pdv/capa.webp',
       video: '/cases/pdv/scroll.mp4',
-      poster: '/cases/pdv/poster.jpg',
+      poster: '/cases/pdv/poster.webp',
       alt: {
         pt: 'Menu do PDV, com os atalhos de venda, totem, relatório e administração',
         en: 'POS menu, with shortcuts for sales, kiosk, reports and administration',
@@ -862,7 +862,7 @@ export const PROJECTS: Project[] = [
     },
     gallery: [
       {
-        src: '/cases/pdv/carrinho.jpg',
+        src: '/cases/pdv/carrinho.webp',
         alt: {
           pt: 'Carrinho do PDV, com busca de produto, tabelas de preço e os itens do pedido',
           en: 'POS cart, with product search, price tables and the order items',
@@ -873,7 +873,7 @@ export const PROJECTS: Project[] = [
         },
       },
       {
-        src: '/cases/pdv/pagamento.jpg',
+        src: '/cases/pdv/pagamento.webp',
         alt: {
           pt: 'Tela de pagamento, com a venda dividida entre duas entradas de valor',
           en: 'Payment screen, with the sale split across two amounts',
@@ -884,7 +884,7 @@ export const PROJECTS: Project[] = [
         },
       },
       {
-        src: '/cases/pdv/dashboard.jpg',
+        src: '/cases/pdv/dashboard.webp',
         alt: {
           pt: 'Painel administrativo com o total vendido no dia e os caixas abertos',
           en: 'Admin panel with the day total and the tills currently open',
@@ -895,7 +895,7 @@ export const PROJECTS: Project[] = [
         },
       },
       {
-        src: '/cases/pdv/impressoras.jpg',
+        src: '/cases/pdv/impressoras.webp',
         alt: {
           pt: 'Tela de impressoras, com uma entrada de endereço por impressora',
           en: 'Printers screen, with one address field per printer',
@@ -933,9 +933,9 @@ export const PROJECTS: Project[] = [
     tags: ['React', 'TypeScript', 'Supabase', 'styled-components'],
     media: {
       frame: 'desktop',
-      src: '/cases/evolua/capa.jpg',
+      src: '/cases/evolua/capa.webp',
       video: '/cases/evolua/scroll.mp4',
-      poster: '/cases/evolua/poster.jpg',
+      poster: '/cases/evolua/poster.webp',
       alt: {
         pt: 'Topo da landing do Evolua, com o título sobre o fluxo de cuidado',
         en: 'Top of the Evolua landing page, with the headline about care flow',
@@ -944,7 +944,7 @@ export const PROJECTS: Project[] = [
     links: [{ kind: 'github', href: 'https://github.com/WinistonAlle/Evolua' }],
     gallery: [
       {
-        src: '/cases/evolua/fluxo.jpg',
+        src: '/cases/evolua/fluxo.webp',
         alt: {
           pt: 'Seção com as três etapas do fluxo de atendimento',
           en: 'Section with the three stages of the care flow',
@@ -955,7 +955,7 @@ export const PROJECTS: Project[] = [
         },
       },
       {
-        src: '/cases/evolua/sobre.jpg',
+        src: '/cases/evolua/sobre.webp',
         alt: {
           pt: 'Seção sobre o sistema, com as listas do que ele serve e onde ajuda',
           en: 'About section, listing what the system is for and where it helps',
@@ -966,7 +966,7 @@ export const PROJECTS: Project[] = [
         },
       },
       {
-        src: '/cases/evolua/login.jpg',
+        src: '/cases/evolua/login.webp',
         alt: {
           pt: 'Tela de login do Evolua, dividida entre a marca e o formulário',
           en: 'Evolua login screen, split between the brand and the form',
@@ -1004,9 +1004,9 @@ export const PROJECTS: Project[] = [
     tags: ['React', 'TypeScript', 'Supabase', 'PWA'],
     media: {
       frame: 'totem',
-      src: '/cases/totem/capa.jpg',
+      src: '/cases/totem/capa.webp',
       video: '/cases/totem/scroll.mp4',
-      poster: '/cases/totem/poster.jpg',
+      poster: '/cases/totem/poster.webp',
       alt: {
         pt: 'Tela de abertura do totem, com a marca e o botão de começar',
         en: 'Kiosk welcome screen, with the brand and the start button',
@@ -1034,7 +1034,7 @@ export const PROJECTS: Project[] = [
     },
     gallery: [
       {
-        src: '/cases/totem/catalogo.jpg',
+        src: '/cases/totem/catalogo.webp',
         alt: {
           pt: 'Catálogo do totem, com as categorias na lateral e os produtos em grade',
           en: 'Kiosk catalog, with categories on the side and products in a grid',
@@ -1045,7 +1045,7 @@ export const PROJECTS: Project[] = [
         },
       },
       {
-        src: '/cases/totem/sacola.jpg',
+        src: '/cases/totem/sacola.webp',
         alt: {
           pt: 'Catálogo com a sacola mostrando itens e total na parte de baixo',
           en: 'Catalog with the bag showing items and total along the bottom',
@@ -1056,7 +1056,7 @@ export const PROJECTS: Project[] = [
         },
       },
       {
-        src: '/cases/totem/revisao.jpg',
+        src: '/cases/totem/revisao.webp',
         alt: {
           pt: 'Revisão do pedido, com itens, quantidades e total antes de confirmar',
           en: 'Order review, with items, quantities and total before confirming',
@@ -1094,9 +1094,9 @@ export const PROJECTS: Project[] = [
     tags: ['Next.js', 'TypeScript', 'three.js', 'Tailwind'],
     media: {
       frame: 'desktop',
-      src: '/cases/portfolio/home-v2.jpg',
+      src: '/cases/portfolio/home-v2.webp',
       video: '/cases/portfolio/tour-v2.mp4',
-      poster: '/cases/portfolio/poster-v2.jpg',
+      poster: '/cases/portfolio/poster-v2.webp',
       alt: {
         pt: 'Home do portfólio como uma área de trabalho de Mac, com barra de menu, widgets, ícones e o título Sistemas e sites que empresas usam todo dia',
         en: 'Portfolio home as a Mac desktop, with menu bar, widgets, icons and the headline Systems and sites that companies use every day',
@@ -1108,7 +1108,7 @@ export const PROJECTS: Project[] = [
     ],
     gallery: [
       {
-        src: '/cases/portfolio/abertura3d-v2.jpg',
+        src: '/cases/portfolio/abertura3d-v2.webp',
         alt: {
           pt: 'MacBook 3D fechado, de costas, com adesivos de tecnologia na tampa',
           en: 'Closed 3D MacBook seen from behind, technology stickers on the lid',
@@ -1119,7 +1119,7 @@ export const PROJECTS: Project[] = [
         },
       },
       {
-        src: '/cases/portfolio/abertura-tela-v2.jpg',
+        src: '/cases/portfolio/abertura-tela-v2.webp',
         alt: {
           pt: 'MacBook 3D aberto, de frente, com a home do portfólio aparecendo na tela dele',
           en: '3D MacBook open, facing the viewer, with the portfolio home showing on its screen',
@@ -1130,7 +1130,7 @@ export const PROJECTS: Project[] = [
         },
       },
       {
-        src: '/cases/portfolio/home-v2.jpg',
+        src: '/cases/portfolio/home-v2.webp',
         alt: {
           pt: 'Home do portfólio como área de trabalho de Mac, com widgets de foto e de total de sistemas, ícones de pasta e arquivo, e o Dock embaixo',
           en: 'Portfolio home as a Mac desktop, with photo and system-count widgets, folder and file icons, and the Dock at the bottom',
@@ -1141,7 +1141,7 @@ export const PROJECTS: Project[] = [
         },
       },
       {
-        src: '/cases/portfolio/iphone-v2.jpg',
+        src: '/cases/portfolio/iphone-v2.webp',
         alt: {
           pt: 'Três telas de celular lado a lado: um iPhone 3D de costas com o monograma WA, o mesmo iPhone de frente com a home na tela, e a home ocupando a tela inteira',
           en: 'Three phone screens side by side: a 3D iPhone seen from behind with the WA monogram, the same iPhone from the front with the home on its screen, and the home filling the whole screen',
@@ -1152,7 +1152,7 @@ export const PROJECTS: Project[] = [
         },
       },
       {
-        src: '/cases/portfolio/projetos-v2.jpg',
+        src: '/cases/portfolio/projetos-v2.webp',
         alt: {
           pt: 'Página de projetos, com filtros por grupo e uma grade de cards em três colunas',
           en: 'Projects page, with group filters and a three-column grid of cards',
@@ -1163,7 +1163,7 @@ export const PROJECTS: Project[] = [
         },
       },
       {
-        src: '/cases/portfolio/cracha-v2.jpg',
+        src: '/cases/portfolio/cracha-v2.webp',
         alt: {
           pt: 'Página sobre mim, com um crachá pendurado num cordão ao lado do texto',
           en: 'About me page, with a badge hanging from a lanyard beside the text',
@@ -1174,7 +1174,7 @@ export const PROJECTS: Project[] = [
         },
       },
       {
-        src: '/cases/portfolio/stack-v2.jpg',
+        src: '/cases/portfolio/stack-v2.webp',
         alt: {
           pt: 'Mapa da stack, com as ferramentas em leques ligados por linhas ao monograma WA no centro',
           en: 'Stack map, with tools in fans connected by lines to the WA monogram in the centre',
@@ -1185,7 +1185,7 @@ export const PROJECTS: Project[] = [
         },
       },
       {
-        src: '/cases/portfolio/contato-v2.jpg',
+        src: '/cases/portfolio/contato-v2.webp',
         alt: {
           pt: 'Página de contato, com os canais em blocos isométricos e um formulário curto embaixo',
           en: 'Contact page, with channels as isometric blocks and a short form below',
@@ -1229,9 +1229,9 @@ export const PROJECTS: Project[] = [
     tags: ['React', 'Recharts', 'Python', 'Vite'],
     media: {
       frame: 'desktop',
-      src: '/cases/dashboard/resumo.jpg',
+      src: '/cases/dashboard/resumo.webp',
       video: '/cases/dashboard/scroll.mp4',
-      poster: '/cases/dashboard/poster.jpg',
+      poster: '/cases/dashboard/poster.webp',
       alt: {
         pt: 'Resumo executivo do painel, com indicadores do período e a evolução do faturamento (dados fictícios)',
         en: 'Executive summary of the dashboard, with period indicators and revenue over time (fictitious data)',
@@ -1239,7 +1239,7 @@ export const PROJECTS: Project[] = [
     },
     gallery: [
       {
-        src: '/cases/dashboard/detalhe.jpg',
+        src: '/cases/dashboard/detalhe.webp',
         alt: {
           pt: 'Painel lateral com o detalhamento de um mês: indicadores, participação por empresa e produtos (dados fictícios)',
           en: 'Side panel detailing one month: indicators, share per company and products (fictitious data)',
@@ -1250,7 +1250,7 @@ export const PROJECTS: Project[] = [
         },
       },
       {
-        src: '/cases/dashboard/heatmap.jpg',
+        src: '/cases/dashboard/heatmap.webp',
         alt: {
           pt: 'Mapa de calor de clientes por mês, com as 18 análises comparativas acima (dados fictícios)',
           en: 'Heatmap of clients by month, with the 18 comparative analyses above (fictitious data)',
@@ -1261,7 +1261,7 @@ export const PROJECTS: Project[] = [
         },
       },
       {
-        src: '/cases/dashboard/ano.jpg',
+        src: '/cases/dashboard/ano.webp',
         alt: {
           pt: 'Comparação ano contra ano, com faturamento, pedidos, clientes e ticket lado a lado (dados fictícios)',
           en: 'Year against year comparison, with revenue, orders, clients and ticket side by side (fictitious data)',
@@ -1272,7 +1272,7 @@ export const PROJECTS: Project[] = [
         },
       },
       {
-        src: '/cases/dashboard/tabela.jpg',
+        src: '/cases/dashboard/tabela.webp',
         alt: {
           pt: 'Tabela de dados brutos, mês a mês, ordenada por faturamento (dados fictícios)',
           en: 'Raw data table, month by month, sorted by revenue (fictitious data)',
@@ -1312,9 +1312,9 @@ export const PROJECTS: Project[] = [
     tags: ['Next.js', 'TypeScript', 'three.js', 'GSAP'],
     media: {
       frame: 'desktop',
-      src: '/cases/lua-de-mel/capa.jpg',
+      src: '/cases/lua-de-mel/capa.webp',
       video: '/cases/lua-de-mel/scroll.mp4',
-      poster: '/cases/lua-de-mel/poster.jpg',
+      poster: '/cases/lua-de-mel/poster.webp',
       alt: {
         pt: 'Abertura do capítulo de Madri, com o globo girando até a Espanha ao lado do título',
         en: 'Opening of the Madrid chapter, with the globe turning to Spain beside the title',
@@ -1348,7 +1348,7 @@ export const PROJECTS: Project[] = [
     },
     gallery: [
       {
-        src: '/cases/lua-de-mel/abertura.jpg',
+        src: '/cases/lua-de-mel/abertura.webp',
         alt: {
           pt: 'Abertura do site, com o contador de dias em cima e a carta amassada como uma bola de papel',
           en: 'Site opening, with the day counter above and the letter crumpled into a ball of paper',
@@ -1359,7 +1359,7 @@ export const PROJECTS: Project[] = [
         },
       },
       {
-        src: '/cases/lua-de-mel/transito.jpg',
+        src: '/cases/lua-de-mel/transito.webp',
         alt: {
           pt: 'Dia de voo, com o bilhete de embarque de Brasília para Madri e o roteiro da partida ao lado',
           en: 'Flight day, with the boarding pass from Brasília to Madrid and the departure plan beside it',
@@ -1370,7 +1370,7 @@ export const PROJECTS: Project[] = [
         },
       },
       {
-        src: '/cases/lua-de-mel/toquio.jpg',
+        src: '/cases/lua-de-mel/toquio.webp',
         alt: {
           pt: 'Cartão de um dia em Tóquio, dividido em fim de tarde e noite, com um selo de falta reservar e um plano B',
           en: 'Card for a day in Tokyo, split into late afternoon and night, with a still to book tag and a plan B',
@@ -1381,7 +1381,7 @@ export const PROJECTS: Project[] = [
         },
       },
       {
-        src: '/cases/lua-de-mel/busca.jpg',
+        src: '/cases/lua-de-mel/busca.webp',
         alt: {
           pt: 'Busca aberta sobre o site, com as cidades da viagem e a contagem de dias que faltam',
           en: 'Search open over the site, with the cities of the trip and the countdown of days left',
@@ -1421,9 +1421,9 @@ export const PROJECTS: Project[] = [
     tags: ['Next.js', 'Expo', 'TypeScript', 'Supabase'],
     media: {
       frame: 'desktop',
-      src: '/cases/kings-table/capa.jpg',
+      src: '/cases/kings-table/capa.webp',
       video: '/cases/kings-table/scroll.mp4',
-      poster: '/cases/kings-table/poster.jpg',
+      poster: '/cases/kings-table/poster.webp',
       alt: {
         pt: "Topo da landing do King’s Table, com uma maleta de fichas de poker aberta ao fundo",
         en: "Top of the King’s Table landing page, with an open poker chip case behind it",
@@ -1460,7 +1460,7 @@ export const PROJECTS: Project[] = [
     },
     gallery: [
       {
-        src: '/cases/kings-table/manifesto.jpg',
+        src: '/cases/kings-table/manifesto.webp',
         alt: {
           pt: 'Manifesto do produto ao lado da ficha de poker em 3D',
           en: 'Product manifesto beside the 3D poker chip',
@@ -1471,7 +1471,7 @@ export const PROJECTS: Project[] = [
         },
       },
       {
-        src: '/cases/kings-table/areas.jpg',
+        src: '/cases/kings-table/areas.webp',
         alt: {
           pt: 'Navegador de funcionalidades, com as oito áreas do produto na lateral',
           en: 'Feature explorer, with the product’s eight areas down the side',
@@ -1482,7 +1482,7 @@ export const PROJECTS: Project[] = [
         },
       },
       {
-        src: '/cases/kings-table/chip.jpg',
+        src: '/cases/kings-table/chip.webp',
         alt: {
           pt: 'Ficha de poker em 3D ao lado da lista de áreas em perspectiva',
           en: '3D poker chip beside the list of areas in perspective',
@@ -1493,7 +1493,7 @@ export const PROJECTS: Project[] = [
         },
       },
       {
-        src: '/cases/kings-table/noites.jpg',
+        src: '/cases/kings-table/noites.webp',
         alt: {
           pt: 'Mosaico de fotos de noites de poker entre amigos',
           en: 'Mosaic of photos of poker nights among friends',
@@ -1504,7 +1504,7 @@ export const PROJECTS: Project[] = [
         },
       },
       {
-        src: '/cases/kings-table/mesa.jpg',
+        src: '/cases/kings-table/mesa.webp',
         alt: {
           pt: 'Chamada final sobre uma mesa de poker vista de cima',
           en: 'Closing call to action over a poker table seen from above',
@@ -1544,9 +1544,9 @@ export const PROJECTS: Project[] = [
     tags: ['Astro', 'TypeScript', 'GSAP', 'WebGL'],
     media: {
       frame: 'desktop',
-      src: '/cases/coro-hub/capa.jpg',
+      src: '/cases/coro-hub/capa.webp',
       video: '/cases/coro-hub/scroll.mp4',
-      poster: '/cases/coro-hub/poster.jpg',
+      poster: '/cases/coro-hub/poster.webp',
       alt: {
         pt: 'Hero da Coro Hub, com o título Automatize o que importa e uma conversa de WhatsApp com o agente de IA ao lado',
         en: 'Coro Hub hero, with the headline Automate what matters and a WhatsApp chat with the AI agent beside it',
@@ -1577,7 +1577,7 @@ export const PROJECTS: Project[] = [
     },
     gallery: [
       {
-        src: '/cases/coro-hub/servicos.jpg',
+        src: '/cases/coro-hub/servicos.webp',
         alt: {
           pt: 'Serviços em dois blocos, Aquisição e Operação, com o caminho do cliente em cinco passos embaixo',
           en: 'Services in two blocks, Acquisition and Operations, with the customer path in five steps below',
@@ -1588,7 +1588,7 @@ export const PROJECTS: Project[] = [
         },
       },
       {
-        src: '/cases/coro-hub/metodo.jpg',
+        src: '/cases/coro-hub/metodo.webp',
         alt: {
           pt: 'Método CORO, com as letras C, O, R e O grandes sobre as quatro etapas',
           en: 'CORO Method, with the large letters C, O, R and O above the four steps',
@@ -1599,7 +1599,7 @@ export const PROJECTS: Project[] = [
         },
       },
       {
-        src: '/cases/coro-hub/exemplos.jpg',
+        src: '/cases/coro-hub/exemplos.webp',
         alt: {
           pt: 'Cartão de exemplo em tela cheia, com o Antes apagado à esquerda e o Depois em letra grande à direita',
           en: 'Full screen example card, with the Before faded on the left and the After in large type on the right',
@@ -1610,7 +1610,7 @@ export const PROJECTS: Project[] = [
         },
       },
       {
-        src: '/cases/coro-hub/chamada.jpg',
+        src: '/cases/coro-hub/chamada.webp',
         alt: {
           pt: 'Chamada final com o símbolo da Coro Hub e a pergunta sobre qual processo tirar das costas da equipe',
           en: 'Closing call to action with the Coro Hub symbol and the question about which process to take off the team',
@@ -1650,9 +1650,9 @@ export const PROJECTS: Project[] = [
     tags: ['Next.js', 'TypeScript', 'Supabase', 'Groq'],
     media: {
       frame: 'desktop',
-      src: '/cases/estudai/capa.jpg',
+      src: '/cases/estudai/capa.webp',
       video: '/cases/estudai/scroll.mp4',
-      poster: '/cases/estudai/poster.jpg',
+      poster: '/cases/estudai/poster.webp',
       alt: {
         pt: 'Hero do Estud.AI, com o título Pare de reler, comece a lembrar sobre um fundo violeta em lâminas',
         en: 'Estud.AI hero, with the headline Stop rereading, start remembering over a slatted violet background',
@@ -1683,7 +1683,7 @@ export const PROJECTS: Project[] = [
     },
     gallery: [
       {
-        src: '/cases/estudai/livro.jpg',
+        src: '/cases/estudai/livro.webp',
         alt: {
           pt: 'Livro aberto com o resumo grifado de amarelo, um plano de estudo riscado e a curva do esquecimento',
           en: 'Open book with the summary highlighted in yellow, a crossed out study plan and the forgetting curve',
@@ -1694,7 +1694,7 @@ export const PROJECTS: Project[] = [
         },
       },
       {
-        src: '/cases/estudai/recursos.jpg',
+        src: '/cases/estudai/recursos.webp',
         alt: {
           pt: 'Grade de recursos com o texto de um PDF virando cards, uma revisão em andamento, um pomodoro e o chat do tutor',
           en: 'Feature grid with the text of a PDF turning into cards, a review in progress, a pomodoro timer and the tutor chat',
@@ -1705,7 +1705,7 @@ export const PROJECTS: Project[] = [
         },
       },
       {
-        src: '/cases/estudai/publico.jpg',
+        src: '/cases/estudai/publico.webp',
         alt: {
           pt: 'Aba Concurseiros, com a cobertura do edital por disciplina e um card de lei seca com lacuna',
           en: 'Civil service exam tab, with syllabus coverage by subject and a fill in the blank law card',
@@ -1716,7 +1716,7 @@ export const PROJECTS: Project[] = [
         },
       },
       {
-        src: '/cases/estudai/planos.jpg',
+        src: '/cases/estudai/planos.webp',
         alt: {
           pt: 'Planos Plus e Pro, com a linha do tempo do teste grátis e uma régua de quantos PDFs a pessoa quer transformar por mês',
           en: 'Plus and Pro plans, with the free trial timeline and a slider for how many PDFs you want to turn into cards each month',
@@ -1727,7 +1727,7 @@ export const PROJECTS: Project[] = [
         },
       },
       {
-        src: '/cases/estudai/chamada.jpg',
+        src: '/cases/estudai/chamada.webp',
         alt: {
           pt: 'Chamada final com a frase Pare de reler, comece a lembrar e um card perguntando qual organela produz ATP',
           en: 'Closing call to action with the line Stop rereading, start remembering and a card asking which organelle produces ATP',
@@ -1738,7 +1738,7 @@ export const PROJECTS: Project[] = [
         },
       },
       {
-        src: '/cases/estudai/login.jpg',
+        src: '/cases/estudai/login.webp',
         alt: {
           pt: 'Tela de entrar desenhada como um caderno aberto, com boas vindas na página da esquerda e o formulário na da direita',
           en: 'Sign in screen drawn as an open notebook, with a welcome on the left page and the form on the right',
@@ -1778,9 +1778,9 @@ export const PROJECTS: Project[] = [
     tags: ['Next.js', 'TypeScript', 'Supabase', 'Mercado Pago'],
     media: {
       frame: 'desktop',
-      src: '/cases/chega-ai/capa.jpg',
+      src: '/cases/chega-ai/capa.webp',
       video: '/cases/chega-ai/scroll.mp4',
-      poster: '/cases/chega-ai/poster.jpg',
+      poster: '/cases/chega-ai/poster.webp',
       alt: {
         pt: 'Hero do Chega Aí, com o título O convite que fala e um celular mostrando um convite de casamento com áudio',
         en: 'Chega Aí hero, with the headline The invitation that talks and a phone showing a wedding invitation with audio',
@@ -1810,7 +1810,7 @@ export const PROJECTS: Project[] = [
     },
     gallery: [
       {
-        src: '/cases/chega-ai/como-funciona.jpg',
+        src: '/cases/chega-ai/como-funciona.webp',
         alt: {
           pt: 'Três cartões: escolher a festa e o tema, gravar as respostas e mandar o link',
           en: 'Three cards: pick the party and theme, record the answers and send the link',
@@ -1821,7 +1821,7 @@ export const PROJECTS: Project[] = [
         },
       },
       {
-        src: '/cases/chega-ai/recursos.jpg',
+        src: '/cases/chega-ai/recursos.webp',
         alt: {
           pt: 'Seção escura com os recursos: confirmação de presença, presentes, mural, check-in e artes',
           en: 'Dark section with the features: RSVP, gifts, guestbook, check-in and artwork',
@@ -1832,7 +1832,7 @@ export const PROJECTS: Project[] = [
         },
       },
       {
-        src: '/cases/chega-ai/precos.jpg',
+        src: '/cases/chega-ai/precos.webp',
         alt: {
           pt: 'Planos grátis e completo, com abas para festa infantil, aniversário e casamento',
           en: 'Free and full plans, with tabs for kids party, birthday and wedding',
@@ -1843,7 +1843,7 @@ export const PROJECTS: Project[] = [
         },
       },
       {
-        src: '/cases/chega-ai/buffets.jpg',
+        src: '/cases/chega-ai/buffets.webp',
         alt: {
           pt: 'Seção laranja para buffets, com um convite no endereço próprio do buffet',
           en: 'Orange section for party venues, with an invitation on the venue’s own address',
@@ -1854,7 +1854,7 @@ export const PROJECTS: Project[] = [
         },
       },
       {
-        src: '/cases/chega-ai/perguntas.jpg',
+        src: '/cases/chega-ai/perguntas.webp',
         alt: {
           pt: 'Perguntas frequentes à direita, com o título Ficou alguma dúvida? à esquerda',
           en: 'Frequently asked questions on the right, with the headline Any questions? on the left',
@@ -1865,7 +1865,7 @@ export const PROJECTS: Project[] = [
         },
       },
       {
-        src: '/cases/chega-ai/chamada.jpg',
+        src: '/cases/chega-ai/chamada.webp',
         alt: {
           pt: 'Chamada final com o título Bora fazer o convite que todo mundo vai querer ouvir',
           en: 'Closing call to action with the headline Let’s make the invitation everyone will want to hear',
@@ -1905,9 +1905,9 @@ export const PROJECTS: Project[] = [
     tags: ['Next.js', 'TypeScript', 'Supabase', 'Tailwind CSS'],
     media: {
       frame: 'desktop',
-      src: '/cases/onboarding-clientes/capa.jpg',
+      src: '/cases/onboarding-clientes/capa.webp',
       video: '/cases/onboarding-clientes/scroll.mp4',
-      poster: '/cases/onboarding-clientes/poster.jpg',
+      poster: '/cases/onboarding-clientes/poster.webp',
       alt: {
         pt: 'Quadro com quatro colunas, de Link enviado a Projeto iniciado, e um cartão por cliente com progresso e selos',
         en: 'Board with four columns, from Link sent to Project started, and one card per client with progress and badges',
@@ -1937,7 +1937,7 @@ export const PROJECTS: Project[] = [
     },
     gallery: [
       {
-        src: '/cases/onboarding-clientes/formulario.jpg',
+        src: '/cases/onboarding-clientes/formulario.webp',
         alt: {
           pt: 'Primeira etapa do formulário, Serviço, com a lista das 11 etapas à esquerda e as respostas preenchidas',
           en: 'First step of the form, Service, with the list of 11 steps on the left and the answers filled in',
@@ -1948,7 +1948,7 @@ export const PROJECTS: Project[] = [
         },
       },
       {
-        src: '/cases/onboarding-clientes/identidade.jpg',
+        src: '/cases/onboarding-clientes/identidade.webp',
         alt: {
           pt: 'Etapa de identidade visual com a opção Tenho parcialmente marcada e um aviso logo abaixo',
           en: 'Visual identity step with the option I have part of it selected and a note right below',
@@ -1959,7 +1959,7 @@ export const PROJECTS: Project[] = [
         },
       },
       {
-        src: '/cases/onboarding-clientes/fotos.jpg',
+        src: '/cases/onboarding-clientes/fotos.webp',
         alt: {
           pt: 'Última etapa, Fotos, com a área de envio e as miniaturas das fotos já enviadas',
           en: 'Last step, Photos, with the upload area and thumbnails of the photos already sent',
@@ -1970,7 +1970,7 @@ export const PROJECTS: Project[] = [
         },
       },
       {
-        src: '/cases/onboarding-clientes/sucesso.jpg',
+        src: '/cases/onboarding-clientes/sucesso.webp',
         alt: {
           pt: 'Tela final com o título Tudo certo e o botão Avisar o Winiston no WhatsApp',
           en: 'Final screen with the headline All set and the button Let Winiston know on WhatsApp',
@@ -1981,7 +1981,7 @@ export const PROJECTS: Project[] = [
         },
       },
       {
-        src: '/cases/onboarding-clientes/detalhe.jpg',
+        src: '/cases/onboarding-clientes/detalhe.webp',
         alt: {
           pt: 'Página de um cliente no painel, com as respostas por seção, anotações internas e as ações do link',
           en: 'A client page in the dashboard, with answers by section, internal notes and the link actions',
@@ -1992,7 +1992,7 @@ export const PROJECTS: Project[] = [
         },
       },
       {
-        src: '/cases/onboarding-clientes/arquivos.jpg',
+        src: '/cases/onboarding-clientes/arquivos.webp',
         alt: {
           pt: 'Arquivos do cliente agrupados em Fotos e Identidade visual, com miniaturas e botão de baixar tudo',
           en: 'Client files grouped into Photos and Visual identity, with thumbnails and a download all button',
@@ -2032,9 +2032,9 @@ export const PROJECTS: Project[] = [
     tags: ['Astro', 'TypeScript', 'Canvas', 'Vercel'],
     media: {
       frame: 'desktop',
-      src: '/cases/dr-alipio/capa-v3.jpg',
+      src: '/cases/dr-alipio/capa-v3.webp',
       video: '/cases/dr-alipio/scroll-v2.mp4',
-      poster: '/cases/dr-alipio/poster-v2.jpg',
+      poster: '/cases/dr-alipio/poster-v2.webp',
       alt: {
         pt: 'Primeira tela do site: um cartão azul escuro com o nome do médico, o título Sua vida segue em frente, mas você não está bem, o botão Agendar consulta e a foto dele de braços cruzados saindo pela borda do cartão',
         en: 'First screen of the site: a dark blue card with the physician’s name, the headline Your life keeps moving, but you are not well, the booking button and his photo with arms crossed breaking out of the card’s edge',
@@ -2067,7 +2067,7 @@ export const PROJECTS: Project[] = [
     },
     gallery: [
       {
-        src: '/cases/dr-alipio/abertura-v2.jpg',
+        src: '/cases/dr-alipio/abertura-v2.webp',
         alt: {
           pt: 'Tela clara com o símbolo AV, o nome Dr Alípio Vigolvino e a linha Médico, Saúde Mental no centro',
           en: 'Light screen with the AV symbol, the name Dr Alípio Vigolvino and the line Physician, Mental Health in the centre',
@@ -2078,7 +2078,7 @@ export const PROJECTS: Project[] = [
         },
       },
       {
-        src: '/cases/dr-alipio/sinais-v2.jpg',
+        src: '/cases/dr-alipio/sinais-v2.webp',
         alt: {
           pt: 'Dobra escura com o título Tudo parece exigir mais esforço do que deveria e quatro cards',
           en: 'Dark section with the headline Does everything seem to take more effort than it should and four cards',
@@ -2089,7 +2089,7 @@ export const PROJECTS: Project[] = [
         },
       },
       {
-        src: '/cases/dr-alipio/causas-v2.jpg',
+        src: '/cases/dr-alipio/causas-v2.webp',
         alt: {
           pt: 'Seção Sintomas parecidos podem ter causas diferentes, com quatro causas ligadas por linhas a falta de foco',
           en: 'Section Similar symptoms can have different causes, with four causes linked by lines to lack of focus',
@@ -2100,7 +2100,7 @@ export const PROJECTS: Project[] = [
         },
       },
       {
-        src: '/cases/dr-alipio/acompanhamento-v2.jpg',
+        src: '/cases/dr-alipio/acompanhamento-v2.webp',
         alt: {
           pt: 'Seção de acompanhamento com quatro itens em duas colunas e o botão Agendar consulta',
           en: 'Follow-up section with four items in two columns and the Book an appointment button',
@@ -2111,7 +2111,7 @@ export const PROJECTS: Project[] = [
         },
       },
       {
-        src: '/cases/dr-alipio/passos-v2.jpg',
+        src: '/cases/dr-alipio/passos-v2.webp',
         alt: {
           pt: 'Cinco passos numerados lado a lado, com os passos três e quatro no centro da tela',
           en: 'Five numbered steps side by side, with steps three and four in the centre of the screen',
@@ -2122,7 +2122,7 @@ export const PROJECTS: Project[] = [
         },
       },
       {
-        src: '/cases/dr-alipio/video-abrindo-v2.jpg',
+        src: '/cases/dr-alipio/video-abrindo-v2.webp',
         alt: {
           pt: 'Janela no centro da tela com o médico escrevendo e o título Quem vai te atender por cima',
           en: 'Window in the centre of the screen with the physician writing and the headline Who will see you over it',
@@ -2133,7 +2133,7 @@ export const PROJECTS: Project[] = [
         },
       },
       {
-        src: '/cases/dr-alipio/video-v2.jpg',
+        src: '/cases/dr-alipio/video-v2.webp',
         alt: {
           pt: 'Vídeo em tela cheia com o médico olhando para a câmera e a frase Ouvir antes de classificar',
           en: 'Full screen video with the physician looking at the camera and the line Listen before labelling',
@@ -2144,7 +2144,7 @@ export const PROJECTS: Project[] = [
         },
       },
       {
-        src: '/cases/dr-alipio/quem-v2.jpg',
+        src: '/cases/dr-alipio/quem-v2.webp',
         alt: {
           pt: 'Retrato do médico ao lado do texto de apresentação e das credenciais',
           en: 'Portrait of the physician next to the introduction text and credentials',
@@ -2155,7 +2155,7 @@ export const PROJECTS: Project[] = [
         },
       },
       {
-        src: '/cases/dr-alipio/interna-v2.jpg',
+        src: '/cases/dr-alipio/interna-v2.webp',
         alt: {
           pt: 'Abertura da página de Ansiedade, com o título Seu corpo está cansado, mas a cabeça não desliga',
           en: 'Top of the Anxiety page, with the headline Your body is tired, but your head will not switch off',
@@ -2193,9 +2193,9 @@ export const PROJECTS: Project[] = [
     tags: ['React', 'TypeScript', 'Three.js', 'Node', 'SQLite'],
     media: {
       frame: 'desktop',
-      src: '/cases/painel-tv/capa.jpg',
+      src: '/cases/painel-tv/capa.webp',
       video: '/cases/painel-tv/tour.mp4',
-      poster: '/cases/painel-tv/poster.jpg',
+      poster: '/cases/painel-tv/poster.webp',
       alt: {
         pt: 'Escritório em 3D visto de cima, com um boneco por sistema e o mostrador do servidor no canto',
         en: '3D office seen from above, with one character per system and the server gauge in the corner',
@@ -2227,7 +2227,7 @@ export const PROJECTS: Project[] = [
     },
     gallery: [
       {
-        src: '/cases/painel-tv/ficha.jpg',
+        src: '/cases/painel-tv/ficha.webp',
         alt: {
           pt: 'Câmera aproximada numa sala, com a ficha do sistema aberta ao lado',
           en: 'Camera zoomed into one room, with the system sheet open beside it',
@@ -2238,7 +2238,7 @@ export const PROJECTS: Project[] = [
         },
       },
       {
-        src: '/cases/painel-tv/queda.jpg',
+        src: '/cases/painel-tv/queda.webp',
         alt: {
           pt: 'Sala com o chão vermelho, um boneco caído e outro ajoelhado ao lado, sob uma faixa de alerta',
           en: 'Room with a red floor, one character on the ground and another kneeling beside it, under an alert banner',
@@ -2249,7 +2249,7 @@ export const PROJECTS: Project[] = [
         },
       },
       {
-        src: '/cases/painel-tv/espera.jpg',
+        src: '/cases/painel-tv/espera.webp',
         alt: {
           pt: 'Vários bonecos parados na beira das salas com crachá cinza, e um caído na rua',
           en: 'Several characters standing at the edge of their rooms with grey badges, and one down in the street',
@@ -2260,7 +2260,7 @@ export const PROJECTS: Project[] = [
         },
       },
       {
-        src: '/cases/painel-tv/cartoes.jpg',
+        src: '/cases/painel-tv/cartoes.webp',
         alt: {
           pt: 'Oito cartões com as checagens de cada sistema, um deles vermelho, sob uma faixa de alerta',
           en: 'Eight cards with the checks for each system, one of them red, under an alert banner',
@@ -2271,7 +2271,7 @@ export const PROJECTS: Project[] = [
         },
       },
       {
-        src: '/cases/painel-tv/cafe.jpg',
+        src: '/cases/painel-tv/cafe.webp',
         alt: {
           pt: 'Bonecos reunidos em volta de uma mesa pequena no pátio, com balões de fala',
           en: 'Characters gathered around a small table in the yard, with speech bubbles',

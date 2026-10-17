@@ -14,20 +14,46 @@
  *    viraria custo fixo. O import dinâmico dentro da função é o ponto todo.
  */
 
+import { aoCenaPronta } from '@/components/background/abertura';
+
 let jaFoi = false;
 
+/* 3. Só onde o crachá 3D existe. Abaixo de 1024px o Sobre mim mostra o
+ *    cartão em imagem (CrachaCartao), e aquecer era baixar 2,2 MB de física
+ *    (rapier, WASM embutido no JS) que o celular nunca ia usar.
+ * 4. Nem com economia de dados ou rede lenta.
+ * 5. requestIdleCallback sozinho não basta: o navegador considera o
+ *    carregamento "ocioso" e disparava no meio da abertura. Agora espera a
+ *    cena 3D pintar e mais uns segundos antes de pedir a ociosidade. */
+function vale() {
+  if (!window.matchMedia('(min-width: 1024px)').matches) return false;
+  const rede = (navigator as Navigator & {
+    connection?: { saveData?: boolean; effectiveType?: string };
+  }).connection;
+  if (rede?.saveData) return false;
+  if (rede?.effectiveType && /(^|-)(2g|3g)$/.test(rede.effectiveType)) return false;
+  return true;
+}
+
 export function aquecerCracha() {
-  if (jaFoi || typeof window === 'undefined') return;
+  if (jaFoi || typeof window === 'undefined' || !vale()) return;
   jaFoi = true;
 
   const ocioso =
     window.requestIdleCallback ??
     ((fn: () => void) => window.setTimeout(fn, 2000));
 
-  ocioso(() => {
-    /* Baixa em prioridade baixa: se a pessoa nunca for pra "sobre mim", isto
-       não pode ter atrapalhado nada no caminho. */
-    fetch('/card.glb', { priority: 'low' } as RequestInit).catch(() => {});
-    import('./Lanyard').catch(() => {});
+  aoCenaPronta(() => {
+    window.setTimeout(() => {
+      ocioso(
+        () => {
+          /* Baixa em prioridade baixa: se a pessoa nunca for pra "sobre mim",
+             isto não pode ter atrapalhado nada no caminho. */
+          fetch('/card.glb', { priority: 'low' } as RequestInit).catch(() => {});
+          import('./Lanyard').catch(() => {});
+        },
+        { timeout: 8000 },
+      );
+    }, 4000);
   });
 }

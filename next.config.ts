@@ -29,7 +29,7 @@ const nextConfig: NextConfig = {
   async headers() {
     return [
       {
-        source: '/:arquivo(card.glb|badge-front.png|badge-back-v2.png|lanyard-band.png)',
+        source: '/:arquivo(card.glb|badge-front.webp|badge-front-claro.webp|badge-back-v2.webp|badge-back-claro.webp|lanyard-band.png)',
         headers: [
           {
             key: 'Cache-Control',

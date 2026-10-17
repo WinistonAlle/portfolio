@@ -45,7 +45,7 @@ import {
 } from './icones';
 import './mesa.css';
 
-const FOTO = '/winiston-hero.png';
+const FOTO = '/winiston-hero.webp';
 
 type Nav = { about: string; projects: string; contact: string };
 

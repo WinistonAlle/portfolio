@@ -1,6 +1,5 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
-import { preload } from 'react-dom';
 import CrachaCartao from '@/components/lanyard/CrachaCartao';
 import LanyardBadge from '@/components/lanyard/LanyardBadge';
 import StackPreguicoso from '@/components/home/secoes/StackPreguicoso';
@@ -19,10 +18,19 @@ import { CURRICULO_PDF } from '@/config/site';
 
 /* O modelo do crachá só era pedido depois que o chunk do three baixava,
    parseava e montava — mais de um segundo depois do HTML, atrás de tudo que o
-   navegador já tinha na fila. Pedindo aqui, ele começa junto com a página. */
-function preloadCracha() {
-  preload('/card.glb', { as: 'fetch', crossOrigin: 'anonymous' });
-}
+   navegador já tinha na fila. Pedindo no <head>, ele começa junto com a
+   página. Só em tela de 1024px ou mais (media): abaixo disso o crachá é o
+   cartão em imagem (CrachaCartao) e o modelo seria 177 KB jogados fora no
+   celular. O React 19 sobe este <link> pro <head> sozinho. */
+const PRELOAD_CRACHA = (
+  <link
+    rel="preload"
+    href="/card.glb"
+    as="fetch"
+    crossOrigin="anonymous"
+    media="(min-width: 1024px)"
+  />
+);
 
 export async function generateMetadata(
   props: PageProps<'/[lang]/sobre-mim'>,
@@ -50,12 +58,12 @@ export default async function SobreMimPage(
   const { lang } = await props.params;
   if (!isLocale(lang)) notFound();
 
-  preloadCracha();
 
   const dict = await getDictionary(lang);
 
   return (
     <main className="relative z-10 flex-1">
+      {PRELOAD_CRACHA}
       {/* id="topo": o header usa isso pra saber que essa página tem um bloco
           de abertura "hero-like" e ficar transparente sobre ele — o crachá
           (e o layout que o acompanha) morava no Hero da home; migrou pra cá

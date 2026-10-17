@@ -39,7 +39,7 @@ function BadgeLoading({ saindo = false }: { saindo?: boolean }) {
     >
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img
-        src="/badge-front.png"
+        src="/badge-front.webp"
         alt=""
         aria-hidden
         className="w-44 animate-pulse rounded-xl opacity-15 blur-[1px] md:w-52"
@@ -178,8 +178,8 @@ export default function LanyardBadge({
             gravity={[0, -40, 0]}
             fov={FOV}
             anchor={[stage.anchorX, 4, 0]}
-            frontImage={claro ? '/badge-front-claro.png' : '/badge-front.png'}
-            backImage={claro ? '/badge-back-claro.png' : '/badge-back-v2.png'}
+            frontImage={claro ? '/badge-front-claro.webp' : '/badge-front.webp'}
+            backImage={claro ? '/badge-back-claro.webp' : '/badge-back-v2.webp'}
             imageFit="cover"
             cardMetalness={claro ? 0.5 : 0.8}
             lanyardImage={claro ? '/lanyard-band-claro.png' : '/lanyard-band.png'}

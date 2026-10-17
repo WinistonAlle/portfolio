@@ -28,8 +28,23 @@ export default function VideoLoop({
     if (!video) return;
     video.muted = true;
 
-    const tryPlay = () => video.play().catch(() => {});
-    tryPlay();
+    /* Só toca quando está perto da tela. Antes todo vídeo da página baixava
+       e decodificava desde a abertura, inclusive os lá embaixo: banda e
+       processador gastos com o que ninguém está vendo, e travada na rolagem
+       do celular. Fora da tela ele pausa. */
+    let visivel = false;
+    const tryPlay = () => {
+      if (visivel) video.play().catch(() => {});
+    };
+    const observer = new IntersectionObserver(
+      ([entrada]) => {
+        visivel = entrada.isIntersecting;
+        if (visivel) tryPlay();
+        else video.pause();
+      },
+      { rootMargin: '200px 0px' },
+    );
+    observer.observe(video);
 
     /* Alguns navegadores (Safari com "Never Auto-Play" nas preferências do
        site, por exemplo) recusam até o autoplay mudo. Nesse caso, a primeira
@@ -42,6 +57,7 @@ export default function VideoLoop({
     window.addEventListener('pointerdown', onFirstInteraction);
     window.addEventListener('keydown', onFirstInteraction);
     return () => {
+      observer.disconnect();
       window.removeEventListener('pointerdown', onFirstInteraction);
       window.removeEventListener('keydown', onFirstInteraction);
     };
@@ -53,11 +69,10 @@ export default function VideoLoop({
       src={src}
       poster={poster}
       className={className}
-      autoPlay
       loop
       muted
       playsInline
-      preload="auto"
+      preload="none"
       disablePictureInPicture
     />
   );

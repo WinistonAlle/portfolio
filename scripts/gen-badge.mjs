@@ -256,12 +256,13 @@ const photo = await sharp('assets/foto.png')
 
 await sharp(Buffer.from(frontSVG()))
   .composite([{ input: photo, left: PHOTO.x, top: PHOTO.y }])
-  .png()
-  .toFile(`public/badge-front${CLARO ? '-claro' : ''}.png`);
+  /* WebP: em PNG a frente pesava 1,4 MB e era o maior arquivo do Sobre mim. */
+  .webp({ quality: 82, effort: 6 })
+  .toFile(`public/badge-front${CLARO ? '-claro' : ''}.webp`);
 
 await sharp(Buffer.from(backSVG()))
-  .png()
-  .toFile(`public/badge-back-${CLARO ? 'claro' : 'v2'}.png`);
+  .webp({ quality: 82, effort: 6 })
+  .toFile(`public/badge-back-${CLARO ? 'claro' : 'v2'}.webp`);
 await band();
 
 console.log(`ok — ${W}x${H}`);

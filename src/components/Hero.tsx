@@ -135,7 +135,7 @@ export default function Hero({
           <div className="hero__img-wrap relative" data-depth="9" data-scroll="0.08">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
-              src="/winiston-hero.png"
+              src="/winiston-hero.webp"
               alt="Winiston Alle"
               className="hero__img block h-auto select-none"
               draggable={false}
