@@ -31,7 +31,7 @@ const pt = {
   cookies: {
     label: 'Aviso de cookies',
     message:
-      'Uso o Microsoft Clarity, com cookies de análise, para ver como as pessoas navegam pelo site. Nada de anúncio.',
+      'Uso cookies de análise para entender como as pessoas navegam pelo site. Nada de anúncio.',
     accept: 'Aceitar',
     decline: 'Recusar',
   },

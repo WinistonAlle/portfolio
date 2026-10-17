@@ -30,7 +30,7 @@ const en: typeof pt = {
   cookies: {
     label: 'Cookie notice',
     message:
-      'I use Microsoft Clarity, with analytics cookies, to see how people move through the site. No ads.',
+      'I use analytics cookies to understand how people move through the site. No ads.',
     accept: 'Accept',
     decline: 'Decline',
   },
