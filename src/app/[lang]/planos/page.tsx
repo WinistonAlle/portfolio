@@ -12,6 +12,18 @@ import { isLocale, slugLocal } from '@/i18n/config';
    SLUGS_TRADUZIDOS). Página toda de servidor: o único pedaço interativo, as
    perguntas frequentes, é <details> nativo e não precisa de JavaScript. */
 
+/* "R$ 1.200" vira moeda pequena e esmaecida + número grande: quem lê uma
+   tabela de preço compara os números, não o símbolo repetido. */
+function Preco({ valor }: { valor: string }) {
+  const [moeda, ...resto] = valor.split(' ');
+  return (
+    <span className="preco">
+      <span className="preco__moeda">{moeda}</span>
+      {resto.join(' ')}
+    </span>
+  );
+}
+
 export async function generateMetadata(
   props: PageProps<'/[lang]/planos'>,
 ): Promise<Metadata> {
@@ -55,31 +67,35 @@ export default async function PlanosPage(props: PageProps<'/[lang]/planos'>) {
         <p className="mt-7 max-w-xl text-lg leading-relaxed text-muted">{t.intro}</p>
       </section>
 
-      {/* 2. Preço do site, pagamento único. Lista com fio e não grade de
-          cartões: são cinco linhas de "o quê / quanto", e lista é a forma que
-          deixa comparar de cima a baixo. */}
-      <section className="mx-auto w-full max-w-7xl px-6 pb-24 lg:px-10">
+      {/* 2. Preço do site, pagamento único. Duas colunas no desktop: o título
+          fica parado à esquerda enquanto a lista passa, e a lista ocupa só a
+          largura que precisa (antes, nome e preço ficavam a 1.600px um do
+          outro e o olho se perdia no meio). */}
+      <section className="planos__bloco">
         <div className="planos__cabeca">
           <h2 className="planos__h2">{t.sitesTitle}</h2>
           <p className="planos__sub">{t.sitesText}</p>
+          <p className="planos__rodape">{t.sitesNote}</p>
         </div>
-        <ul className="planos__lista">
-          {t.sites.map((s) => (
+        <ol className="planos__lista">
+          {t.sites.map((s, i) => (
             <li key={s.nome} className="planos__linha">
+              <span className="planos__indice" aria-hidden="true">
+                {String(i + 1).padStart(2, '0')}
+              </span>
               <span className="planos__nome">
                 {s.nome}
                 {'nota' in s && s.nota && <span className="planos__nota">{s.nota}</span>}
               </span>
               <span className="planos__preco">
                 {'prefixo' in s && s.prefixo && (
-                  <span className="planos__prefixo">{s.prefixo} </span>
+                  <span className="planos__prefixo">{s.prefixo}</span>
                 )}
-                {s.preco}
+                <Preco valor={s.preco} />
               </span>
             </li>
           ))}
-        </ul>
-        <p className="planos__rodape">{t.sitesNote}</p>
+        </ol>
       </section>
 
       {/* 3. Planos mensais: os dois lado a lado no desktop, empilhados no
@@ -102,7 +118,7 @@ export default async function PlanosPage(props: PageProps<'/[lang]/planos'>) {
                   {destaque && <span className="plano__selo">{t.recommended}</span>}
                 </div>
                 <p className="plano__preco">
-                  {plano.preco}
+                  <Preco valor={plano.preco} />
                   <span className="plano__mes">{t.perMonth}</span>
                 </p>
                 <ul className="plano__itens">
@@ -117,24 +133,28 @@ export default async function PlanosPage(props: PageProps<'/[lang]/planos'>) {
         <p className="planos__rodape">{t.annualNote}</p>
       </section>
 
-      {/* 4. Combos */}
-      <section className="mx-auto w-full max-w-7xl px-6 pb-24 lg:px-10">
+      {/* 4. Combos: mesma lista do preço do site. */}
+      <section className="planos__bloco">
         <div className="planos__cabeca">
           <h2 className="planos__h2">
             <TituloAcento texto={t.combosTitle} />
           </h2>
           <p className="planos__sub">{t.combosText}</p>
         </div>
-        <ul className="planos__lista">
-          {t.combos.map((c) => (
-            <li key={c.nome} className="planos__linha planos__linha--combo">
+        <ol className="planos__lista">
+          {t.combos.map((c, i) => (
+            <li key={c.nome} className="planos__linha">
+              <span className="planos__indice" aria-hidden="true">
+                {String(i + 1).padStart(2, '0')}
+              </span>
               <span className="planos__nome">{c.nome}</span>
               <span className="planos__preco">
-                {c.entrada} <span className="planos__mensal">{c.mensal}</span>
+                <Preco valor={c.entrada} />
+                <span className="planos__mensal">{c.mensal}</span>
               </span>
             </li>
           ))}
-        </ul>
+        </ol>
       </section>
 
       {/* 5. Perguntas frequentes */}

@@ -2402,8 +2402,33 @@ a.cert-piece:focus-visible .cert-frame {
 /* Página de planos (app/[lang]/planos). Só tokens do site: --line, --muted,
    --accent, --surface e as quatro famílias com o papel de sempre (display nos
    títulos e nomes, mono nos valores, que são dado). */
+.planos__bloco {
+  display: grid;
+  gap: 2rem;
+  width: 100%;
+  max-width: 80rem;
+  margin-inline: auto;
+  padding: 0 1.5rem 6rem;
+}
+/* Duas colunas a partir de 1024px: o título fica preso no alto enquanto a
+   lista passa ao lado. */
+@media (min-width: 1024px) {
+  .planos__bloco {
+    grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
+    gap: 4rem;
+    padding-inline: 2.5rem;
+  }
+  .planos__bloco > .planos__cabeca {
+    position: sticky;
+    top: 7rem;
+    align-self: start;
+  }
+}
 .planos__cabeca {
   margin-bottom: 2rem;
+}
+.planos__bloco > .planos__cabeca {
+  margin-bottom: 0;
 }
 .planos__h2 {
   font-family: var(--font-display), system-ui, sans-serif;
@@ -2422,56 +2447,120 @@ a.cert-piece:focus-visible .cert-frame {
 .planos__lista {
   border-top: 1px solid var(--line);
 }
+/* Índice | nome | preço. O filete azul à esquerda acende no hover:
+   transform (escala) e não altura, pra não recalcular layout. */
 .planos__linha {
-  display: flex;
-  flex-wrap: wrap;
+  position: relative;
+  display: grid;
+  grid-template-columns: 2.25rem minmax(0, 1fr) auto;
   align-items: baseline;
-  justify-content: space-between;
-  gap: 0.25rem 1.5rem;
-  padding: 1.15rem 0;
+  gap: 0 1rem;
+  padding: 1.35rem 0.75rem 1.35rem 0.25rem;
   border-bottom: 1px solid var(--line);
+  transition: background-color 0.2s ease;
+}
+.planos__linha::before {
+  content: '';
+  position: absolute;
+  left: -1px;
+  top: 0.9rem;
+  bottom: 0.9rem;
+  width: 2px;
+  border-radius: 2px;
+  background: var(--accent);
+  transform: scaleY(0);
+  transition: transform 0.25s cubic-bezier(0.22, 1, 0.36, 1);
+}
+@media (hover: hover) {
+  .planos__linha:hover {
+    background: color-mix(in srgb, var(--surface) 55%, transparent);
+  }
+  .planos__linha:hover::before {
+    transform: scaleY(1);
+  }
+}
+.planos__indice {
+  font-family: var(--font-mono), ui-monospace, monospace;
+  font-size: 0.75rem;
+  color: var(--muted);
 }
 .planos__nome {
   font-family: var(--font-display), system-ui, sans-serif;
-  font-size: 1.0625rem;
+  font-size: 1.125rem;
   font-weight: 500;
+  line-height: 1.3;
 }
 .planos__nota {
   display: block;
-  margin-top: 0.15rem;
+  margin-top: 0.2rem;
   font-family: var(--font-sans), system-ui, sans-serif;
   font-size: 0.8125rem;
   font-weight: 400;
   color: var(--muted);
 }
 .planos__preco {
-  font-family: var(--font-mono), ui-monospace, monospace;
-  font-size: 1rem;
-  font-weight: 500;
-  white-space: nowrap;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  text-align: right;
 }
+.planos__prefixo,
 .planos__mensal {
-  color: var(--muted);
-}
-/* "a partir de" é texto, não dado: fica na família do parágrafo. */
-.planos__prefixo {
   font-family: var(--font-sans), system-ui, sans-serif;
-  font-size: 0.875rem;
+  font-size: 0.8125rem;
   font-weight: 400;
   color: var(--muted);
+  white-space: nowrap;
 }
-/* No celular o combo (nome + entrada + mensal) não cabe numa linha, e deixar
-   o navegador decidir quebrava uns e outros não. Empilha todos igual. */
-@media (max-width: 639px) {
-  .planos__linha--combo {
-    flex-direction: column;
-    align-items: flex-start;
-  }
+.planos__prefixo {
+  order: -1;
+  margin-bottom: 0.1rem;
+}
+.planos__mensal {
+  margin-top: 0.15rem;
 }
 .planos__rodape {
   margin-top: 1rem;
   font-size: 0.875rem;
   color: var(--muted);
+}
+.planos__bloco .planos__rodape {
+  margin-top: 1.5rem;
+}
+
+/* Preço: número grande na fonte de título, algarismos de largura igual
+   (alinham de uma linha pra outra), moeda pequena e apagada. */
+.preco {
+  font-family: var(--font-display), system-ui, sans-serif;
+  font-size: 1.5rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+  line-height: 1.1;
+}
+.preco__moeda {
+  margin-right: 0.3em;
+  font-size: 0.55em;
+  font-weight: 500;
+  letter-spacing: 0;
+  color: var(--muted);
+  vertical-align: 0.45em;
+}
+@media (max-width: 479px) {
+  .planos__linha {
+    grid-template-columns: 1.75rem minmax(0, 1fr) auto;
+    gap: 0 0.75rem;
+    padding-right: 0.25rem;
+  }
+  .preco {
+    font-size: 1.25rem;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .planos__linha::before {
+    transition: none;
+  }
 }
 
 .plano {
@@ -2511,10 +2600,9 @@ a.cert-piece:focus-visible .cert-frame {
 }
 .plano__preco {
   margin-top: 1.25rem;
-  font-family: var(--font-mono), ui-monospace, monospace;
-  font-size: 2rem;
-  font-weight: 500;
-  letter-spacing: -0.02em;
+}
+.plano__preco .preco {
+  font-size: 2.5rem;
 }
 .plano__mes {
   margin-left: 0.2rem;
