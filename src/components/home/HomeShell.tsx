@@ -23,7 +23,7 @@ const BootIntro = dynamic(() => import('@/components/boot/BootIntro'), {
   ssr: false,
 });
 
-type Nav = { about: string; projects: string; plans: string; contact: string };
+type Nav = { about: string; projects: string; contact: string };
 
 export default function HomeShell({
   locale,

@@ -2,7 +2,8 @@ import ProjectGrid from '@/components/projects/ProjectGrid';
 import { montarAbas, montarItens } from '@/components/projects/montar';
 import GlowButton, { GlowArrow } from '@/components/ui/GlowButton';
 import { getDictionary } from '@/i18n';
-import type { Locale } from '@/i18n/config';
+import { slugLocal, type Locale } from '@/i18n/config';
+import LinkPlanos from '@/components/ui/LinkPlanos';
 import TituloAcento from '@/components/text/TituloAcento';
 import CtaBlock from '@/components/ui/CtaBlock';
 
@@ -37,7 +38,16 @@ export default async function Projects({ locale }: { locale: Locale }) {
       {/* Fecho: quem chegou até aqui já passou pela grade inteira, então a
           próxima ação é conversar, não continuar navegando. */}
       <div className="mt-20">
-        <CtaBlock titulo={dict.projects.ctaTitle} texto={dict.projects.ctaText}>
+        <CtaBlock
+          titulo={dict.projects.ctaTitle}
+          texto={dict.projects.ctaText}
+          rodape={
+            <LinkPlanos
+              href={`/${locale}/${slugLocal('planos', locale)}`}
+              texto={dict.projects.plansLink}
+            />
+          }
+        >
           <GlowButton href={`/${locale}/contato`}>
             {dict.projects.ctaButton}
             <GlowArrow />

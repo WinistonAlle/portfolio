@@ -3,7 +3,8 @@ import { notFound } from 'next/navigation';
 import SocialCubes from '@/components/socials/SocialCubes';
 import QuickMessage from '@/components/contact/QuickMessage';
 import { getDictionary } from '@/i18n';
-import { isLocale } from '@/i18n/config';
+import { isLocale, slugLocal } from '@/i18n/config';
+import LinkPlanos from '@/components/ui/LinkPlanos';
 
 export async function generateMetadata(
   props: PageProps<'/[lang]/contato'>,
@@ -71,6 +72,13 @@ export default async function ContatoPage(
 
             <div className="mt-10">
               <QuickMessage t={dict.contact.form} />
+            </div>
+
+            <div className="mt-12">
+              <LinkPlanos
+                href={`/${lang}/${slugLocal('planos', lang)}`}
+                texto={dict.contact.plansLink}
+              />
             </div>
           </div>
         </div>

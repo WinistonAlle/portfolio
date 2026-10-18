@@ -11,6 +11,7 @@ export default function CtaBlock({
   titulo,
   texto,
   children,
+  rodape,
 }: {
   titulo: string;
   texto: string;
@@ -18,6 +19,8 @@ export default function CtaBlock({
    *  tela: quem chegou pelos projetos quer conversar, quem chegou pela bio
    *  quer ver trabalho. */
   children: ReactNode;
+  /** Link de apoio abaixo dos botões, fora da hierarquia deles. */
+  rodape?: ReactNode;
 }) {
   return (
     <div className="cta">
@@ -33,6 +36,8 @@ export default function CtaBlock({
         <div className="mt-9 flex flex-wrap items-center justify-center gap-3">
           {children}
         </div>
+
+        {rodape ? <div className="mt-7">{rodape}</div> : null}
       </div>
     </div>
   );

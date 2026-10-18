@@ -541,7 +541,7 @@ body.scroll-locked .site-header {
 
   .site-header__link {
     font-size: 0.75rem;
-    /* Com o quarto link (Planos), "Sobre mim" quebrava em duas linhas. */
+    /* "Sobre mim" quebrava em duas linhas quando havia quatro links. */
     white-space: nowrap;
   }
 
@@ -2694,4 +2694,24 @@ a.cert-piece:focus-visible .cert-frame {
   .faq__icone::after {
     transition: none;
   }
+}
+
+/* Link de apoio para a página de planos (components/ui/LinkPlanos). Texto com
+   fio embaixo, sem caixa: não compete com o botão principal da tela. */
+.link-planos {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--muted);
+  font-size: 0.9375rem;
+  text-decoration: underline;
+  text-decoration-color: var(--line);
+  text-underline-offset: 0.35em;
+  transition: color 0.2s ease, text-decoration-color 0.2s ease;
+}
+
+.link-planos:hover,
+.link-planos:focus-visible {
+  color: var(--foreground);
+  text-decoration-color: var(--accent);
 }

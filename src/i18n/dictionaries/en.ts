@@ -20,7 +20,6 @@ const en: typeof pt = {
   nav: {
     about: 'About',
     projects: 'Projects',
-    plans: 'Plans',
     contact: 'Contact',
   },
 
@@ -132,6 +131,7 @@ const en: typeof pt = {
       "Tell me what you need and I'll come back with scope, timeline and price. Quotes are free, and we adjust together until it fits what you actually want.",
     ctaButton: 'Request a quote',
     ctaAbout: 'About me',
+    plansLink: 'See plans and pricing',
   },
 
   project: {
@@ -157,6 +157,7 @@ const en: typeof pt = {
     titleEnd: ' we start.',
     intro:
       'A job, freelance work or just an idea you want to sanity-check. Click whichever block you prefer over there: they all reach me directly, with nobody in between.',
+    plansLink: 'Want prices first? Plans and pricing',
     quickTitle: 'Or just message me on WhatsApp.',
     quickText:
       'Fill in the three lines below and I open the chat with the message already written. On your side, just check it and hit send.',

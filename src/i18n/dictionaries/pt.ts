@@ -18,7 +18,6 @@ const pt = {
   nav: {
     about: 'Sobre mim',
     projects: 'Projetos',
-    plans: 'Planos',
     contact: 'Contato',
   },
 
@@ -140,6 +139,7 @@ const pt = {
       'Me conta o que você precisa e eu volto com escopo, prazo e preço. O orçamento é gratuito e a gente ajusta junto até chegar no que funciona pra você.',
     ctaButton: 'Solicitar orçamento',
     ctaAbout: 'Sobre mim',
+    plansLink: 'Ver planos e preços',
   },
 
   project: {
@@ -168,6 +168,7 @@ const pt = {
     titleEnd: ' a gente começa.',
     intro:
       'Vaga, projeto freelance ou só uma ideia pra validar. É só clicar no bloco do canal que você preferir aí do lado: todos caem direto comigo, sem intermediário no meio do caminho.',
+    plansLink: 'Quer ver valores antes? Planos e preços',
     quickTitle: 'Ou já me chama no WhatsApp.',
     quickText:
       'Preenche as três linhas abaixo que eu abro a conversa com a mensagem montada. Do seu lado é só conferir e apertar enviar.',
