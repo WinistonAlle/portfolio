@@ -2283,4 +2283,110 @@ export const PROJECTS: Project[] = [
       },
     ],
   },
+  {
+    n: '21',
+    slug: 'cardume',
+    name: 'Cardume',
+    status: 'live',
+    context: 'Projeto de portfólio',
+    groups: ['sites'],
+    line: {
+      pt: 'Uma loja de aquarismo inteira, do hero ao Pix: um koi de verdade nada atrás do cursor, a loja avisa quando um peixe come o outro e o aquário montado ganha vida na tela.',
+      en: 'A complete aquarium store, from the hero to the checkout: a real koi swims after the cursor, the store warns you when one fish eats another and the tank you build comes alive on screen.',
+    },
+    stat: {
+      pt: [
+        'No ar na Vercel, inteiro no navegador: 29 produtos, carrinho, ficha técnica e checkout com Pix de demonstração',
+        'O koi do hero é uma foto real recortada e fatiada em 32 tiras que seguem a curva do corpo',
+        '13 espécies recortadas das fotos nadam, comem e se assustam no aquário que a pessoa monta',
+        '60 quadros por segundo medidos no hero, nas categorias e no aquário montado',
+      ],
+      en: [
+        'Live on Vercel, entirely in the browser: 29 products, cart, spec sheets and a demo Pix checkout',
+        'The hero koi is a real photo, cut out and sliced into 32 strips that follow the curve of its body',
+        '13 species cut out of photos swim, eat and get startled in the tank the visitor builds',
+        '60 frames per second measured on the hero, the categories and the tank builder',
+      ],
+    },
+    tags: ['React', 'Vite', 'Tailwind CSS', 'WebGL', 'Canvas'],
+    media: {
+      frame: 'desktop',
+      src: '/cases/cardume/capa.webp',
+      video: '/cases/cardume/scroll.mp4',
+      poster: '/cases/cardume/poster.webp',
+      alt: {
+        pt: 'Primeira tela da loja: o nome Cardume em letras enormes sobre água escura com cáusticas, e um koi laranja e branco nadando por cima das letras',
+        en: 'First screen of the store: the name Cardume in huge letters over dark water with caustics, and an orange and white koi swimming over the letters',
+      },
+    },
+    links: [{ kind: 'site', href: 'https://cardume-beta.vercel.app' }],
+    nota: {
+      pt: 'A Cardume é uma loja FICTÍCIA, feita para este portfólio. Os produtos e preços são de exemplo e o Pix do checkout não cobra nada. As fotos das espécies são do Wikimedia Commons, com os créditos no rodapé do site.',
+      en: 'Cardume is a FICTITIOUS store, built for this portfolio. Products and prices are examples and the checkout Pix charges nothing. The species photos come from Wikimedia Commons, credited in the site footer.',
+    },
+    problem: {
+      pt: [
+        'Eu queria um e-commerce no portfólio que não parecesse mais um template de loja. Aquarismo dava o assunto certo: é um produto vivo, bonito de ver e cheio de regra escondida, porque peixe bonito no aquário errado morre ou come o vizinho.',
+        'Quem começa no hobby compra pela vitrine e descobre o problema em casa. O neon e o acará-bandeira nadam juntos na loja; meses depois o acará cresce e o neon vira comida. Uma loja boa precisava mostrar o peixe e, ao mesmo tempo, avisar isso antes da compra.',
+      ],
+      en: [
+        'I wanted an e-commerce piece in the portfolio that did not look like yet another store template. Fishkeeping was the right subject: a living product, beautiful to look at and full of hidden rules, because a beautiful fish in the wrong tank dies or eats its neighbour.',
+        'Newcomers buy from the shop window and find the problem at home. The neon and the angelfish swim together in the store; months later the angelfish grows and the neon becomes food. A good store had to show the fish and, at the same time, warn about that before the purchase.',
+      ],
+    },
+    solution: {
+      pt: [
+        'O site inteiro mora debaixo d’água. Um único fundo em WebGL desenha as cáusticas e as bolhas atrás de todas as dobras e escurece conforme a página desce, como quem mergulha. No hero, o nome da loja fica enorme e um koi nada por cima das letras atrás do cursor. Tentei primeiro um koi desenhado em código e ficou com cara de ilustração. A versão final é uma foto real, recortada do fundo com o Vision do próprio Mac e fatiada em 32 tiras que acompanham uma cadeia de pontos: a cabeça persegue o cursor e uma onda cresce até a cauda.',
+        'Cada peixe tem ficha técnica com temperatura, pH, tamanho adulto e temperamento em réguas visuais. Uma regra compara os peixes do carrinho entre si e avisa quando a água é diferente, quando a temperatura não fecha ou quando um pode comer o outro. O mesmo aviso aparece no Monte seu aquário, onde a pessoa escolhe tanque, equipamento, plantas e peixes e vê o resultado vivo: os peixes recortados das fotos nadam, vão atrás da ração quando ela clica na água e fogem se o cursor passa rápido.',
+        'Tudo roda no navegador, sem servidor: o carrinho fica salvo na própria máquina e o checkout vai até um Pix de demonstração que avisa, com todas as letras, que nada é cobrado. A tipografia passou por três tentativas até chegar numa serifa grossa, a Zodiak, com uma palavra em itálico ciano em cada título.',
+      ],
+      en: [
+        'The whole site lives underwater. A single WebGL background draws caustics and bubbles behind every section and gets darker as the page goes down, like diving. In the hero, the store name is huge and a koi swims over the letters after the cursor. I first tried a koi drawn in code and it looked like an illustration. The final version is a real photo, cut out of its background with the Mac’s own Vision framework and sliced into 32 strips that follow a chain of points: the head chases the cursor and a wave grows towards the tail.',
+        'Every fish has a spec sheet with temperature, pH, adult size and temperament on visual rulers. A rule compares the fish in the cart with each other and warns when the water differs, when the temperatures do not overlap or when one can eat the other. The same warning shows up in the tank builder, where the visitor picks the tank, equipment, plants and fish and watches the result alive: the fish cut out of the photos swim, chase the food when you click the water and flee if the cursor moves fast.',
+        'Everything runs in the browser, with no server: the cart is saved on the visitor’s own machine and the checkout goes as far as a demo Pix that says, in plain words, that nothing is charged. The typography went through three attempts before landing on a heavy serif, Zodiak, with one word in cyan italics in every heading.',
+      ],
+    },
+    gallery: [
+      {
+        src: '/cases/cardume/oceano.webp',
+        alt: { pt: 'Dobra com o título Um oceano inteiro cabe na sua sala e um vídeo de peixes laranja num feixe de luz', en: 'Section with the heading A whole ocean fits in your living room and a video of orange fish in a beam of light' },
+        caption: { pt: 'A promessa da loja e as quatro garantias de entrega de peixe vivo, ao lado do vídeo que começou o projeto.', en: 'The store’s promise and the four live-delivery guarantees, next to the video that started the project.' },
+      },
+      {
+        src: '/cases/cardume/categorias.webp',
+        alt: { pt: 'Lista de categorias em letras grandes com a foto de um peixe-palhaço flutuando ao lado do cursor', en: 'List of categories in large type with a clownfish photo floating next to the cursor' },
+        caption: { pt: 'As categorias são uma lista tipográfica. A foto de cada uma segue o cursor com atraso, como algo boiando, e ondula como vista através da água.', en: 'The categories are a typographic list. Each one’s photo follows the cursor with a delay, like something floating, and ripples as if seen through water.' },
+      },
+      {
+        src: '/cases/cardume/loja.webp',
+        alt: { pt: 'Grade da loja com filtros por categoria, busca e cards de peixes com nome científico e preço', en: 'Store grid with category filters, search and fish cards with scientific name and price' },
+        caption: { pt: 'A loja: busca que aceita nome popular ou científico, filtros por água e um botão que solta uma bolha até o carrinho.', en: 'The store: search that takes the common or the scientific name, filters by water and a button that releases a bubble up to the cart.' },
+      },
+      {
+        src: '/cases/cardume/ficha.webp',
+        alt: { pt: 'Painel lateral com a ficha do betta: réguas de temperatura, pH e tamanho adulto', en: 'Side panel with the betta’s spec sheet: rulers for temperature, pH and adult size' },
+        caption: { pt: 'A ficha técnica mostra a faixa ideal de cada espécie em réguas e já diz se o peixe convive com o que está no carrinho.', en: 'The spec sheet shows each species’ ideal range on rulers and already says whether the fish gets along with what is in the cart.' },
+      },
+      {
+        src: '/cases/cardume/plantado.webp',
+        alt: { pt: 'Vídeo de um aquário plantado com neons e um acará-bandeira, com o título Um pedaço de rio na sua estante', en: 'Video of a planted tank with neons and an angelfish, with the heading A piece of river on your shelf' },
+        caption: { pt: 'O vídeo mostra um acará-bandeira entre os neons, e o texto aponta o problema: quando ele crescer, o neon vira comida. É a ponte para o aviso de compatibilidade.', en: 'The video shows an angelfish among the neons, and the text points at the problem: when it grows, the neon becomes food. It bridges into the compatibility warning.' },
+      },
+      {
+        src: '/cases/cardume/monte.webp',
+        alt: { pt: 'Monte seu aquário: um tanque animado com plantas e peixes de um lado, e as escolhas de aquário, equipamento e plantas do outro', en: 'Tank builder: an animated tank with plants and fish on one side, and the choices of tank, equipment and plants on the other' },
+        caption: { pt: 'O aquário que a pessoa monta aparece vivo. A barra mede a ocupação pela regra de um centímetro de peixe por litro, e os avisos mudam a cada peixe que entra.', en: 'The tank the visitor builds shows up alive. The bar measures stocking by the one centimetre of fish per litre rule, and the warnings change with every fish added.' },
+      },
+      {
+        src: '/cases/cardume/carrinho.webp',
+        alt: { pt: 'Carrinho lateral com aquário, neons, acará-bandeira e anúbias, e um aviso de que o acará pode comer o neon', en: 'Side cart with a tank, neons, an angelfish and anubias, and a warning that the angelfish may eat the neon' },
+        caption: { pt: 'No carrinho, a mesma regra: aqui ela pega a combinação do vídeo. O frete com garantia de peixe vivo some acima de R$ 300.', en: 'In the cart, the same rule: here it catches the combination from the video. The live-fish delivery fee disappears above R$ 300.' },
+      },
+      {
+        src: '/cases/cardume/celular.webp',
+        alt: { pt: 'Três telas de celular: o hero com o koi, a loja e o Monte seu aquário', en: 'Three phone screens: the hero with the koi, the store and the tank builder' },
+        caption: { pt: 'No celular o koi passeia sozinho e segue o toque, e o aquário montado fica acima das escolhas.', en: 'On the phone the koi wanders by itself and follows touch, and the built tank sits above the choices.' },
+      },
+    ],
+  },
 ];
