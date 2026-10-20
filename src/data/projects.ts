@@ -2389,4 +2389,106 @@ export const PROJECTS: Project[] = [
       },
     ],
   },
+  {
+    n: '22',
+    slug: 'visitantes',
+    name: 'Visitantes da Catraca',
+    status: 'live',
+    context: 'Cliente',
+    groups: ['gostinho-mineiro'],
+    line: {
+      pt: 'O RH cadastra quem vem de fora, o WhatsApp abre sozinho com o QR pronto e a catraca da empresa libera a entrada e a saída com ele.',
+      en: 'HR registers an outside visitor, WhatsApp opens by itself with the QR ready and the company turnstile lets them in and out with it.',
+    },
+    stat: {
+      pt: [
+        'Um QR por visita, válido de algumas horas a um mês, que vale na entrada e na saída',
+        'Cria e apaga o acesso direto na catraca por API, e o bloqueio vale na hora do cancelamento',
+        '29 testes, com uma catraca falsa que roda o sistema inteiro sem o equipamento',
+        'Dados apagados sozinhos depois de 90 dias, por causa da LGPD',
+      ],
+      en: [
+        'One QR per visit, valid from a few hours to a month, working on the way in and on the way out',
+        'Creates and removes access on the turnstile through its API, and a cancellation blocks the QR at once',
+        '29 tests, with a fake turnstile that runs the whole system without the hardware',
+        'Data deleted automatically after 90 days, for data protection law',
+      ],
+    },
+    tags: ['Node', 'JavaScript', 'API REST', 'WhatsApp', 'nginx', 'pm2'],
+    media: {
+      frame: 'desktop',
+      src: '/cases/visitantes/capa.webp',
+      video: '/cases/visitantes/tour.mp4',
+      poster: '/cases/visitantes/poster.webp',
+      alt: {
+        pt: 'Painel de visitantes com três números do dia e a lista de quem está dentro, quem ainda não chegou e quem já saiu',
+        en: 'Visitors board with three numbers for the day and the list of who is inside, who has not arrived and who has left',
+      },
+    },
+    nota: {
+      pt: 'Os nomes, empresas e documentos que aparecem nas telas e no vídeo são inventados, gravados numa catraca de teste. O sistema real roda atrás de login, e só a página do QR de cada visitante é aberta.',
+      en: 'The names, companies and documents shown on the screens and in the video are made up, recorded on a test turnstile. The real system runs behind a login, and only each visitor’s QR page is open.',
+    },
+    problem: {
+      pt: [
+        'Os funcionários já entravam pela catraca com o rosto. Quem vinha de fora ficava de fora do sistema: alguém abria a porta, ninguém sabia dizer quantos visitantes estavam no prédio, e não havia registro de hora de entrada e de saída.',
+        'A primeira ideia foi um leitor de cartão na recepção, com o cartão devolvido ao RH na saída. Cartão se perde, precisa de estoque e de gente para entregar e recolher. O QR no celular do próprio visitante resolve sem nada para devolver.',
+      ],
+      en: [
+        'Employees already went through the turnstile with their face. Outside visitors stayed outside the system: someone opened the door, nobody could say how many visitors were in the building, and there was no record of when they came in and left.',
+        'The first idea was a card reader at reception, with the card handed back to HR on the way out. Cards get lost, need stock and someone to hand them out and collect them. A QR on the visitor’s own phone solves it with nothing to return.',
+      ],
+    },
+    solution: {
+      pt: [
+        'O RH preenche nome, documento, WhatsApp e quem vai receber, escolhe a validade e aperta um botão. O sistema cria um usuário temporário direto na catraca, com data de início e de fim, e gera o QR. No mesmo clique o WhatsApp abre com a mensagem pronta e a imagem do QR copiada, é só colar e enviar. O visitante também recebe um link com o QR grande e o horário de validade.',
+        'Testando no equipamento de verdade descobri duas coisas que a documentação não diz. A catraca lê um QR só de números como se fosse um cartão, então o acesso é cadastrado como cartão e não como QR. E ela guarda a hora local como se fosse UTC, o que deslocaria toda validade em três horas se eu tivesse seguido o óbvio.',
+        'O painel mostra quem está dentro agora, quem ainda tem acesso e quem já saiu, lendo as passagens da própria catraca. Cancelar bloqueia o QR na hora, estender o prazo muda a validade, e a etiqueta impressa serve para quem chega sem celular.',
+        'Para ninguém precisar de explicação, o sistema abre com um tutorial em máscara que ilumina uma parte por vez. Ele mora no mesmo endereço do painel da catraca, atrás do mesmo login, com uma página no início para escolher entre as duas áreas. Só a página do QR do visitante é aberta, e ela não mostra documento nem número de acesso.',
+      ],
+      en: [
+        'HR fills in name, ID, WhatsApp and who is hosting, picks the validity and presses one button. The system creates a temporary user straight on the turnstile, with start and end dates, and generates the QR. On the same click WhatsApp opens with the message ready and the QR image copied, so it is just paste and send. The visitor also gets a link with the large QR and the validity time.',
+        'Testing on the real equipment I found two things the documentation does not say. The turnstile reads a numbers-only QR as if it were a card, so access is registered as a card and not as a QR. And it stores local time as if it were UTC, which would have shifted every validity by three hours had I followed the obvious path.',
+        'The board shows who is inside now, who still has access and who has left, reading the passes from the turnstile itself. Cancelling blocks the QR at once, extending changes the validity, and a printed label covers whoever arrives without a phone.',
+        'So nobody needs an explanation, the system opens with a masked tutorial that lights up one part at a time. It lives at the same address as the turnstile panel, behind the same login, with a page up front to choose between the two areas. Only the visitor’s QR page is open, and it shows neither ID nor access number.',
+      ],
+    },
+    gallery: [
+      {
+        src: '/cases/visitantes/menu.webp',
+        alt: { pt: 'Página de escolha com dois cartões: Visitantes e Painel da catraca', en: 'Choice page with two cards: Visitors and Turnstile panel' },
+        caption: { pt: 'Depois do login, uma página escolhe a área. O RH e o administrador entram pelo mesmo endereço e com a mesma senha de antes.', en: 'After login, a page picks the area. HR and the administrator come in at the same address with the same password as before.' },
+      },
+      {
+        src: '/cases/visitantes/lista.webp',
+        alt: { pt: 'Lista de visitantes com a Helena Moreira recém-criada no topo, ainda não chegou', en: 'Visitor list with Helena Moreira just created at the top, not yet arrived' },
+        caption: { pt: 'Cada visita tem situação própria: ainda não chegou, dentro, já saiu, agendada, expirada ou cancelada, com a hora real de entrada e saída.', en: 'Each visit has its own status: not yet arrived, inside, left, scheduled, expired or cancelled, with the real entry and exit times.' },
+      },
+      {
+        src: '/cases/visitantes/cadastro.webp',
+        alt: { pt: 'Gaveta lateral com o formulário de novo visitante preenchido e atalhos de duração', en: 'Side drawer with the new visitor form filled in and duration shortcuts' },
+        caption: { pt: 'O cadastro cabe numa gaveta e tem atalhos de validade: só hoje, três dias, uma semana ou um mês. O WhatsApp é obrigatório, porque é por ele que o QR chega.', en: 'The form fits in a drawer with validity shortcuts: today only, three days, a week or a month. WhatsApp is required, because that is how the QR arrives.' },
+      },
+      {
+        src: '/cases/visitantes/pronto.webp',
+        alt: { pt: 'Painel de confirmação com o QR gerado, aviso de WhatsApp aberto e botões de copiar e imprimir', en: 'Confirmation panel with the generated QR, a WhatsApp-opened notice and copy and print buttons' },
+        caption: { pt: 'Ao gerar, o WhatsApp abre sozinho e a imagem do QR já está copiada. Se a janela for bloqueada, os mesmos passos ficam em botões.', en: 'On generating, WhatsApp opens by itself and the QR image is already copied. If the window gets blocked, the same steps stay as buttons.' },
+      },
+      {
+        src: '/cases/visitantes/qr.webp',
+        alt: { pt: 'Página pública do visitante com o nome, o selo de acesso liberado e um QR grande', en: 'Visitor public page with the name, an access granted badge and a large QR' },
+        caption: { pt: 'O que o visitante recebe: nome inteiro, QR grande para a câmera da catraca, dois passos e a validade. Nenhum documento aparece.', en: 'What the visitor receives: full name, a large QR for the turnstile camera, two steps and the validity. No ID is shown.' },
+      },
+      {
+        src: '/cases/visitantes/tutorial.webp',
+        alt: { pt: 'Tutorial com a tela escurecida e o formulário iluminado ao lado de um balão de explicação', en: 'Tutorial with the screen dimmed and the form lit up next to an explanation bubble' },
+        caption: { pt: 'O tutorial escurece a tela e ilumina uma parte por vez, em sete passos. Abre sozinho na primeira visita e volta pelo botão Como usar.', en: 'The tutorial dims the screen and lights up one part at a time, in seven steps. It opens by itself on the first visit and returns through the How to use button.' },
+      },
+      {
+        src: '/cases/visitantes/celular.webp',
+        alt: { pt: 'Três telas de celular: a escolha de área, a lista de visitantes e a página do QR', en: 'Three phone screens: area choice, the visitor list and the QR page' },
+        caption: { pt: 'No celular a tabela vira lista de cartões e o botão de novo visitante fica fixo. O RH cadastra de onde estiver.', en: 'On the phone the table becomes a list of cards and the new visitor button stays fixed. HR can register from wherever they are.' },
+      },
+    ],
+  },
 ];
