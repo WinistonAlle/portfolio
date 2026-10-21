@@ -1081,12 +1081,12 @@ export const PROJECTS: Project[] = [
     },
     stat: {
       pt: [
-        'Dezenove cases, cada um com vídeo do sistema rodando de verdade',
+        'Vinte e três cases, cada um com vídeo do sistema rodando de verdade',
         'Português e inglês na mesma base: tradução faltando quebra o build',
         'A abertura é um MacBook 3D em three.js, guiado pela rolagem; no celular, um iPhone',
       ],
       en: [
-        'Nineteen cases, each with video of the system actually running',
+        'Twenty-three cases, each with video of the system actually running',
         'Portuguese and English from one source: a missing translation breaks the build',
         'The opening is a 3D MacBook in three.js, driven by scroll; on phones, an iPhone',
       ],
@@ -2488,6 +2488,133 @@ export const PROJECTS: Project[] = [
         src: '/cases/visitantes/celular.webp',
         alt: { pt: 'Três telas de celular: a escolha de área, a lista de visitantes e a página do QR', en: 'Three phone screens: area choice, the visitor list and the QR page' },
         caption: { pt: 'No celular a tabela vira lista de cartões e o botão de novo visitante fica fixo. O RH cadastra de onde estiver.', en: 'On the phone the table becomes a list of cards and the new visitor button stays fixed. HR can register from wherever they are.' },
+      },
+    ],
+  },
+  {
+    n: '23',
+    slug: 'painel-comercial',
+    name: 'Painel Comercial',
+    status: 'live',
+    context: 'Cliente',
+    groups: ['gostinho-mineiro'],
+    line: {
+      pt: 'Os supervisores comerciais veem quem parou de comprar, quem ligar hoje, onde a venda está e como cada representante vai na meta, tudo direto do ERP.',
+      en: 'Sales supervisors see who stopped buying, who to call today, where sales are concentrated and how each rep is doing against target, straight from the ERP.',
+    },
+    stat: {
+      pt: [
+        'Lê o ERP da empresa a cada hora, só em leitura, com um usuário próprio que nunca derruba os outros sistemas',
+        'Cada supervisor enxerga só os representantes dele, e a regra vale no servidor, não só na tela',
+        'Fila de cobrança com a mensagem de WhatsApp pronta e a medição de quem voltou a comprar depois do contato',
+        'Dezesseis telas com tutorial guiado, PDF com gráficos por representante e 20 testes automáticos',
+      ],
+      en: [
+        'Reads the company ERP every hour, read-only, with its own user that never knocks the other systems off',
+        'Each supervisor sees only their own reps, and the rule holds on the server, not just on screen',
+        'Collection queue with the WhatsApp message ready and a measure of who came back to buy after the contact',
+        'Sixteen screens with a guided tutorial, PDF with charts per rep and 20 automated tests',
+      ],
+    },
+    tags: ['React', 'TypeScript', 'Vite', 'Node', 'Hono', 'SQLite', 'API REST', 'MapLibre', 'PDF', 'Excel'],
+    media: {
+      frame: 'desktop',
+      src: '/cases/painel-comercial/capa.webp',
+      video: '/cases/painel-comercial/tour.mp4',
+      poster: '/cases/painel-comercial/poster.webp',
+      alt: {
+        pt: 'Visão geral do painel com faturamento, volume, clientes novos e clientes que deixaram de comprar, e o gráfico de evolução do mês',
+        en: 'Overview with revenue, volume, new customers and customers who stopped buying, and the month evolution chart',
+      },
+    },
+    nota: {
+      pt: 'Todos os nomes, documentos, telefones, representantes e valores das telas, do vídeo e dos PDFs são inventados, gerados só para esta demonstração. Nenhum dado real da empresa aparece. O sistema de verdade roda atrás de login por CPF.',
+      en: 'All names, IDs, phone numbers, reps and amounts in the screens, the video and the PDFs are made up, generated only for this demo. No real company data appears. The real system runs behind a CPF login.',
+    },
+    problem: {
+      pt: [
+        'Os supervisores comerciais acompanhavam a carteira por planilhas montadas à mão. Quando um cliente bom parava de comprar, ninguém via até a venda do mês já ter caído, e cada pergunta nova virava um pedido de relatório.',
+        'Para piorar, a empresa trocou de ERP no meio do caminho. O histórico estava num sistema, as vendas de hoje no outro, e os números só batiam se alguém juntasse os dois com cuidado.',
+      ],
+      en: [
+        'Sales supervisors tracked the portfolio with hand-built spreadsheets. When a good customer stopped buying, nobody noticed until the month’s sales had already dropped, and every new question became a report request.',
+        'On top of that, the company switched ERP halfway. The history lived in one system and today’s sales in the other, and the numbers only matched if someone merged them carefully.',
+      ],
+    },
+    solution: {
+      pt: [
+        'O painel junta o histórico antigo com as vendas novas do ERP e trata os dois como uma coisa só. Venda é a nota de venda líquida de devolução, o cliente é identificado pelo CPF ou CNPJ, e bonificação, remessa e nota cancelada ficam de fora, para o total conferir com o que o financeiro enxerga.',
+        'Em vez de esperar a pergunta, ele aponta: cliente que passou de duas vezes o intervalo habitual de compra, cliente que parou de levar uma categoria, oportunidade de venda cruzada. Tudo cai numa fila do dia, do maior valor em risco para o menor, com a mensagem de WhatsApp escrita e um registro do contato. Depois de 30 dias o painel mede quantos dos contatados voltaram a comprar.',
+        'As metas são definidas pelo supervisor por representante e acompanhadas com projeção do mês. O mapa mostra onde a venda se concentra, a tela Comparar põe até quatro representantes, regiões ou produtos lado a lado, e a ficha de produto mostra onde e quem mais vende. Toda tabela baixa em planilha e cada representante tem um PDF com gráficos, gerado sozinho toda segunda-feira.',
+        'Uma descoberta que mudou o desenho: o ERP só aceita uma sessão por usuário, então usar o login de outro sistema derrubaria a loja. O painel tem usuário de serviço próprio, só de leitura, e uma tela de qualidade dos dados mostra o que está faltando no cadastro. Alterações em meses já fechados e quem baixou o quê ficam registradas.',
+      ],
+      en: [
+        'The panel merges the old history with the ERP’s new sales and treats both as one. A sale is the sales invoice net of returns, the customer is identified by CPF or CNPJ, and giveaways, shipments and cancelled invoices are left out, so the total matches what finance sees.',
+        'Instead of waiting for the question, it points things out: a customer past twice their usual buying interval, a customer who stopped taking one category, a cross-sell opportunity. All of it lands in a daily queue, from highest value at risk to lowest, with the WhatsApp message written and a contact log. After 30 days the panel measures how many of the contacted came back to buy.',
+        'Targets are set by the supervisor per rep and tracked with a month projection. The map shows where sales are concentrated, the Compare screen puts up to four reps, regions or products side by side, and the product sheet shows where and who sells most. Every table downloads as a spreadsheet and each rep gets a PDF with charts, generated automatically every Monday.',
+        'One discovery shaped the design: the ERP accepts only one session per user, so using another system’s login would knock the store offline. The panel has its own read-only service user, and a data quality screen shows what is missing in the records. Changes to already closed months and who downloaded what are logged.',
+      ],
+    },
+    gallery: [
+      {
+        src: '/cases/painel-comercial/fila.webp',
+        alt: { pt: 'Fila de cobrança com quatro números do dia e a lista de clientes com dias sem comprar e botões de WhatsApp e registrar', en: 'Collection queue with four numbers for the day and the customer list with days without buying and WhatsApp and log buttons' },
+        caption: { pt: 'A fila do dia, do maior valor em risco para o menor. O WhatsApp abre com a mensagem pronta e quem foi contatado há menos de uma semana sai da frente.', en: 'The daily queue, from highest value at risk to lowest. WhatsApp opens with the message ready and anyone contacted less than a week ago steps aside.' },
+      },
+      {
+        src: '/cases/painel-comercial/gaveta.webp',
+        alt: { pt: 'Gaveta do cliente com contato, histórico de compras, o botão Não vou mais vender pra este cliente e o gráfico por mês', en: 'Customer drawer with contact, purchase history, the Stop selling to this customer button and the monthly chart' },
+        caption: { pt: 'A ficha do cliente abre numa gaveta. Quem o supervisor decide não atender mais sai das listas de ativos com um clique, e o histórico de vendas continua nos totais.', en: 'The customer sheet opens in a drawer. A customer the supervisor decides to stop serving leaves the active lists in one click, and sales history stays in the totals.' },
+      },
+      {
+        src: '/cases/painel-comercial/metas.webp',
+        alt: { pt: 'Tela de metas com a meta de cada representante, barra de andamento, projeção e situação', en: 'Targets screen with each rep’s target, progress bar, projection and status' },
+        caption: { pt: 'O supervisor define a meta de cada representante, e o painel mostra quanto já vendeu, para onde vai no ritmo atual e quanto falta por dia.', en: 'The supervisor sets each rep’s target, and the panel shows what has been sold, where the current pace leads and how much is needed per day.' },
+      },
+      {
+        src: '/cases/painel-comercial/mapa.webp',
+        alt: { pt: 'Mapa do Distrito Federal e entorno com bolhas por região e a lista das maiores regiões', en: 'Map of the Federal District and surroundings with bubbles per region and the list of largest regions' },
+        caption: { pt: 'Cada bolha é uma região e o tamanho mostra o faturamento, o volume ou os clientes. Clicar numa bolha filtra o painel inteiro por ela.', en: 'Each bubble is a region and its size shows revenue, volume or customers. Clicking a bubble filters the whole panel by it.' },
+      },
+      {
+        src: '/cases/painel-comercial/oportunidades.webp',
+        alt: { pt: 'Lista de oportunidades de venda cruzada com a categoria a oferecer e o motivo', en: 'Cross-sell opportunity list with the category to offer and the reason' },
+        caption: { pt: 'Venda cruzada: clientes que ainda não levam uma categoria que quase todo cliente parecido leva, com o potencial por mês e a oferta pronta no WhatsApp.', en: 'Cross-sell: customers who do not yet take a category that almost every similar customer takes, with monthly potential and the offer ready on WhatsApp.' },
+      },
+      {
+        src: '/cases/painel-comercial/comparar.webp',
+        alt: { pt: 'Gráfico de linhas comparando o faturamento de três representantes no mesmo período', en: 'Line chart comparing the revenue of three reps in the same period' },
+        caption: { pt: 'Comparar põe de dois a quatro representantes, regiões, categorias ou produtos lado a lado, com os mesmos filtros do topo.', en: 'Compare puts two to four reps, regions, categories or products side by side, with the same filters from the top.' },
+      },
+      {
+        src: '/cases/painel-comercial/produto.webp',
+        alt: { pt: 'Ficha de um produto com faturamento, onde mais vende, quem mais vende e clientes que pararam de comprar', en: 'Product sheet with revenue, where it sells most, who sells it most and customers who stopped buying' },
+        caption: { pt: 'A ficha do produto responde onde se vende mais, quem mais vende e quem parou de levar, com a posição dele dentro da categoria.', en: 'The product sheet answers where it sells most, who sells it most and who stopped taking it, with its position inside the category.' },
+      },
+      {
+        src: '/cases/painel-comercial/relatorio.webp',
+        alt: { pt: 'Página de PDF com quatro números, gráfico de evolução do período contra o anterior e rankings de produtos, categorias e clientes', en: 'PDF page with four numbers, an evolution chart of the period against the previous one and rankings of products, categories and customers' },
+        caption: { pt: 'O PDF de cada representante abre com um painel de gráficos: o período contra o anterior, produtos, categorias e maiores clientes, e segue com as tabelas.', en: 'Each rep’s PDF opens with a chart panel: the period against the previous one, products, categories and top customers, and goes on with the tables.' },
+      },
+      {
+        src: '/cases/painel-comercial/resumos.webp',
+        alt: { pt: 'Resumos semanais com a lista de semanas à esquerda e os representantes da semana com faturamento e botão de PDF', en: 'Weekly summaries with the week list on the left and the week’s reps with revenue and a PDF button' },
+        caption: { pt: 'Toda segunda-feira às 6h o painel gera o PDF da semana de cada representante. Dá para baixar um por um ou todos num zip.', en: 'Every Monday at 6am the panel generates each rep’s weekly PDF. You can download them one by one or all in a zip.' },
+      },
+      {
+        src: '/cases/painel-comercial/auditoria.webp',
+        alt: { pt: 'Tela de auditoria com as alterações em meses já fechados, mês, valor antes e depois', en: 'Audit screen with changes to already closed months, month, value before and after' },
+        caption: { pt: 'Se uma carga do ERP muda o total de um mês que já fechou, a diferença fica registrada. A mesma tela mostra a qualidade dos dados e quem baixou o quê.', en: 'If an ERP load changes the total of an already closed month, the difference is logged. The same screen shows data quality and who downloaded what.' },
+      },
+      {
+        src: '/cases/painel-comercial/tutorial.webp',
+        alt: { pt: 'Tutorial com a tela escurecida e o menu iluminado ao lado de um balão de explicação', en: 'Tutorial with the screen dimmed and the menu lit up next to an explanation bubble' },
+        caption: { pt: 'Toda tela nova abre com um tutorial em máscara que ilumina uma parte por vez e explica onde apertar, para ninguém precisar de treinamento.', en: 'Every new screen opens with a masked tutorial that lights up one part at a time and explains where to press, so nobody needs training.' },
+      },
+      {
+        src: '/cases/painel-comercial/celular.webp',
+        alt: { pt: 'Três telas de celular: a visão geral, a fila de cobrança e o mapa', en: 'Three phone screens: the overview, the collection queue and the map' },
+        caption: { pt: 'No celular o menu vira uma faixa que rola de lado e os filtros ficam recolhidos num botão. O supervisor confere a fila e liga de onde estiver.', en: 'On the phone the menu becomes a strip that scrolls sideways and the filters collapse into a button. The supervisor checks the queue and calls from wherever they are.' },
       },
     ],
   },
