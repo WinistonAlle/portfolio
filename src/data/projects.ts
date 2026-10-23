@@ -2618,4 +2618,203 @@ export const PROJECTS: Project[] = [
       },
     ],
   },
+  {
+    n: '24',
+    slug: 'prospecta',
+    name: 'Prospecta',
+    status: 'live',
+    context: 'Produto próprio',
+    groups: ['outros'],
+    line: {
+      pt: 'Acha no Google Maps os negócios que precisam de site, dá uma nota de 0 a 100 que explica o porquê e deixa a mensagem de WhatsApp pronta para quem vende site.',
+      en: 'Finds businesses on Google Maps that need a website, gives each a 0 to 100 score that explains itself and leaves the WhatsApp message ready for someone who sells websites.',
+    },
+    stat: {
+      pt: [
+        'A área é escolhida no mapa, com raio ajustável, e a coleta de um nicho leva de 1 a 3 minutos',
+        'Cada site é analisado sozinho e o lead cai em sem site, só rede social, fora do ar, ruim ou ok',
+        'Nota de 0 a 100 com a lista dos motivos ao lado, e o dono achado pelo CNPJ quando o site mostra',
+        '460 testes automáticos e nada é enviado sozinho: a ferramenta prepara, eu aperto enviar',
+      ],
+      en: [
+        'The area is picked on the map, with an adjustable radius, and collecting one niche takes 1 to 3 minutes',
+        'Each site is analysed automatically and the lead lands as no site, social media only, offline, poor or fine',
+        'A 0 to 100 score with the list of reasons beside it, and the owner found through the company ID when the site shows it',
+        '460 automated tests and nothing is sent automatically: the tool prepares, I press send',
+      ],
+    },
+    tags: ['React', 'TypeScript', 'Vite', 'Node', 'Hono', 'SQLite', 'MapLibre', 'Go', 'Vitest'],
+    media: {
+      frame: 'desktop',
+      src: '/cases/prospecta/capa.webp',
+      video: '/cases/prospecta/tour.mp4',
+      poster: '/cases/prospecta/poster.webp',
+      alt: {
+        pt: 'Mapa com os leads marcados e, à esquerda, a ficha de uma clínica com nota 96, os motivos da nota e a mensagem de WhatsApp pronta',
+        en: 'Map with the leads marked and, on the left, a clinic sheet with a score of 96, the reasons for the score and the WhatsApp message ready',
+      },
+    },
+    nota: {
+      pt: 'Os nomes, telefones, donos e endereços das telas e do vídeo são inventados, num banco de demonstração. O banco de verdade, com negócios reais, fica só no meu computador e não aparece aqui. O mapa é real e os negócios marcados nele não são.',
+      en: 'The names, phone numbers, owners and addresses in the screens and the video are made up, in a demo database. The real database, with real businesses, stays on my computer only and does not appear here. The map is real and the businesses marked on it are not.',
+    },
+    problem: {
+      pt: [
+        'Eu vendo sites como freelancer, e o primeiro passo é sempre achar quem precisa de um. As listas de empresas que existem por aí vêm sem critério: nome, telefone e nada sobre o que importa, que é saber se o negócio tem site, se vale a conversa e com quem falar.',
+        'Fazer isso à mão era abrir o Maps, procurar negócio por negócio, abrir o site de cada um e anotar numa planilha. Dava uma ou duas dúzias de contatos por tarde, e metade nem era dos bons.',
+      ],
+      en: [
+        'I sell websites as a freelancer, and the first step is always finding who needs one. The business lists out there come with no criteria: name, phone number and nothing about what matters, which is whether the business has a site, whether it is worth the conversation and who to talk to.',
+        'Doing it by hand meant opening Maps, going business by business, opening each site and noting it down in a spreadsheet. It gave a dozen or two contacts per afternoon, and half of them were not even good ones.',
+      ],
+    },
+    solution: {
+      pt: [
+        'O Prospecta começa pelo mapa. Eu busco a cidade, marco o centro com um clique, ajusto o raio e digo o nicho. Um coletor compilado para o chip do Mac traz os negócios do Google Maps daquela área, e os que ficam fora do raio são cortados. Cada site é aberto e analisado em seguida: ele diz se o negócio não tem site, só tem Instagram, tem um site fora do ar ou um site ruim, com os sinais que justificam, como página sem versão para celular ou muito lenta.',
+        'A nota vai de 0 a 100 e nunca aparece sozinha. Ao lado dela está a conta: sem site vale 45 pontos, muitas avaliações no Google somam, ter celular provável para WhatsApp soma, saber o nome do dono soma. A lista fica ordenada por ela, então o melhor contato é sempre o primeiro. O dono vem da Receita pelo CNPJ quando o site mostra o número, ou eu preencho na ficha.',
+        'A abordagem é toda manual de propósito. A ficha tem a mensagem escrita a partir de um modelo, com o nome da empresa, o bairro, um elogio tirado das avaliações e o meu portfólio no fim, e eu ajusto antes de abrir o WhatsApp. Há modelos para quem não tem site, para quem só tem Instagram, para o retorno em três dias e para quem respondeu. O funil marca em que ponto cada lead está, e o botão Voltar a falar agenda o retorno para amanhã, três dias, uma semana ou três meses.',
+        'A tela de resultados mostra a taxa de resposta, o funil, quanto está em negociação e qual primeira mensagem responde mais, para eu parar de adivinhar o que funciona. O sistema abre com um tutorial em máscara, tem tema claro e escuro, exporta em CSV e roda no endereço local do Mac, com um ícone no Dock.',
+      ],
+      en: [
+        'Prospecta starts from the map. I search the city, mark the centre with a click, adjust the radius and name the niche. A collector compiled for the Mac chip brings the businesses from Google Maps for that area, and those outside the radius are cut. Each site is then opened and analysed: it says whether the business has no site, only an Instagram, an offline site or a poor one, with the signals that justify it, such as a page with no mobile version or a very slow one.',
+        'The score goes from 0 to 100 and never shows up alone. Beside it is the sum: no site is worth 45 points, many Google reviews add up, a likely WhatsApp mobile number adds up, knowing the owner’s name adds up. The list is sorted by it, so the best contact is always first. The owner comes from the tax authority through the company ID when the site shows the number, or I fill it in on the sheet.',
+        'The approach is manual on purpose. The sheet has the message written from a template, with the company name, the neighbourhood, a compliment taken from the reviews and my portfolio at the end, and I adjust it before opening WhatsApp. There are templates for businesses with no site, for those with only Instagram, for the three-day follow-up and for those who replied. The funnel marks where each lead stands, and the Follow up button schedules the return for tomorrow, three days, a week or three months.',
+        'The results screen shows the reply rate, the funnel, how much is in negotiation and which first message gets the most replies, so I stop guessing what works. The system opens with a masked tutorial, has light and dark themes, exports to CSV and runs on a local address on the Mac, with a Dock icon.',
+      ],
+    },
+    gallery: [
+      {
+        src: '/cases/prospecta/lista.webp',
+        alt: { pt: 'Mapa com os leads marcados por pontos azuis e, à esquerda, a lista ordenada pela nota com filtros por tipo de presença', en: 'Map with leads marked by blue dots and, on the left, the list sorted by score with filters by type of presence' },
+        caption: { pt: 'A lista é ordenada pela nota e cada linha mostra a situação do site, as avaliações e se tem celular. Clicar num lead leva o mapa até ele.', en: 'The list is sorted by score and each row shows the site status, the reviews and whether there is a mobile number. Clicking a lead takes the map to it.' },
+      },
+      {
+        src: '/cases/prospecta/filtros.webp',
+        alt: { pt: 'Painel de filtros avançados com etapa do funil, mínimo de avaliações, nota, categoria e bairro', en: 'Advanced filters panel with funnel stage, minimum reviews, rating, category and neighbourhood' },
+        caption: { pt: 'Os filtros afinam a lista por etapa do funil, número de avaliações, nota, categoria, bairro e só quem tem celular. O mapa acompanha o que a lista mostra.', en: 'Filters narrow the list by funnel stage, number of reviews, rating, category, neighbourhood and only those with a mobile number. The map follows what the list shows.' },
+      },
+      {
+        src: '/cases/prospecta/busca.webp',
+        alt: { pt: 'Mapa com um círculo de raio marcado, o campo de nicho preenchido com pizzaria e o botão Buscar ativo', en: 'Map with a radius circle marked, the niche field filled with pizzeria and the Search button active' },
+        caption: { pt: 'Uma busca nova: um clique no mapa marca o centro, o controle ajusta o raio e o nicho é digitado. A coleta roda em segundo plano, uma por vez.', en: 'A new search: one click on the map marks the centre, the control adjusts the radius and the niche is typed. Collection runs in the background, one at a time.' },
+      },
+      {
+        src: '/cases/prospecta/hoje.webp',
+        alt: { pt: 'Aba Para hoje com três leads, o aviso de retorno atrasado em vermelho e os botões Avançou e Recusou', en: 'Today tab with three leads, the overdue follow-up notice in red and the Moved forward and Declined buttons' },
+        caption: { pt: 'Para hoje junta quem tem retorno marcado ou atrasado. Em cada linha, dois botões levam o lead adiante no funil ou o descartam.', en: 'Today gathers whoever has a follow-up due or overdue. On each row, two buttons move the lead forward in the funnel or discard it.' },
+      },
+      {
+        src: '/cases/prospecta/resultados.webp',
+        alt: { pt: 'Tela de resultados com taxa de resposta, valor em negociação, funil em barras e a tabela de qual mensagem responde mais', en: 'Results screen with reply rate, amount in negotiation, a bar funnel and the table of which message gets the most replies' },
+        caption: { pt: 'Resultados mostra a taxa de resposta, o funil e, por modelo de mensagem, quantas foram enviadas e quantas responderam, com um aviso quando a amostra ainda é pequena.', en: 'Results shows the reply rate, the funnel and, per message template, how many were sent and how many replied, with a warning while the sample is still small.' },
+      },
+      {
+        src: '/cases/prospecta/mensagens.webp',
+        alt: { pt: 'Lista de modelos de mensagem com as variáveis disponíveis e os botões Editar e Apagar', en: 'List of message templates with the available variables and the Edit and Delete buttons' },
+        caption: { pt: 'Os modelos aceitam variáveis como nome, bairro, dono, categoria e um elogio tirado das avaliações. Dá para editar, apagar e escolher qual é o padrão.', en: 'Templates accept variables such as name, neighbourhood, owner, category and a compliment taken from the reviews. You can edit, delete and choose the default.' },
+      },
+      {
+        src: '/cases/prospecta/tutorial.webp',
+        alt: { pt: 'Tutorial com a tela escurecida e o campo de cidade iluminado ao lado de um balão de explicação', en: 'Tutorial with the screen dimmed and the city field lit up next to an explanation bubble' },
+        caption: { pt: 'O tutorial escurece a tela e ilumina uma parte por vez, em vinte passos. Abre sozinho na primeira visita e volta pelo botão Tutorial.', en: 'The tutorial dims the screen and lights up one part at a time, in twenty steps. It opens by itself on the first visit and returns through the Tutorial button.' },
+      },
+      {
+        src: '/cases/prospecta/escuro.webp',
+        alt: { pt: 'Tema escuro em azul-marinho com o mapa em tons escuros, o raio da busca e a ficha de um lead', en: 'Dark theme in navy blue with the map in dark tones, the search radius and a lead sheet' },
+        caption: { pt: 'O tema escuro troca também o estilo do mapa. O claro é o padrão e a escolha fica salva.', en: 'The dark theme also swaps the map style. Light is the default and the choice is saved.' },
+      },
+    ],
+  },
+  {
+    n: '25',
+    slug: 'agentflow',
+    name: 'AgentFlow',
+    status: 'live',
+    context: 'Produto próprio',
+    groups: ['outros'],
+    line: {
+      pt: 'Painel local que mostra quanto de cota resta em cada agente de IA de programar, recomenda qual usar numa tarefa e deixa rodar a tarefa só depois de eu confirmar.',
+      en: 'A local dashboard that shows how much quota is left on each AI coding agent, recommends which one to use for a task and only runs the task after I confirm.',
+    },
+    stat: {
+      pt: [
+        'Lê as cotas do Claude Code, do Codex e do Antigravity pelo cache local, sem pedir senha nem token',
+        'Cada janela de cota é mostrada separada: nunca soma períodos diferentes nem inventa um histórico',
+        'Execução supervisionada: projeto cadastrado à mão, dois aceites e permissões de só leitura por padrão',
+        'Python puro, sem dependência de runtime, 44 testes automáticos e ouve só no endereço local',
+      ],
+      en: [
+        'Reads the quotas of Claude Code, Codex and Antigravity from the local cache, without asking for a password or token',
+        'Each quota window is shown separately: it never adds different periods together or invents a history',
+        'Supervised execution: a project registered by hand, two acknowledgements and read-only permissions by default',
+        'Plain Python, no runtime dependency, 44 automated tests and it only listens on the local address',
+      ],
+    },
+    tags: ['Python', 'JavaScript', 'HTML', 'CSS', 'SQLite', 'CLI'],
+    media: {
+      frame: 'desktop',
+      src: '/cases/agentflow/capa.webp',
+      video: '/cases/agentflow/tour.mp4',
+      poster: '/cases/agentflow/poster.webp',
+      alt: {
+        pt: 'Visão geral escura com três agentes instalados, janelas de cota com leitura recente e o cartão do Smart Router',
+        en: 'Dark overview with three installed agents, quota windows with a recent reading and the Smart Router card',
+      },
+    },
+    nota: {
+      pt: 'Nas execuções do vídeo e das telas os agentes são simulados, num repositório descartável: nenhum modelo de verdade foi chamado. As leituras de cota e de versão vêm da minha própria máquina, no momento da gravação.',
+      en: 'In the executions in the video and screens the agents are simulated, in a disposable repository: no real model was called. The quota and version readings come from my own machine at the time of recording.',
+    },
+    problem: {
+      pt: [
+        'Eu trabalho com três agentes de IA para programar, cada um com a sua cota de uso por janela de cinco horas e por semana. Saber qual ainda tinha folga significava abrir três lugares diferentes, e eu escolhia pelo hábito, não pelo que sobrava.',
+        'Quando a cota acabava no meio de uma tarefa, eu só descobria na hora. E deixar um agente mexer num projeto exigia confiar que ele pediria permissão no momento certo.',
+      ],
+      en: [
+        'I work with three AI coding agents, each with its own usage quota per five-hour window and per week. Knowing which one still had room meant opening three different places, and I chose out of habit, not by what was left.',
+        'When the quota ran out in the middle of a task, I only found out then. And letting an agent touch a project meant trusting it would ask for permission at the right moment.',
+      ],
+    },
+    solution: {
+      pt: [
+        'O AgentFlow junta tudo numa tela. Ele descobre quais agentes estão instalados, lê o catálogo de modelos que cada um guardou na máquina e as cotas pelo cache do Codenotch, um app que já as acompanhava. Cada leitura traz a idade: recente, antiga ou desconhecida. Desconhecido não vira zero, porque falta de informação não é cota esgotada, e janelas de escopos diferentes nunca são somadas.',
+        'O Smart Router recebe a descrição da tarefa e responde com uma recomendação explicada: a categoria que ele entendeu, a afinidade do agente, o estado da cota e o que ficou incerto. Há três modos, qualidade, equilíbrio e economia, e a análise roda só no servidor local e não aciona nenhum agente.',
+        'A versão 0.2 acrescentou a execução, separada da recomendação de propósito. Cada projeto precisa ser cadastrado pelo terminal, tem de ser um repositório Git e é recusado se for um diretório amplo ou um atalho. Para rodar, a tarefa é preparada, eu reviso diretório, ramo, agente e objetivo, marco duas confirmações e só então ela começa. Os agentes entram com perfis restritos, e se a tarefa exigir escrita ou uma permissão que não existe, ela termina como Needs attention em vez de receber acesso sozinha.',
+        'A parte de segurança foi tratada como requisito, não como detalhe. O servidor só ouve no endereço local, a área de execução exige uma chave aleatória que vive na sessão da aba e é tirada do endereço depois de lida, e cada pedido confere origem e formato. O histórico fica num banco privado e as saídas passam por uma limpeza para não guardar segredos. O visual foi refeito em modo escuro com um acento verde-menta, sem biblioteca de ícones ou de gráficos, e respeita a preferência por menos movimento.',
+      ],
+      en: [
+        'AgentFlow puts everything on one screen. It finds which agents are installed, reads the model catalogue each one stored on the machine and the quotas from the cache of Codenotch, an app that already tracked them. Every reading carries its age: recent, old or unknown. Unknown never becomes zero, because missing information is not an exhausted quota, and windows from different scopes are never added together.',
+        'The Smart Router takes the task description and answers with an explained recommendation: the category it understood, the agent’s affinity, the quota state and what stayed uncertain. There are three modes, quality, balanced and economy, and the analysis runs only on the local server and triggers no agent.',
+        'Version 0.2 added execution, kept separate from the recommendation on purpose. Each project has to be registered through the terminal, must be a Git repository and is refused if it is a broad directory or a shortcut. To run, the task is prepared, I review directory, branch, agent and objective, tick two confirmations and only then does it start. Agents get restricted profiles, and if the task needs writing or a permission that does not exist, it ends as Needs attention instead of getting access on its own.',
+        'Security was treated as a requirement, not a detail. The server only listens on the local address, the execution area requires a random key that lives in the tab session and is removed from the address after being read, and every request checks origin and format. History sits in a private database and outputs go through a cleaning step so secrets are not stored. The look was redone in dark mode with a mint accent, with no icon or chart library, and respects the reduced motion preference.',
+      ],
+    },
+    gallery: [
+      {
+        src: '/cases/agentflow/agentes.webp',
+        alt: { pt: 'Tela de agentes e modelos com o cartão do Claude Code e do Codex, caminho do executável, janelas de cota e barras de uso', en: 'Agents and models screen with the Claude Code and Codex cards, executable path, quota windows and usage bars' },
+        caption: { pt: 'Cada agente mostra de onde vem cada dado: o executável, a origem da versão e a idade de cada leitura. As barras têm texto equivalente, para não depender só de cor.', en: 'Each agent shows where each piece of data comes from: the executable, the version source and the age of each reading. Bars have a text equivalent, so they do not rely on colour alone.' },
+      },
+      {
+        src: '/cases/agentflow/router.webp',
+        alt: { pt: 'Smart Router com a tarefa escrita, os três modos e a recomendação do Codex com as razões e as outras opções elegíveis', en: 'Smart Router with the task written, the three modes and the Codex recommendation with the reasons and the other eligible options' },
+        caption: { pt: 'O Router explica a escolha e diz o que não sabe: aqui o modelo é unknown, e o aviso de que a disponibilidade não foi comprovada aparece junto da recomendação.', en: 'The Router explains the choice and says what it does not know: here the model is unknown, and the warning that availability was not verified appears with the recommendation.' },
+      },
+      {
+        src: '/cases/agentflow/confirm.webp',
+        alt: { pt: 'Diálogo Revise antes de executar com projeto, diretório, ramo, agente, objetivo, tempo limite e duas caixas de confirmação', en: 'Review before running dialog with project, directory, branch, agent, objective, time limit and two confirmation checkboxes' },
+        caption: { pt: 'Nada roda sem este diálogo. Ele repete o que vai acontecer, pede dois aceites e avisa que não haverá aprovação automática, troca de provedor, commit, push ou deploy.', en: 'Nothing runs without this dialog. It repeats what is about to happen, asks for two acknowledgements and warns there will be no automatic approval, provider switch, commit, push or deploy.' },
+      },
+      {
+        src: '/cases/agentflow/concluida.webp',
+        alt: { pt: 'Execução concluída com o selo Completed, resumo, identificadores, horários, arquivos observados e botões de retomada e handoff', en: 'Completed execution with the Completed badge, summary, identifiers, times, observed files and resume and handoff buttons' },
+        caption: { pt: 'O estado vem do processo e dos eventos, nunca de uma barra de progresso inventada. Retomar exige preparar e confirmar outro plano.', en: 'The state comes from the process and the events, never from an invented progress bar. Resuming requires preparing and confirming another plan.' },
+      },
+      {
+        src: '/cases/agentflow/diag.webp',
+        alt: { pt: 'Tela de diagnóstico com a leitura local, os limites da versão, o significado dos estados e a origem dos dados', en: 'Diagnostics screen with the local reading, the version limits, what the states mean and where the data comes from' },
+        caption: { pt: 'Diagnóstico explica as fontes e os limites. Fresh, stale e unknown têm definição escrita, e a tela diz que o relógio reavalia a validade sem buscar dado nenhum.', en: 'Diagnostics explains the sources and limits. Fresh, stale and unknown have a written definition, and the screen says the clock re-evaluates validity without fetching any data.' },
+      },
+    ],
+  },
 ];
