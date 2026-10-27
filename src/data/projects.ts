@@ -2760,6 +2760,7 @@ export const PROJECTS: Project[] = [
         en: 'First screen of the Cintila store: the headline Delicate pieces for everyday wear, the See the collection and Talk on WhatsApp buttons and a photo of gold rings and chains in an arch',
       },
     },
+    links: [{ kind: 'site', href: 'https://semijoias-nine.vercel.app' }],
     nota: {
       pt: 'A Cintila é uma loja FICTÍCIA, feita para este portfólio: nome, preços e dados da empresa são de exemplo. As fotos das peças vêm do Unsplash, de uso livre, e o WhatsApp do pedido é um número de teste.',
       en: 'Cintila is a FICTITIOUS store, built for this portfolio: name, prices and company details are examples. The product photos come from Unsplash, free to use, and the order WhatsApp is a test number.',
