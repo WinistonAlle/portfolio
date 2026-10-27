@@ -2754,6 +2754,7 @@ export const PROJECTS: Project[] = [
     media: {
       frame: 'desktop',
       src: '/cases/semijoias/capa.webp',
+      video: '/cases/semijoias/tour.mp4',
       poster: '/cases/semijoias/poster.webp',
       alt: {
         pt: 'Primeira tela da loja Cintila: título Peças delicadas para usar todo dia, botões Ver a coleção e Falar no WhatsApp e uma foto de anéis e correntes douradas num arco',
