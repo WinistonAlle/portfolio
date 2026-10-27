@@ -2818,4 +2818,101 @@ export const PROJECTS: Project[] = [
       },
     ],
   },
+  {
+    n: '26',
+    slug: 'agentflow',
+    name: 'AgentFlow',
+    status: 'wip',
+    context: 'Produto próprio',
+    groups: ['outros'],
+    line: {
+      pt: 'Um terminal para trabalhar com vários agentes de IA de programar: mostra a cota de cada um, recomenda qual usar e só executa a tarefa depois que eu digito a confirmação.',
+      en: 'A terminal for working with several AI coding agents: it shows each one’s quota, recommends which to use and only runs the task after I type the confirmation.',
+    },
+    stat: {
+      pt: [
+        'Interface inteira no terminal: conversa com rolagem de um lado, monitor de cotas fixo do outro',
+        'Lê as cotas do Claude Code, do Codex e do Antigravity pelo cache local, sem pedir senha nem token',
+        'Execução supervisionada: o plano é mostrado e só roda depois de digitar EXECUTAR',
+        'Python puro, sem dependência de runtime, mais de 500 testes automáticos',
+      ],
+      en: [
+        'Entire interface in the terminal: a scrolling conversation on one side, a fixed quota monitor on the other',
+        'Reads the quotas of Claude Code, Codex and Antigravity from the local cache, without asking for a password or token',
+        'Supervised execution: the plan is shown and only runs after typing EXECUTAR',
+        'Plain Python, no runtime dependency, more than 500 automated tests',
+      ],
+    },
+    tags: ['Python', 'Terminal', 'TUI', 'CLI', 'SQLite'],
+    media: {
+      frame: 'desktop',
+      src: '/cases/agentflow/capa.webp',
+      video: '/cases/agentflow/tour.mp4',
+      poster: '/cases/agentflow/poster.webp',
+      alt: {
+        pt: 'Terminal com a abertura do AgentFlow: logotipo em blocos, a lista de agentes com barras de cota e, à direita, o monitor fixo com as janelas de cada agente',
+        en: 'Terminal showing the AgentFlow opening: a block-built logo, the agents list with quota bars and, on the right, the fixed monitor with each agent’s windows',
+      },
+    },
+    nota: {
+      pt: 'O AgentFlow ainda está em desenvolvimento. Nas execuções do vídeo e das telas os agentes são simulados, e a tela diz isso com o selo SIMULAÇÃO: nenhum modelo de verdade foi chamado. As leituras de cota vêm da minha própria máquina, no momento da gravação.',
+      en: 'AgentFlow is still in development. In the executions in the video and screens the agents are simulated, and the screen says so with a SIMULATION badge: no real model was called. The quota readings come from my own machine at the time of recording.',
+    },
+    problem: {
+      pt: [
+        'Eu trabalho com três agentes de IA para programar, cada um com a sua cota de uso por janela de cinco horas e por semana. Saber qual ainda tinha folga significava abrir três lugares diferentes, e eu escolhia pelo hábito, não pelo que sobrava.',
+        'Quando a cota acabava no meio de uma tarefa, eu só descobria na hora. E deixar um agente mexer num projeto exigia confiar que ele pediria permissão no momento certo. Como eu já passo o dia no terminal, a ferramenta precisava viver lá.',
+      ],
+      en: [
+        'I work with three AI coding agents, each with its own usage quota per five-hour window and per week. Knowing which one still had room meant opening three different places, and I chose out of habit, not by what was left.',
+        'When the quota ran out in the middle of a task, I only found out then. And letting an agent touch a project meant trusting it would ask for permission at the right moment. Since I already spend the day in the terminal, the tool had to live there.',
+      ],
+    },
+    solution: {
+      pt: [
+        'O AgentFlow abre no terminal com o comando flow. A tela é dividida em duas partes: à esquerda a conversa, que rola por dentro, e à direita um monitor fixo com os agentes instalados e as janelas de cota de cada um. Cada leitura traz a idade, recente ou antiga, e desconhecido nunca vira zero, porque falta de informação não é cota esgotada.',
+        'Eu descrevo a tarefa em texto livre e o Smart Router responde com uma recomendação explicada: qual agente, o estado da cota e o que ficou incerto. Em seguida a tela mostra o plano completo, com agente, escopo, diretório, modo, limites e cobrança, e só segue quando eu digito EXECUTAR. Qualquer outra coisa cancela.',
+        'Durante a execução o estado vem do processo, nunca de uma barra de progresso inventada. Se a janela de um agente acaba, a interface anima a passagem de contexto para outro e registra o motivo. Se o agente pede uma permissão que o modo supervisionado não concede, a tarefa termina como Needs attention em vez de receber acesso sozinha.',
+        'A administração tem um espaço próprio, os comandos :flow, que nunca colidem com os comandos do agente. Tudo é feito só com Python da biblioteca padrão, e o visual usa cor, o logotipo em blocos e barras de texto, com a leitura equivalente em palavras para não depender só de cor.',
+      ],
+      en: [
+        'AgentFlow opens in the terminal with the flow command. The screen is split in two: on the left the conversation, which scrolls inside, and on the right a fixed monitor with the installed agents and each one’s quota windows. Every reading carries its age, recent or old, and unknown never becomes zero, because missing information is not an exhausted quota.',
+        'I describe the task in free text and the Smart Router answers with an explained recommendation: which agent, the quota state and what stayed uncertain. Then the screen shows the full plan, with agent, scope, directory, mode, limits and billing, and only goes on when I type EXECUTAR. Anything else cancels.',
+        'During execution the state comes from the process, never from an invented progress bar. If an agent’s window runs out, the interface animates the context moving to another one and records the reason. If the agent asks for a permission the supervised mode does not grant, the task ends as Needs attention instead of getting access on its own.',
+        'Administration has a namespace of its own, the :flow commands, which never collide with the agent’s commands. Everything runs on the Python standard library only, and the look uses colour, the block-built logo and text bars, with the equivalent reading in words so it does not rely on colour alone.',
+      ],
+    },
+    gallery: [
+      {
+        src: '/cases/agentflow/confirm.webp',
+        alt: { pt: 'Terminal com a recomendação do Smart Router e o bloco Executar tarefa com agente, escopo, diretório, modo, limites e a instrução para digitar EXECUTAR', en: 'Terminal with the Smart Router recommendation and the Run task block with agent, scope, directory, mode, limits and the instruction to type EXECUTAR' },
+        caption: { pt: 'Nada roda sem este bloco. Ele repete agente, escopo, diretório e limites, e só aceita a palavra EXECUTAR: qualquer outra coisa cancela.', en: 'Nothing runs without this block. It repeats agent, scope, directory and limits, and only accepts the word EXECUTAR: anything else cancels.' },
+      },
+      {
+        src: '/cases/agentflow/concluida.webp',
+        alt: { pt: 'Terminal com a execução concluída, a resposta simulada, o uso de tokens de entrada e saída e o monitor com o estado Concluída', en: 'Terminal with the completed execution, the simulated reply, input and output token usage and the monitor showing the Completed state' },
+        caption: { pt: 'A execução termina com resumo, tokens e o aviso de que eles não medem a cota. O monitor à direita acompanha o estado do começo ao fim.', en: 'The execution ends with a summary, tokens and a note that they do not measure the quota. The monitor on the right follows the state from start to finish.' },
+      },
+      {
+        src: '/cases/agentflow/handoff.webp',
+        alt: { pt: 'Terminal com o aviso de janela de 5 horas atingida e a animação de handoff do Claude para o Codex', en: 'Terminal with the 5-hour window reached notice and the handoff animation from Claude to Codex' },
+        caption: { pt: 'Quando a janela de um agente acaba, o contexto passa para outro com o motivo registrado. O destino precisa confirmar o recebimento e a origem segue intacta.', en: 'When an agent’s window runs out, the context moves to another with the reason recorded. The destination has to confirm receipt and the source stays intact.' },
+      },
+      {
+        src: '/cases/agentflow/aprovacao.webp',
+        alt: { pt: 'Terminal com o aviso Precisa de atenção: aprovação pendente, explicando que o modo supervisionado não concede a permissão pedida', en: 'Terminal with the Needs attention: pending approval notice, explaining that supervised mode does not grant the requested permission' },
+        caption: { pt: 'Quando o agente pede uma permissão que o modo não concede, a tarefa para e explica. O AgentFlow não aprova nada por mim.', en: 'When the agent asks for a permission the mode does not grant, the task stops and explains. AgentFlow approves nothing on my behalf.' },
+      },
+      {
+        src: '/cases/agentflow/ajuda.webp',
+        alt: { pt: 'Terminal com a lista de comandos :flow, cada um com uma linha de explicação, e o guia de como conversar', en: 'Terminal with the list of :flow commands, each with a one-line explanation, and the guide on how to chat' },
+        caption: { pt: 'A administração vive no próprio espaço, com :flow na frente, e nunca colide com os comandos do agente. A ajuda diz o que cada um faz.', en: 'Administration lives in its own space, with :flow in front, and never collides with the agent’s commands. Help says what each one does.' },
+      },
+      {
+        src: '/cases/agentflow/agentes.webp',
+        alt: { pt: 'Terminal com o comando :flow agents mostrando os agentes instalados, versões, barras de cota e o catálogo de modelos observado', en: 'Terminal with the :flow agents command showing installed agents, versions, quota bars and the observed model catalogue' },
+        caption: { pt: 'Cada agente mostra a versão, as barras de cota e o catálogo de modelos lido da máquina, com a ressalva de que a autorização não foi comprovada.', en: 'Each agent shows the version, the quota bars and the model catalogue read from the machine, with the caveat that authorization was not verified.' },
+      },
+    ],
+  },
 ];
