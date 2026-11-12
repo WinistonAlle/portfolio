@@ -1081,12 +1081,12 @@ export const PROJECTS: Project[] = [
     },
     stat: {
       pt: [
-        'Vinte e sete cases, cada um com vídeo do sistema rodando de verdade',
+        'Vinte e oito cases, cada um com vídeo do sistema rodando de verdade',
         'Português e inglês na mesma base: tradução faltando quebra o build',
         'A abertura é um MacBook 3D em three.js, guiado pela rolagem; no celular, um iPhone',
       ],
       en: [
-        'Twenty-seven cases, each with video of the system actually running',
+        'Twenty-eight cases, each with video of the system actually running',
         'Portuguese and English from one source: a missing translation breaks the build',
         'The opening is a 3D MacBook in three.js, driven by scroll; on phones, an iPhone',
       ],
@@ -3029,6 +3029,104 @@ export const PROJECTS: Project[] = [
         src: '/cases/mural/celular.webp',
         alt: { pt: 'Três telas de celular: a página de download, os comunicados e os PCs', en: 'Three phone screens: the download page, notices and PCs' },
         caption: { pt: 'No celular o menu vira uma faixa no topo, com os dois atalhos de aviso sempre à mão. Dá para tirar um aviso do ar de onde estiver.', en: 'On the phone the menu becomes a strip at the top, with both notice shortcuts always at hand. A notice can be taken down from anywhere.' },
+      },
+    ],
+  },
+  {
+    n: '28',
+    slug: 'desafio-gowin',
+    name: 'Desafio Go Win',
+    status: 'live',
+    context: 'Cliente',
+    groups: ['sites', 'outros'],
+    line: {
+      pt: 'Um desafio fitness de 31 dias inteiro: a landing que vende, o questionário que monta o plano, o pagamento, o acesso pelo WhatsApp e o app onde a pessoa treina, faz check-in e disputa o ranking.',
+      en: 'A complete 31-day fitness challenge: the landing that sells, the quiz that builds the plan, the payment, access over WhatsApp and the app where people train, check in and compete on the ranking.',
+    },
+    stat: {
+      pt: [
+        'Da primeira visita ao primeiro treino sem ninguém do suporte no meio',
+        'Questionário de 10 perguntas que vira o plano mostrado antes do pagamento',
+        'Treino montado sozinho pela anamnese, a partir de uma biblioteca de mais de mil exercícios',
+        'Pontos por treino, cardio, água e tarefas surpresa, com multiplicador pela sequência',
+      ],
+      en: [
+        'From the first visit to the first workout with nobody from support in between',
+        'A 10-question quiz that becomes the plan shown before payment',
+        'Workouts built automatically from the health questionnaire, out of a library of more than a thousand exercises',
+        'Points for workouts, cardio, water and surprise tasks, with a streak multiplier',
+      ],
+    },
+    tags: ['Next.js', 'React', 'Supabase', 'AbacatePay', 'WhatsApp', 'Vercel'],
+    media: {
+      frame: 'desktop',
+      src: '/cases/desafio-gowin/capa.webp',
+      video: '/cases/desafio-gowin/tour.mp4',
+      poster: '/cases/desafio-gowin/poster.webp',
+      alt: {
+        pt: 'Landing do Desafio Go Win com o título Sua melhor versão te espera no fim do ano, a lista do que vem no desafio e o botão de inscrição',
+        en: 'Desafio Go Win landing with the headline Your best version is waiting at the end of the year, the list of what the challenge includes and the sign-up button',
+      },
+    },
+    links: [{ kind: 'site', href: 'https://desafio.gowinfit.com.br' }],
+    nota: {
+      pt: 'O questionário do vídeo foi preenchido com uma pessoa inventada e parou antes do pagamento. O app aparece no modo de demonstração, com participantes e posts de exemplo: nenhum dado de quem se inscreveu de verdade está nas telas.',
+      en: 'The quiz in the video was filled in with a made-up person and stopped before payment. The app is shown in demo mode, with sample participants and posts: no data from real sign-ups appears on screen.',
+    },
+    problem: {
+      pt: [
+        'O treinador queria transformar o desafio de 30 dias num produto que se repete algumas vezes por ano. Aplicativo de treino pronto resolve a ficha, mas deixa de fora o resto: a venda, a cobrança, a entrega do acesso, o grupo e a pontuação, que acabam feitos à mão, pessoa por pessoa.',
+        'Para dar conta disso sem crescer a equipe, o caminho inteiro precisava andar sozinho: vender, cobrar, entregar o acesso, montar um treino seguro para cada nível e manter as pessoas voltando por 31 dias.',
+      ],
+      en: [
+        'The trainer wanted to turn the 30-day challenge into a product that repeats a few times a year. An off-the-shelf workout app handles the plan but leaves out the rest: selling, charging, delivering access, the group and the points, which end up done by hand, person by person.',
+        'To manage that without growing the team, the whole path had to run on its own: sell, charge, deliver access, build a safe workout for each level and keep people coming back for 31 days.',
+      ],
+    },
+    solution: {
+      pt: [
+        'A landing é uma tela só, com a promessa, o que vem no desafio, as datas e o preço da pré-venda. O botão leva a um questionário de dez perguntas: objetivo, como a pessoa se sente, o que travou até hoje, quantos dias e onde vai treinar, e um campo para escrever o maior objetivo com as próprias palavras. No fim aparece o plano dela, com as respostas de volta, e só aí o preço e o botão de pagar, por Pix ou cartão no AbacatePay.',
+        'Quando o pagamento cai, o sistema já cria a conta. A página de confirmação tem um vídeo do treinador e um botão que abre o WhatsApp com um código pronto; um robô responde com o link do app, a senha provisória e o grupo da comunidade. Escolhi assim porque um número novo de WhatsApp não consegue começar conversa, então quem escreve primeiro é sempre a pessoa.',
+        'No primeiro acesso vem a anamnese, com as perguntas do treinador e da nutricionista. Ela classifica o nível e acende uma bandeira verde, amarela ou vermelha: verde recebe a ficha na hora, montada sozinha a partir da biblioteca de exercícios; amarela espera a aprovação do treinador; vermelha só treina depois da liberação. Um tutorial em máscara apresenta cada parte do app.',
+        'O dia a dia acontece em quatro abas: Hoje, com as tarefas e os pontos; Treino, com a ficha do dia; Feed, onde o check-in com foto vira post, curtida e comentário; e o ranking, com pódio e desempate por número de treinos e maior sequência. Do outro lado, o painel da equipe mostra inscrições, as filas da anamnese, as provas das tarefas surpresa e o conteúdo de cada semana.',
+      ],
+      en: [
+        'The landing is a single screen, with the promise, what the challenge includes, the dates and the pre-sale price. The button leads to a ten-question quiz: goal, how the person feels, what has held them back, how many days and where they will train, and a field to write their biggest goal in their own words. At the end their plan appears, echoing the answers, and only then the price and the pay button, by Pix or card through AbacatePay.',
+        'When the payment lands, the system already creates the account. The confirmation page has a video from the trainer and a button that opens WhatsApp with a ready code; a bot answers with the app link, a temporary password and the community group. I went this way because a new WhatsApp number cannot start conversations, so the person always writes first.',
+        'On first access comes the health questionnaire, with questions from the trainer and the nutritionist. It sets the level and raises a green, yellow or red flag: green gets the workout plan right away, built automatically from the exercise library; yellow waits for the trainer’s approval; red only trains after clearance. A masked tutorial walks through each part of the app.',
+        'Daily use happens in four tabs: Today, with tasks and points; Workout, with the day’s plan; Feed, where a photo check-in becomes a post with likes and comments; and the ranking, with a podium and a tiebreak by number of workouts and longest streak. On the other side, the team panel shows sign-ups, the questionnaire queues, the proofs for surprise tasks and each week’s content.',
+      ],
+    },
+    gallery: [
+      {
+        src: '/cases/desafio-gowin/quiz.webp',
+        alt: { pt: 'Questionário na pergunta 2 de 10, O que você quer ver no espelho em 23 de dezembro, com cinco opções numeradas', en: 'Quiz on question 2 of 10, What do you want to see in the mirror on December 23, with five numbered options' },
+        caption: { pt: 'Uma pergunta por tela, com número e progresso no topo. O questionário guarda as respostas no aparelho e continua de onde parou se a pessoa sair.', en: 'One question per screen, with the number and progress at the top. The quiz keeps answers on the device and picks up where it stopped if the person leaves.' },
+      },
+      {
+        src: '/cases/desafio-gowin/plano.webp',
+        alt: { pt: 'Resultado do questionário com o plano da Ana, a meta um corpo definido, a frase dela e o preço de pré-venda com o botão Garantir minha vaga', en: 'Quiz result with Ana’s plan, the goal a defined body, her own sentence and the pre-sale price with the Secure my spot button' },
+        caption: { pt: 'O preço só aparece depois do plano. A página repete a meta, a frase que a pessoa escreveu e o que travou, e mostra quando a pré-venda acaba.', en: 'The price only shows after the plan. The page repeats the goal, the sentence the person wrote and what held them back, and shows when the pre-sale ends.' },
+      },
+      {
+        src: '/cases/desafio-gowin/obrigado.webp',
+        alt: { pt: 'Página Ana, você está dentro, com o botão Receber meu acesso no WhatsApp, os próximos passos e o vídeo do treinador', en: 'Page Ana, you are in, with the Get my access on WhatsApp button, the next steps and the trainer’s video' },
+        caption: { pt: 'Depois do pagamento, o treinador dá parabéns em vídeo e a página lista os próximos passos. O botão abre o WhatsApp com o código da inscrição já escrito.', en: 'After payment, the trainer congratulates the person on video and the page lists the next steps. The button opens WhatsApp with the sign-up code already written.' },
+      },
+      {
+        src: '/cases/desafio-gowin/celular-site.webp',
+        alt: { pt: 'Três telas de celular: a landing, o plano com o preço e a confirmação do pagamento', en: 'Three phone screens: the landing, the plan with the price and the payment confirmation' },
+        caption: { pt: 'A divulgação é pelo Instagram, então quase todo acesso vem do celular. A landing cabe numa tela e o botão de pagar fica sempre à vista no plano.', en: 'Promotion happens on Instagram, so almost every visit comes from a phone. The landing fits one screen and the pay button stays in view on the plan.' },
+      },
+      {
+        src: '/cases/desafio-gowin/app-hoje.webp',
+        alt: { pt: 'Três telas do app: o tutorial no passo 2 de 17, a aba Hoje com o cartão Bora treinar e a aba Treino com a ficha do dia', en: 'Three app screens: the tutorial at step 2 of 17, the Today tab with the Lets train card and the Workout tab with the day’s plan' },
+        caption: { pt: 'O tutorial ilumina uma parte por vez. Na aba Hoje ficam o check-in e as tarefas do dia; na aba Treino, a ficha com séries, repetições e descanso.', en: 'The tutorial lights up one part at a time. The Today tab holds the check-in and the day’s tasks; the Workout tab, the plan with sets, reps and rest.' },
+      },
+      {
+        src: '/cases/desafio-gowin/app-feed.webp',
+        alt: { pt: 'Três telas do app: o check-in com foto, o feed com posts dos participantes e o ranking com pódio', en: 'Three app screens: the photo check-in, the feed with participants’ posts and the ranking with a podium' },
+        caption: { pt: 'O check-in aceita foto tirada na hora ou da galeria e vira post no feed. O ranking mostra o pódio e a posição de quem está olhando.', en: 'The check-in takes a photo from the camera or the gallery and becomes a post in the feed. The ranking shows the podium and the viewer’s own position.' },
       },
     ],
   },
