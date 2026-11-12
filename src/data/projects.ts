@@ -1081,12 +1081,12 @@ export const PROJECTS: Project[] = [
     },
     stat: {
       pt: [
-        'Vinte e oito cases, cada um com vídeo do sistema rodando de verdade',
+        'Vinte e nove cases, cada um com vídeo do sistema rodando de verdade',
         'Português e inglês na mesma base: tradução faltando quebra o build',
         'A abertura é um MacBook 3D em three.js, guiado pela rolagem; no celular, um iPhone',
       ],
       en: [
-        'Twenty-eight cases, each with video of the system actually running',
+        'Twenty-nine cases, each with video of the system actually running',
         'Portuguese and English from one source: a missing translation breaks the build',
         'The opening is a 3D MacBook in three.js, driven by scroll; on phones, an iPhone',
       ],
@@ -3127,6 +3127,108 @@ export const PROJECTS: Project[] = [
         src: '/cases/desafio-gowin/app-feed.webp',
         alt: { pt: 'Três telas do app: o check-in com foto, o feed com posts dos participantes e o ranking com pódio', en: 'Three app screens: the photo check-in, the feed with participants’ posts and the ranking with a podium' },
         caption: { pt: 'O check-in aceita foto tirada na hora ou da galeria e vira post no feed. O ranking mostra o pódio e a posição de quem está olhando.', en: 'The check-in takes a photo from the camera or the gallery and becomes a post in the feed. The ranking shows the podium and the viewer’s own position.' },
+      },
+    ],
+  },
+  {
+    n: '29',
+    slug: 'dr-guilherme',
+    name: 'Dr. Guilherme Lucas',
+    status: 'live',
+    context: 'Cliente',
+    groups: ['sites'],
+    line: {
+      pt: 'Site de página única para um médico de saúde mental: preto e dourado, uma abertura com o monograma dele e um caminho direto até o WhatsApp da consulta.',
+      en: 'Single-page website for a mental health physician: black and gold, an opening with his monogram and a direct path to booking on WhatsApp.',
+    },
+    stat: {
+      pt: [
+        'No ar na Vercel, fora dos buscadores até o registro de especialista ser confirmado',
+        'Uma página em Astro, sem React: no navegador vão só a rolagem fluida e os efeitos da própria página',
+        'Agendamento só pelo WhatsApp, com a mensagem já escrita de acordo com o botão clicado',
+        'Versão própria para celular, sem rolagem lateral de 375 a 768 px',
+      ],
+      en: [
+        'Live on Vercel, kept out of search engines until his specialist registration is confirmed',
+        'One page in Astro, with no React: the browser only gets the smooth scrolling and the page’s own effects',
+        'Booking only on WhatsApp, with the message already written according to the button clicked',
+        'A layout of its own for phones, with no sideways scroll from 375 to 768 px',
+      ],
+    },
+    tags: ['Astro', 'TypeScript', 'WebGL', 'Vercel'],
+    media: {
+      frame: 'desktop',
+      src: '/cases/dr-guilherme/capa.webp',
+      video: '/cases/dr-guilherme/tour.mp4',
+      poster: '/cases/dr-guilherme/poster.webp',
+      alt: {
+        pt: 'Primeira tela do site em fundo preto: o nome Dr. Guilherme Lucas, o título em dourado, o botão de agendar e a foto do médico à direita com uma luz dourada ao fundo',
+        en: 'First screen of the site on a black background: the name Dr. Guilherme Lucas, the headline in gold, the booking button and the physician’s photo on the right with a golden light behind',
+      },
+    },
+    links: [{ kind: 'site', href: 'https://dr-guilherme-lucas.vercel.app' }],
+    problem: {
+      pt: [
+        'O Dr. Guilherme queria um site que tivesse a cara do cartão de visita dele, preto e dourado, e que levasse a pessoa a marcar a consulta sem formulário nem cadastro. O atendimento é online e presencial, e quem procura ajuda em saúde mental costuma chegar pelo celular, com pouca paciência para ler.',
+        'Havia também a regra da publicidade médica: nada de prometer resultado nem de usar título de especialista antes do registro estar confirmado.',
+      ],
+      en: [
+        'Dr. Guilherme wanted a site that looked like his business card, black and gold, and that led people to book an appointment with no form or sign-up. He sees patients online and in person, and people looking for mental health care usually arrive on a phone, with little patience for reading.',
+        'There were also medical advertising rules: no promised results and no specialist title before the registration is confirmed.',
+      ],
+    },
+    solution: {
+      pt: [
+        'Tudo cabe numa página só, na ordem em que a pessoa decide: a frase de abertura, quem é o médico, os três pilares do cuidado, o que acontece na consulta, a consulta online, as dúvidas e o convite final. Cada botão abre o WhatsApp com uma mensagem diferente, então a secretaria já sabe de onde a pessoa veio.',
+        'O site abre com duas linhas douradas que desenham o monograma GL antes de a página aparecer. No topo, uma aurora dourada em WebGL fica atrás da foto. Ao rolar, o título acende palavra por palavra, os pilares se empilham como cartas e a lista da consulta fica presa enquanto o texto troca. Quem pede menos movimento no sistema vê tudo parado.',
+        'No celular a primeira tela cortava o rosto do médico com um cartão por cima. Refiz a dobra para telas estreitas: os pilares viraram uma faixa de três colunas na base da foto e os cartões da consulta foram para baixo da imagem.',
+      ],
+      en: [
+        'Everything fits in a single page, in the order people decide: the opening line, who the physician is, the three pillars of care, what happens in the appointment, the online appointment, questions and the final invitation. Each button opens WhatsApp with a different message, so the front desk already knows where the person came from.',
+        'The site opens with two golden lines that draw the GL monogram before the page shows up. At the top, a golden WebGL aurora sits behind the photo. On scroll, the headline lights up word by word, the pillars stack like cards and the appointment list stays pinned while the text changes. Whoever asks the system for less motion sees everything still.',
+        'On phones the first screen covered the physician’s face with a card. I rebuilt the section for narrow screens: the pillars became a three-column strip at the bottom of the photo and the appointment cards moved below the image.',
+      ],
+    },
+    gallery: [
+      {
+        src: '/cases/dr-guilherme/abertura.webp',
+        alt: { pt: 'Tela preta com o monograma GL em dourado e o nome do médico no centro', en: 'Black screen with the GL monogram in gold and the physician’s name in the centre' },
+        caption: { pt: 'A abertura: as linhas douradas entram pelas bordas, desenham o GL e saem para revelar a página. Só some quando a página terminou de carregar.', en: 'The opening: the golden lines come in from the edges, draw the GL and leave to reveal the page. It only goes away once the page has finished loading.' },
+      },
+      {
+        src: '/cases/dr-guilherme/frase.webp',
+        alt: { pt: 'Dobra com a frase Você sente que ainda falta algo, com o final em dourado', en: 'Section with the line Do you feel something is still missing, with the ending in gold' },
+        caption: { pt: 'A frase acende palavra por palavra conforme a rolagem passa por ela.', en: 'The line lights up word by word as the scroll moves through it.' },
+      },
+      {
+        src: '/cases/dr-guilherme/areas.webp',
+        alt: { pt: 'Seção Três pilares para cuidar de você, com cartas empilhadas', en: 'Section Three pillars to care for you, with stacked cards' },
+        caption: { pt: 'Os três pilares se empilham com a rolagem. Quem prende cada carta é o próprio navegador; o script só encolhe e escurece as de baixo.', en: 'The three pillars stack as you scroll. The browser itself pins each card; the script only shrinks and darkens the ones underneath.' },
+      },
+      {
+        src: '/cases/dr-guilherme/atendimento.webp',
+        alt: { pt: 'Seção da consulta com quatro pontos numerados à esquerda e o texto do ponto ativo à direita', en: 'Appointment section with four numbered points on the left and the active point’s text on the right' },
+        caption: { pt: 'Em tela larga a dobra fica presa e a rolagem passa de um ponto para o outro. Em tela estreita vira uma lista simples.', en: 'On wide screens the section stays pinned and scrolling moves from one point to the next. On narrow screens it becomes a plain list.' },
+      },
+      {
+        src: '/cases/dr-guilherme/escuta.webp',
+        alt: { pt: 'Foto da consulta com dois cartões: Online e presencial, e 30 dias para dúvidas', en: 'Photo of the appointment with two cards: Online and in person, and 30 days for questions' },
+        caption: { pt: 'A foto se abre de baixo para cima e os dois cartões chegam depois, cada um no seu ritmo.', en: 'The photo opens from the bottom up and the two cards arrive after it, each at its own pace.' },
+      },
+      {
+        src: '/cases/dr-guilherme/duvidas.webp',
+        alt: { pt: 'Seção de dúvidas com uma pergunta aberta', en: 'Questions section with one question open' },
+        caption: { pt: 'As dúvidas mais comuns antes da primeira consulta, uma aberta por vez.', en: 'The most common questions before the first appointment, one open at a time.' },
+      },
+      {
+        src: '/cases/dr-guilherme/celular.webp',
+        alt: { pt: 'Três telas de celular: a primeira tela, a foto com os pilares na base e os cartões da consulta', en: 'Three phone screens: the first screen, the photo with the pillars at the bottom and the appointment cards' },
+        caption: { pt: 'No celular os pilares viram uma faixa na base da foto, sem cobrir o rosto, e os cartões descem para baixo da imagem.', en: 'On phones the pillars become a strip at the bottom of the photo, clear of the face, and the cards move below the image.' },
+      },
+      {
+        src: '/cases/dr-guilherme/celular-2.webp',
+        alt: { pt: 'Três telas de celular: os pilares, as dúvidas e o convite final', en: 'Three phone screens: the pillars, the questions and the final invitation' },
+        caption: { pt: 'O resto da página no celular, até o botão final do WhatsApp.', en: 'The rest of the page on a phone, down to the final WhatsApp button.' },
       },
     ],
   },
