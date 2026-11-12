@@ -1081,12 +1081,12 @@ export const PROJECTS: Project[] = [
     },
     stat: {
       pt: [
-        'Vinte e três cases, cada um com vídeo do sistema rodando de verdade',
+        'Vinte e sete cases, cada um com vídeo do sistema rodando de verdade',
         'Português e inglês na mesma base: tradução faltando quebra o build',
         'A abertura é um MacBook 3D em three.js, guiado pela rolagem; no celular, um iPhone',
       ],
       en: [
-        'Twenty-three cases, each with video of the system actually running',
+        'Twenty-seven cases, each with video of the system actually running',
         'Portuguese and English from one source: a missing translation breaks the build',
         'The opening is a 3D MacBook in three.js, driven by scroll; on phones, an iPhone',
       ],
@@ -2912,6 +2912,123 @@ export const PROJECTS: Project[] = [
         src: '/cases/agentflow/agentes.webp',
         alt: { pt: 'Terminal com o comando :flow agents mostrando os agentes instalados, versões, barras de cota e o catálogo de modelos observado', en: 'Terminal with the :flow agents command showing installed agents, versions, quota bars and the observed model catalogue' },
         caption: { pt: 'Cada agente mostra a versão, as barras de cota e o catálogo de modelos lido da máquina, com a ressalva de que a autorização não foi comprovada.', en: 'Each agent shows the version, the quota bars and the model catalogue read from the machine, with the caveat that authorization was not verified.' },
+      },
+    ],
+  },
+  {
+    n: '27',
+    slug: 'mural',
+    name: 'Mural',
+    status: 'live',
+    context: 'Cliente',
+    groups: ['gostinho-mineiro'],
+    line: {
+      pt: 'O fundo de tela oficial em todos os computadores da empresa, trocado sozinho em feriado, campanha e aviso urgente, com uma janela de Ciente que avisa quem já leu.',
+      en: 'The official wallpaper on every company computer, swapped by itself for holidays, campaigns and urgent notices, with an Acknowledge window that reports who has read it.',
+    },
+    stat: {
+      pt: [
+        'Um programa de 7 MB para Windows, que instala sem senha de administrador e se atualiza sozinho',
+        'Aviso para todos, por setor ou para uma pessoa, com hora de entrar e de sair do ar',
+        'Mostra quantos PCs estão com cada aviso na tela e quem apertou Ciente, com a hora',
+        'Mais de 70 testes entre o painel, o programa e o caminho completo no navegador',
+      ],
+      en: [
+        'A 7 MB Windows program that installs without an administrator password and updates itself',
+        'Notices for everyone, by department or for one person, with a time to go up and come down',
+        'Shows how many PCs have each notice on screen and who pressed Acknowledge, with the time',
+        'More than 70 tests across the panel, the program and the full path in the browser',
+      ],
+    },
+    tags: ['Next.js', 'Go', 'Supabase', 'Windows', 'Cloudflare Tunnel', 'pm2'],
+    media: {
+      frame: 'desktop',
+      src: '/cases/mural/capa.webp',
+      video: '/cases/mural/tour.mp4',
+      poster: '/cases/mural/poster.webp',
+      alt: {
+        pt: 'Painel do Mural com o aviso que está na tela dos PCs em destaque e a lista dos avisos no ar, cada um com quantos PCs estão mostrando',
+        en: 'Mural panel with the notice currently on the PCs highlighted and the list of live notices, each with how many PCs are showing it',
+      },
+    },
+    nota: {
+      pt: 'As telas e o vídeo foram gravados numa empresa de demonstração: os nomes das pessoas, os PCs e os avisos são inventados. O sistema real roda atrás de login, e só a página de download é aberta aos funcionários.',
+      en: 'The screens and the video were recorded on a demo company: the people, PCs and notices are made up. The real system runs behind a login, and only the download page is open to employees.',
+    },
+    problem: {
+      pt: [
+        'Cada computador da empresa tinha um fundo de tela diferente, escolhido por quem usava. Aviso importante ia por grupo de WhatsApp, papel na parede ou de boca em boca, e ninguém sabia dizer quem tinha lido. Num feriado ou numa campanha, o TI passava de máquina em máquina.',
+        'A ferramenta do próprio Windows para isso exige servidor de domínio, e a empresa não tem. Os computadores ficam em redes diferentes, então a solução precisava funcionar pela internet, sem pedir senha de administrador e sem mexer nos outros sistemas da empresa.',
+      ],
+      en: [
+        'Every company computer had a different wallpaper, picked by whoever used it. Important notices went through a WhatsApp group, paper on the wall or word of mouth, and nobody could say who had read them. On a holiday or for a campaign, IT went from machine to machine.',
+        'Windows’ own tool for this needs a domain server, and the company does not have one. The computers sit on different networks, so the solution had to work over the internet, without asking for an administrator password and without touching the company’s other systems.',
+      ],
+    },
+    solution: {
+      pt: [
+        'O funcionário abre uma página, diz o nome e o setor e baixa o mural.exe, um programa em Go de 7 MB que se instala só para o usuário dele. A cada dez minutos o programa pergunta ao servidor o que deve estar na tela, troca o fundo quando muda e volta para o fundo padrão quando o aviso sai do ar. Quando sai versão nova, ele baixa, confere o código de verificação do arquivo e se troca sozinho.',
+        'No painel, o TI cria o aviso em três passos: imagem, datas e para quem. Não precisa de outro programa para a arte: um editor monta a imagem com a logo e as cores da marca em quatro modelos, com o texto sempre dentro da área que nenhuma tela corta. Antes de salvar, dá para ver como fica no Windows. Os feriados nacionais e do DF já estão listados, e um clique cria o aviso com as datas preenchidas.',
+        'O aviso urgente passa na frente de qualquer outro e abre uma janela do Windows com a mensagem e o botão Ciente. Quem aperta não vê de novo, e o painel mostra quem confirmou e a que horas. Cada aviso diz em quantos PCs está na tela agora, e um PC que some por mais de três dias acende um alerta no menu.',
+        'O banco foi feito para várias empresas desde o começo, cada uma vendo só o que é dela, e o programa nunca fala direto com o banco: passa por uma rota do servidor que acha a empresa pela chave do instalador. Como nos outros sistemas, cada tela nova chega com um tutorial que ilumina uma parte por vez.',
+      ],
+      en: [
+        'The employee opens a page, enters their name and department and downloads mural.exe, a 7 MB Go program that installs for their user only. Every ten minutes it asks the server what should be on screen, swaps the wallpaper when that changes and goes back to the default when the notice comes down. When a new version is out, it downloads it, checks the file’s hash and replaces itself.',
+        'In the panel, IT creates a notice in three steps: image, dates and audience. No other program is needed for the artwork: an editor builds the image with the logo and brand colours in four templates, keeping the text inside the area no screen crops. Before saving, you can see how it looks on Windows. National and Federal District holidays are already listed, and one click creates the notice with the dates filled in.',
+        'An urgent notice goes ahead of any other and opens a Windows dialog with the message and an Acknowledge button. Whoever presses it does not see it again, and the panel shows who confirmed and when. Each notice says how many PCs have it on screen right now, and a PC missing for more than three days lights up an alert in the menu.',
+        'The database was built for many companies from the start, each seeing only its own data, and the program never talks to the database directly: it goes through a server route that finds the company by the installer’s key. As in the other systems, every new screen ships with a tutorial that lights up one part at a time.',
+      ],
+    },
+    gallery: [
+      {
+        src: '/cases/mural/baixar.webp',
+        alt: { pt: 'Página de download com o título O fundo de tela que avisa e um monitor mostrando um aviso urgente com a janela de Ciente', en: 'Download page with the headline The wallpaper that tells you and a monitor showing an urgent notice with the Acknowledge dialog' },
+        caption: { pt: 'A página que o funcionário abre. O monitor troca sozinho entre o fundo padrão, um feriado e um aviso urgente, que é o que o programa vai fazer no computador dele.', en: 'The page employees open. The monitor cycles between the default wallpaper, a holiday and an urgent notice, which is what the program will do on their computer.' },
+      },
+      {
+        src: '/cases/mural/como-funciona.webp',
+        alt: { pt: 'Seção Recados da empresa direto na sua tela com quatro cartões numerados de 01 a 04', en: 'Section Company messages straight to your screen with four cards numbered 01 to 04' },
+        caption: { pt: 'Quatro passos explicam o que acontece depois de instalar. O último cartão é o aviso urgente, o único que pede uma ação de quem está no computador.', en: 'Four steps explain what happens after installing. The last card is the urgent notice, the only one that asks something of whoever is at the computer.' },
+      },
+      {
+        src: '/cases/mural/formulario.webp',
+        alt: { pt: 'Janela Antes de baixar com os campos nome e setor preenchidos', en: 'Before downloading dialog with the name and department fields filled in' },
+        caption: { pt: 'Antes do download a página pede nome e setor. Os dois vão dentro do próprio instalador, e o PC já aparece no painel com dono e setor.', en: 'Before the download the page asks for name and department. Both travel inside the installer itself, and the PC shows up in the panel with its owner and department.' },
+      },
+      {
+        src: '/cases/mural/editor.webp',
+        alt: { pt: 'Editor de arte com o modelo Feriado, campos de rótulo, título, texto e rodapé e a prévia amarela do Dia da Consciência Negra', en: 'Artwork editor with the Holiday template, label, title, text and footer fields and the yellow preview for Black Consciousness Day' },
+        caption: { pt: 'O editor de arte monta a imagem em 1920 por 1080 no navegador. O título diminui sozinho se for longo e tudo fica dentro do quadro tracejado.', en: 'The artwork editor builds a 1920 by 1080 image in the browser. The title shrinks by itself when it is long and everything stays inside the dashed frame.' },
+      },
+      {
+        src: '/cases/mural/previa.webp',
+        alt: { pt: 'Prévia de uma tela do Windows com o aviso urgente de fundo e a janela com o botão Ciente', en: 'Preview of a Windows screen with the urgent notice as wallpaper and the dialog with the Acknowledge button' },
+        caption: { pt: 'Ver como fica no PC mostra a imagem como fundo de tela e, no urgente, a mesma janela que o programa abre. Erro de texto aparece aqui, não na tela de todo mundo.', en: 'See how it looks on the PC shows the image as wallpaper and, for urgent ones, the same dialog the program opens. A typo shows up here, not on everyone’s screen.' },
+      },
+      {
+        src: '/cases/mural/ciente.webp',
+        alt: { pt: 'Lista Quem apertou Ciente com seis de oito pessoas confirmadas, cada uma com setor, PC e a hora', en: 'Who pressed Acknowledge list with six of eight people confirmed, each with department, PC and time' },
+        caption: { pt: 'No aviso urgente, cada pessoa aparece com o setor, o PC e a hora do Ciente. Quem ainda não confirmou fica separado de quem está com o PC desligado.', en: 'On an urgent notice, each person shows with department, PC and the time they acknowledged. Those who have not confirmed yet are kept apart from those whose PC is off.' },
+      },
+      {
+        src: '/cases/mural/pcs.webp',
+        alt: { pt: 'Tela PCs com alerta de um computador sem sinal, três números e a lista de computadores com pessoa, setor e último sinal', en: 'PCs screen with an alert for one computer without signal, three numbers and the list of computers with person, department and last signal' },
+        caption: { pt: 'Cada PC mostra quem usa, o setor, a versão e o aviso que está na tela. Sem sinal há mais de três dias vira alerta, porque pode ser máquina formatada ou programa removido.', en: 'Each PC shows who uses it, the department, the version and the notice on screen. More than three days without a signal becomes an alert, since it may be a wiped machine or a removed program.' },
+      },
+      {
+        src: '/cases/mural/feriados.webp',
+        alt: { pt: 'Lista de feriados com data, tipo nacional, Distrito Federal ou ponto facultativo e botões de criar aviso', en: 'Holiday list with date, type national, Federal District or optional, and create notice buttons' },
+        caption: { pt: 'Os feriados dos próximos doze meses, nacionais e do DF, calculados pelo próprio sistema, inclusive Carnaval e Sexta-feira Santa. Quem já tem aviso mostra o atalho para ele.', en: 'Holidays for the next twelve months, national and Federal District, worked out by the system itself, Carnival and Good Friday included. Those that already have a notice link to it.' },
+      },
+      {
+        src: '/cases/mural/tutorial.webp',
+        alt: { pt: 'Tutorial com o painel escurecido e o atalho Aviso urgente iluminado ao lado de um balão de explicação', en: 'Tutorial with the panel dimmed and the Urgent notice shortcut lit up next to an explanation bubble' },
+        caption: { pt: 'O tutorial escurece a tela e ilumina uma parte por vez. Abre sozinho na primeira visita e volta pelo botão Ver tour.', en: 'The tutorial dims the screen and lights up one part at a time. It opens by itself on the first visit and comes back through the See tour button.' },
+      },
+      {
+        src: '/cases/mural/celular.webp',
+        alt: { pt: 'Três telas de celular: a página de download, os comunicados e os PCs', en: 'Three phone screens: the download page, notices and PCs' },
+        caption: { pt: 'No celular o menu vira uma faixa no topo, com os dois atalhos de aviso sempre à mão. Dá para tirar um aviso do ar de onde estiver.', en: 'On the phone the menu becomes a strip at the top, with both notice shortcuts always at hand. A notice can be taken down from anywhere.' },
       },
     ],
   },
