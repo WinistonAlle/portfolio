@@ -71,7 +71,7 @@ const INTRO_VH = 190;
    e o que está na tela dele fica ilegível. No celular a abertura é um iPhone
    girando (PhoneIntro3D), que preenche a tela em pé. Sem 3D, nem moldura nem
    zoom: o boot entrega direto a home. */
-const CELULAR = '(max-width: 640px)';
+export const CELULAR = '(max-width: 640px)';
 
 /* Geometria da tela dentro do SVG (viewBox 650x400). */
 const SCREEN_W_RATIO = 501.22 / 650;

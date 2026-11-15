@@ -1,10 +1,10 @@
 'use client';
 
 import dynamic from 'next/dynamic';
-import { useEffect, type ReactNode } from 'react';
+import { useEffect, useState, type ReactNode } from 'react';
 import Mesa, { type DadosMesa, type TextoMesa } from '@/components/desktop/Mesa';
 import { aquecerCracha } from '@/components/lanyard/aquecer-cracha';
-import MacbookPortal from '@/components/macbook/MacbookPortal';
+import MacbookPortal, { CELULAR } from '@/components/macbook/MacbookPortal';
 import type { Locale } from '@/i18n/config';
 
 /* A casca de cliente da home.
@@ -57,6 +57,19 @@ export default function HomeShell({
     aquecerCracha();
   }, []);
 
+  /* O portal decide notebook ou iPhone uma vez só, ao montar. Se a janela
+     abriu estreita e depois foi alargada (ou o contrário), a escolha ficava
+     presa: iPhone girando numa tela de notebook. Ao cruzar o limite, a chave
+     muda e o portal remonta, escolhendo de novo. No carregamento normal a
+     chave não muda, então nada é montado duas vezes. */
+  const [geracao, setGeracao] = useState(0);
+  useEffect(() => {
+    const mq = window.matchMedia(CELULAR);
+    const trocar = () => setGeracao((g) => g + 1);
+    mq.addEventListener('change', trocar);
+    return () => mq.removeEventListener('change', trocar);
+  }, []);
+
   return (
     <main className="relative z-10 flex-1">
       <BootIntro />
@@ -64,7 +77,7 @@ export default function HomeShell({
           sobre o fundo animado, e a rolagem entra no site. */}
       {/* Sem header dentro do notebook: a barra de menu da mesa é o header
           da home. */}
-      <MacbookPortal rolar={t.mesa.rolar}>
+      <MacbookPortal key={geracao} rolar={t.mesa.rolar}>
         <Mesa
           locale={locale}
           title={t.title}
