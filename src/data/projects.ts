@@ -1081,12 +1081,12 @@ export const PROJECTS: Project[] = [
     },
     stat: {
       pt: [
-        'Vinte e nove cases, cada um com vídeo do sistema rodando de verdade',
+        'Trinta cases, cada um com vídeo do sistema rodando de verdade',
         'Português e inglês na mesma base: tradução faltando quebra o build',
         'A abertura é um MacBook 3D em three.js, guiado pela rolagem; no celular, um iPhone',
       ],
       en: [
-        'Twenty-nine cases, each with video of the system actually running',
+        'Thirty cases, each with video of the system actually running',
         'Portuguese and English from one source: a missing translation breaks the build',
         'The opening is a 3D MacBook in three.js, driven by scroll; on phones, an iPhone',
       ],
@@ -3229,6 +3229,113 @@ export const PROJECTS: Project[] = [
         src: '/cases/dr-guilherme/celular-2.webp',
         alt: { pt: 'Três telas de celular: os pilares, as dúvidas e o convite final', en: 'Three phone screens: the pillars, the questions and the final invitation' },
         caption: { pt: 'O resto da página no celular, até o botão final do WhatsApp.', en: 'The rest of the page on a phone, down to the final WhatsApp button.' },
+      },
+    ],
+  },
+  {
+    n: '30',
+    slug: 'cadastro-rapido',
+    name: 'Cadastro Rápido',
+    status: 'live',
+    context: 'Cliente',
+    groups: ['gostinho-mineiro'],
+    line: {
+      pt: 'O faturamento cola a mensagem que o vendedor mandou no WhatsApp e o sistema separa os campos, confere na Receita e no CEP, deduz o que falta e grava o cadastro direto no ERP, devolvendo o código.',
+      en: 'Billing pastes the message the vendor sent on WhatsApp and the system splits the fields, checks them against the tax registry and the postcode, infers what is missing and writes the record straight into the ERP, handing back the code.',
+    },
+    stat: {
+      pt: [
+        'Cliente, vendedor e motorista pelo mesmo caminho; pessoa física ou empresa ele descobre pelo documento',
+        'Lê o modelo com asteriscos e também texto solto, sem inventar nenhum dado',
+        'Condição de pagamento, tabela de preço e região deduzidas do histórico de mais de 11 mil cadastros',
+        'Nunca duplica: se o documento já está no ERP, devolve o código existente',
+      ],
+      en: [
+        'Clients, vendors and drivers through the same path; individual or company is worked out from the document',
+        'Reads the asterisk template and free text too, without making up any data',
+        'Payment term, price table and region inferred from the history of more than 11 thousand records',
+        'Never duplicates: if the document is already in the ERP, it returns the existing code',
+      ],
+    },
+    tags: ['React', 'TypeScript', 'Vite', 'Node', 'Hono', 'SQLite', 'API REST', 'Cloudflare Tunnel', 'pm2'],
+    media: {
+      frame: 'desktop',
+      src: '/cases/cadastro-rapido/capa.webp',
+      video: '/cases/cadastro-rapido/tour.mp4',
+      poster: '/cases/cadastro-rapido/poster.webp',
+      alt: {
+        pt: 'Tela Novo cadastro com a mensagem do vendedor colada à esquerda e, à direita, a ficha organizada com as conferências da Receita, do CEP e do ERP e cada campo marcado com a origem',
+        en: 'New record screen with the vendor’s message pasted on the left and, on the right, the organized record with the tax registry, postcode and ERP checks and each field tagged with its source',
+      },
+    },
+    nota: {
+      pt: 'As telas e o vídeo foram gravados com dados inventados: a empresa, os vendedores e o histórico não existem. O sistema real roda atrás de login, ligado ao ERP da empresa.',
+      en: 'The screens and the video were recorded with made-up data: the company, the vendors and the history do not exist. The real system runs behind a login, connected to the company’s ERP.',
+    },
+    problem: {
+      pt: [
+        'Todo cliente novo chega ao faturamento como mensagem de WhatsApp. Os vendedores novos usam um modelo com asteriscos; os antigos mandam do jeito que der. Alguém precisava ler, separar campo por campo, achar a condição de pagamento, a tabela de preço e a região certas e só então digitar tudo no ERP, uma tela de cada vez.',
+        'Era o trabalho que mais tomava o dia da equipe, e o que mais gerava erro: CEP que perdia um dígito, endereço que não cabia no campo, cliente cadastrado duas vezes porque ninguém lembrou de procurar antes.',
+      ],
+      en: [
+        'Every new client reaches billing as a WhatsApp message. Newer vendors use an asterisk template; older ones send it however they can. Someone had to read it, split it field by field, find the right payment term, price table and region and only then type everything into the ERP, one screen at a time.',
+        'It was the task that took up most of the team’s day, and the one with the most mistakes: postcodes losing a digit, addresses too long for the field, clients registered twice because nobody remembered to search first.',
+      ],
+    },
+    solution: {
+      pt: [
+        'A pessoa cola a mensagem e escolhe o vendedor. O sistema lê o modelo direto e, quando é texto solto, garimpa o documento, o CEP, o telefone, o e-mail e o prazo; uma IA opcional ajuda nos nomes, proibida de inventar. Ao mesmo tempo ele confere o CNPJ na Receita (empresa baixada não passa), busca o endereço pelo CEP e procura o documento no ERP.',
+        'A ficha mostra cada campo com a origem: Mensagem, Receita, CEP ou Deduzido. Quando o vendedor escreveu uma razão social diferente da Receita, a diferença aparece embaixo. Os campos curtos do ERP são respeitados: "quadra 20 lote 02" vira "QD 20 LT 02", e o que não cabe nem abreviando fica amarelo para alguém conferir.',
+        'A parte comercial é deduzida do histórico real: "7/14/21" vira a condição de boleto com esses dias, a tabela de preço é a que aquele vendedor mais usa, e a região sai do bairro e da cidade comparados aos cadastros anteriores. Os campos fixos foram copiados dos cadastros que a equipe fazia à mão.',
+        'Ao confirmar, o sistema grava pela API do ERP e mostra o código num carimbo, com a mensagem pronta para devolver ao vendedor. Se o ERP demora, ele confere pelo documento antes de dizer que falhou, para ninguém apertar duas vezes e duplicar. Roda no servidor da empresa, publicado por túnel, com login por pessoa e histórico de quem fez cada cadastro.',
+      ],
+      en: [
+        'The person pastes the message and picks the vendor. The system reads the template directly and, for free text, digs out the document, postcode, phone, email and payment days; an optional AI helps with names and is forbidden from making anything up. At the same time it checks the company ID against the tax registry (closed companies do not pass), looks up the address by postcode and searches the ERP for the document.',
+        'The record shows each field with its source: Message, Registry, Postcode or Inferred. When the vendor wrote a company name that differs from the registry, the difference shows underneath. The ERP’s short fields are respected: "quadra 20 lote 02" becomes "QD 20 LT 02", and whatever does not fit even abbreviated turns yellow for someone to check.',
+        'The commercial part is inferred from real history: "7/14/21" becomes the bank slip term with those days, the price table is the one that vendor uses most, and the region comes from the district and city compared with earlier records. The fixed fields were copied from the records the team used to make by hand.',
+        'On confirm, the system writes through the ERP’s API and shows the code on a stamp, with a ready message to send back to the vendor. If the ERP is slow, it checks by document before reporting a failure, so nobody presses twice and creates a duplicate. It runs on the company’s server, published through a tunnel, with a login per person and a history of who made each record.',
+      ],
+    },
+    gallery: [
+      {
+        src: '/cases/cadastro-rapido/busca.webp',
+        alt: { pt: 'Campo Vendedor que mandou com rafa digitado e a lista mostrando Rafael Moreira Lima com o código e 58 clientes no ano', en: 'Vendor field with rafa typed and the list showing Rafael Moreira Lima with the code and 58 clients this year' },
+        caption: { pt: 'A busca de vendedor acha por pedaço do nome em qualquer ordem, sem acento, pelo código ou pelo telefone, e aguenta um erro de digitação. Quando a mensagem cita o vendedor, ele já vem escolhido.', en: 'The vendor search finds by any part of the name in any order, without accents, by code or by phone, and tolerates one typo. When the message mentions the vendor, they come preselected.' },
+      },
+      {
+        src: '/cases/cadastro-rapido/comercial.webp',
+        alt: { pt: 'Parte de baixo da ficha com endereço, número SN em amarelo, complemento abreviado e o bloco comercial com vendedor, condição 214, tabela 024 e região Goiânia', en: 'Lower part of the record with the address, number SN in yellow, abbreviated complement and the commercial block with vendor, payment term 214, price table 024 and region Goiânia' },
+        caption: { pt: 'O bloco comercial é todo deduzido: a condição vem dos dias escritos na mensagem, a tabela é a que o vendedor mais usa e a região vem do CEP. O complemento é abreviado para caber nas 15 letras do campo do ERP.', en: 'The commercial block is entirely inferred: the payment term comes from the days written in the message, the price table is the one the vendor uses most and the region comes from the postcode. The complement is abbreviated to fit the ERP field’s 15 characters.' },
+      },
+      {
+        src: '/cases/cadastro-rapido/pronto.webp',
+        alt: { pt: 'Tela Pronto com o carimbo do código 012345, o nome da empresa e a mensagem pronta para devolver ao vendedor', en: 'Done screen with the stamp of code 012345, the company name and the ready message to send back to the vendor' },
+        caption: { pt: 'O código do ERP aparece grande, com a mensagem pronta para colar de volta no WhatsApp do vendedor. Se o ERP demora a responder, o sistema confere pelo documento se gravou antes de dizer que deu erro.', en: 'The ERP code shows up large, with a ready message to paste back into the vendor’s WhatsApp. If the ERP is slow to answer, the system checks by document whether it saved before reporting an error.' },
+      },
+      {
+        src: '/cases/cadastro-rapido/ja-existe.webp',
+        alt: { pt: 'Ficha com o aviso Esse CNPJ já está no CIGAM, código 009876, e o botão Usar este código', en: 'Record with the warning This CNPJ is already in the ERP, code 009876, and the Use this code button' },
+        caption: { pt: 'Antes de qualquer coisa o sistema procura o documento no ERP. Se o cliente já existe, não deixa cadastrar de novo e devolve o código que já estava lá.', en: 'Before anything else the system looks the document up in the ERP. If the client already exists, it blocks a duplicate and hands back the code that was already there.' },
+      },
+      {
+        src: '/cases/cadastro-rapido/historico.webp',
+        alt: { pt: 'Histórico com sete cadastros do dia, cada um com hora, nome, documento, código, tipo, quem fez e a situação', en: 'History with seven records from the day, each with time, name, document, code, type, who did it and status' },
+        caption: { pt: 'No ERP todo cadastro aparece feito pelo mesmo usuário de serviço, então o histórico guarda quem fez de verdade. Busca por nome, CPF, CNPJ ou código, e um clique copia o código.', en: 'In the ERP every record shows as made by the same service user, so the history keeps who actually did it. Search by name, CPF, CNPJ or code, and one click copies the code.' },
+      },
+      {
+        src: '/cases/cadastro-rapido/tutorial.webp',
+        alt: { pt: 'Tutorial com a tela escurecida e o botão Organizar dados iluminado ao lado do balão do passo 4 de 6', en: 'Tutorial with the screen dimmed and the Organize data button lit next to the step 4 of 6 bubble' },
+        caption: { pt: 'O tutorial abre sozinho no primeiro acesso e ilumina uma parte por vez, da caixa de colar até o histórico. Volta pelo menu Como usar.', en: 'The tutorial opens by itself on first access and lights up one part at a time, from the paste box to the history. It comes back through the How to use menu.' },
+      },
+      {
+        src: '/cases/cadastro-rapido/entrar.webp',
+        alt: { pt: 'Tela de entrada com a logo, os campos de usuário e senha sobre a foto desfocada de pão de queijo', en: 'Sign-in screen with the logo and the user and password fields over a blurred photo of cheese bread' },
+        caption: { pt: 'Cada pessoa do faturamento tem o próprio login, com senha provisória trocada no primeiro acesso. A foto do produto ficou só na entrada; dentro, o fundo é limpo para não cansar quem passa o dia na tela.', en: 'Each billing person has their own login, with a temporary password changed on first access. The product photo stays on the sign-in only; inside, the background is plain so it does not tire whoever spends the day on it.' },
+      },
+      {
+        src: '/cases/cadastro-rapido/celular.webp',
+        alt: { pt: 'Três telas de celular: a mensagem colada com o vendedor escolhido, a ficha com as conferências e o código pronto', en: 'Three phone screens: the pasted message with the vendor chosen, the record with its checks and the finished code' },
+        caption: { pt: 'No celular o menu vira uma faixa no topo e a ficha desce em uma coluna. Dá para cadastrar do telefone quando a mensagem chega fora do escritório.', en: 'On a phone the menu becomes a strip at the top and the record flows into one column. Records can be made from the phone when a message arrives away from the office.' },
       },
     ],
   },
