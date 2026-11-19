@@ -3240,24 +3240,26 @@ export const PROJECTS: Project[] = [
     context: 'Cliente',
     groups: ['gostinho-mineiro'],
     line: {
-      pt: 'O faturamento cola a mensagem que o vendedor mandou no WhatsApp e o sistema separa os campos, confere na Receita e no CEP, deduz o que falta e grava o cadastro direto no ERP, devolvendo o código.',
-      en: 'Billing pastes the message the vendor sent on WhatsApp and the system splits the fields, checks them against the tax registry and the postcode, infers what is missing and writes the record straight into the ERP, handing back the code.',
+      pt: 'O faturamento cola a mensagem ou anexa o arquivo que o vendedor mandou no WhatsApp e o sistema separa os campos, confere na Receita e no CEP, deduz o que falta e grava o cadastro direto no ERP, devolvendo o código.',
+      en: 'Billing pastes the message or attaches the file the vendor sent on WhatsApp and the system splits the fields, checks them against the tax registry and the postcode, infers what is missing and writes the record straight into the ERP, handing back the code.',
     },
     stat: {
       pt: [
         'Cliente, vendedor e motorista pelo mesmo caminho; pessoa física ou empresa ele descobre pelo documento',
-        'Lê o modelo com asteriscos e também texto solto, sem inventar nenhum dado',
+        'Lê o modelo com asteriscos, texto solto com IA e também PDF, foto, print e Word, sem inventar nenhum dado',
         'Condição de pagamento, tabela de preço e região deduzidas do histórico de mais de 11 mil cadastros',
         'Nunca duplica: se o documento já está no ERP, devolve o código existente',
+        'Sem condição de pagamento na mensagem, o cliente entra à vista e vai para a fila do financeiro conferir',
       ],
       en: [
         'Clients, vendors and drivers through the same path; individual or company is worked out from the document',
-        'Reads the asterisk template and free text too, without making up any data',
+        'Reads the asterisk template, free text with AI, and PDFs, photos, screenshots and Word files too, without making up any data',
         'Payment term, price table and region inferred from the history of more than 11 thousand records',
         'Never duplicates: if the document is already in the ERP, it returns the existing code',
+        'With no payment term in the message, the client goes in as cash and lands in the finance queue for review',
       ],
     },
-    tags: ['React', 'TypeScript', 'Vite', 'Node', 'Hono', 'SQLite', 'API REST', 'Cloudflare Tunnel', 'pm2'],
+    tags: ['React', 'TypeScript', 'Vite', 'Node', 'Hono', 'SQLite', 'Groq', 'Tesseract', 'API REST', 'Cloudflare Tunnel', 'pm2'],
     media: {
       frame: 'desktop',
       src: '/cases/cadastro-rapido/capa.webp',
@@ -3284,19 +3286,26 @@ export const PROJECTS: Project[] = [
     },
     solution: {
       pt: [
-        'A pessoa cola a mensagem e escolhe o vendedor. O sistema lê o modelo direto e, quando é texto solto, garimpa o documento, o CEP, o telefone, o e-mail e o prazo; uma IA opcional ajuda nos nomes, proibida de inventar. Ao mesmo tempo ele confere o CNPJ na Receita (empresa baixada não passa), busca o endereço pelo CEP e procura o documento no ERP.',
-        'A ficha mostra cada campo com a origem: Mensagem, Receita, CEP ou Deduzido. Quando o vendedor escreveu uma razão social diferente da Receita, a diferença aparece embaixo. Os campos curtos do ERP são respeitados: "quadra 20 lote 02" vira "QD 20 LT 02", e o que não cabe nem abreviando fica amarelo para alguém conferir.',
+        'A pessoa cola a mensagem e escolhe o vendedor. Se o vendedor mandou PDF, foto, print ou Word, basta anexar ou arrastar: o servidor tira o texto (foto passa por leitura automática) e põe na caixa. O sistema lê o modelo direto e, quando é texto solto, uma IA separa nome, fantasia, endereço e prazo, proibida de inventar; se ela cair, regras garimpam documento, CEP, telefone, e-mail e prazo. Ao mesmo tempo ele confere o CNPJ na Receita (empresa baixada não passa), busca o endereço pelo CEP e procura o documento no ERP.',
+        'A ficha mostra cada campo com a origem: Mensagem, Receita, CEP ou Deduzido. O que o vendedor escreveu vale primeiro; a Receita e o CEP completam o que faltou e, quando discordam, a diferença aparece embaixo do campo. Os campos curtos do ERP são respeitados: "quadra 20 lote 02" vira "QD 20 LT 02", e o que não cabe nem abreviando fica amarelo para alguém conferir.',
         'A parte comercial é deduzida do histórico real: "7/14/21" vira a condição de boleto com esses dias, a tabela de preço é a que aquele vendedor mais usa, e a região sai do bairro e da cidade comparados aos cadastros anteriores. Os campos fixos foram copiados dos cadastros que a equipe fazia à mão.',
         'Ao confirmar, o sistema grava pela API do ERP e mostra o código num carimbo, com a mensagem pronta para devolver ao vendedor. Se o ERP demora, ele confere pelo documento antes de dizer que falhou, para ninguém apertar duas vezes e duplicar. Roda no servidor da empresa, publicado por túnel, com login por pessoa e histórico de quem fez cada cadastro.',
+        'Quando a mensagem não diz a condição de pagamento, o cliente entra à vista e cai na fila do financeiro. Lá a pessoa vê o vendedor e a mensagem original e confirma ou troca a condição; a troca regrava o cadastro inteiro no ERP com backup antes e conferência campo a campo depois, porque a API apaga o que não for reenviado. Em Ajustes cada um troca a senha, e o administrador cria acessos por setor: o faturamento cadastra, o financeiro só vê a fila. O sistema abre no tema escuro, azul-marinho, e troca para o claro num círculo que nasce do botão.',
       ],
       en: [
-        'The person pastes the message and picks the vendor. The system reads the template directly and, for free text, digs out the document, postcode, phone, email and payment days; an optional AI helps with names and is forbidden from making anything up. At the same time it checks the company ID against the tax registry (closed companies do not pass), looks up the address by postcode and searches the ERP for the document.',
-        'The record shows each field with its source: Message, Registry, Postcode or Inferred. When the vendor wrote a company name that differs from the registry, the difference shows underneath. The ERP’s short fields are respected: "quadra 20 lote 02" becomes "QD 20 LT 02", and whatever does not fit even abbreviated turns yellow for someone to check.',
+        'The person pastes the message and picks the vendor. If the vendor sent a PDF, photo, screenshot or Word file, just attach or drop it: the server pulls the text out (photos go through automatic reading) and puts it in the box. The system reads the template directly and, for free text, an AI separates name, trade name, address and payment days, forbidden from making anything up; if it is down, rules dig out the document, postcode, phone, email and payment days. At the same time it checks the company ID against the tax registry (closed companies do not pass), looks up the address by postcode and searches the ERP for the document.',
+        'The record shows each field with its source: Message, Registry, Postcode or Inferred. What the vendor wrote comes first; the registry and the postcode fill in what is missing and, when they disagree, the difference shows under the field. The ERP’s short fields are respected: "quadra 20 lote 02" becomes "QD 20 LT 02", and whatever does not fit even abbreviated turns yellow for someone to check.',
         'The commercial part is inferred from real history: "7/14/21" becomes the bank slip term with those days, the price table is the one that vendor uses most, and the region comes from the district and city compared with earlier records. The fixed fields were copied from the records the team used to make by hand.',
         'On confirm, the system writes through the ERP’s API and shows the code on a stamp, with a ready message to send back to the vendor. If the ERP is slow, it checks by document before reporting a failure, so nobody presses twice and creates a duplicate. It runs on the company’s server, published through a tunnel, with a login per person and a history of who made each record.',
+        'When the message gives no payment term, the client goes in as cash and lands in the finance queue. There the person sees the vendor and the original message and confirms or changes the term; a change rewrites the whole record in the ERP with a backup before and a field by field check after, because the API wipes whatever is not sent again. In Settings everyone changes their password, and the admin creates access per department: billing makes records, finance only sees the queue. The system opens in a navy dark theme and switches to light in a circle that grows from the button.',
       ],
     },
     gallery: [
+      {
+        src: '/cases/cadastro-rapido/anexo.webp',
+        alt: { pt: 'Caixa da mensagem preenchida com o texto tirado de um PDF e o aviso Texto tirado do PDF, confira e aperte Organizar dados', en: 'Message box filled with text pulled from a PDF and the note Text taken from the PDF, check it and press Organize data' },
+        caption: { pt: 'Quando o vendedor manda PDF, foto, print ou Word, a pessoa anexa, arrasta ou cola com Ctrl+V. O texto cai na caixa e segue o mesmo caminho da mensagem.', en: 'When the vendor sends a PDF, photo, screenshot or Word file, the person attaches it, drops it or pastes it with Ctrl+V. The text lands in the box and follows the same path as a message.' },
+      },
       {
         src: '/cases/cadastro-rapido/busca.webp',
         alt: { pt: 'Campo Vendedor que mandou com rafa digitado e a lista mostrando Rafael Moreira Lima com o código e 58 clientes no ano', en: 'Vendor field with rafa typed and the list showing Rafael Moreira Lima with the code and 58 clients this year' },
@@ -3323,14 +3332,29 @@ export const PROJECTS: Project[] = [
         caption: { pt: 'No ERP todo cadastro aparece feito pelo mesmo usuário de serviço, então o histórico guarda quem fez de verdade. Busca por nome, CPF, CNPJ ou código, e um clique copia o código.', en: 'In the ERP every record shows as made by the same service user, so the history keeps who actually did it. Search by name, CPF, CNPJ or code, and one click copies the code.' },
       },
       {
+        src: '/cases/cadastro-rapido/fila.webp',
+        alt: { pt: 'Fila do financeiro com três clientes à vista, cada um com vendedor, quem cadastrou e a condição, e o primeiro trocado para boleto 14/21/28 com o botão Alterar no CIGAM', en: 'Finance queue with three cash clients, each with vendor, who registered them and the payment term, the first one changed to a 14/21/28 slip with the Change in ERP button' },
+        caption: { pt: 'A fila do financeiro: cada cliente que entrou à vista por falta de condição aparece com o vendedor e a mensagem original. Confirmar à vista tira da fila; trocar a condição grava no ERP e confere se nada mais mudou.', en: 'The finance queue: every client that went in as cash for lack of a payment term shows with the vendor and the original message. Confirming cash takes it off the queue; changing the term writes to the ERP and checks nothing else changed.' },
+      },
+      {
+        src: '/cases/cadastro-rapido/ajustes.webp',
+        alt: { pt: 'Tela Ajustes com Minha senha e a lista de usuários, com a senha provisória queijo-4705 gerada para um acesso novo do financeiro', en: 'Settings screen with My password and the user list, with the temporary password queijo-4705 generated for a new finance account' },
+        caption: { pt: 'Em Ajustes o administrador cria o acesso escolhendo o setor, e a senha provisória sai pronta para copiar e mandar. Gerar senha nova resolve quem esqueceu; desativar corta o acesso sem apagar o histórico.', en: 'In Settings the admin creates an account by picking the department, and the temporary password comes ready to copy and send. Generating a new password solves forgotten ones; deactivating cuts access without erasing the history.' },
+      },
+      {
+        src: '/cases/cadastro-rapido/tema.webp',
+        alt: { pt: 'Meio da troca de tema: um círculo claro crescendo a partir do botão no rodapé do menu sobre a tela escura', en: 'Mid theme switch: a light circle growing from the button at the foot of the menu over the dark screen' },
+        caption: { pt: 'O sistema abre sempre no escuro, azul-marinho com o amarelo da marca. O botão no rodapé troca para o claro num círculo que nasce dele; quem pediu menos movimento no computador vê a troca direta.', en: 'The system always opens in the dark, navy with the brand yellow. The button at the foot switches to light in a circle that grows from it; anyone who asked for reduced motion gets an instant switch.' },
+      },
+      {
         src: '/cases/cadastro-rapido/tutorial.webp',
-        alt: { pt: 'Tutorial com a tela escurecida e o botão Organizar dados iluminado ao lado do balão do passo 4 de 6', en: 'Tutorial with the screen dimmed and the Organize data button lit next to the step 4 of 6 bubble' },
-        caption: { pt: 'O tutorial abre sozinho no primeiro acesso e ilumina uma parte por vez, da caixa de colar até o histórico. Volta pelo menu Como usar.', en: 'The tutorial opens by itself on first access and lights up one part at a time, from the paste box to the history. It comes back through the How to use menu.' },
+        alt: { pt: 'Tutorial com a tela escurecida e o botão Organizar dados iluminado ao lado do balão do tutorial', en: 'Tutorial with the screen dimmed and the Organize data button lit next to the tutorial bubble' },
+        caption: { pt: 'O tutorial abre sozinho no primeiro acesso e ilumina uma parte por vez, e cada setor vê só os passos das telas dele. Volta pelo menu Como usar.', en: 'The tutorial opens by itself on first access and lights up one part at a time, and each department sees only the steps for its own screens. It comes back through the How to use menu.' },
       },
       {
         src: '/cases/cadastro-rapido/entrar.webp',
         alt: { pt: 'Tela de entrada com a logo, os campos de usuário e senha sobre a foto desfocada de pão de queijo', en: 'Sign-in screen with the logo and the user and password fields over a blurred photo of cheese bread' },
-        caption: { pt: 'Cada pessoa do faturamento tem o próprio login, com senha provisória trocada no primeiro acesso. A foto do produto ficou só na entrada; dentro, o fundo é limpo para não cansar quem passa o dia na tela.', en: 'Each billing person has their own login, with a temporary password changed on first access. The product photo stays on the sign-in only; inside, the background is plain so it does not tire whoever spends the day on it.' },
+        caption: { pt: 'Cada pessoa do faturamento tem o próprio login, com senha provisória trocada no primeiro acesso. A foto do produto ficou só na entrada, sob um véu escuro; dentro, o fundo é liso para não cansar quem passa o dia na tela.', en: 'Each billing person has their own login, with a temporary password changed on first access. The product photo stays on the sign-in only, under a dark veil; inside, the background is plain so it does not tire whoever spends the day on it.' },
       },
       {
         src: '/cases/cadastro-rapido/celular.webp',
