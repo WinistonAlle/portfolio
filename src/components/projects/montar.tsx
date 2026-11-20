@@ -36,13 +36,13 @@ export function montarAbas(dict: Dict): Aba[] {
 /**
  * Cards já renderizados, do mais recente para o mais antigo.
  *
- * `limite` existe para a home, que mostra um recorte. A ordem é invertida de
- * propósito: `PROJECTS` cresce por acréscimo no fim, então os seis primeiros da
- * lista crua seriam sempre os seis mais antigos — a home mostraria para sempre
- * o trabalho de 2024.
+ * `PROJECTS` cresce por acréscimo no fim, então a lista crua começaria pelo
+ * trabalho mais antigo. A inversão vale para as duas telas: a grade de
+ * /projetos e o recorte da home (`limite`).
  */
 export function montarItens(dict: Dict, locale: Locale, limite?: number): Item[] {
-  const lista = limite ? [...PROJECTS].reverse().slice(0, limite) : PROJECTS;
+  const recentes = [...PROJECTS].reverse();
+  const lista = limite ? recentes.slice(0, limite) : recentes;
   return lista.map((project) => ({
     slug: project.slug,
     grupos: project.groups.map((g) => dict.projects.groups[g]),
